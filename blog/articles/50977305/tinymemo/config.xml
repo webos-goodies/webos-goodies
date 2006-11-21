@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<widget>
+  <widgetname>Tiny Memo</widgetname>
+  <description>簡単なメモを保存するための Widget です。</description>
+  <id>
+    <host>webos-goodies.jp</host>
+    <name>Tiny Memo</name>
+    <revised>2006-11-21</revised>
+  </id>
+  <width>320</width>
+  <height>240</height>
+  <author>
+    <name>歩行者</name>
+    <link>http://webos-goodies.jp/</link>
+    <organization>WebOS Goodies</organization>
+  </author>
+</widget>
