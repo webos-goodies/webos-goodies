@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Module>
+  <ModulePrefs
+    title="SearchMash API Query"
+    title_url="http://webos-goodies.jp/archives/50985615.html"
+    height="200"
+    scrolling="true" />
+  <Content type="html">
+    <![CDATA[
+
+<script type="text/javascript">
+function getQueryURL()
+{
+  var url = 'http://www.searchmash.com/results/' + _esc(_gel('q').value);
+  var p1  = '?i=' + _esc(_gel('i').value);
+  var p2  = '&n=' + _esc(_gel('n').value);
+  return url + p1 + p2;
+}
+function dumpProperties(obj)
+{
+  var result='';
+  for(var i in obj)
+  {
+    if(typeof obj[i] == 'object')
+    {
+      result += _hesc(i.toString()) + ' : <div class="props">' + dumpProperties(obj[i]) + '</div>';
+    }
+    else
+    {
+      result += _hesc(i.toString()) + ' : ' + _hesc(obj[i].toString()) + '<br/>';
+    }
+  }
+  return result;
+}
+function showResult(contents)
+{
+  var result = _gel('result');
+  var json=eval('('+contents+')');
+  result.innerHTML = dumpProperties(json);
+}
+function sendQuery()
+{
+  _IG_FetchContent(getQueryURL(), showResult);
+}
+</script>
+
+<style>
+body {
+  font-size: 12px;
+}
+.props {
+  margin-left: 8px;
+  padding-left: 8px;
+  border-left: solid 2px gray;
+}
+</style>
+
+<form name="search"  onsubmit="sendQuery(); return false;">
+<input type="text" id="q" style="width:200px;" /><br/>
+開始：<input type="text" id="i" style="width:30px;" value="1" />
+個数：<input type="text" id="n" style="width:30px;" value="10" />
+<input type="submit" />
+</form>
+
+<div id="result">
+</div>
+
+    ]]>
+  </Content>
+</Module>
