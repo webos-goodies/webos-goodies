@@ -1,3 +1,12 @@
+// ==UserScript==
+// @name        replace
+// @description aaa
+// @namespace   http://webos-goodies.jp/
+// @include     *
+// ==/UserScript==
+
+(function() {
+
 var WebOSGoodies_replace = {
 
 keyCode : 'Q'.charCodeAt(0),
@@ -417,3 +426,7 @@ phaseReplace : {
 }
 
 };
+
+WebOSGoodies_replace.onLoad();
+
+})();
