@@ -114,16 +114,31 @@ onLoad : function()
         {
           module.begin(e.target);
           e.stopPropagation();
+          e.returnValue=false;
         }
       }
       else if(module.phase == module.phaseReplace)
       {
         module.onKeyDown(e);
         e.stopPropagation();
+        e.returnValue=false;
       }
     }
   };
-  document.addEventListener('keydown', keyDownHandler, true);
+  var keyPressHandler={
+    handleEvent:function(e)
+    {
+      var module = WebOSGoodies_replace;
+      if(module && module.phase == module.phaseReplace)
+      {
+        e.stopPropagation();
+        e.returnValue=false;
+      }
+    }
+  };
+  window.addEventListener('keydown', keyDownHandler, true);
+  window.addEventListener('keypress', keyPressHandler, true);
+  window.addEventListener('keyup', keyPressHandler, true);
 /*
   var targets=document.getElementsByTagName('textarea');
   for(var i=0 ; i < targets.length ; i++)
