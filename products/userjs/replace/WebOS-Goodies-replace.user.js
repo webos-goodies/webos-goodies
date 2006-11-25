@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        replace
-// @description aaa
-// @namespace   http://webos-goodies.jp/
+// @description Adds replace functionality to TEXTAREA.
+// @namespace   webos-goodies.jp
 // @include     *
 // ==/UserScript==
 
@@ -12,7 +12,7 @@ var WebOSGoodies_replace = {
 keyCode : 'Q'.charCodeAt(0),
 
 frameNodes : ['text', 'cmd'],
-temporaryValues : ['target', 'targetWords', 'phase', 'left', 'right', 'input', 'confirm', 'yes', 'no', 'abort', 'searchWord', 'replaceWord'],
+temporaryValues : ['target', 'targetWords', 'phase', 'left', 'right', 'input', 'confirm', 'yes', 'no', 'all', 'cancel', 'searchWord', 'replaceWord'],
 
 baseStyle : [
   'color:black;',
@@ -159,7 +159,9 @@ begin : function(target)
     document.createTextNode(' / '),
     this.no = this.createElement('span', null, '[N]o', null),
     document.createTextNode(' / '),
-    this.abort = this.createElement('span', null, '[A]bort', null)];
+    this.all = this.createElement('span', null, '[A]ll', null),
+    document.createTextNode(' / '),
+    this.cancel = this.createElement('span', null, '[C]ancel', null)];
 
   this.input = this.createElement('input', null, null, this.inputStyle);
   this.input.addEventListener('keydown', this.onKeyDown, false);
@@ -317,18 +319,20 @@ phaseTo : {
 },
 
 phaseReplace : {
-  options : ['yes', 'no', 'abort'],
+  options : ['yes', 'no', 'all', 'cancel'],
 
   begin : function(owner)
   {
     this.wordIndex = 0;
     this.selectIndex = 0;
     this.replaceCount = 0;
+    this.live = true;
     this.update(owner);
     owner.confirm.style.display = 'inline';
   },
   end : function(owner)
   {
+    this.live = false;
     owner.confirm.style.display = 'none';
   },
   onKeyDown : function(owner, e)
@@ -346,6 +350,10 @@ phaseReplace : {
       }
       else if(this.selectIndex == 2)
       {
+          this.replaceAll(owner);
+      }
+      else if(this.selectIndex == 3)
+      {
         owner.end();
       }
     }
@@ -358,6 +366,10 @@ phaseReplace : {
       this.skip(owner);
     }
     else if(k == 65)
+    {
+      this.replaceAll(owner);
+    }
+    else if(k == 67)
     {
       owner.end();
     }
@@ -395,7 +407,7 @@ phaseReplace : {
       }
     }
   },
-  replace : function(owner)
+  replace : function(owner, skipUpdate)
   {
     var n = document.createTextNode(owner.replaceWord);
     var o = owner.targetWords[this.wordIndex].lastChild;
@@ -403,8 +415,18 @@ phaseReplace : {
     this.wordIndex++;
     this.selectIndex = 0;
     this.replaceCount += 1;
-    this.update(owner);
+    if(!skipUpdate) { this.update(owner); }
     this.finish(owner);
+  },
+  replaceAll : function(owner)
+  {
+    if(confirm('Replace all?'))
+    {
+      while(this.live)
+      {
+        this.replace(owner, true);
+      }
+    }
   },
   skip : function(owner)
   {
