@@ -28,7 +28,8 @@ frameStyle : [
   'z-index:10000;'].join(''),
 
 textStyle : [
-  'white-space:pre;',
+  'line-height:1.3em;',
+  window.opera ? 'white-space:pre-wrap;' : 'white-space:pre;',
   'top:20px;',
   'bottom:60px;',
   'left:20px;',
