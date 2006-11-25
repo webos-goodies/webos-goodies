@@ -446,7 +446,7 @@ phaseReplace : {
         var nodes = owner.text.childNodes;
         for(var i = 0 ; i < nodes.length ; ++i)
         {
-          if(nodes[i].nodeType == Node.TEXT_NODE)
+          if(nodes[i].nodeType == 3/* Node.TEXT_NODE is undefined on Firefox :( */)
             result[result.length] = nodes[i].data;
           else
             result[result.length] = nodes[i].lastChild.data;
