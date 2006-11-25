@@ -11,6 +11,7 @@
 
 <style>
 h1 { text-align: center; }
+li { font-size: small; line-height: 1.5em; }
 </style>
 
 </head>
@@ -19,9 +20,15 @@ h1 { text-align: center; }
 
 <h1>WebOS-Goodies-replace.user.jp ライブデモ</h1>
 
-<p>以下の TEXTAREA 内をクリックして Ctrl + Q を押すと、文字列置換ができます。</p>
+<ol>
+<li>テキストエリア内をクリックしてフォーカスを移し、 Alt + Shift + R を押してください。</li>
+<li>下のボックスに「Search for ?」と表示され、テキストが入力できる状態になります。置換する元の文字列を入力して、 Enter キーを押してください。</li>
+<li>次に「Replce with ?」と表示されますので、今度は置換後の文字列を入力し、 Enter キーを押してください。</li>
+<li>検索対象の文字列が水色で表示され、下のボックスに Yes（置換する）, No（置換しない）, All（すべて置換する）, Cancel（置換せずに終了する）の選択肢が表示されます。カーソルキーの左右で選んで Enter キーで選択してください。それぞれの頭文字のキーでも選択が可能です。</li>
+<li>すべての文字列が置換し終わると、 TEXTAREA 内のテキストを実際に置き換えてボックスが消えます。</li>
+</ol>
 
-<textarea style="width: 100%; height: 10em;">
+<textarea style="width: 100%; height: 20em;">
 // ==UserScript==
 // @name        TEXTAREA Replace
 // @description Adds replace functionality to TEXTAREA.
