@@ -9,7 +9,7 @@
 
 var WebOSGoodies_replace = {
 
-keyCode : 'Q'.charCodeAt(0),
+keyCode : 'R'.charCodeAt(0),
 
 frameNodes : ['text', 'cmd'],
 temporaryValues : ['target', 'targetWords', 'phase', 'left', 'right', 'input', 'confirm', 'yes', 'no', 'all', 'cancel', 'searchWord', 'replaceWord'],
@@ -111,14 +111,14 @@ onLoad : function()
       if(!module.phase)
       {
         if(e.target.tagName && e.target.tagName == 'TEXTAREA' &&
-           e.keyCode == module.keyCode && e.ctrlKey)
+           e.keyCode == module.keyCode && e.altKey && e.shiftKey)
         {
           module.begin(e.target);
           e.stopPropagation();
           e.returnValue=false;
         }
       }
-      else if(module.phase == module.phaseReplace)
+      else if(e.target != module.input || module.phase == module.phaseReplace)
       {
         module.onKeyDown(e);
         e.stopPropagation();
@@ -130,7 +130,7 @@ onLoad : function()
     handleEvent:function(e)
     {
       var module = WebOSGoodies_replace;
-      if(module && module.phase == module.phaseReplace)
+      if(module.phase && e.target != module.input)
       {
         e.stopPropagation();
         e.returnValue=false;
@@ -140,13 +140,6 @@ onLoad : function()
   window.addEventListener('keydown', keyDownHandler, true);
   window.addEventListener('keypress', keyPressHandler, true);
   window.addEventListener('keyup', keyPressHandler, true);
-/*
-  var targets=document.getElementsByTagName('textarea');
-  for(var i=0 ; i < targets.length ; i++)
-  {
-    targets[i].addEventListener('keydown', handler, false);
-  }
-*/
 },
 
 begin : function(target)
@@ -259,7 +252,6 @@ phaseFrom : {
   },
   end : function(owner)
   {
-    owner.input.blur();
     owner.input.style.display = 'none';
   },
   onKeyDown : function(owner, e)
@@ -302,7 +294,6 @@ phaseTo : {
   },
   end : function(owner)
   {
-    owner.input.blur();
     owner.input.style.display = 'none';
   },
   onKeyDown : function(owner, e)
@@ -458,6 +449,8 @@ phaseReplace : {
       {
         alert('Finish : no word has been replaced.');
       }
+      owner.input.style.display = 'inline';
+      owner.input.focus();
       owner.end();
     }
   }

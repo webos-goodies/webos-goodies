@@ -23,9 +23,9 @@ h1 { text-align: center; }
 
 <textarea style="width: 100%; height: 10em;">
 // ==UserScript==
-// @name        replace
-// @description aaa
-// @namespace   http://webos-goodies.jp/
+// @name        TEXTAREA Replace
+// @description Adds replace functionality to TEXTAREA.
+// @namespace   webos-goodies.jp
 // @include     *
 // ==/UserScript==
 
@@ -33,10 +33,10 @@ h1 { text-align: center; }
 
 var WebOSGoodies_replace = {
 
-keyCode : 'Q'.charCodeAt(0),
+keyCode : 'R'.charCodeAt(0),
 
 frameNodes : ['text', 'cmd'],
-temporaryValues : ['target', 'targetWords', 'phase', 'left', 'right', 'input', 'confirm', 'yes', 'no', 'abort', 'searchWord', 'replaceWord'],
+temporaryValues : ['target', 'targetWords', 'phase', 'left', 'right', 'input', 'confirm', 'yes', 'no', 'all', 'cancel', 'searchWord', 'replaceWord'],
 
 baseStyle : [
   'color:black;',
@@ -52,7 +52,8 @@ frameStyle : [
   'z-index:10000;'].join(''),
 
 textStyle : [
-  'white-space:pre;',
+  'line-height:1.3em;',
+  window.opera ? 'white-space:pre-wrap;' : 'white-space:pre;',
   'top:20px;',
   'bottom:60px;',
   'left:20px;',
@@ -134,14 +135,14 @@ onLoad : function()
       if(!module.phase)
       {
         if(e.target.tagName && e.target.tagName == 'TEXTAREA' &&
-           e.keyCode == module.keyCode && e.ctrlKey)
+           e.keyCode == module.keyCode && e.altKey && e.shiftKey)
         {
           module.begin(e.target);
           e.stopPropagation();
           e.returnValue=false;
         }
       }
-      else if(module.phase == module.phaseReplace)
+      else if(e.target != module.input || module.phase == module.phaseReplace)
       {
         module.onKeyDown(e);
         e.stopPropagation();
@@ -153,7 +154,7 @@ onLoad : function()
     handleEvent:function(e)
     {
       var module = WebOSGoodies_replace;
-      if(module && module.phase == module.phaseReplace)
+      if(module.phase && e.target != module.input)
       {
         e.stopPropagation();
         e.returnValue=false;
@@ -163,13 +164,6 @@ onLoad : function()
   window.addEventListener('keydown', keyDownHandler, true);
   window.addEventListener('keypress', keyPressHandler, true);
   window.addEventListener('keyup', keyPressHandler, true);
-/*
-  var targets=document.getElementsByTagName('textarea');
-  for(var i=0 ; i &lt; targets.length ; i++)
-  {
-    targets[i].addEventListener('keydown', handler, false);
-  }
-*/
 },
 
 begin : function(target)
@@ -183,7 +177,9 @@ begin : function(target)
     document.createTextNode(' / '),
     this.no = this.createElement('span', null, '[N]o', null),
     document.createTextNode(' / '),
-    this.abort = this.createElement('span', null, '[A]bort', null)];
+    this.all = this.createElement('span', null, '[A]ll', null),
+    document.createTextNode(' / '),
+    this.cancel = this.createElement('span', null, '[C]ancel', null)];
 
   this.input = this.createElement('input', null, null, this.inputStyle);
   this.input.addEventListener('keydown', this.onKeyDown, false);
@@ -273,14 +269,13 @@ onKeyDown : function(e)
 phaseFrom : {
   begin : function(owner)
   {
-    owner.left.innerHTML = 'Search word?';
+    owner.left.innerHTML = 'Search for ?';
     owner.input.value = '';
     owner.input.style.display = 'inline';
     owner.input.focus();
   },
   end : function(owner)
   {
-    owner.input.blur();
     owner.input.style.display = 'none';
   },
   onKeyDown : function(owner, e)
@@ -316,14 +311,13 @@ phaseFrom : {
 phaseTo : {
   begin : function(owner)
   {
-    owner.left.innerHTML = 'Replace word?';
+    owner.left.innerHTML = 'Replace with ?';
     owner.input.value = '';
     owner.input.style.display = 'inline';
     owner.input.focus();
   },
   end : function(owner)
   {
-    owner.input.blur();
     owner.input.style.display = 'none';
   },
   onKeyDown : function(owner, e)
@@ -341,18 +335,20 @@ phaseTo : {
 },
 
 phaseReplace : {
-  options : ['yes', 'no', 'abort'],
+  options : ['yes', 'no', 'all', 'cancel'],
 
   begin : function(owner)
   {
     this.wordIndex = 0;
     this.selectIndex = 0;
     this.replaceCount = 0;
+    this.live = true;
     this.update(owner);
     owner.confirm.style.display = 'inline';
   },
   end : function(owner)
   {
+    this.live = false;
     owner.confirm.style.display = 'none';
   },
   onKeyDown : function(owner, e)
@@ -370,6 +366,10 @@ phaseReplace : {
       }
       else if(this.selectIndex == 2)
       {
+          this.replaceAll(owner);
+      }
+      else if(this.selectIndex == 3)
+      {
         owner.end();
       }
     }
@@ -382,6 +382,10 @@ phaseReplace : {
       this.skip(owner);
     }
     else if(k == 65)
+    {
+      this.replaceAll(owner);
+    }
+    else if(k == 67)
     {
       owner.end();
     }
@@ -419,7 +423,7 @@ phaseReplace : {
       }
     }
   },
-  replace : function(owner)
+  replace : function(owner, skipUpdate)
   {
     var n = document.createTextNode(owner.replaceWord);
     var o = owner.targetWords[this.wordIndex].lastChild;
@@ -427,8 +431,18 @@ phaseReplace : {
     this.wordIndex++;
     this.selectIndex = 0;
     this.replaceCount += 1;
-    this.update(owner);
+    if(!skipUpdate) { this.update(owner); }
     this.finish(owner);
+  },
+  replaceAll : function(owner)
+  {
+    if(confirm('Replace all?'))
+    {
+      while(this.live)
+      {
+        this.replace(owner, true);
+      }
+    }
   },
   skip : function(owner)
   {
@@ -447,7 +461,7 @@ phaseReplace : {
         var nodes = owner.text.childNodes;
         for(var i = 0 ; i &lt; nodes.length ; ++i)
         {
-          if(nodes[i].nodeType == Node.TEXT_NODE)
+          if(nodes[i].nodeType == 3/* Node.TEXT_NODE is undefined on Firefox Greasemonkey extension. :( */)
             result[result.length] = nodes[i].data;
           else
             result[result.length] = nodes[i].lastChild.data;
@@ -459,6 +473,8 @@ phaseReplace : {
       {
         alert('Finish : no word has been replaced.');
       }
+      owner.input.style.display = 'inline';
+      owner.input.focus();
       owner.end();
     }
   }
