@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name        replace
+// @name        TEXTAREA Replace
 // @description Adds replace functionality to TEXTAREA.
 // @namespace   webos-goodies.jp
 // @include     *
@@ -252,7 +252,7 @@ onKeyDown : function(e)
 phaseFrom : {
   begin : function(owner)
   {
-    owner.left.innerHTML = 'Search word?';
+    owner.left.innerHTML = 'Search for ?';
     owner.input.value = '';
     owner.input.style.display = 'inline';
     owner.input.focus();
@@ -295,7 +295,7 @@ phaseFrom : {
 phaseTo : {
   begin : function(owner)
   {
-    owner.left.innerHTML = 'Replace word?';
+    owner.left.innerHTML = 'Replace with ?';
     owner.input.value = '';
     owner.input.style.display = 'inline';
     owner.input.focus();
@@ -446,7 +446,7 @@ phaseReplace : {
         var nodes = owner.text.childNodes;
         for(var i = 0 ; i < nodes.length ; ++i)
         {
-          if(nodes[i].nodeType == Node.TEXT_NODE)
+          if(nodes[i].nodeType == 3/* Node.TEXT_NODE is undefined on Firefox Greasemonkey extension. :( */)
             result[result.length] = nodes[i].data;
           else
             result[result.length] = nodes[i].lastChild.data;
