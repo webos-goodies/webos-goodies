@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name        replace
+// @name        TEXTAREA Replace
 // @description Adds replace functionality to TEXTAREA.
 // @namespace   webos-goodies.jp
 // @include     *
