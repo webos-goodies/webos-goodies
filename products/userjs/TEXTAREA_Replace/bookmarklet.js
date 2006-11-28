@@ -19,6 +19,7 @@ baseStyle : [
   'font: normal normal normal 12px/1.2em monospace;'].join(''),
 
 frameStyle : [
+  'text-align:left;',
   'background-color:white;',
   'border:solid 1px black;',
   'padding:8px;',
@@ -45,6 +46,7 @@ cmdStyle : [
 innerStyle : [
   'position:static;',
   'overflow:hidden;',
+  'text-align:left;',
   'border:none;',
   'padding:0px;',
   'margin:0px;',
