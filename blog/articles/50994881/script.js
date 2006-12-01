@@ -14,5 +14,7 @@ window.onload = function() {
   for(var i = 0 ; i < e.length ; ++i)
   {
     e[i].onkeydown = f;
+    e[i].onkeyup = f;
+    e[i].onkeypress = f;
   }
 }
