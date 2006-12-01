@@ -14,7 +14,7 @@ function set_content(content)
   var html = ""
   for(var i in content.Entry)
   {
-    html += '<a href="' + _hesc(content.Entry[i].Link) + '">'
+    html += '<a target="_top" href="' + _hesc(content.Entry[i].Link) + '">'
     html += _hesc(content.Entry[i].Title) + '</a><br/>';
   }
   _gel("feed_titles").innerHTML = html;
