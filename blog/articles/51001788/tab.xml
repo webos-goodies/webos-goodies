@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?> 
 <Module>
-  <ModulePrefs title="拡張ライブラリサンプル"
-               title_url="http://webos-goodies.jp/"
+  <ModulePrefs title="タブライブラリの例"
+               title_url="http://webos-goodies.jp/archives/51001788.html"
                height="200">
     <Require feature="setprefs"/>
     <Require feature="tabs"/>
