@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<Module>
+  <ModulePrefs title="拡張ライブラリサンプル"
+               title_url="http://webos-goodies.jp/"
+               height="200">
+    <Require feature="setprefs"/>
+    <Require feature="tabs"/>
+  </ModulePrefs>
+  <UserPref name="selectedTab" datatype="hidden"/>
+  <Content type="html">
+    <![CDATA[
+
+<style type="text/css">
+@import url(http://www.google.com/ig/tablib.css);
+</style>
+
+<script type="text/javascript">
+function dynamicContent(tabId)
+{
+  var t = _gel(tabId)
+  if(typeof(t.initialized) == "undefined")
+  {
+    var e = document.createElement('div')
+    e.className = "sec";
+    e.innerHTML = 'コールバックによる動的なコンテンツ';
+    t.appendChild(e);
+    t.initialized = true;
+  }
+}
+function init()
+{
+  var tabs = new _IG_Tabs(__MODULE_ID__, "InnerHTML");
+  _gel(tabs.addTab("InnerHTML")).innerHTML = '<div class="sec">innerHTML によるコンテンツ</div>';
+  tabs.addTab("隠しdiv", "hidden_div1");
+  tabs.addTab("隠しdiv+callback", "hidden_div2", dynamicContent);
+  tabs.addDynamicTab("callback", dynamicContent);
+}
+
+_IG_RegisterOnloadHandler(init);
+</script>
+
+<style type="text/css">
+.sec { font-size:12px; border: solid 1px gray; padding:4px; margin: 4px; }
+</style>
+
+<div class="sec">静的な内容はすべてのタブに表示されます。</div>
+
+<div class="sec" id="hidden_div1" style="display:none;">隠しdivによるコンテンツ</div>
+<div class="sec" id="hidden_div2" style="display:none;">隠しdivによるコンテンツ</div>
+
+<div class="sec">表示順序は、エレメントの順序そのままですね。たぶん display 属性を制御しているだけなのでしょう（＾＾；</div>
+
+    ]]>
+  </Content>
+</Module>
