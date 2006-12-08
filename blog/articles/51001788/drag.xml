@@ -31,7 +31,7 @@ var drag_obj = new _IG_Drag();
 drag_obj.addSource("item1");
 drag_obj.addSource("item2");
 drag_obj.addSource("item3");
-drag_obj.addSource("item4");
+drag_obj.addSource("item4", "item4", '<div style="font-size:10px">ドラッグ中の表示は<br/>差し替えられます</div>');
 drag_obj.addTarget("box1");
 drag_obj.addTarget("box2");
 drag_obj.onDragStart = function(source) {
