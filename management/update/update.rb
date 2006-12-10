@@ -49,9 +49,11 @@ class Update
     @new_dirs << JSONP_DIR unless @new_dirs.include?(JSONP_DIR)
     json = WebAPI::Json.new
     @articles.each do |tag, posts|
-      p = posts.map { |post| { "t" => post.title, "u" => post.url } }
-      @new_files["#{JSONP_DIR}/#{tag}.js"] =
-        "tplRegistCategory(\"#{json.escape(tag)}\", #{json.build(p)});"
+      fname = "#{JSONP_DIR}/#{tag}.js"
+      obj = {}
+      obj['p'] = posts.map { |post| { "t" => post.title, "u" => post.url } }
+      obj['t'] = tag;
+      @new_files[fname] = "tplRegistCategory(#{json.build(obj)});"
     end
   end
 
