@@ -2,7 +2,7 @@
 <Module>
   <ModulePrefs title="ミニメッセージライブラリの例"
                title_url="http://webos-goodies.jp/archives/51001788.html"
-               height="200">
+               height="150">
     <Require feature="minimessage"/>
   </ModulePrefs>
   <Content type="html">
