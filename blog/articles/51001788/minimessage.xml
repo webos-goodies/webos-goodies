@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<Module>
+  <ModulePrefs title="ミニメッセージライブラリの例"
+               title_url="http://webos-goodies.jp/archives/51001788.html"
+               height="200">
+    <Require feature="minimessage"/>
+  </ModulePrefs>
+  <Content type="html">
+    <![CDATA[
+
+<style>body { font-size: 12px; }</style>
+
+<div style="margin-top:1em;">任意の場所にメッセージを表示することも可能。</div>
+<div id="msg_box">こんな感じで</div>
+
+<div style="margin-top:1em;">
+  <a href="javascript:closeAll();">すべてのメッセージを消します。</a>
+</div>
+
+<script type="text/javascript">
+var msg = new _IG_MiniMessage(__MODULE_ID__);
+var msgs = [
+  msg.createDismissibleMessage("クローズボタン付きメッセージ", function(){return confirm("閉じますか？");}),
+  msg.createStaticMessage("クローズボタンなしメッセージ", function(){return confirm("閉じますか？");}),
+  msg.createStaticMessage('HTMLで<span style="color:red;">マークアップ</span>もできます'),
+  msg.createTimerMessage('5秒後に消えます', 5),
+  msg.createStaticMessage(_gel("msg_box"))];
+
+function closeAll() {
+  for(var i = 0 ; i < msgs.length ; ++i)
+  {
+    msg.dismissMessage(msgs[i]);
+  }
+}
+</script>
+
+    ]]>
+  </Content>
+</Module>
