@@ -1,7 +1,6 @@
 #! /usr/bin/ruby
 
 require 'webapi/delicious'
-require 'nkf'
 require 'erb'
 require 'fileutils'
 require 'net/ftp'
@@ -31,8 +30,8 @@ class Update
 
   def fetch_articles()
     del = WebAPI::Delicious.new(*DELICIOUS)
-    del.tags.each do |tag|
-      @articles[tag.name] = del.posts(100, [tag.name])
+    del.get_tags.each do |tag|
+      @articles[tag.name] = del.get_posts('tags' => [tag.name])
     end
   end
 
