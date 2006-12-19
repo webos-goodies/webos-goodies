@@ -23,8 +23,8 @@ var msgs = [
   msg.createDismissibleMessage("クローズボタン付きメッセージ", function(){return confirm("閉じますか？");}),
   msg.createStaticMessage("クローズボタンなしメッセージ", function(){return confirm("閉じますか？");}),
   msg.createStaticMessage('HTMLで<span style="color:red;">マークアップ</span>もできます'),
-  msg.createTimerMessage('5秒後に消えます', 5),
-  msg.createStaticMessage(_gel("msg_box"))];
+  msg.createStaticMessage(_gel("msg_box")),
+  msg.createTimerMessage('5秒後に消えます', 5)];
 
 function closeAll() {
   for(var i = 0 ; i < msgs.length ; ++i)
