@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<Module>
+  <ModulePrefs title="SetPrefs &amp; Dynamic Height"
+               title_url="http://webos-goodies.jp/archives/51001788.html"
+               height="25">
+    <Require feature="setprefs"/>
+    <Require feature="dynamic-height"/>
+  </ModulePrefs>
+  <UserPref name="height" datatype="hidden" default_value="25"/>
+  <Content type="html">
+    <![CDATA[
+
+<script type="text/javascript">
+var prefs = new _IG_Prefs(__MODULE_ID__);
+function fit()
+{
+  var height = _max(Number(_gel('height').value), 25);
+  _gel('height').value = height;
+  _gel('wrap').style.height = height + 'px';
+  _IG_AdjustIFrameHeight();
+  prefs.set('height', height);
+}
+_IG_RegisterOnloadHandler(fit)
+</script>
+
+<div id="wrap" style="overflow: hidden;">
+  <form onsubmit="fit();return false;">
+    <input id="height" type="text" size="8" value="__UP_height__"/>
+    <input type="submit" value="適用"/>
+  </form>
+</div>
+
+    ]]>
+  </Content>
+</Module>
