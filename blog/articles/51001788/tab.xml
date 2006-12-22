@@ -1,8 +1,8 @@
-<?xml version="1.0" encoding="UTF-8" ?> 
+<?xml version="1.0" encoding="UTF-8" ?>
 <Module>
   <ModulePrefs title="タブライブラリの例"
                title_url="http://webos-goodies.jp/archives/51001788.html"
-               height="200">
+               height="120">
     <Require feature="setprefs"/>
     <Require feature="tabs"/>
   </ModulePrefs>
@@ -31,8 +31,8 @@ function init()
 {
   var tabs = new _IG_Tabs(__MODULE_ID__, "InnerHTML");
   _gel(tabs.addTab("InnerHTML")).innerHTML = '<div class="sec">innerHTML によるコンテンツ</div>';
-  tabs.addTab("隠しdiv", "hidden_div1");
-  tabs.addTab("隠しdiv+callback", "hidden_div2", dynamicContent);
+  tabs.addTab("div", "hidden_div1");
+  tabs.addTab("div+callback", "hidden_div2", dynamicContent);
   tabs.addDynamicTab("callback", dynamicContent);
 }
 
@@ -45,10 +45,8 @@ _IG_RegisterOnloadHandler(init);
 
 <div class="sec">静的な内容はすべてのタブに表示されます。</div>
 
-<div class="sec" id="hidden_div1" style="display:none;">隠しdivによるコンテンツ</div>
-<div class="sec" id="hidden_div2" style="display:none;">隠しdivによるコンテンツ</div>
-
-<div class="sec">表示順序は、エレメントの順序そのままですね。たぶん display 属性を制御しているだけなのでしょう（＾＾；</div>
+<div class="sec" id="hidden_div1" style="display:none;">divによるコンテンツ</div>
+<div class="sec" id="hidden_div2" style="display:none;">divによるコンテンツ</div>
 
     ]]>
   </Content>
