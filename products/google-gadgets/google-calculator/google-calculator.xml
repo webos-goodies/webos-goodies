@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Module>
+  <ModulePrefs title="Google電卓"
+               title_url="http://webos-goodies.jp/"
+               height="45"/>
+  <Content type="html">
+    <![CDATA[
+
+<script type="text/javascript">
+var mod__MODULE_ID__ = {
+receive : function(contents)
+{
+  var json = eval('(' + contents + ')');
+  var answer = json[1][0];
+  if(typeof(answer) == "string" && /^=.*/.test(answer))
+  {
+    _gel('answer__MODULE_ID__').innerHTML = _hesc(answer);
+  }
+  else
+  {
+    _gel('answer__MODULE_ID__').innerHTML = "計算できません";
+  }
+},
+
+calculate : function()
+{
+  var exp = _gel('expression__MODULE_ID__').value;
+  var url = 'http://suggestqueries.google.com/complete/search?output=firefox&hl=ja&qu=' + _esc(exp);
+  _IG_FetchContent(url, this.receive);
+}
+
+};
+</script>
+
+<style>
+form#form__MODULE_ID__ {
+  width:100%;
+  padding:0px;
+  margin:0px;
+}
+#form__MODULE_ID__ table {
+  width:100%;
+  border:none;
+  padding:0px;
+  margin:0px;
+}
+#form__MODULE_ID__ td, #form__MODULE_ID__ tr {
+  font-size:12px;
+  border:none;
+  padding:0px;
+  margin:0px;
+}
+#answer__MODULE_ID__ {
+  font-size:14px;
+  padding:0px;
+  margin:2px 0px 0px 8px;
+}
+</style>
+
+<form id="form__MODULE_ID__" onsubmit="mod__MODULE_ID__.calculate(); return false;">
+<table>
+<tr>
+<td><input id="expression__MODULE_ID__" type="text" style="width:100%;"/></td>
+<td width="1"><input type="submit" value="計算"/></td>
+</tr>
+</table>
+</form>
+<div id="answer__MODULE_ID__"></div>
+
+    ]]>
+  </Content>
+</Module>
+
