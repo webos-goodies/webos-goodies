@@ -4,6 +4,7 @@ require 'webapi/delicious'
 require 'erb'
 require 'fileutils'
 require 'net/ftp'
+require 'kconv'
 
 require 'account'
 
@@ -11,12 +12,48 @@ class Update
 
   JSONP_DIR = 'jsonp'
 
-  def initialize(account, current_path, old_path, remote_path)
+  class TemplateEngine
+
+    def initialize(template_dir)
+      @templates = {}
+      Dir.chdir(template_dir) do
+        Dir.glob('*') do |fname|
+          @templates[fname] = IO.read(fname)
+        end
+      end
+    end
+
+    def apply(fname, articles)
+      @articles = articles
+      @template = 'standard'
+      @title    = 'No title'
+      @content = ERB.new(IO.read(fname)).result(binding)
+      if @template
+        @content = ERB.new(@templates[@template]).result(binding)
+      end
+      Kconv.kconv(@content, Kconv::EUC, Kconv::UTF8)
+    end
+
+    def list_articles(tag, max = nil)
+      posts = max ? @articles[tag][0, max] : @articles[tag].clone
+      text = ''
+      posts.each do |post|
+        url     = post.url
+        title   = post.title
+        text += '<li><a href="' + url + '">' + title + "</a></li>\n"
+      end
+      text
+    end
+
+  end
+
+  def initialize(account, current_path, old_path, remote_path, template_dir)
     @ftp          = nil
     @account      = account
     @current_path = current_path
     @old_path     = old_path
     @remote_path  = remote_path
+    @template     = TemplateEngine.new(template_dir)
     @new_files    = {}
     @new_dirs     = []
     @articles     = {}
@@ -24,6 +61,7 @@ class Update
 
   def prepare()
     @ftp = Net::FTP.new(*@account)
+    @ftp.passive = true
     FileUtils.rm_rf(@current_path)
     FileUtils.mkdir(@current_path)
   end
@@ -41,7 +79,7 @@ class Update
         if File.directory?(fname)
           @new_dirs << fname
         else
-          @new_files[fname] = ERB.new(IO.read(fname)).result(binding)
+          @new_files[fname] = @template.apply(fname, @articles)
         end
       end
     end
@@ -94,8 +132,8 @@ class Update
       fetch_articles()
       build_files()
       update_current()
-      upload()
-      post_process()
+      #upload()
+      #post_process()
     ensure
       @ftp.close if @ftp
     end
@@ -103,4 +141,4 @@ class Update
 
 end
 
-Update.new(LIVEDOOR, 'current', 'old', '/categories').do()
+Update.new(LIVEDOOR, 'current', 'old', '/categories', 'templates').do()
