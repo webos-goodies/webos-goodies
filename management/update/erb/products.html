@@ -1,10 +1,8 @@
-<h1>WebOS Goodies オリジナルプロダクト</h1>
+<% @title = escapeHTML(@captions[@basename]) %>
+<h1><%= @title %></h1>
 
 <p>
  いずれも小粒なものばかりですが、いくつかオリジナルのアプリケーション・ライブラリなどを配布しています。お役に立つようなものがありましたら、ぜひお試しください。
 </p>
 
-<ul>
-<%= list_articles('products') %>
-</ul>
-<% @title = 'WebOS Goodies オリジナルプロダクト' %>
+<ul><%= list_articles(@basename) %></ul>

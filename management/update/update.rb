@@ -7,12 +7,18 @@ require 'net/ftp'
 require 'kconv'
 
 require 'account'
+require 'caption'
+require 'open-uri'
 
 class Update
 
   JSONP_DIR = 'jsonp'
 
   class TemplateEngine
+
+    EntityRefMap = {
+      '>' => '&lt;',  '<' => '&gt;', '&' => '&amp;', '"' => '&quot;'
+    }
 
     def initialize(template_dir)
       @templates = {}
@@ -21,10 +27,17 @@ class Update
           @templates[fname] = IO.read(fname)
         end
       end
+      pluginA = open('http://webos-goodies.jp/archives/plugin_A.inc') do |file|
+        file.read
+      end
+      @pluginA = Kconv.kconv(pluginA, Kconv::UTF8, Kconv::EUC)
     end
 
-    def apply(fname, articles)
+    def apply(fname, articles, bundles, captions)
+      @basename = File.basename(fname, '.*')
       @articles = articles
+      @bundles  = bundles
+      @captions = captions
       @template = 'standard'
       @title    = 'No title'
       @content = ERB.new(IO.read(fname)).result(binding)
@@ -45,6 +58,12 @@ class Update
       text
     end
 
+    def escapeHTML(str)
+      str.gsub('<>&"') do |s|
+        EntityRefMap[s]
+      end
+    end
+
   end
 
   def initialize(account, current_path, old_path, remote_path, template_dir)
@@ -57,6 +76,7 @@ class Update
     @new_files    = {}
     @new_dirs     = []
     @articles     = {}
+    @bundles      = {}
   end
 
   def prepare()
@@ -67,9 +87,16 @@ class Update
   end
 
   def fetch_articles()
-    del = WebAPI::Delicious.new(*DELICIOUS)
-    del.get_tags.each do |tag|
-      @articles[tag.name] = del.get_posts('tags' => [tag.name])
+    WebAPI::Delicious.new(*DELICIOUS).get_bundles().each do |bundle|
+      bundle.tags.each do |tag|
+        raise "Two or more bundles have #{tag}." if @bundles.has_key?(tag)
+        @bundles[tag] = bundle
+      end
+    end
+    del = WebAPI::Delicious.new(DELICIOUS[0])
+    @bundles.each_key do |tag|
+      print "Fetching #{tag}...\n"
+      @articles[tag] = del.get_posts('tags' => [tag])
     end
   end
 
@@ -79,17 +106,20 @@ class Update
         if File.directory?(fname)
           @new_dirs << fname
         else
-          @new_files[fname] = @template.apply(fname, @articles)
+          @new_files[fname] =
+            @template.apply(fname, @articles, @bundles, CaptionMap)
         end
       end
     end
     @new_dirs << JSONP_DIR unless @new_dirs.include?(JSONP_DIR)
     json = WebAPI::Json.new
     @articles.each do |tag, posts|
+      raise "The caption of #{tag} is not defined." unless CaptionMap[tag]
       fname = "#{JSONP_DIR}/#{tag}.js"
       obj = {}
       obj['p'] = posts.map { |post| { "t" => post.title, "u" => post.url } }
       obj['t'] = tag;
+      obj['c'] = CaptionMap[tag]
       @new_files[fname] = "tplRegistCategory(#{json.build(obj)});"
     end
   end
@@ -132,8 +162,8 @@ class Update
       fetch_articles()
       build_files()
       update_current()
-      #upload()
-      #post_process()
+      upload()
+      post_process()
     ensure
       @ftp.close if @ftp
     end

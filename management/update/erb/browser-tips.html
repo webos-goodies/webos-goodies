@@ -1,10 +1,8 @@
-<h1>Opera &amp; Firefox Tips</h1>
+<% @title = escapeHTML(@captions[@basename]) %>
+<h1><%= @title %></h1>
 
 <p>
  <a href="http://wiki.livedoor.jp/sourcewalker/d/Opera" class="iw_lw">Opera</a> や <a href="http://wiki.livedoor.jp/sourcewalker/d/Firefox" class="iw_lw">Firefox</a> を便利に使うためのちょっとしたアイディアをご紹介しています。まだまだ数が少ないので、今後力を入れて生きたいところです。
 </p>
 
-<ul>
-<%= list_articles('browser-tips') %>
-</ul>
-<% @title = 'Opera &amp; Firefox Tips' %>
+<ul><%= list_articles(@basename) %></ul>

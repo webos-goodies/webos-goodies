@@ -1,95 +1,149 @@
+<% @title = escapeHTML(@captions[@basename]) %>
+
 <p>
  WebOS が現実のものとなれば、サーバーは企業が運用し、個人はシン・クライアントでそのサービスを利用することに終始するようになるのでしょうか？ WebOS Goodies は、むしろその逆だと考えています。各種サービスが Web <acronym title="Application Programming Interface">API</acronym> によって連携する時代だからこそ、個人がサーバーを運用する意味は今以上に高まるでしょう。また、そのサーバー上でオープンソースの Web アプリケーションを稼動させることで、 Web の可能性をより広げることもできます。そこで、このカテゴリーでは <a href="http://wiki.livedoor.jp/sourcewalker/d/GentooLinux" class="iw_lw">GentooLinux</a> をベースとして個人サーバーを構築する方法をご紹介し、そうした時代への布石としたいと思います。
 </p>
 
-<h1><a href="gentoo.html">VMware に Gentoo Linux をインストールする</a></h1>
+<h1><a href="gentoo.html"><%= escapeHTML(@captions['gentoo']) %></a></h1>
 
 <p>
  Windows 上の WMware に <a href="http://wiki.livedoor.jp/sourcewalker/d/GentooLinux" class="iw_lw">GentooLinux</a> をインストールする手順を、順を追ってご紹介しています。 2005 年末から 2006 年にかけての記事なので、最新バージョンとは異なる場合があるかと思いますが、大半は現在でも通用するはずです。 VMware 上で <a href="http://wiki.livedoor.jp/sourcewalker/d/GentooLinux" class="iw_lw">GentooLinux</a> サーバーを運用しようという方は参考にしていただければと思います。
 </p>
 
-<ul>
-<%= list_articles('gentoo', 3) %>
-</ul>
+<fieldset id="tpl_relatedframe">
+<legend>最新記事</legend>
+<div id="tpl_related">
+<ul><%= list_articles('gentoo', 3) %></ul>
+<div class="morecategory">
+<a href="gentoo.html">&gt;&gt; もっと読む</a>
+</div>
+</div>
+</fieldset>
 
-<h1><a href="gentoo-tips.html">Gentoo Linux Tips</a></h1>
+<h1><a href="gentoo-tips.html"><%= escapeHTML(@captions['gentoo-tips']) %></a></h1>
 
 <p>
  <a href="http://wiki.livedoor.jp/sourcewalker/d/Portage" class="iw_lw">Portage</a> 関連以外の <a href="http://wiki.livedoor.jp/sourcewalker/d/GentooLinux" class="iw_lw">GentooLinux</a> の Tips をご紹介するコーナーです。サーバー構築の手順に関する記事も、一回で終わるものはこちらに含めています。ほとんどは <a href="http://wiki.livedoor.jp/sourcewalker/d/VMware" class="iw_lw">VMware</a> とは関係なく <a href="http://wiki.livedoor.jp/sourcewalker/d/GentooLinux" class="iw_lw">GentooLinux</a> 全般に適用できる内容になっています。
 </p>
 
-<ul>
-<%= list_articles('gentoo-tips', 3) %>
-</ul>
+<fieldset id="tpl_relatedframe">
+<legend>最新記事</legend>
+<div id="tpl_related">
+<ul><%= list_articles('gentoo-tips', 3) %></ul>
+<div class="morecategory">
+<a href="gentoo-tips.html">&gt;&gt; もっと読む</a>
+</div>
+</div>
+</fieldset>
 
-<h1><a href="portage-tips.html">Portage Tips</a></h1>
+<h1><a href="portage-tips.html"><%= escapeHTML(@captions['portage-tips']) %></a></h1>
 
 <p>
  <a href="http://wiki.livedoor.jp/sourcewalker/d/Portage" class="iw_lw">Portage</a> は <a href="http://wiki.livedoor.jp/sourcewalker/d/GentooLinux" class="iw_lw">GentooLinux</a> 独自のパッケージ管理システムです。 <a href="http://wiki.livedoor.jp/sourcewalker/d/GentooLinux" class="iw_lw">GentooLinux</a> の特徴の多くがこの <a href="http://wiki.livedoor.jp/sourcewalker/d/Portage" class="iw_lw">Portage</a> によって生み出されており、ある意味 <a href="http://wiki.livedoor.jp/sourcewalker/d/GentooLinux" class="iw_lw">GentooLinux</a> の本質と言っても過言ではないものです。このこーなーでは、 <a href="http://wiki.livedoor.jp/sourcewalker/d/Portage" class="iw_lw">Portage</a> に関連したさまざまな Tips をご紹介しています。あまり日本語の資料が見つからないものを重点的に記事にしていますので、ぜひご活用ください。
 </p>
 
-<ul>
-<%= list_articles('portage-tips', 3) %>
-</ul>
+<fieldset id="tpl_relatedframe">
+<legend>最新記事</legend>
+<div id="tpl_related">
+<ul><%= list_articles('portage-tips', 3) %></ul>
+<div class="morecategory">
+<a href="portage-tips.html">&gt;&gt; もっと読む</a>
+</div>
+</div>
+</fieldset>
 
-<h1><a href="vmware.html">VMware Tips</a></h1>
+<h1><a href="vmware.html"><%= escapeHTML(@captions['vmware']) %></a></h1>
 
 <p>
  <a href="http://wiki.livedoor.jp/sourcewalker/d/VMware" class="iw_lw">VMware</a> に関する細々としたネタを集めています。とくに時刻のずれを解消ネタはけっこう参照していただけています。筆者のスキルゆえにあまり高度な記事が書けていないので、精進していきます。
 </p>
 
-<ul>
-<%= list_articles('vmware', 3) %>
-</ul>
+<fieldset id="tpl_relatedframe">
+<legend>最新記事</legend>
+<div id="tpl_related">
+<ul><%= list_articles('vmware', 3) %></ul>
+<div class="morecategory">
+<a href="vmware.html">&gt;&gt; もっと読む</a>
+</div>
+</div>
+</fieldset>
 
-<h1><a href="bind.html">BIND による DNS サーバーの構築</a></h1>
+<h1><a href="bind.html"><%= escapeHTML(@captions['bind']) %></a></h1>
 
 <p>
  <a href="http://wiki.livedoor.jp/sourcewalker/d/DNS" class="iw_lw">DNS</a> サーバーの定番、 <a href="http://wiki.livedoor.jp/sourcewalker/d/BIND" class="iw_lw">BIND</a> を使用した <a href="http://wiki.livedoor.jp/sourcewalker/d/DNS" class="iw_lw">DNS</a> サーバーの構築方法をご紹介しています。設定ファイルの記述方法などもできるだけ詳細に書くようにしていますので、参考にしていただければと思います。
 </p>
 
-<ul>
-<%= list_articles('bind', 3) %>
-</ul>
+<fieldset id="tpl_relatedframe">
+<legend>最新記事</legend>
+<div id="tpl_related">
+<ul><%= list_articles('bind', 3) %></ul>
+<div class="morecategory">
+<a href="bind.html">&gt;&gt; もっと読む</a>
+</div>
+</div>
+</fieldset>
 
-<h1><a href="apache.html">Apache による Web サーバーの構築</a></h1>
+<h1><a href="apache.html"><%= escapeHTML(@captions['apache']) %></a></h1>
 
 <p>
  <a href="http://wiki.livedoor.jp/sourcewalker/d/Apache" class="iw_lw">Apache</a> による Web サーバー構築をご紹介するコーナーです。 <a href="http://wiki.livedoor.jp/sourcewalker/d/GentooLinux" class="iw_lw">GentooLinux</a> へのインストール方法から細かい Tips まで幅広く取り扱っていきます。
 </p>
 
-<ul>
-<%= list_articles('apache', 3) %>
-</ul>
+<fieldset id="tpl_relatedframe">
+<legend>最新記事</legend>
+<div id="tpl_related">
+<ul><%= list_articles('apache', 3) %></ul>
+<div class="morecategory">
+<a href="apache.html">&gt;&gt; もっと読む</a>
+</div>
+</div>
+</fieldset>
 
-<h1><a href="mysql.html">MySQL によるデータベースの構築</a></h1>
+<h1><a href="mysql.html"><%= escapeHTML(@captions['mysql']) %></a></h1>
 
 <p>
  オープンソース・データベースサーバーの代名詞となりつつある <a href="http://wiki.livedoor.jp/sourcewalker/d/MySQL" class="iw_lw">MySQL</a> のコーナーです。 <a href="opensource-apps.html">オープンソースの Web アプリケーション</a>を利用するには必須のソフトウェアとなりつつありますね。 <a href="http://wiki.livedoor.jp/sourcewalker/d/MySQL" class="iw_lw">MySQL</a> 自身のインストール・利用方法はもちろん、 <a href="http://wiki.livedoor.jp/sourcewalker/d/SQL" class="iw_lw">SQL</a> に関する事柄も扱っていきます。
 </p>
 
-<ul>
-<%= list_articles('mysql', 3) %>
-</ul>
+<fieldset id="tpl_relatedframe">
+<legend>最新記事</legend>
+<div id="tpl_related">
+<ul><%= list_articles('mysql', 3) %></ul>
+<div class="morecategory">
+<a href="mysql.html">&gt;&gt; もっと読む</a>
+</div>
+</div>
+</fieldset>
 
-<h1><a href="ssh.html">SSH 活用法</a></h1>
+<h1><a href="ssh.html"><%= escapeHTML(@captions['ssh']) %></a></h1>
 
 <p>
  暗号化されたセキュアな通信を手軽に利用できる <a href="http://wiki.livedoor.jp/sourcewalker/d/SSH" class="iw_lw">SSH</a> 関連のコーナーです。 <a href="http://wiki.livedoor.jp/sourcewalker/d/SSH" class="iw_lw">SSH</a> は単にセキュアなリモートシェルを実現するものと誤解されていることが多いのですが、実はファイル転送やポートフォワーディングなど、多彩な利用方法があります。これらを活用することで、出先から安全・便利にサーバーへのアクセスができるようになります。個人サーバーを構築したら、真っ先に立ち上げたいサービスのひとつと言えるでしょう。このコーナーでは、サーバー側の設定はもちろん、各種クライアントのご紹介まで <a href="http://wiki.livedoor.jp/sourcewalker/d/SSH" class="iw_lw">SSH</a> 活用に必要な知識をご紹介していきます。
 </p>
 
-<ul>
-<%= list_articles('ssh', 3) %>
-</ul>
+<fieldset id="tpl_relatedframe">
+<legend>最新記事</legend>
+<div id="tpl_related">
+<ul><%= list_articles('ssh', 3) %></ul>
+<div class="morecategory">
+<a href="ssh.html">&gt;&gt; もっと読む</a>
+</div>
+</div>
+</fieldset>
 
-<h1><a href="courier.html">Courier によるメールサーバーの構築</a></h1>
+<h1><a href="courier.html"><%= escapeHTML(@captions['courier']) %></a></h1>
 
 <p>
  <a href="http://wiki.livedoor.jp/sourcewalker/d/Courier" class="iw_lw">Courier</a> メールサーバーを利用して <a href="http://wiki.livedoor.jp/sourcewalker/d/SMTP" class="iw_lw">SMTP</a>, <a href="http://wiki.livedoor.jp/sourcewalker/d/POP3" class="iw_lw">POP3</a>, <a href="http://wiki.livedoor.jp/sourcewalker/d/IMAP" class="iw_lw">IMAP</a> の各サーバーを構築する手順をご紹介しています。残念ながら私自身はメールの管理を完全に <a href="google-apps-for-your-domain.html">Google Apps for Your Domain</a> に移行してしまったのですが、ご参考までに残してあります。これから <a href="http://wiki.livedoor.jp/sourcewalker/d/Courier" class="iw_lw">Courier</a> でメールサーバーを構築しようという方に、少しでもお役に立てば幸いです。
 </p>
 
-<ul>
-<%= list_articles('courier', 3) %>
-</ul>
-
-<% @title = 'Gentoo Linux と VMware による個人サーバー構築記' %>
+<fieldset id="tpl_relatedframe">
+<legend>最新記事</legend>
+<div id="tpl_related">
+<ul><%= list_articles('courier', 3) %></ul>
+<div class="morecategory">
+<a href="courier.html">&gt;&gt; もっと読む</a>
+</div>
+</div>
+</fieldset>

@@ -1,10 +1,8 @@
-<h1>最新 Web アプリケーション速攻レビュー</h1>
+<% @title = escapeHTML(@captions[@basename]) %>
+<h1><%= @title %></h1>
 
 <p>
  Web アプリケーション全盛の今、日々新たなサービスが生まれています。それらの中から、役に立ちそうなサービスを厳選してご紹介するのがこのコーナーです。やはり <a href="http://wiki.livedoor.jp/sourcewalker/d/Google" class="iw_lw">Google</a> 関連が多数を占めてしまいますが、それにこだわらずにさまざまなサービスをご紹介していきます。単なるサービス内容の紹介にとどまらず、活用方法の提案まで踏み込めるように努力していますので、気になる Web アプリケーションがありましたら、ぜひご覧ください。
 </p>
 
-<ul>
-<%= list_articles('web-apps-review') %>
-</ul>
-<% @title = '最新 Web アプリケーション速攻レビュー' %>
+<ul><%= list_articles(@basename) %></ul>

@@ -1,10 +1,8 @@
-<h1>Opera Widgets の作り方</h1>
+<% @title = escapeHTML(@captions[@basename]) %>
+<h1><%= @title %></h1>
 
 <p>
  <a href="http://wiki.livedoor.jp/sourcewalker/d/Opera" class="iw_lw">Opera</a> 9 で追加されたさまざまな機能の中でも異彩を放っているのが <a href="http://wiki.livedoor.jp/sourcewalker/d/Opera%20Widgets" class="iw_lw">Opera Widgets</a> です。 <a href="http://wiki.livedoor.jp/sourcewalker/d/HTML" class="iw_lw">HTML</a> や <a href="http://wiki.livedoor.jp/sourcewalker/d/JavaScript" class="iw_lw">JavaScript</a> といった既存技術を利用してデスクトップで動作するミニアプリケーションを作成できる機能で、その仕様は <acronym title="World Wide Web Consortium">W3C</acronym> で策定中の <a href="http://www.w3.org/TR/widgets/">Widgets 1.0</a> 規格のベースにもなっています。このコーナーでは、その <a href="http://wiki.livedoor.jp/sourcewalker/d/Opera%20Widgets" class="iw_lw">Opera Widgets</a> の作成方法をご紹介しています。自分で好みのウィジェットが作れるほか、 <a href="http://webos-goodies.jp/archives/50548720.html">XMLHttpRequest</a> が任意のサイトに対して発行できるため、各種 Web <acronym title="Application Programming Interface">API</acronym> を利用したマッシュアップの実験も手軽に行えますね。 <a href="http://wiki.livedoor.jp/sourcewalker/d/Opera" class="iw_lw">Opera</a> をご利用の皆さん、この素晴らしい機能をぜひともご活用ください。
 </p>
 
-<ul>
-<%= list_articles('opera-widgets') %>
-</ul>
-<% @title = 'Opera Widgets の作り方' %>
+<ul><%= list_articles(@basename) %></ul>

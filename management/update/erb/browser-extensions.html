@@ -1,10 +1,8 @@
-<h1>拡張機能レビュー</h1>
+<% @title = escapeHTML(@captions[@basename]) %>
+<h1><%= @title %></h1>
 
 <p>
  <a href="http://wiki.livedoor.jp/sourcewalker/d/Opera" class="iw_lw">Opera</a> も <a href="http://wiki.livedoor.jp/sourcewalker/d/Firefox" class="iw_lw">Firefox</a> もそれぞれの熱心なユーザーによりさまざまな拡張機能が作成されています。それらを厳選してご紹介するのが、このコーナーです。また、ときどき自作のものをご紹介することもありますので、お気に召しましたらご利用ください。
 </p>
 
-<ul>
-<%= list_articles('browser-extensions') %>
-</ul>
-<% @title = '拡張機能レビュー' %>
+<ul><%= list_articles(@basename) %></ul>

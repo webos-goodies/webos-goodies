@@ -1,10 +1,8 @@
-<h1>Courier によるメールサーバーの構築</h1>
+<% @title = escapeHTML(@captions[@basename]) %>
+<h1><%= @title %></h1>
 
 <p>
  <a href="http://wiki.livedoor.jp/sourcewalker/d/Courier" class="iw_lw">Courier</a> メールサーバーを利用して <a href="http://wiki.livedoor.jp/sourcewalker/d/SMTP" class="iw_lw">SMTP</a>, <a href="http://wiki.livedoor.jp/sourcewalker/d/POP3" class="iw_lw">POP3</a>, <a href="http://wiki.livedoor.jp/sourcewalker/d/IMAP" class="iw_lw">IMAP</a> の各サーバーを構築する手順をご紹介しています。残念ながら私自身はメールの管理を完全に <a href="google-apps-for-your-domain.html">Google Apps for Your Domain</a> に移行してしまったのですが、ご参考までに残してあります。これから <a href="http://wiki.livedoor.jp/sourcewalker/d/Courier" class="iw_lw">Courier</a> でメールサーバーを構築しようという方に、少しでもお役に立てば幸いです。
 </p>
 
-<ul>
-<%= list_articles('courier') %>
-</ul>
-<% @title = 'Courier によるメールサーバーの構築' %>
+<ul><%= list_articles(@basename) %></ul>

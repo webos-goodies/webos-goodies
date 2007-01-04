@@ -1,10 +1,8 @@
-<h1>雑多な話題</h1>
+<% @title = escapeHTML(@captions[@basename]) %>
+<h1><%= @title %></h1>
 
 <p>
  こちらには、どのコーナーにもあてはまらないような記事を集めています。基本的には時事ネタやプライベートなネタがほとんどなので残しておく意味もあまりないのですが、記録も兼ねてここに置いてあります。
 </p>
 
-<ul>
-<%= list_articles('misc') %>
-</ul>
-<% @title = '雑多な話題' %>
+<ul><%= list_articles(@basename) %></ul>

@@ -28,7 +28,7 @@
 
 <script type="text/javascript"> <!--
 SWBodyTop();
-//SWAuthAdmin();
+SWAuthAdmin();
 //-->
 </script>
 
@@ -102,10 +102,7 @@ SWBodyTop();
 
 <div id="rightside">
 
-<!-- ssi -->
-<!--#include file="plugin_A.inc" -->
-<!-- ssi -->
-<!--#include file="plugin_B.inc" -->
+<%= @pluginA %>
 
 </div><!-- rightside -->
 
