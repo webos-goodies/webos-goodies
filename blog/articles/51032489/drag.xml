@@ -40,7 +40,6 @@ drag_obj.onDragStart = function(source) {
 drag_obj.onDragEnd = function(src, tgt) {
   if(src && src.parentNode && tgt && src.parentNode != tgt)
   {
-    src.parentNode.removeChild(src);
     tgt.appendChild(src);
   }
   _gel("msg").innerHTML = "";
