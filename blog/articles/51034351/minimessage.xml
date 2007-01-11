@@ -21,7 +21,7 @@
 var msg = new _IG_MiniMessage(__MODULE_ID__);
 var msgs = [
   msg.createDismissibleMessage("クローズボタン付きメッセージ", function(){return confirm("閉じますか？");}),
-  msg.createStaticMessage("クローズボタンなしメッセージ", function(){return confirm("閉じますか？");}),
+  msg.createStaticMessage("クローズボタンなしメッセージ"),
   msg.createStaticMessage('HTMLで<span style="color:red;">マークアップ</span>もできます'),
   msg.createStaticMessage(_gel("msg_box")),
   msg.createTimerMessage('5秒後に消えます', 5)];
