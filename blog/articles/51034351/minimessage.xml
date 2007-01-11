@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?> 
 <Module>
   <ModulePrefs title="ミニメッセージライブラリの例"
-               title_url="http://webos-goodies.jp/archives/51001788.html"
+               title_url="http://webos-goodies.jp/archives/51034351.html"
                height="150">
     <Require feature="minimessage"/>
   </ModulePrefs>
