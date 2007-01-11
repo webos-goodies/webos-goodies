@@ -29,7 +29,13 @@ var msgs = [
 function closeAll() {
   for(var i = 0 ; i < msgs.length ; ++i)
   {
-    msg.dismissMessage(msgs[i]);
+    try
+	{
+	  msg.dismissMessage(msgs[i]);
+	}
+	catch(e)
+	{
+	}
   }
 }
 </script>
