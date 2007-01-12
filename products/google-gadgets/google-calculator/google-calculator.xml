@@ -1,8 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <Module>
-  <ModulePrefs title="Google電卓"
-               title_url="http://webos-goodies.jp/"
-               height="45"/>
+  <ModulePrefs title="__MSG_title__"
+               title_url="__MSG_link__"
+			   description="__MSG_description__"
+               height="45"
+			   author="WebOS Goodies"
+			   author_email="support@webos-goodies.jp"
+			   author_affiliation="WebOS Goodies"
+			   author_location="Tokyo, Japan"
+			   author_link="http://webos-goodies.jp/">
+    <Locale message="http://webos-goodies.googlecode.com/svn/trunk/products/google-gadgets/google-calculator/ALL_ALL.xml"/>
+    <Locale lang="en" message="http://webos-goodies.googlecode.com/svn/trunk/products/google-gadgets/google-calculator/en_ALL.xml"/>
+  </ModulePrefs>
   <Content type="html">
     <![CDATA[
 
@@ -18,7 +27,7 @@ receive : function(contents)
   }
   else
   {
-    _gel('answer__MODULE_ID__').innerHTML = "計算できません";
+    _gel('answer__MODULE_ID__').innerHTML = "__MSG_na__";
   }
 },
 
@@ -61,7 +70,7 @@ form#form__MODULE_ID__ {
 <table>
 <tr>
 <td><input id="expression__MODULE_ID__" type="text" style="width:100%;"/></td>
-<td width="1"><input type="submit" value="計算"/></td>
+<td width="1"><input type="submit" value="__MSG_calc__"/></td>
 </tr>
 </table>
 </form>
