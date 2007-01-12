@@ -29,7 +29,7 @@ function dynamicContent(tabId)
 }
 function init()
 {
-  var tabs = new _IG_Tabs(__MODULE_ID__, "InnerHTML");
+  var tabs = new _IG_Tabs(__MODULE_ID__);
   _gel(tabs.addTab("InnerHTML")).innerHTML = '<div class="sec">innerHTML によるコンテンツ</div>';
   tabs.addTab("div", "hidden_div1");
   tabs.addTab("div+callback", "hidden_div2", dynamicContent);
