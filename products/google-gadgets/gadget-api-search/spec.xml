@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<Module>
+  <ModulePrefs title="Gadget API Search"
+               title_url="http://webos-goodies.jp/"
+               height="45">
+    <Require feature="dynamic-height"/> 
+  </ModulePrefs>
+  <UserPref name="max_height" datatype="string" required="true" default_value="300"/>
+  <UserPref name="japanese" datatype="bool" default_value="false"/>
+  <Content type="url" href="http://webos-goodies.googlecode.com/svn/trunk/products/google-gadgets/gadget-api-search/content.html"/>
+</Module>

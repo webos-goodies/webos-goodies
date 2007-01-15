@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Module>
+  <ModulePrefs title="Layout"
+               title_url="http://webos-goodies.jp/"
+               height="0"/>
+  <UserPref name="pref_revision" datatype="hidden" default_value="1"/>
+  <UserPref name="layout" display_name="Layout" datatype="enum" required="true" default_value="LCR">
+    <EnumValue display_value="3 columns (default)" value="LCR"/>
+    <EnumValue display_value="2 columns (LLR)" value="LLR:CCC"/>
+    <EnumValue display_value="2 columns (LRR)" value="LRR:CCC"/>
+    <EnumValue display_value="single columns" value="LLL:CCC:RRR"/>
+  </UserPref>
+  <Content type="html-inline">
+    <![CDATA[
+
+<script type="text/javascript">
+if(_args()['webos-goodies'] != 'noinline') {_IG_RegisterOnloadHandler(function(){
+
+function nextTag(element, tag)
+{
+  while(element = element.nextSibling)
+  {
+    if(element.nodeName == tag)
+    {
+      return element;
+    }
+  }
+  return null;
+}
+
+var col = [
+  _gel('c_1'),
+  _gel('c_2'),
+  _gel('c_3') ];
+var row = col[0].parentNode;
+var tbl = row.parentNode;
+var mode = (new _IG_Prefs(__MODULE_ID__)).getString('layout');
+
+switch(mode)
+{
+case 'LLR:CCC' :
+  var newRow = document.createElement('TR');
+  tbl.appendChild(newRow);
+  row.removeChild(nextTag(col[0], 'TD'));
+  newRow.appendChild(col[1]);
+  col[0].colSpan=3;
+  col[0].style.width='66%';
+  col[1].colSpan=5;
+  col[1].style.width='100%';
+  break;
+
+case 'LRR:CCC' :
+  var newRow = document.createElement('TR');
+  tbl.appendChild(newRow);
+  row.removeChild(nextTag(col[1], 'TD'));
+  newRow.appendChild(col[1]);
+  col[2].colSpan=3;
+  col[2].style.width='66%';
+  col[1].colSpan=5;
+  col[1].style.width='100%';
+  break;
+
+case 'LLL:CCC:RRR' :
+  row.removeChild(nextTag(col[0], 'TD'));
+  row.removeChild(nextTag(col[1], 'TD'));
+  for(var i = 1 ; i < 3 ; ++i)
+  {
+    var newRow = document.createElement('TR');
+    tbl.appendChild(newRow);
+    newRow.appendChild(col[i]);
+    col[i].colSpan=5;
+    col[i].style.width='100%';
+  }
+  col[0].colSpan=5;
+  col[0].style.width='100%';
+  break;
+}
+
+}); }
+</script>
+
+    ]]> 
+  </Content> 
+</Module>

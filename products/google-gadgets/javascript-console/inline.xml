@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Module>
+  <ModulePrefs title="JavaScript Console (inline)"
+               title_url="http://webos-goodies.jp/"
+               height="200">
+    <Require feature="setprefs"/>
+    <Require feature="dynamic-height"/>
+    <Require feature="tabs"/>
+    <Require feature="drag"/>
+    <Require feature="minimessage"/>
+  </ModulePrefs>
+  <UserPref name="selectedTab" datatype="hidden"/>
+  <UserPref name="fontsize" datatype="string" required="true" default_value="12"/>
+  <UserPref name="height" datatype="string" required="true" default_value="200"/>
+  <UserPref name="pref_revision" datatype="hidden" default_value="1"/>
+  <UserPref name="script1" datatype="hidden"/>
+  <UserPref name="markup1" datatype="hidden"/>
+  <Content type="html-inline">
+    <![CDATA[
+
+<script type="text/javascript">
+if(_args()['webos-goodies'] != 'noinline') {
+
+window.mod__MODULE_ID__ = {
+
+prefs : new _IG_Prefs(__MODULE_ID__),
+tabs : new _IG_Tabs(__MODULE_ID__),
+isInline : location.hostname != '__MODULE_ID__.gmodules.com',
+
+adjustHeight : function()
+{
+  if(!this.isInline)
+    _IG_AdjustIFrameHeight();
+},
+
+init : function()
+{
+  var script = this.prefs.getString('script1');
+  if(script)
+  {
+    _gel('__MODULE_ID__script').value = script;
+  }
+  var markup = this.prefs.getString('markup1');
+  if(markup)
+  {
+    _gel('__MODULE_ID__markup').value = markup;
+  }
+  var embed = this.prefs.getString('embed');
+  this.tabs.addTab('Script', 'tab-script');
+  this.tabs.addTab('HTML', 'tab-markup');
+  this.adjustHeight();
+},
+
+runScript : function()
+{
+  var script = _gel('__MODULE_ID__script').value;
+  this.prefs.set('script1', script);
+  _gel('__MODULE_ID__result').innerHTML = _hesc(String(eval(script)));
+  this.adjustHeight();
+},
+
+embedScript : function()
+{
+  var script = _gel('__MODULE_ID__script').value;
+  this.prefs.set('script1', script);
+  var e = document.createElement('SCRIPT');
+  var t = document.createTextNode(script);
+  e.appendChild(t);
+  document.body.appendChild(e);
+  this.adjustHeight();
+},
+
+replaceHTML : function()
+{
+  var markup = _gel('__MODULE_ID__markup').value;
+  this.prefs.set('markup1', markup);
+  _gel('__MODULE_ID__contents').innerHTML = markup;
+  this.adjustHeight();
+}
+
+};
+
+_IG_RegisterOnloadHandler(function(){ mod__MODULE_ID__.init(); });
+
+}
+</script>
+
+<style type="text/css">
+@import url(http://www.google.com/ig/tablib.css);
+#__MODULE_ID__result {
+  width: 100%;
+  margin: 0px;
+  overflow: auto;
+}
+</style>
+
+<div id="tab-script" style="display:none;">
+<textarea id="__MODULE_ID__script" style="font-size:__UP_fontsize__px; width:100%; height:__UP_height__px; white-space: nowrap;"></textarea>
+</div>
+
+<div id="tab-markup" style="display:none;">
+<textarea id="__MODULE_ID__markup" style="font-size:__UP_fontsize__px; width:100%; height:__UP_height__px; white-space: nowrap;"></textarea>
+</div>
+
+<input type="button" value="Run script" onclick="mod__MODULE_ID__.runScript();" />
+<input type="button" value="Embed script" onclick="mod__MODULE_ID__.embedScript();" />
+<input type="button" value="Replace HTML" onclick="mod__MODULE_ID__.replaceHTML();" />
+
+<pre id="__MODULE_ID__result"></pre>
+
+<div id="__MODULE_ID__contents"></div>
+
+    ]]>
+  </Content>
+</Module>
