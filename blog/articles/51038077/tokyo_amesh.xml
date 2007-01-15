@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Module>
+  <ModulePrefs title="__MSG_title__"
+               directory_title="__MSG_title__"
+               title_url="http://tokyo-ame.jwa.or.jp/__MSG_locale__/1-top.html"
+               height="200"
+               description="__MSG_description__"
+               screenshot="http://webos-goodies.googlecode.com/svn/trunk/blog/articles/51038077/__MSG_screenshot__.jpg"
+               thumbnail="http://webos-goodies.googlecode.com/svn/trunk/blog/articles/51038077/__MSG_thumbnail__.jpg"
+               author="WebOS Goodies"
+               author_email="support@webos-goodies.jp"
+               author_affiliation="WebOS Goodies"
+               author_location="Tokyo, Japan"
+               author_link="http://webos-goodies.jp/">
+    <Locale messages="http://webos-goodies.googlecode.com/svn/trunk/blog/articles/51038077/ALL_ALL.xml"/>
+    <Locale lang="en" messages="http://webos-goodies.googlecode.com/svn/trunk/blog/articles/51038077/en_ALL.xml"/>
+  </ModulePrefs>
+  <UserPref name="location" display_name="__MSG_area_selection__" datatype="enum" default_value="1">
+    <EnumValue value="1" display_value="__MSG_area_all__"/>
+    <EnumValue value="11" display_value="__MSG_area_23__"/>
+    <EnumValue value="22" display_value="__MSG_area_tama__"/>
+  </UserPref>
+  <Content type="html">
+    <![CDATA[
+      <a href="http://tokyo-ame.jwa.or.jp/__MSG_locale__/__UP_location__-top.html" target="_top">
+        <img style="width:100%; height:200px; border-width: 0px;"
+             src="http://tokyo-ame.jwa.or.jp/__UP_location__-0.jpg"/>
+      </a>
+    ]]>
+  </Content>
+</Module>

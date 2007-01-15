@@ -1,0 +1,11 @@
+<messagebundle>
+  <msg name="locale">jp</msg>
+  <msg name="title">東京アメッシュ</msg>
+  <msg name="description">東京の現在の降雨量を表示します。</msg>
+  <msg name="area_selection">地域選択</msg>
+  <msg name="area_all">全域</msg>
+  <msg name="area_23">23区</msg>
+  <msg name="area_tama">多摩</msg>
+  <msg name="screenshot">screenshot_ja</msg>
+  <msg name="thumbnail">thumbnail</msg>
+</messagebundle>
