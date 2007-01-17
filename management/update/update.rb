@@ -47,8 +47,9 @@ class Update
       Kconv.kconv(@content, Kconv::EUC, Kconv::UTF8)
     end
 
-    def list_articles(tag, max = nil)
+    def list_articles(tag, max = nil, reverse = true)
       posts = max ? @articles[tag][0, max] : @articles[tag].clone
+      posts.reverse! if posts.size >= 2 && !reverse
       text = ''
       posts.each do |post|
         url     = post.url

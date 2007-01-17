@@ -18,6 +18,7 @@ CaptionMap = {
   'google-universal-gadget' => 'Google Personalized Homepage を使い倒そう！',
   'misc' => '雑多な話題',
   'mysql' => 'MySQL によるデータベースの構築',
+  'net2ftp' => 'net2ftp : Web ブラウザで動く FTP クライアント',
   'opensource-apps' => 'オープンソース・アプリケーションで快適 Web ライフ',
   'opera-firefox' => 'Opera & Firefox をディープに使いこなす',
   'opera-widgets' => 'Opera Widgets の作り方',
