@@ -2,7 +2,8 @@
 <Module>
 <ModulePrefs title="Box.net"
     title_url="http://www.box.net"
-    description="Access your important documents, photos, and files from the Google Homepage.  A free Box.net account provides 1GB of storage."
+    description="This is a unofficial non-inline version of box.net gadget."
+    height="320"
     author="WebOS Goodies"
     author_email="support@webos-goodies.jp"
     author_location="Tokyo, Japan"
