@@ -172,7 +172,7 @@ function showLogin() {
 	"<div id=boxbar>"+
 	"<a href=\"http://www.box.net\" target=\"_new\"><img src=\"http://modules.box.net/google/logo.jpg\"></a>"+
 	"</div>";
-
+	_IG_AdjustIFrameHeight();
 
 }
 
@@ -199,7 +199,7 @@ function showRegistration() {
 	"<div id=boxbar>"+
 	"<a href=\"http://www.box.net\" target=\"_new\"><img src=\"http://modules.box.net/google/logo.jpg\"></a>"+
 	"</div>";
-
+	_IG_AdjustIFrameHeight();
 
 }
 
@@ -287,6 +287,7 @@ function loadAccount(sessid,username) {
 
 	document.getElementById('boxmodule___MODULE_ID__').innerHTML="<div id=status>Logged in as <b>"+username+"</b> <a href=\"javascript:doLogout()\">[Logout]</a></div>"+
 	"<iframe id=boxiframe___MODULE_ID__ class=boxiframe scrolling=no frameborder=0 src=http://modules.box.net/google/index.php?phpsessid="+sessid+" ></iframe>";
+	_IG_AdjustIFrameHeight();
 
 
 
