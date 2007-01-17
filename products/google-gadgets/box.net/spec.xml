@@ -1,0 +1,344 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Module>
+<ModulePrefs title="Box.net"
+    title_url="http://www.box.net"
+    description="Access your important documents, photos, and files from the Google Homepage.  A free Box.net account provides 1GB of storage."
+    author="WebOS Goodies"
+    author_email="support@webos-goodies.jp"
+    author_location="Tokyo, Japan"
+    author_affiliation="WebOS Goodies">
+<Require feature="setprefs"/>
+<Require feature="dynamic-height"/>
+</ModulePrefs>
+<UserPref name="email2" display_name="Email2" datatype="hidden" />
+<UserPref name="password" display_name="Password"  datatype="hidden" />
+<Content type="html"><![CDATA[
+
+<style TYPE="text/css">
+<!--
+
+.blueheader {
+
+color: #4BA3DE;
+font-weight: bold;
+font-size: 12pt;
+margin-bottom: 12px;
+}
+
+
+#boxinfo {
+
+border: 0px dotted gray;
+width: auto;
+
+}
+
+#login {
+
+border: 1px dotted gray;
+width: 150px;
+
+}
+
+
+#infotext {
+
+background: #ECF4FB;
+line-height: 14pt;
+padding: 5px;
+color: #444444;
+
+}
+
+.boxmodule input[type="text"], input[type="password"]  {
+
+width: 120px;
+
+
+}
+
+#layout {
+
+padding: 5px;
+
+
+}
+
+#layout td{
+
+vertical-align: top;
+font-size: 8pt;
+padding: 5px;
+
+}
+
+
+#layout td a, #layout td b{
+
+text-decoration: none;
+color: #222;
+font-weight: bold;
+
+}
+
+#layout td a:hover{
+
+border-bottom: 1px dotted #222;
+
+}
+
+
+
+#boxbar {
+
+background: url('http://modules.box.net/google/bar.jpg');
+background-repeat: repeat-x;
+border-bottom: 1px dotted #3366CC;
+}
+
+#boxbar img {
+
+border: 0px;
+
+}
+
+
+.boxiframe {
+
+
+border: 0px;
+width: 100%;
+height: 300px;
+overflow: hidden;
+
+}
+
+#status {
+
+font-size: 8pt;
+margin: 3px;
+
+}
+
+#status a{
+
+text-decoration: none;
+
+
+}
+
+-->
+</style>
+
+
+
+
+
+<div id=boxmodule___MODULE_ID__ class=boxmodule style="border:0px solid gray"></div>
+
+
+
+
+<script language="Javascript">
+
+var prefs = new _IG_Prefs(__MODULE_ID__);
+var email=prefs.getString('email2');
+var password=prefs.getString('password');
+
+
+
+if (email==null || email=="" || password==null || password=="") showLogin();
+else doLogin(false);
+
+
+
+function showLogin() {
+
+
+	document.getElementById('boxmodule___MODULE_ID__').innerHTML="<table id=layout><tr>"+
+	"<td><div class=blueheader>Free online storage</div>"+
+	"<div id=infotext>"+
+	"<a href=\"javascript:showRegistration()\">Signup</a> and receive 1GB of free online file storage. You can upload and download your files from this Google module or Box.net with the same account."+
+	"</div></td>"+
+	"<td>"+
+	"<div class=blueheader>Sign In</div>"+
+	"Email: <input type=text id='email___MODULE_ID__'><br>"+
+	"Password: <input type=password id='password___MODULE_ID__'><br>"+
+	"<input type=checkbox id='stay___MODULE_ID__'>Stay Signed In<br>"+
+	"<input type=button value=\"Sign In\" onclick=\"doLogin(true)\">"+
+	"</td>"+
+	"</tr>"+
+	"</table>"+
+	"<div id=boxbar>"+
+	"<a href=\"http://www.box.net\" target=\"_new\"><img src=\"http://modules.box.net/google/logo.jpg\"></a>"+
+	"</div>";
+
+
+}
+
+
+
+function showRegistration() {
+
+
+	document.getElementById('boxmodule___MODULE_ID__').innerHTML="<table id=layout><tr>"+
+	"<td><div class=blueheader>Free online storage</div>"+
+	"<div id=infotext>"+
+	"Enter your email address (your new Box.net login) and choose a password. Your account will created automatically so you can begin storing files right away."+
+	"</div></td>"+
+	"<td>"+
+	"<div class=blueheader>Register</font></div>"+
+	"Email: <input type=text id='email___MODULE_ID__'><br>"+
+	"Choose Password: <input type=password id='password___MODULE_ID__'><br>"+
+	"Reenter Password: <input type=password id='passwordConfirm___MODULE_ID__'><br>"+
+	"<input type=button value=\"Register\" onclick=\"doRegistration()\">"+
+	"<input type=button value=\"Cancel\" onclick=\"showLogin()\">"+
+	"</td>"+
+	"</tr>"+
+	"</table>"+
+	"<div id=boxbar>"+
+	"<a href=\"http://www.box.net\" target=\"_new\"><img src=\"http://modules.box.net/google/logo.jpg\"></a>"+
+	"</div>";
+
+
+}
+
+
+
+
+
+
+function doLogout() {
+			prefs.set("email2", "");
+			prefs.set("password", "");
+			showLogin();
+}
+
+
+
+function doRegistration() {
+
+
+
+		var email=document.getElementById('email___MODULE_ID__').value;
+		var password=document.getElementById('password___MODULE_ID__').value;
+		var password2=document.getElementById('passwordConfirm___MODULE_ID__').value;
+
+		if (email=="") {
+			alert("Please enter an email address.");
+			return;
+		}
+
+		if (password==null) {
+			alert("Please enter a password.");
+			return;
+		}
+
+		if (password!=password2) {
+			alert("Passwords must match.");
+			return;
+		}
+
+
+
+
+		d = new Date();
+		ms=d.valueOf();
+
+		url='http://modules.box.net/login.php?login='+email+'&pass='+password+'&ms='+ms+'&register=1';
+
+		_IG_FetchContent(url, function (responseText) {
+
+	  	 registrationResponse(responseText,email);
+
+    	});
+
+
+
+}
+
+
+function registrationResponse(response,email) {
+
+	if (response=="error") {
+		alert("Error creating account. Please try again.");
+	} else {
+		loadAccount(response,email);
+	}
+
+}
+
+
+
+function loginResponse(response,email) {
+
+	if (response=="error") {
+		alert("Error logging in. Please try again.");
+	} else {
+
+		loadAccount(response,email);
+	}
+
+}
+
+
+function loadAccount(sessid,username) {
+
+
+	document.getElementById('boxmodule___MODULE_ID__').innerHTML="<div id=status>Logged in as <b>"+username+"</b> <a href=\"javascript:doLogout()\">[Logout]</a></div>"+
+	"<iframe id=boxiframe___MODULE_ID__ class=boxiframe scrolling=no frameborder=0 src=http://modules.box.net/google/index.php?phpsessid="+sessid+" ></iframe>";
+
+
+
+
+
+}
+
+
+function doLogin(saveLogin) {
+
+	var prefs = new _IG_Prefs(__MODULE_ID__);
+
+	if (saveLogin)	{
+
+		var email=document.getElementById('email___MODULE_ID__').value;
+		var password=document.getElementById('password___MODULE_ID__').value;
+
+		if (document.getElementById('stay___MODULE_ID__').checked) {
+			prefs.set("email2", email);
+			prefs.set("password", password);
+		}
+
+	} else {
+		var email=prefs.getString('email2');
+		var password=prefs.getString('password');
+	}
+
+
+	if (email!=null && password!=null) {
+
+	d = new Date();
+	ms=d.valueOf();
+
+	url='http://modules.box.net/login.php?login='+email+'&pass='+password+'&ms='+ms;
+
+	_IG_FetchContent(url, function (responseText) {
+
+	   loginResponse(responseText,email);
+
+    });
+
+	}
+}
+
+
+</script>
+
+
+
+
+
+
+
+]]></Content>
+</Module>
