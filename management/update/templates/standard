@@ -11,10 +11,15 @@
 <link rel="alternate" type="application/atom+xml" title="Atom" href="http://webos-goodies.jp/atom.xml" />
 <link rel="shortcut icon" href="http://webos-goodies.jp/favicon.ico" type="image/x-icon" />
 
+<link rel="alternate"
+      type="application/x-opera-widgets"
+      title="WebOS Goodies"
+      href="http://widgets.opera.com/widgetize/Feed%20Reader/Advanced/?serve&amp;skin=skin2&amp;widgetname=WebOS%20Goodies&amp;url=http%3A%2F%2Fwebos-goodies.jp%2Fatom.xml&amp;rel=myopera&amp;ref="/>
+
 <link rel="search"
       type="application/opensearchdescription+xml"
       title="WebOS Goodies"
-      href="http://www.sourcewalker.com/blog_files/common/SourceWalker-LD-Wiki.xml"/>
+      href="http://webos-goodies.googlecode.com/svn/trunk/products/firefox-search/webos-goodies-jp/webos-goodies-jp.xml"/>
 
 <script type="text/javascript" src="http://www.sourcewalker.com/blog_files/common/prototype.js"></script>
 <script type="text/javascript" src="http://www.sourcewalker.com/blog_files/common/common.js"></script>
@@ -93,7 +98,8 @@ WebOS はインターネットの未来形。あらゆる Web サイトが繋が
 <a href="http://www.google.com/reader/view/feed/http://webos-goodies.jp/atom.xml" title="Google Readerで購読"><img alt="[Google Reader]" width="68" height="17" alt="Google Readerで購読" src="http://webos-goodies.jp/template/imgs/feed/googlereader.gif" />&nbsp;
 <a href="http://www.bloglines.com/sub/http://webos-goodies.jp/" title="Bloglinesで購読"><img src="http://webos-goodies.jp/template/imgs/feed/bloglines.gif" alt="[Bloglines]" width="76" height="17"/></a>&nbsp;
 <a href="http://reader.livedoor.com/subscribe/http://webos-goodies.jp/" title="livedoor Readerで購読"><img width="91" height="17" src="http://webos-goodies.jp/template/imgs/feed/livedoorreader.gif" alt="[livedoor Reader]" /></a>&nbsp;
-<a href="http://r.hatena.ne.jp/append/http://webos-goodies.jp/" title="はてなRSSで購読"><img src="http://webos-goodies.jp/template/imgs/feed/hatenarss.gif" alt="[はてなRSS]" width="80" height="15"/></a>
+<a href="http://r.hatena.ne.jp/append/http://webos-goodies.jp/" title="はてなRSSで購読"><img src="http://webos-goodies.jp/template/imgs/feed/hatenarss.gif" alt="[はてなRSS]" width="80" height="15"/></a>&nbsp;
+<a href="http://widgets.opera.com/widgetize/Feed%20Reader/Advanced/?serve&skin=skin2&widgetname=WebOS%20Goodies&url=http%3A%2F%2Fwebos-goodies.jp%2Fatom.xml&rel=myopera&ref=" title="Opera Widgetで購読"><img src="http://widgets.opera.com/widgetize/icon/168_small_red.png" alt="[Opera Widgetize]" width="80" height="15"></a>
 </div>
 
 
