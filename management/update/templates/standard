@@ -21,7 +21,6 @@
       title="WebOS Goodies"
       href="http://webos-goodies.googlecode.com/svn/trunk/products/firefox-search/webos-goodies-jp/webos-goodies-jp.xml"/>
 
-<script type="text/javascript" src="http://www.sourcewalker.com/blog_files/common/prototype.js"></script>
 <script type="text/javascript" src="http://www.sourcewalker.com/blog_files/common/common.js"></script>
 
 <title><%= @title %> - WebOS Goodies</title>
