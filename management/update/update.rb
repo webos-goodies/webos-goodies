@@ -121,7 +121,7 @@ class Update
       end
     end
     @new_dirs << JSONP_DIR unless @new_dirs.include?(JSONP_DIR)
-    json = WebAPI::Json.new
+    json = WebAPI::JsonBuilder.new
     @articles.each do |tag, posts|
       raise "The caption of #{tag} is not defined." unless CaptionMap[tag]
       fname = "#{JSONP_DIR}/#{tag}.js"
