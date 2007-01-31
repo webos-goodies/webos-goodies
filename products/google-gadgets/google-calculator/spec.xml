@@ -78,8 +78,8 @@ form#form__MODULE_ID__ {
 </tr>
 </table>
 </form>
-<div id="indicator__MODULE_ID__">
-<img src="http://webos-goodies.googlecode.com/svn/trunk/products/google-gadgets/google-calculator/loading.gif" width="16" height="16" style="display:none;"/>
+<div id="indicator__MODULE_ID__" style="display:none;">
+<img src="http://webos-goodies.googlecode.com/svn/trunk/products/google-gadgets/google-calculator/loading.gif" width="16" height="16"/>
 </div>
 <div id="answer__MODULE_ID__"></div>
 
