@@ -29,10 +29,14 @@ receive : function(contents)
   {
     _gel('answer__MODULE_ID__').innerHTML = "__MSG_na__";
   }
+  _gel('indicator__MODULE_ID__').style.display="none";
+  _gel('answer__MODULE_ID__').style.display="block";
 },
 
 calculate : function()
 {
+  _gel('indicator__MODULE_ID__').style.display="block";
+  _gel('answer__MODULE_ID__').style.display="none";
   var exp = _gel('expression__MODULE_ID__').value;
   var url = 'http://suggestqueries.google.com/complete/search?output=firefox&hl=ja&qu=' + _esc(exp);
   _IG_FetchContent(url, this.receive);
@@ -74,6 +78,9 @@ form#form__MODULE_ID__ {
 </tr>
 </table>
 </form>
+<div id="indicator__MODULE_ID__">
+<img src="http://webos-goodies.googlecode.com/svn/trunk/products/google-gadgets/google-calculator/loading.gif" width="16" height="16" style="display:none;"/>
+</div>
 <div id="answer__MODULE_ID__"></div>
 
     ]]>
