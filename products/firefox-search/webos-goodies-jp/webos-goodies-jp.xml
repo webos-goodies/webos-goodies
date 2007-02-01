@@ -5,13 +5,11 @@
 <InputEncoding>UTF-8</InputEncoding>
 <Image width="16" height="16">http://webos-goodies.jp/favicon.ico</Image>
 <Url type="application/x-suggestions+json" method="GET" template="http://suggestqueries.google.com/complete/search?output=firefox&amp;client=firefox&amp;hl=ja&amp;qu={searchTerms}"/>
-<Url type="text/html" method="GET" template="http://www.google.com/custom">
+<Url type="text/html" method="GET" template="http://www.google.com/search">
   <Param name="q" value="{searchTerms}"/>
   <Param name="cx" value="011600946954025377643%3A3gub1bav68w"/>
-  <Param name="lr" value="lang_ja"/>
   <Param name="ie" value="utf-8"/>
   <Param name="oe" value="utf-8"/>
-  <Param name="cof" value="LH%3A32%3BCX%3AWebOS%2520Goodies%3BFORID%3A0%3BS%3Ahttp%3A%2F%2Fwebos-goodies.jp%2F%3BL%3Ahttp%3A%2F%2Fwebos-goodies.jp%2Ftemplate%2Fimgs%2Flogo%2Fsearch.png%3BLP%3A1"/>
 </Url>
 <SearchForm>http://www.google.com/coop/cse?cx=011600946954025377643%3A3gub1bav68w</SearchForm>
 </SearchPlugin>
