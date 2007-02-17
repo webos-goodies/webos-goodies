@@ -7,6 +7,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=EUC-JP" />
 
 <link rel="stylesheet" href="http://webos-goodies.jp/template/site.css" type="text/css" />
+<link rel="stylesheet" href="http://webos-goodies.jp/template/categories.css" type="text/css" />
 <link rel="alternate" type="application/rss+xml" title="RSS" href="http://webos-goodies.jp/index.rdf" />
 <link rel="alternate" type="application/atom+xml" title="Atom" href="http://webos-goodies.jp/atom.xml" />
 <link rel="shortcut icon" href="http://webos-goodies.jp/favicon.ico" type="image/x-icon" />
@@ -107,10 +108,8 @@ WebOS はインターネットの未来形。あらゆる Web サイトが繋が
 <div id="leftside">
 
 <div class="article">
-<div class="article_body">
-<div class="dokuwiki">
+<div class="tpl_categories_body">
 <%= @content %>
-</div>
 </div>
 </div>
 
