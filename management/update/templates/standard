@@ -107,8 +107,10 @@ WebOS はインターネットの未来形。あらゆる Web サイトが繋が
 <div id="leftside">
 
 <div class="article">
+<div class="article_body">
 <div class="dokuwiki">
 <%= @content %>
+</div>
 </div>
 </div>
 
