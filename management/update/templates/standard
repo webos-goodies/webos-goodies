@@ -56,7 +56,7 @@ SWAuthAdmin();
 <div id="search">
 <form class="search" id="search_engine" method="GET" action="http://google.com/cse">
 <p>
-<input class="text" name="q" type="text" id="keywords" value="Search Keywords" onfocus="document.forms['search_engine'].keywords.value='';" onblur="if (document.forms['search_engine'].keywords.value == '') document.forms['search_engine'].keywords.value='Search Keywords';" />
+<input class="text" name="q" type="text" id="keywords" value="Google Custom Search" onfocus="document.forms['search_engine'].keywords.value='';" onblur="if (document.forms['search_engine'].keywords.value == '') document.forms['search_engine'].keywords.value='Google Custom Search';" />
 <input class="searchbutton" name="submit" type="submit" value="Search" /></p>
 <input type="hidden" name="cx" value="011600946954025377643:3gub1bav68w" />
 <input type="hidden" name="cof" value="FORID:0" />
@@ -120,6 +120,17 @@ WebOS はインターネットの未来形。あらゆる Web サイトが繋が
 <div id="rightside">
 
 <%= @pluginA %>
+
+<table style="background-color: #fff; padding: 5px; margin: 12px 0px;" cellspacing=0>
+  <tr><td>
+    <img src="http://groups.google.com/groups/img/3/groups_bar_ja.gif"
+         height=26 width=132 alt="Google グループ Beta">
+  </td></tr>
+  <tr><td style="padding-left: 5px;font-size: 125%">
+    <b>WebOS Goodies</b>
+  </td></tr>
+  <tr><td style="padding-left: 5px"> <a href="http://groups.google.com/group/webos-goodies">このグループにアクセス</a> </td></tr>
+</table>
 
 </div><!-- rightside -->
 
