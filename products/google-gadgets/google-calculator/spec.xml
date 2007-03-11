@@ -4,13 +4,15 @@
                title_url="__MSG_link__"
 			   description="__MSG_description__"
                height="45"
+               screenshot="http://webos-goodies.googlecode.com/svn/trunk/blog/articles/51038077/__MSG_screenshot__.jpg"
+               thumbnail="http://webos-goodies.googlecode.com/svn/trunk/blog/articles/51038077/__MSG_thumbnail__.jpg"
 			   author="WebOS Goodies"
 			   author_email="support@webos-goodies.jp"
 			   author_affiliation="WebOS Goodies"
 			   author_location="Tokyo, Japan"
 			   author_link="http://webos-goodies.jp/">
     <Locale messages="http://webos-goodies.googlecode.com/svn/trunk/products/google-gadgets/google-calculator/ALL_ALL.xml"/>
-    <Locale lang="en" messages="http://webos-goodies.googlecode.com/svn/trunk/products/google-gadgets/google-calculator/en_ALL.xml"/>
+    <Locale lang="ja" messages="http://webos-goodies.googlecode.com/svn/trunk/products/google-gadgets/google-calculator/ja_ALL.xml"/>
   </ModulePrefs>
   <Content type="html">
     <![CDATA[
@@ -38,7 +40,7 @@ calculate : function()
   _gel('indicator__MODULE_ID__').style.display="block";
   _gel('answer__MODULE_ID__').style.display="none";
   var exp = _gel('expression__MODULE_ID__').value;
-  var url = 'http://suggestqueries.google.com/complete/search?output=firefox&hl=ja&qu=' + _esc(exp);
+  var url = 'http://suggestqueries.google.com/complete/search?output=firefox&hl=__MSG_hl__&qu=' + _esc(exp);
   _IG_FetchContent(url, this.receive);
 }
 

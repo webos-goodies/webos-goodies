@@ -1,7 +1,10 @@
 <messagebundle>
-<msg name="title">Google電卓</msg>
-<msg name="description">Firefox Search Suggest Protocol を使った高速・堅牢なGoogle電卓ガジェットです。</msg>
+<msg name="title">Google Calculator</msg>
+<msg name="description">This is a fast and robust Google Calculator gadget using Firefox Search Suggest Protocol.</msg>
 <msg name="link">http://webos-goodies.jp/</msg>
-<msg name="na">計算できません</msg>
-<msg name="calc">計算</msg>
+<msg name="na">No answer.</msg>
+<msg name="calc">Calc</msg>
+<msg name="hl">en</msg>
+<msg name="screenshot">screenshot_en</msg>
+<msg name="thumbnail">thumbnail</msg>
 </messagebundle>

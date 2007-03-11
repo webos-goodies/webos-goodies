@@ -1,7 +1,0 @@
-<messagebundle>
-<msg name="title">Google Calculator</msg>
-<msg name="description">This is a fast and robust Google Calculator gadget using Firefox Search Suggest Protocol.</msg>
-<msg name="link">http://webos-goodies.jp/</msg>
-<msg name="na">No answer.</msg>
-<msg name="calc">Calc</msg>
-</messagebundle>

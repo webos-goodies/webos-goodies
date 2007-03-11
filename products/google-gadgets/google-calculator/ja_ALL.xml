@@ -1,0 +1,10 @@
+<messagebundle>
+<msg name="title">Google電卓</msg>
+<msg name="description">Firefox Search Suggest Protocol を使った高速・堅牢なGoogle電卓ガジェットです。</msg>
+<msg name="link">http://webos-goodies.jp/</msg>
+<msg name="na">計算できません</msg>
+<msg name="calc">計算</msg>
+<msg name="hl">ja</msg>
+<msg name="screenshot">screenshot_ja</msg>
+<msg name="thumbnail">thumbnail</msg>
+</messagebundle>
