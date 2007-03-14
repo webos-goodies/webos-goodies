@@ -4,6 +4,7 @@
                title_url="__MSG_link__"
 			   description="__MSG_description__"
                height="56"
+			   scrolling="true"
                screenshot="http://webos-goodies.googlecode.com/svn/trunk/products/google-gadgets/google-calculator/__MSG_screenshot__.png"
                thumbnail="http://webos-goodies.googlecode.com/svn/trunk/products/google-gadgets/google-calculator/__MSG_thumbnail__.png"
 			   author="WebOS Goodies"
@@ -77,8 +78,8 @@ form#form__MODULE_ID__ {
   margin:2px 0px 0px 8px;
 }
 #support__MODULE_ID__ {
-  font-size: 10px;
-  text-align: right;
+  font-size:10px;
+  float:right;
 }
 </style>
 
@@ -90,11 +91,11 @@ form#form__MODULE_ID__ {
 </tr>
 </table>
 </form>
+<div id="support__MODULE_ID__"><a target="_top" href="http://groups.google.com/group/webos-goodies">__MSG_support__</div>
 <div id="indicator__MODULE_ID__" style="display:none;">
 <img src="http://webos-goodies.googlecode.com/svn/trunk/products/google-gadgets/google-calculator/loading.gif" width="16" height="16"/>
 </div>
 <div id="answer__MODULE_ID__"></div>
-<div id="support__MODULE_ID__"><a target="_top" href="http://groups.google.com/group/webos-goodies">__MSG_support__</div>
 
     ]]>
   </Content>
