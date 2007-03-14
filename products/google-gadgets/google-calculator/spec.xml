@@ -3,7 +3,7 @@
   <ModulePrefs title="__MSG_title__"
                title_url="__MSG_link__"
 			   description="__MSG_description__"
-               height="45"
+               height="56"
                screenshot="http://webos-goodies.googlecode.com/svn/trunk/products/google-gadgets/google-calculator/__MSG_screenshot__.png"
                thumbnail="http://webos-goodies.googlecode.com/svn/trunk/products/google-gadgets/google-calculator/__MSG_thumbnail__.png"
 			   author="WebOS Goodies"
