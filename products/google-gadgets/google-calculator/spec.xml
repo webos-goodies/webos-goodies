@@ -3,7 +3,7 @@
   <ModulePrefs title="__MSG_title__"
                title_url="__MSG_link__"
 			   description="__MSG_description__"
-               height="56"
+               height="46"
 			   scrolling="true"
                screenshot="http://webos-goodies.googlecode.com/svn/trunk/products/google-gadgets/google-calculator/__MSG_screenshot__.png"
                thumbnail="http://webos-goodies.googlecode.com/svn/trunk/products/google-gadgets/google-calculator/__MSG_thumbnail__.png"
@@ -91,7 +91,7 @@ form#form__MODULE_ID__ {
 </tr>
 </table>
 </form>
-<div id="support__MODULE_ID__"><a target="_top" href="http://groups.google.com/group/webos-goodies">__MSG_support__</div>
+<div id="support__MODULE_ID__"><a target="_top" href="http://groups.google.com/group/webos-goodies">__MSG_support__</a></div>
 <div id="indicator__MODULE_ID__" style="display:none;">
 <img src="http://webos-goodies.googlecode.com/svn/trunk/products/google-gadgets/google-calculator/loading.gif" width="16" height="16"/>
 </div>
