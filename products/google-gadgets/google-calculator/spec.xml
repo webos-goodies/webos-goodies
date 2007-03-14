@@ -65,10 +65,20 @@ form#form__MODULE_ID__ {
   padding:0px;
   margin:0px;
 }
+#indicator__MODULE_ID__ {
+  height:16px;
+  padding:0px;
+  margin:0px;
+}
 #answer__MODULE_ID__ {
   font-size:14px;
+  height:16px;
   padding:0px;
   margin:2px 0px 0px 8px;
+}
+#support__MODULE_ID__ {
+  font-size: 10px;
+  text-align: right;
 }
 </style>
 
@@ -84,8 +94,8 @@ form#form__MODULE_ID__ {
 <img src="http://webos-goodies.googlecode.com/svn/trunk/products/google-gadgets/google-calculator/loading.gif" width="16" height="16"/>
 </div>
 <div id="answer__MODULE_ID__"></div>
+<div id="support__MODULE_ID__"><a href="http://groups.google.com/group/webos-goodies">__MSG_support__</div>
 
     ]]>
   </Content>
 </Module>
-

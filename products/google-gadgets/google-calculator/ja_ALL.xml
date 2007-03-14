@@ -5,6 +5,7 @@
 <msg name="na">計算できません</msg>
 <msg name="calc">計算</msg>
 <msg name="hl">ja</msg>
+<msg name="support">サポートはこちら</msg>
 <msg name="screenshot">screenshot_ja</msg>
 <msg name="thumbnail">thumbnail_ja</msg>
 </messagebundle>
