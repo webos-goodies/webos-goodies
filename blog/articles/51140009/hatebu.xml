@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+  <ModulePrefs
+      title="はてなタグ検索 for Google Subsclibed Link"
+      scrolling="true"/>
+  <UserPref name="tag" datatype="string" default_value="google"/>
+  <Content type="html">
+    <![CDATA[
+
+<style type="text/css">
+div#output {
+  font-size: 12px;
+}
+</style>
+
+<div id="output"></div>
+
+<script type="text/javascript">
+
+var prefs = new _IG_Prefs(__MODULE_ID__);
+var tag   = prefs.getString('tag');
+
+_IG_FetchFeedAsJSON(
+  'http://b.hatena.ne.jp/t/' + _esc(tag) + '?mode=rss&sort=hot&threshold=3',
+  function(contents) {
+    var html = '';
+    for(var i = 0 ; i < contents.Entry.length ; i++) {
+      var title = _hesc(contents.Entry[i].Title);
+      var url   = _hesc(contents.Entry[i].Link);
+      html += '<li><a href="' + url + '">' + title + '</a></li>';
+    }
+    _gel('output').innerHTML = '<ul>' + html + '</ul>';
+  },
+  10,
+  false);
+
+</script>
+
+    ]]>
+  </Content>
+</Module>
