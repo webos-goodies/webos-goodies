@@ -78,7 +78,7 @@ function OnLoad()
   var japanese   = parseInt(args['up_japanese']);
   if(max_height)
   {
-    document.getElementById('wrap').style.maxHeight = max_height + 'px';
+    document.getElementById('searchcontrol').style.maxHeight = max_height + 'px';
   }
 
   new cse(japanese && japanese != 0 ? '日本語' : null);
@@ -88,9 +88,9 @@ function OnLoad()
 </head>
 
 <body onload="OnLoad()" style="padding:0px;margin:4px 0px;">
-<div id="wrap" style="overflow:auto;">
+<div id="wrap">
 <div id="searchform" style="font-size:12px;"></div>
-<div id="searchcontrol" style="font-size:12px;"></div>
+<div id="searchcontrol" style="font-size:12px; overflow:auto"></div>
 </div>
 </body>
 
