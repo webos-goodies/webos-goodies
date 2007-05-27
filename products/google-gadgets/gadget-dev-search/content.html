@@ -57,20 +57,26 @@ cse.prototype.onClear = function(form)
 {
   this.searchControl.clearAllResults();
   form.input.value = '';
-  alert('clear');
-  this.adjustGadgetHeight();
+  this.adjustGadgetHeight(45);
   return false;
 }
 
 cse.prototype.onSearchCompleted = function(searchControl, searcher)
 {
-  alert('completed');
   this.adjustGadgetHeight();
 }
 
-cse.prototype.adjustGadgetHeight = function()
+cse.prototype.adjustGadgetHeight = function(height)
 {
-  _IG_AdjustIFrameHeight(_gel('wrap').offsetHeight);
+  height = parseInt(height);
+  if(!isNaN(height) && height > 0)
+  {
+    _IG_AdjustIFrameHeight(height);
+  }
+  else
+  {
+    _IG_AdjustIFrameHeight(_gel('wrap').offsetHeight);
+  }
 }
 
 function OnLoad()
