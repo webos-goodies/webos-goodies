@@ -66,7 +66,7 @@ cse.prototype.onSearchCompleted = function(searchControl, searcher)
   this.adjustGadgetHeight();
 }
 
-cse.prototype.adjustGadgetHeight()
+cse.prototype.adjustGadgetHeight = function()
 {
   _IG_AdjustIFrameHeight(_gel('wrap').offsetHeight+8);
 }
