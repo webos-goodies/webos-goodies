@@ -57,13 +57,18 @@ cse.prototype.onClear = function(form)
 {
   this.searchControl.clearAllResults();
   form.input.value = '';
-  _IG_AdjustIFrameHeight();
+  this.adjustGadgetHeight();
   return false;
 }
 
 cse.prototype.onSearchCompleted = function(searchControl, searcher)
 {
-  _IG_AdjustIFrameHeight(_gel('wrap').offsetHeight);
+  this.adjustGadgetHeight();
+}
+
+cse.prototype.adjustGadgetHeight()
+{
+  _IG_AdjustIFrameHeight(_gel('wrap').offsetHeight+8);
 }
 
 function OnLoad()
