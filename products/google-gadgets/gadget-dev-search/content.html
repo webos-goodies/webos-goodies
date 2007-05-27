@@ -41,6 +41,8 @@ function cse(refinement)
 
   this.searchControl.setSearchCompleteCallback(this, cse.prototype.onSearchCompleted);
   this.searchControl.draw(document.getElementById('searchcontrol'));
+
+  this.adjustGadgetHeight(45);
 }
 
 cse.prototype.onSubmit = function(form)
