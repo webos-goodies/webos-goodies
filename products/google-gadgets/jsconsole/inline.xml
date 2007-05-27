@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <Module>
-  <ModulePrefs title="JavaScript Console"
+  <ModulePrefs title="JavaScript Console (inline)"
                title_url="http://groups.google.com/group/webos-goodies/"
                height="200">
     <Require feature="setprefs"/>
