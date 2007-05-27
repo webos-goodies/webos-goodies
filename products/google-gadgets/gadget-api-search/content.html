@@ -63,7 +63,7 @@ cse.prototype.onClear = function(form)
 
 cse.prototype.onSearchCompleted = function(searchControl, searcher)
 {
-  _IG_AdjustIFrameHeight();
+  _IG_AdjustIFrameHeight(200);
 }
 
 function OnLoad()
@@ -71,10 +71,12 @@ function OnLoad()
   var args = _args()
   var max_height = parseInt(args['up_max_height']);
   var japanese   = parseInt(args['up_japanese']);
+  /*
   if(max_height)
   {
     document.getElementById('wrap').style.maxHeight = max_height + 'px';
   }
+  */
 
   new cse(japanese && japanese != 0 ? '日本語' : null);
 }
