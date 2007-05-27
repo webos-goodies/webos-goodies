@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Module>
+  <ModulePrefs title="JavaScript Console"
+               title_url="http://groups.google.com/group/webos-goodies/"
+               height="200">
+    <Require feature="setprefs"/>
+    <Require feature="dynamic-height"/>
+    <Require feature="settitle"/>
+    <Require feature="tabs"/>
+    <Require feature="drag"/>
+    <Require feature="grid"/>
+    <Require feature="minimessage"/>
+    <Require feature="analytics"/>
+    <Require feature="flash"/>
+  </ModulePrefs>
+  <UserPref name="pref_revision" datatype="hidden" default_value="1"/>
+  <UserPref name="selectedTab" datatype="hidden"/>
+  <UserPref name="fontsize" display_name="Font Size" datatype="string" required="true" default_value="12"/>
+  <UserPref name="textrows" display_name="Text Rows" datatype="string" required="true" default_value="15"/>
+  <UserPref name="resultrows" display_name="Result Rows" datatype="string" required="true" default_value="8"/>
+  <UserPref name="text1" datatype="hidden"/>
+  <UserPref name="text2" datatype="hidden"/>
+  <UserPref name="text3" datatype="hidden"/>
+  <UserPref name="text4" datatype="hidden"/>
+  <UserPref name="text5" datatype="hidden"/>
+  <Content type="html">
+    <![CDATA[
+
+<script type="text/javascript">
+if(_args()['webos-goodies'] != 'noinline') {
+
+function class__MODULE_ID__()
+{
+  this.prefs    = new _IG_Prefs(__MODULE_ID__);
+  this.tabs     = new _IG_Tabs(__MODULE_ID__);
+  this.isInline = location.hostname != '__MODULE_ID__.gmodules.com';
+  this.numTexts = 5;
+
+  // create tab contents.
+  var fragment = document.createDocumentFragment();
+  for(var i = 1 ; i <= this.numTexts ; ++i)
+  {
+    var div = document.createElement('DIV');
+    div.id = 'mod__MODULE_ID__tab' + i;
+    div.style.display = 'none';
+    var ta = document.createElement('TEXTAREA');
+    ta.id = 'mod__MODULE_ID__text' + i;
+    ta.className = 'mod__MODULE_ID__textarea';
+    ta.value = this.prefs.getString('text' + i);
+    ta.wrap = 'off';
+    div.appendChild(ta);
+    fragment.appendChild(div);
+  }
+  _gel('mod__MODULE_ID__container').appendChild(fragment);
+
+  // create tabs.
+  for(var i = 1 ; i <= this.numTexts ; ++i)
+  {
+    this.tabs.addTab(i, {
+        contentContainer : _gel('mod__MODULE_ID__tab' + i)
+        });
+  }
+
+  this.adjustHeight();
+}
+
+class__MODULE_ID__.prototype = {
+
+adjustHeight : function()
+{
+  if(!this.isInline)
+  {
+    _IG_AdjustIFrameHeight();
+  }
+},
+
+getCurrentText : function(save)
+{
+  var index = this.tabs.getSelectedTab().getIndex() + 1;
+  if(1 <= index && index <= this.numTexts)
+  {
+    var text = _gel('mod__MODULE_ID__text' + index).value;
+    if(save)
+    {
+      this.prefs.set('text' + index, text);
+    }
+    return text;
+  }
+  else
+  {
+    return null;
+  }
+},
+
+clearCurrentText : function(save)
+{
+  var index = this.tabs.getSelectedTab().getIndex() + 1;
+  if(1 <= index && index <= this.numTexts)
+  {
+    _gel('mod__MODULE_ID__text' + index).value = "";
+    if(save)
+    {
+      this.prefs.set('text' + index, "");
+    }
+  }
+},
+
+runAsScript : function()
+{
+  var text = this.getCurrentText(true);
+  if(text)
+  {
+    (function() {
+      var r = eval(text);
+      var e = _gel('mod__MODULE_ID__result');
+      if(e.innerText)
+        e.innerText = r;
+      else
+        e.innerHTML = _hesc(String(r));
+    })();
+    this.adjustHeight();
+  }
+},
+
+replaceHTML : function()
+{
+  var text = this.getCurrentText(true);
+  if(text)
+  {
+    _gel('mod__MODULE_ID__contents').innerHTML = text;
+    this.adjustHeight();
+  }
+}
+
+};
+
+_IG_RegisterOnloadHandler(function(){ window.mod__MODULE_ID__ = new class__MODULE_ID__(); });
+
+}
+</script>
+
+<style type="text/css">
+@import url(http://www.google.com/ig/tablib.css);
+#mod__MODULE_ID__outer {
+  font-size: __UP_fontsize__px;
+}
+.mod__MODULE_ID__textarea {
+  width:     100%;
+  height:    __UP_textrows__em;
+  font-size: __UP_fontsize__px;
+}
+.mod__MODULE_ID__frame {
+  margin:  0px;
+  padding: 4px;
+  border:  solid 1px black;
+}
+.mod__MODULE_ID__title{
+  margin:      4px 0px 2px 0px;
+  padding:     0px;
+  font-weight: bold;
+}
+#mod__MODULE_ID__buttonframe {
+  margin:  4px 0px;
+  padding: 0px;
+}
+#mod__MODULE_ID__buttonframe input{
+  font-size: __UP_fontsize__px;
+}
+#mod__MODULE_ID__result {
+  width:      100%;
+  max-height: __UP_resultrows__em;
+  margin:     0px;
+  overflow:   auto;
+}
+</style>
+
+<div id="mod__MODULE_ID__outer">
+
+<div id="mod__MODULE_ID__container"></div>
+
+<div id="mod__MODULE_ID__buttonframe">
+<div style="float:right;">
+<input type="button" value="Clear" onclick="mod__MODULE_ID__.clearCurrentText(true);"/>
+</div>
+<div>
+<input type="button" value="Run as script" onclick="mod__MODULE_ID__.runAsScript();"/>
+<input type="button" value="Replace HTML"  onclick="mod__MODULE_ID__.replaceHTML();"/>
+</div>
+</div>
+
+<div class="mod__MODULE_ID__title">Script Result</div>
+<div class="mod__MODULE_ID__frame">
+<pre id="mod__MODULE_ID__result"></pre>
+</div>
+
+<div class="mod__MODULE_ID__title">HTML</div>
+<div class="mod__MODULE_ID__frame">
+<div id="mod__MODULE_ID__contents"></div>
+</div>
+
+</div>
+
+    ]]>
+  </Content>
+</Module>
