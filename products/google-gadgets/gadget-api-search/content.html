@@ -63,7 +63,7 @@ cse.prototype.onClear = function(form)
 
 cse.prototype.onSearchCompleted = function(searchControl, searcher)
 {
-  _IG_AdjustIFrameHeight();
+  _IG_AdjustIFrameHeight(_gel('wrap').offsetHeight);
 }
 
 function OnLoad()
