@@ -57,12 +57,14 @@ cse.prototype.onClear = function(form)
 {
   this.searchControl.clearAllResults();
   form.input.value = '';
+  alert('clear');
   this.adjustGadgetHeight();
   return false;
 }
 
 cse.prototype.onSearchCompleted = function(searchControl, searcher)
 {
+  alert('completed');
   this.adjustGadgetHeight();
 }
 
