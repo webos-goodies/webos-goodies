@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+<ModulePrefs
+    title="Make it be syndicated!"
+    title_url="http://webos-goodies.jp/archives/50803073.html"
+    height="35"/>
+<UserPref name="url" display_name="Default URL" datatype="string" default_value="http://"/>
+<Content type="html"><![CDATA[
+
+<style type="text/css">
+#mod__MODULE_ID__grid {
+  width:          100%;
+  border:         0px;
+  border-spacing: 0px;
+}
+#mod__MODULE_ID__grid td {
+  border:  0px;
+  padding: 0px;
+}
+#mod__MODULE_ID__wrap form {
+  margin:  0px;
+  padding: 0px;
+}
+#mod__MODULE_ID__wrap input {
+  margin: 0px;
+}
+#mod__MODULE_ID__url {
+  width:  100%;
+}
+</style>
+
+<div id="mod__MODULE_ID__wrap">
+
+<div>
+<form onsubmit="return false;">
+<table id="mod__MODULE_ID__grid" border="1"><tr>
+<td><input id="mod__MODULE_ID__url" type="text" value="__UP_url__"/></td>
+<td width="1"><input id="mod__MODULE_ID__submit" type="submit" onclick="window.open('http://gmodules.com/ig/creator?synd=open&url=' + _gel('mod__MODULE_ID__url').value, '_blank'); return false;"/></td>
+</tr></table>
+</form>
+</div>
+<div style="font-size:10px;text-align:right;">
+<a target="_top" href="http://groups.google.com/group/webos-goodies">Need support?</a>
+</div>
+
+</div>
+
+]]></Content>
+</Module>
