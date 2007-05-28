@@ -3,11 +3,14 @@
 <ModulePrefs
     title="Make it be syndicated!"
     title_url="http://webos-goodies.jp/archives/50803073.html"
-    height="35"/>
+    height="40"/>
 <UserPref name="url" display_name="Default URL" datatype="string" default_value="http://"/>
 <Content type="html"><![CDATA[
 
 <style type="text/css">
+#mod__MODULE_ID__wrap {
+  font-size: 12px;
+}
 #mod__MODULE_ID__grid {
   width:          100%;
   border:         0px;
@@ -32,15 +35,19 @@
 <div id="mod__MODULE_ID__wrap">
 
 <div>
-<form onsubmit="return false;">
+<form action="http://gmodules.com/ig/creator" method="GET" target="_blank">
+<input type="hidden" name="synd" value="open"/>
 <table id="mod__MODULE_ID__grid" border="1"><tr>
-<td><input id="mod__MODULE_ID__url" type="text" value="__UP_url__"/></td>
-<td width="1"><input id="mod__MODULE_ID__submit" type="submit" onclick="window.open('http://gmodules.com/ig/creator?synd=open&url=' + _gel('mod__MODULE_ID__url').value, '_blank'); return false;"/></td>
+<td><input id="mod__MODULE_ID__url" type="text" name="url" value="__UP_url__"/></td>
+<td width="1"><input id="mod__MODULE_ID__submit" type="submit"/></td>
 </tr></table>
-</form>
+<div style="float:left;">
+<input type="checkbox" name="nocache" value="1"/>nocache
 </div>
-<div style="font-size:10px;text-align:right;">
+</form>
+<div style="font-size:10px;float:right;">
 <a target="_top" href="http://groups.google.com/group/webos-goodies">Need support?</a>
+</div>
 </div>
 
 </div>
