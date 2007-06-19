@@ -52,8 +52,8 @@ class Update
       posts = posts.reverse if posts.size >= 2 && !reverse
       text = ''
       posts.each do |post|
-        url     = post.url
-        title   = post.title
+        url     = post[:url]
+        title   = post[:title]
         text += '<li><a href="' + url + '">' + title + "</a></li>\n"
       end
       text
@@ -90,8 +90,8 @@ class Update
   def fetch_articles()
     del = WebAPI::Delicious.new(*DELICIOUS)
     print "Fetching tags...\n"
-    del.get_bundles().each do |bundle|
-      bundle.tags.each do |tag|
+    del.get_bundles().each do |bundle, tags|
+      tags.each do |tag|
         raise "Two or more bundles have #{tag}." if @bundles.has_key?(tag)
         @bundles[tag] = bundle
       end
@@ -100,7 +100,7 @@ class Update
     all_posts = del.get_posts()
     @bundles.each_key do |tag|
       @articles[tag] = all_posts.collect do |post|
-        post.tags.include?(tag) ? post : nil
+        post[:tags].include?(tag) ? post : nil
       end.compact
     end
     # @bundles.each_key do |tag|
@@ -126,7 +126,7 @@ class Update
       raise "The caption of #{tag} is not defined." unless CaptionMap[tag]
       fname = "#{JSONP_DIR}/#{tag}.js"
       obj = {}
-      obj['p'] = posts.map { |post| { "t" => post.title, "u" => post.url } }
+      obj['p'] = posts.map { |post| { "t" => post[:title], "u" => post[:url] } }
       obj['t'] = tag;
       obj['c'] = CaptionMap[tag]
       @new_files[fname] = "tplRegistCategory(#{json.build(obj)});"
