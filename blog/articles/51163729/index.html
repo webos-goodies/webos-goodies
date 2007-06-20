@@ -44,6 +44,8 @@ function initDB()
 	return;
   }
 
+  gearsDB.open('example');
+
   ExecuteSQL(['DROP TABLE IF EXISTS articles']);
   ExecuteSQL(['CREATE TABLE IF NOT EXISTS articles (id INTEGER, title TEXT, date TEXT)']);
   for(var i = 0 ; i < dataSrc.length ; ++i)
