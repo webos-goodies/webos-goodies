@@ -18,7 +18,6 @@ function ExecuteSQL(args)
   }
   catch(ex)
   {
-	u.error(ex.message || ex.description || String(ex), 'Gears');
 	throw ex;
   }
   finally
