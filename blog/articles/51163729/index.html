@@ -14,7 +14,7 @@ function ExecuteSQL(args)
   var qr = null;
   try
   {
-	qr = this._db.execute(ag[0], ag[1]);
+	qr = gearsDB.execute(ag[0], ag[1]);
   }
   catch(ex)
   {
@@ -35,9 +35,9 @@ function initDB()
 	return;
   }
 
-  var db = null;
-  try { db = google.gears.factory.create('beta.database', '1.0'); } catch(e) { }
-  if(!db)
+  window.gearsDB = null;
+  try { gearsDB = google.gears.factory.create('beta.database', '1.0'); } catch(e) { }
+  if(!gearsDB)
   {
 	document.getElementById('settingup').style.display = 'none';
 	document.getElementById('disabled').style.display = 'block';
