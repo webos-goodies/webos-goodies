@@ -1,0 +1,94 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Google Gears データベースのセットアップ</title>
+<script type="text/javascript" src="gears_init.js"></script>
+<script type="text/javascript" src="data_source.js"></script>
+<script type="text/javascript">
+function ExecuteSQL(args)
+{
+  var ag = args;
+  var qr = null;
+  try
+  {
+	qr = this._db.execute(ag[0], ag[1]);
+  }
+  catch(ex)
+  {
+	u.error(ex.message || ex.description || String(ex), 'Gears');
+	throw ex;
+  }
+  finally
+  {
+	if(qr) qr.close();
+  }
+}
+
+function initDB()
+{
+  if(!window.google || !google.gears)
+  {
+	document.getElementById('settingup').style.display = 'none';
+	document.getElementById('nogears').style.display = 'block';
+	return;
+  }
+
+  var db = null;
+  try { db = google.gears.factory.create('beta.database', '1.0'); } catch(e) { }
+  if(!db)
+  {
+	document.getElementById('settingup').style.display = 'none';
+	document.getElementById('disabled').style.display = 'block';
+	return;
+  }
+
+  ExecuteSQL(['DROP TABLE IF EXISTS articles']);
+  ExecuteSQL(['CREATE TABLE IF NOT EXISTS articles (id INTEGER, title TEXT, date TEXT)']);
+  for(var i = 0 ; i < dataSrc.length ; ++i)
+  {
+	ExecuteSQL(['INSERT INTO articles (id, title, date) VALUES (?, ?, ?)', [dataSrc[i].id, dataSrc[i].t, dataSrc[i].dt]]);
+  }
+
+  location.href = 'gearsadmin/sqladmin.html';
+};
+</script>
+<style type="text/css">
+#settingup, #nogears, #disabled {
+  text-align:  center;
+  line-height: 1.5;
+}
+</style>
+</head>
+
+<body onload="initDB();">
+
+<div id="settingup">
+<p>Google Gears データベースのセットアップ中...</p>
+</div>
+
+<div id="nogears" style="display:none;">
+<p>
+Google Gears がインストールされていません。<br/>
+以下のサイトからインストーラがダウンロードできます。
+</p>
+<p><a href="http://gears.google.com/">Google Gears 公式サイト</a></p>
+<p><a href="http://webos-goodies.jp/articles/51163729.html">記事に戻る</a></p>
+</div>
+
+<div id="disabled" style="display:none;">
+<p>Google Gears のデータベース機能が無効になっています。<br/>
+「Security Warning」ダイアログで「Allow」を選択してください。
+</p>
+<p>
+もしダイアログが表示されない場合は、ブラウザのメインメニューの<br/>
+[ツール]-[Google Gears Settings] を確認してください。
+</p>
+<p><a href="http://webos-goodies.jp/articles/51163729.html">記事に戻る</a></p>
+</div>
+
+</body>
+
+</html>
