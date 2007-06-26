@@ -1,0 +1,74 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<script type="text/javascript" src="http://webos-goodies.jp/template/ext/ext-base.js"></script>
+<script type="text/javascript" src="http://webos-goodies.jp/template/ext/ext-core.js"></script>
+
+<style type="text/css">
+body {
+  margin: 0px;
+  padding: 0px;
+}
+#mover {
+  position: absolute;
+  left: 10px;
+  top: 10px;
+  width: 20px;
+  height: 20px;
+  background-color: red;
+}
+input {
+  margin-left: 1em;
+}
+</style>
+
+<script type="text/javascript">
+function reset()
+{
+  Ext.get('mover').setLocation(10, 10);
+}
+
+function animate()
+{
+  reset();
+  var easingMethod = document.getElementById('easing').value;
+  Ext.get('mover').setLocation(280, 10, {
+    duration: 2.0,
+    easing:   easingMethod
+  });
+}
+</script>
+
+</head>
+
+<div style="width: 200px; height: 40px;">
+<div id="mover"></div>
+</div>
+
+<div style="text-align: center;">
+  <select id="easing">
+    <option value="easeNone">easeNone</option>
+    <option value="easeIn">easeIn</option>
+    <option value="easeOut">easeOut</option>
+    <option value="easeBoth">easeBoth</option>
+    <option value="easeInStrong">easeInStrong</option>
+    <option value="easeOutStrong">easeOutStrong</option>
+    <option value="easeBothStrong">easeBothStrong</option>
+    <option value="elasticIn">elasticIn</option>
+    <option value="elasticOut">elasticOut</option>
+    <option value="elasticBoth">elasticBoth</option>
+    <option value="backIn">backIn</option>
+    <option value="backOut">backOut</option>
+    <option value="backBoth">backBoth</option>
+    <option value="bounceIn">bounceIn</option>
+    <option value="bounceOut">bounceOut</option>
+    <option value="bounceBoth">bounceBoth</option>
+  </select>
+  <input type="button" value="実行" onclick="animate();">
+  <input type="button" value="リセット" onclick="reset();">
+</div>
+
+</html>
