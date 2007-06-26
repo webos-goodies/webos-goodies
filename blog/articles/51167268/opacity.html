@@ -28,14 +28,12 @@ input {
 <script type="text/javascript">
 function fadein()
 {
-  var el = Ext.get('mover');
-  el.setOpacity(0.0).setOpacity(1.0, { duration: 1.0, easing: 'easeNone' });
+  Ext.get('mover').setOpacity(1.0, { duration: 1.0, easing: 'easeNone' });
 }
 
 function fadeout()
 {
-  var el = Ext.get('mover');
-  el.setOpacity(1.0).setOpacity(0.0, { duration: 1.0, easing: 'easeNone' });
+  Ext.get('mover').setOpacity(0.0, { duration: 1.0, easing: 'easeNone' });
 }
 </script>
 
