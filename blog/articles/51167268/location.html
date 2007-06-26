@@ -7,19 +7,6 @@
 <script type="text/javascript" src="http://webos-goodies.jp/template/ext/ext-base.js"></script>
 <script type="text/javascript" src="http://webos-goodies.jp/template/ext/ext-core.js"></script>
 
-<script type="text/javascript">
-function reset()
-{
-  Ext.get('mover').setBounds(10, 10, 20, 20);
-}
-
-function animate()
-{
-  reset();
-  Ext.get('mover').setBounds(80, 80, 100, 100, { duration: 1.0 });
-}
-</script>
-
 <style type="text/css">
 body {
   margin: 0px;
@@ -33,15 +20,31 @@ body {
   height: 20px;
   background-color: red;
 }
+input {
+  margin-right: 1em;
+}
 </style>
+
+<script type="text/javascript">
+function reset()
+{
+  Ext.get('mover').setBounds(10, 10, 20, 20);
+}
+
+function animate()
+{
+  reset();
+  Ext.get('mover').setBounds(80, 80, 100, 100, { duration: 1.0 });
+}
+</script>
 
 </head>
 
-<div style="width: 200px; height: 200px; border: solid 1px black;">
+<div style="width: 200px; height: 200px;">
 <div id="mover"></div>
 </div>
-<div>
-<input type="button" value="実行" onclick="animate();">&nbsp;
+<div style="text-align: right;">
+<input type="button" value="実行" onclick="animate();">
 <input type="button" value="リセット" onclick="reset();">
 </div>
 
