@@ -1,0 +1,50 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<script type="text/javascript" src="http://webos-goodies.jp/template/ext/ext-base.js"></script>
+<script type="text/javascript" src="http://webos-goodies.jp/template/ext/ext-core.js"></script>
+
+<style type="text/css">
+body {
+  margin: 0px;
+  padding: 0px;
+}
+#mover {
+  position: absolute;
+  left: 60px;
+  top: 10px;
+  width: 80px;
+  height: 80px;
+  background-color: red;
+}
+input {
+  margin-right: 1em;
+}
+</style>
+
+<script type="text/javascript">
+function fadein()
+{
+  Ext.get('mover').setOpacity(1.0, { duration: 1.0, easing: 'easeNone' });
+}
+
+function fadeout()
+{
+  Ext.get('mover').setOpacity(0.0, { duration: 1.0, easing: 'easeNone' });
+}
+</script>
+
+</head>
+
+<div style="width: 200px; height: 100px; border: solid 1px black;">
+<div id="mover"></div>
+</div>
+<div style="text-align: right;">
+<input type="button" value="フェードイン" onclick="fadein();">
+<input type="button" value="フェードアウト" onclick="fadeout();">
+</div>
+
+</html>
