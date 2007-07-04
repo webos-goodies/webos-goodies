@@ -35,6 +35,7 @@ class Update
 
     def apply(fname, articles, bundles, captions)
       @basename = File.basename(fname, '.*')
+	  @charset  = 'EUC-JP'
       @articles = articles
       @bundles  = bundles
       @captions = captions

@@ -4,7 +4,7 @@
 
 <head>
 
-<meta http-equiv="Content-Type" content="text/html; charset=EUC-JP" />
+<meta http-equiv="Content-Type" content="text/html; charset=<%= @charset %>" />
 
 <link rel="stylesheet" href="http://webos-goodies.jp/template/site.css" type="text/css" />
 <link rel="stylesheet" href="http://webos-goodies.jp/template/categories.css" type="text/css" />
@@ -29,20 +29,6 @@
 </head>
 
 <body>
-
-<!-- **** Script **** -->
-
-<script type="text/javascript"> <!--
-SWBodyTop();
-SWAuthAdmin();
-//-->
-</script>
-
-<noscript>
-<a href="http://w1.ax.xrea.com/c.f?id=100527431" target="_blank">
-<img src="http://w1.ax.xrea.com/l.f?id=100527431&url=X"  border="0" />
-</a>
-</noscript>
 
 <a name="top"></a>
 
@@ -80,6 +66,8 @@ SWAuthAdmin();
 <li><a href="http://wiki.livedoor.jp/sourcewalker/d/" title="Wiki へ移動">Wiki</a></li>
 </ul></div><!-- lefts -->
 </div><!-- topmenu -->
+
+<script type="text/javascript">template.oldSite();</script>
 
 <!-- **** サイトの趣旨 **** -->
 
