@@ -2,7 +2,7 @@
 <Module>
   <ModulePrefs title="__MSG_title__"
                directory_title="__MSG_title__"
-               title_url="http://tokyo-ame.jwa.or.jp/__MSG_locale__/1-top.html"
+               title_url="__MSG_url__"
                height="200"
                scrolling="false"
                description="__MSG_description__"
@@ -14,12 +14,12 @@
                author_location="Tokyo, Japan"
                author_link="http://webos-goodies.jp/">
     <Locale messages="http://webos-goodies.googlecode.com/svn/trunk/blog/articles/51038077/ALL_ALL.xml"/>
-    <Locale lang="en" messages="http://webos-goodies.googlecode.com/svn/trunk/blog/articles/51038077/en_ALL.xml"/>
+    <Locale lang="ja" messages="http://webos-goodies.googlecode.com/svn/trunk/blog/articles/51038077/ja_ALL.xml"/>
   </ModulePrefs>
-  <UserPref name="mode" display_name="Location" datatype="enum" default_value="east">
-    <EnumValue value="west" display_value="West"/>
-    <EnumValue value="east" display_value="East"/>
-    <EnumValue value="whole" display_value="Whole Area"/>
+  <UserPref name="mode" display_name="__MSG_area_selection__" datatype="enum" default_value="east">
+    <EnumValue value="west" display_value="__MSG_area_west__"/>
+    <EnumValue value="east" display_value="__MSG_area_east__"/>
+    <EnumValue value="whole" display_value="__MSG_area_whole__"/>
   </UserPref>
   <Content type="html">
 <![CDATA[
@@ -82,9 +82,9 @@
 <![endif]-->
 
 <div id="mod__MODULE_ID__buttons">
-  <a href="#" onclick="if(mod__MODULE_ID__app) mod__MODULE_ID__app.onClickWhole(); event.returnValue = false; return false;">Whole Area</a>
-  <a href="#" onclick="if(mod__MODULE_ID__app) mod__MODULE_ID__app.onClickEast(); event.returnValue = false; return false;">East</a>
-  <a href="#" onclick="if(mod__MODULE_ID__app) mod__MODULE_ID__app.onClickWest(); event.returnValue = false; return false;">West</a>
+  <a href="#" onclick="if(mod__MODULE_ID__app) mod__MODULE_ID__app.onClickWhole(); event.returnValue = false; return false;">__MSG_btn_whole__</a>
+  <a href="#" onclick="if(mod__MODULE_ID__app) mod__MODULE_ID__app.onClickEast(); event.returnValue = false; return false;">__MSG_btn_east__</a>
+  <a href="#" onclick="if(mod__MODULE_ID__app) mod__MODULE_ID__app.onClickWest(); event.returnValue = false; return false;">__MSG_btn_west__</a>
 </div>
 
 <div id="mod__MODULE_ID__wrap"
