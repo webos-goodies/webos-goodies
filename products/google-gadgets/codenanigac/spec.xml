@@ -122,7 +122,7 @@ var prefs     = new _IG_Prefs(__MODULE_ID__);
 var pageId    = prefs.getInt('page');
 var revision  = prefs.getString('rev');
 var sourceURL = 'http://code.nanigac.com/source/download/' + pageId + '?pid=1';
-var appRoot   = 'http://www.sourcewalker.com/public_files/codenanigac';
+var appRoot   = 'http://webos-goodies.googlecode.com/svn/trunk/products/google-gadgets/codenanigac';
 var colorize  = !window.isIE && prefs.getBool('colorize');
 var showLinks = prefs.getBool('link');
 
