@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Module>
+  <ModulePrefs title="コードなにがし"
+               title_url="http://code.nanigac.com/"
+               height="200"
+               scrolling="false"
+               author="WebOS Goodies"
+               author_email="support@webos-goodies.jp"
+               author_affiliation="WebOS Goodies"
+               author_location="Tokyo, Japan"
+               author_link="http://webos-goodies.jp/">
+  </ModulePrefs>
+  <UserPref name="page" display_name="ソースコード ID" datatype="string" required="true"/>
+  <UserPref name="rev" display_name="リビジョン" datatype="string"/>
+  <UserPref name="lineheight" display_name="行の高さ" datatype="string" default_value="1.3"/>
+  <UserPref name="colorize" display_name="色分け表示" datatype="bool" default_value="1"/>
+  <UserPref name="link" display_name="リンクの表示" datatype="bool" default_value="1"/>
+  <Content type="html">
+    <![CDATA[
+
+<style type="text/css">
+  body {
+    position:fixed;
+    left:0px;right:0px;top:0px;bottom:0px;
+    margin:0px; padding:0px;
+  }
+  #mod__MODULE_ID__source {
+    position:absolute;
+    left:0px; top:0px; right:0px;
+    margin:0px; padding:2px; border:solid 1px #888;
+    font-size:12px; line-height:__UP_lineheight__;
+    overflow:auto;
+  }
+  .mod__MODULE_ID__source1 {
+    bottom:16px;
+  }
+  .mod__MODULE_ID__source0 {
+    bottom:0px;
+  }
+  pre#mod__MODULE_ID__source span {
+    font-family:monospace;
+  }
+  #mod__MODULE_ID__links {
+    position:absolute;
+    left:0px; right:0px; bottom:0px;
+    width:100%; height:14px; margin:0px; padding:0px;
+    font-size:12px; text-align: right;
+    overflow:visible;
+  }
+  .mod__MODULE_ID__links0 {
+    display:none;
+  }
+
+  .str { color: #080; }
+  .kwd { color: #008; }
+  .com { color: #800; }
+  .typ { color: #606; }
+  .lit { color: #066; }
+  .pun { color: #660; }
+  .pln { color: #000; }
+  .tag { color: #008; }
+  .atn { color: #606; }
+  .atv { color: #080; }
+  .dec { color: #606; }
+  pre.prettyprint { padding: 2px; border: 1px solid #888; }
+
+  @media print {
+    .str { color: #060; }
+    .kwd { color: #006; font-weight: bold; }
+    .com { color: #600; font-style: italic; }
+    .typ { color: #404; font-weight: bold; }
+    .lit { color: #044; }
+    .pun { color: #440; }
+    .pln { color: #000; }
+    .tag { color: #006; font-weight: bold; }
+    .atn { color: #404; }
+    .atv { color: #060; }
+  }
+</style>
+
+<!--[if IE]>
+<style type="text/css">
+  #mod__MODULE_ID__source {
+    position:static;
+    width:100%;
+  }
+  .mod__MODULE_ID__source1 {
+    height:expression((document.body.clientHeight - 16) + 'px');
+  }
+  .mod__MODULE_ID__source0 {
+    height:expression(document.body.clientHeight + 'px');
+  }
+  #mod__MODULE_ID__links {
+    position:static;
+    margin-top:2px;
+  }
+</style>
+<script type="text/javascript">
+var isIE = true;
+</script>
+<![endif]-->
+
+<div id="mod__MODULE_ID__fail" style="display:none; font-size:12px;">
+  ソースコードの読み込みに失敗しました。以下のページで参照してください。<br>
+  <a href="http://code.nanigac.com/source/download/__UP_page__?pid=1&rev=__UP_rev__">
+    http://code.nanigac.com/source/download/__UP_page__?pid=1&amp;rev=__UP_rev__
+  </a>
+</div>
+
+<pre id="mod__MODULE_ID__source" class="prettyprint mod__MODULE_ID__source__UP_link__"></pre>
+
+<div id="mod__MODULE_ID__links" class="mod__MODULE_ID__links__UP_link__">
+  <a id="mod__MODULE_ID__desc" target="_blank" href="http://code.nanigac.com/source/view/__UP_page__">説明</a> |
+  <a id="mod__MODULE_ID__history" target="_blank" href="http://code.nanigac.com/source/history/__UP_page__?pid=1">履歴</a> |
+  <a id="mod__MODULE_ID__copy" target="_blank" href="http://code.nanigac.com/source/download/__UP_page__?pid=1&rev=__UP_rev__">コピペ用</a>
+</div>
+
+<script type="text/javascript">
+(function() {
+
+var prefs     = new _IG_Prefs(__MODULE_ID__);
+var pageId    = prefs.getInt('page');
+var revision  = prefs.getString('rev');
+var sourceURL = 'http://code.nanigac.com/source/download/' + pageId + '?pid=1';
+var appRoot   = 'http://www.sourcewalker.com/public_files/codenanigac';
+var colorize  = !window.isIE && prefs.getBool('colorize');
+var showLinks = prefs.getBool('link');
+
+var isSafari  = navigator.userAgent.indexOf("Safari") > -1;
+var scriptURL = _IG_GetCachedUrl(appRoot + '/prettify.js');
+var cssURL    = _IG_GetCachedUrl(appRoot + '/prettify.css');
+
+if(revision)
+{
+  sourceURL += '&rev=' + revision;
+}
+
+function hesc(a)
+{
+  a = a.replace(/&/g, '&amp;');
+  a = a.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  a = a.replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+  return a;
+}
+
+function init()
+{
+  if(isSafari)
+  {
+    var el = document.createElement('SCRIPT');
+    el.type = 'text/javascript';
+    el.src  = scriptURL;
+    document.body.appendChild(el);
+  }
+  _gel('mod__MODULE_ID__source').style.bottom = showLinks ? '16px' : '0px';
+  _IG_FetchXmlContent(sourceURL, fetchSource);
+}
+
+function fetchSource(response)
+{
+  try
+  {
+    if(!response)
+      throw new Error('empty response');
+
+    var srcEl = response.getElementsByTagName('pre').item(0);
+    var text  = '';
+    for(var i = 0 ; i < srcEl.childNodes.length ; ++i)
+    {
+      var el = srcEl.childNodes.item(i);
+      if(el && el.nodeType == 3 && el.nodeValue)
+      {
+        text += el.nodeValue;
+      }
+    }
+    if(!text)
+      throw new Error('empty response');
+
+    var rootEl = document.createElement('DIV');
+    rootEl.innerHTML = '<pre>' + hesc(text) + '</pre>';
+    var newEl = rootEl.firstChild;
+    var dstEl = _gel('mod__MODULE_ID__source');
+    newEl.id = dstEl.id;
+    newEl.className = dstEl.className;
+    dstEl.parentNode.replaceChild(newEl, dstEl);
+
+    if(colorize)
+      prettyPrint();
+  }
+  catch(ex)
+  {
+    _toggle(_gel('mod__MODULE_ID__fail'));
+    _toggle(_gel('mod__MODULE_ID__source'));
+    throw ex;
+  }
+}
+
+_IG_RegisterOnloadHandler(init);
+
+if(colorize && !isSafari)
+{
+  document.open();
+  document.write('<scr' + 'ipt type="text/javascript" src="' + scriptURL + '"></scr' + 'ipt>');
+  document.close();
+}
+
+})();
+</script>
+
+    ]]>
+  </Content>
+</Module>
