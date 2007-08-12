@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+
+<!--
+ガジェットの基本設定です。
+title:     タイトルに表示する文字列
+title_url: タイトルのリンク先 URL
+height:    ガジェットの縦ピクセル数
+scrolling: 表示内容が height を越えた際にスクロールバーを表示するかどうか
+この他にもいろいろあります。
+-->
+<ModulePrefs
+  title="Hello World!"
+  title_url="http://code.nanigac.com/"
+  height="100"
+  scrolling="false" />
+
+<!--
+ガジェットのメニューの「設定を編集」の設定項目です。
+UserPref 要素を複数並べれば、その分の設定項目が表示されます。
+-->
+<UserPref name="message" display_name="表示メッセージ" datatype="string" default_value="Hello World!"/>
+
+<Content type="html">
+<![CDATA[
+
+<!--
+ここに HTML を書くと、そのままガジェットの表示内容になります。
+JavaScript（script要素）や CSS（style要素）も書けます。
+__UP_[name]__ は UserPref の該当項目の値で置き換えられます。
+-->
+<div style="font-size:16px; font-weight:bold;">__UP_message__</div>
+
+]]>
+</Content>
+</Module>
