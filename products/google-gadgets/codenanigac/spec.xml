@@ -85,10 +85,10 @@
     width:100%;
   }
   .mod__MODULE_ID__source1 {
-    height:expression((document.body.clientHeight - 16) + 'px');
+    height:expression((document.body.clientHeight - 17) + 'px');
   }
   .mod__MODULE_ID__source0 {
-    height:expression(document.body.clientHeight + 'px');
+    height:expression((document.body.clientHeight - 1)  + 'px');
   }
   #mod__MODULE_ID__links {
     position:static;
