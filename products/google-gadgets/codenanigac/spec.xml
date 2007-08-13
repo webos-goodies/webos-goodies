@@ -14,7 +14,7 @@
   <UserPref name="rev" display_name="リビジョン" datatype="string"/>
   <UserPref name="lineheight" display_name="行の高さ" datatype="string" default_value="1.3"/>
   <UserPref name="colorize" display_name="色分け表示" datatype="bool" default_value="1"/>
-  <UserPref name="link" display_name="リンクの表示" datatype="bool" default_value="1"/>
+  <UserPref name="showlink" display_name="リンクの表示" datatype="bool" default_value="1"/>
   <Content type="html">
     <![CDATA[
 
@@ -107,9 +107,9 @@ var isIE = true;
   </a>
 </div>
 
-<pre id="mod__MODULE_ID__source" class="prettyprint mod__MODULE_ID__source__UP_link__"></pre>
+<pre id="mod__MODULE_ID__source" class="prettyprint mod__MODULE_ID__source__UP_showlink__"></pre>
 
-<div id="mod__MODULE_ID__links" class="mod__MODULE_ID__links__UP_link__">
+<div id="mod__MODULE_ID__links" class="mod__MODULE_ID__links__UP_showlink__">
   <a id="mod__MODULE_ID__desc" target="_blank" href="http://code.nanigac.com/source/view/__UP_page__">説明</a> |
   <a id="mod__MODULE_ID__history" target="_blank" href="http://code.nanigac.com/source/history/__UP_page__?pid=1">履歴</a> |
   <a id="mod__MODULE_ID__copy" target="_blank" href="http://code.nanigac.com/source/download/__UP_page__?pid=1&rev=__UP_rev__">コピペ用</a>
@@ -124,7 +124,7 @@ var revision  = prefs.getString('rev');
 var sourceURL = 'http://code.nanigac.com/source/download/' + pageId + '?pid=1';
 var appRoot   = 'http://webos-goodies.googlecode.com/svn/trunk/products/google-gadgets/codenanigac';
 var colorize  = !window.isIE && prefs.getBool('colorize');
-var showLinks = prefs.getBool('link');
+var showLinks = prefs.getBool('showlink');
 
 var isSafari  = navigator.userAgent.indexOf("Safari") > -1;
 var scriptURL = _IG_GetCachedUrl(appRoot + '/prettify.js');
