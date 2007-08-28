@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+  <ModulePrefs title="検索" height="40" />
+  <UserPref datatype="hidden" name="rawquery" publish="true" />
+  <Content type="html"><![CDATA[
+
+<form method="GET" action="#" onsubmit="sendmsg(); return false;">
+  <input type="text" id="message" value="__UP_rawquery__" />
+  <input type="submit" value="検索" />
+</form>
+
+<script type="text/javascript">
+  function sendmsg()
+  {
+    try
+    {
+      var prefs = new _IG_Prefs(__MODULE_ID__);
+      prefs.set('rawquery', _gel('message').value);
+    }
+    catch(ex)
+    {
+    }
+  }
+</script>
+
+  ]]></Content>
+</Module>
