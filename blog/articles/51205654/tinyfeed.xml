@@ -34,7 +34,7 @@
         }
         else
         {
-          el.style.backgroundColor = null;
+          el.style.backgroundColor = 'transparent';
         }
       }
     }
