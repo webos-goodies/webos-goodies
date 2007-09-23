@@ -64,7 +64,7 @@ document.close();
 </div>
 
 <div style="font-size:10px;float:right;margin-top:4px;">
-<a target="_blank" href="http://www.google.com/ig/add?synd=open&moduleurl=http://webos-goodies.googlecode.com/svn/trunk/products/google-gadgets/jsconsole/inline.xml">__MSG_inline__</a>
+<a target="_blank" href="http://www.google.com/ig/add?synd=open&moduleurl=http://webos-goodies.googlecode.com/svn/trunk/products/google-gadgets/jsconsole/normal.xml">__MSG_iframe__</a>
 |
 <a target="_blank" href="http://groups.google.com/group/webos-goodies">__MSG_support__</a>
 </div>
