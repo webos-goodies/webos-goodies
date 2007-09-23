@@ -14,8 +14,8 @@
     <Require feature="minimessage"/>
     <Require feature="analytics"/>
     <Require feature="flash"/>
-    <Locale messages="http://webos-goodies.googlecode.com/svn/trunk/products/google-gadgets/jsconsole/ALL_ALL.xml"/>
-    <Locale messages="http://webos-goodies.googlecode.com/svn/trunk/products/google-gadgets/jsconsole/ja_ALL.xml" lang="ja"/>
+    <Locale messages="http://webos-goodies.googlecode.com/svn/trunk/products/google-gadgets/jsconsole/locale/ALL_ALL.xml"/>
+    <Locale messages="http://webos-goodies.googlecode.com/svn/trunk/products/google-gadgets/jsconsole/locale/ja_ALL.xml" lang="ja"/>
   </ModulePrefs>
   <UserPref name="pr" datatype="hidden" default_value="1"/><!-- Preference revision -->
   <UserPref name="sm" datatype="hidden" default_value="1"/><!-- Show message about Save Text -->
