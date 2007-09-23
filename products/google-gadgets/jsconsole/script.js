@@ -1156,7 +1156,7 @@ _IG_RegisterOnloadHandler(function(){ Gadget.init(); });
 if(Gadget.getPrefBool('saveText'))
 {
 	document.open();
-	document.write('<scr' + 'ipt type="text/javascript" src="' + _IG_GetCachedUrl('http://webos-goodies.googlecode.com/svn/trunk/products/google-gadgets/jsconsole/flash/swfobject.js') + '"></scr' + 'ipt>');
+	document.write('<scr' + 'ipt type="text/javascript" src="' + _IG_GetCachedUrl('http://webos-goodies.googlecode.com/svn/trunk/products/google-gadgets/jsconsole/swfobject.js') + '"></scr' + 'ipt>');
 	document.close();
 }
 
