@@ -19,7 +19,7 @@
   </ModulePrefs>
   <UserPref name="pr" datatype="hidden" default_value="1"/><!-- Preference revision -->
   <UserPref name="sm" datatype="hidden" default_value="1"/><!-- Show message about Save Text -->
-  <UserPref name="sv" display_name="__MSG_prf_sav__" datatype="bool"   required="true" default_value="0"/>
+  <UserPref name="sv" datatype="hidden" default_value="0"/><!-- A cached file for inline gadget is not from the origin server.  -->
   <UserPref name="fs" display_name="__MSG_prf_fon__" datatype="string" required="true" default_value="12"/>
   <UserPref name="tr" display_name="__MSG_prf_txt__" datatype="string" required="true" default_value="15"/>
   <UserPref name="or" display_name="__MSG_prf_out__" datatype="string" required="true" default_value="8"/>
