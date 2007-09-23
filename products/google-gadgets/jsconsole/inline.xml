@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <Module>
-  <ModulePrefs title="JavaScript Console (inline)"
-               title_url="http://groups.google.com/group/webos-goodies/"
-               height="200">
+  <ModulePrefs
+      title="JavaScript Console (inline)"
+      title_url="http://webos-goodies.jp/"
+      scrolling="false"
+      height="200">
     <Require feature="setprefs"/>
     <Require feature="dynamic-height"/>
     <Require feature="settitle"/>
@@ -12,192 +14,74 @@
     <Require feature="minimessage"/>
     <Require feature="analytics"/>
     <Require feature="flash"/>
+    <Locale messages="http://webos-goodies.googlecode.com/svn/trunk/products/google-gadgets/jsconsole/locale/ALL_ALL.xml"/>
+    <Locale messages="http://webos-goodies.googlecode.com/svn/trunk/products/google-gadgets/jsconsole/locale/ja_ALL.xml" lang="ja"/>
   </ModulePrefs>
-  <UserPref name="pref_revision" datatype="hidden" default_value="1"/>
-  <UserPref name="selectedTab" datatype="hidden"/>
-  <UserPref name="fontsize" display_name="Font Size" datatype="string" required="true" default_value="12"/>
-  <UserPref name="textrows" display_name="Text Rows" datatype="string" required="true" default_value="15"/>
-  <UserPref name="resultrows" display_name="Result Rows" datatype="string" required="true" default_value="8"/>
-  <UserPref name="text1" datatype="hidden"/>
-  <UserPref name="text2" datatype="hidden"/>
-  <UserPref name="text3" datatype="hidden"/>
-  <UserPref name="text4" datatype="hidden"/>
-  <UserPref name="text5" datatype="hidden"/>
+  <UserPref name="pr" datatype="hidden" default_value="1"/><!-- Preference revision -->
+  <UserPref name="sm" datatype="hidden" default_value="1"/><!-- Show message about Save Text -->
+  <UserPref name="sv" display_name="__MSG_prf_sav__" datatype="bool"   required="true" default_value="0"/>
+  <UserPref name="fs" display_name="__MSG_prf_fon__" datatype="string" required="true" default_value="12"/>
+  <UserPref name="tr" display_name="__MSG_prf_txt__" datatype="string" required="true" default_value="15"/>
+  <UserPref name="or" display_name="__MSG_prf_out__" datatype="string" required="true" default_value="8"/>
+  <UserPref name="lr" display_name="__MSG_prf_log__" datatype="string" required="true" default_value="8"/>
+  <UserPref name="gh" display_name="__MSG_prf_gad__" datatype="string" required="true" default_value="200"/>
+  <UserPref name="u1" display_name="__MSG_prf_usr__ 1" datatype="string"/>
+  <UserPref name="u2" display_name="__MSG_prf_usr__ 2" datatype="string"/>
+  <UserPref name="u3" display_name="__MSG_prf_usr__ 3" datatype="string"/>
+  <UserPref name="u4" display_name="__MSG_prf_usr__ 4" datatype="string"/>
   <Content type="html-inline">
     <![CDATA[
 
 <script type="text/javascript">
-if(_args()['webos-goodies'] != 'noinline') {
-
-function class__MODULE_ID__()
-{
-  this.prefs    = new _IG_Prefs(__MODULE_ID__);
-  this.tabs     = new _IG_Tabs(__MODULE_ID__);
-  this.isInline = location.hostname != '__MODULE_ID__.gmodules.com';
-  this.numTexts = 5;
-
-  // create tab contents.
-  var fragment = document.createDocumentFragment();
-  for(var i = 1 ; i <= this.numTexts ; ++i)
-  {
-    var div = document.createElement('DIV');
-    div.id = 'mod__MODULE_ID__tab' + i;
-    div.style.display = 'none';
-    var ta = document.createElement('TEXTAREA');
-    ta.id = 'mod__MODULE_ID__text' + i;
-    ta.className = 'mod__MODULE_ID__textarea';
-    ta.value = this.prefs.getString('text' + i);
-    ta.wrap = 'off';
-    div.appendChild(ta);
-    fragment.appendChild(div);
-  }
-  _gel('mod__MODULE_ID__container').appendChild(fragment);
-
-  // create tabs.
-  for(var i = 1 ; i <= this.numTexts ; ++i)
-  {
-    this.tabs.addTab(i, {
-        contentContainer : _gel('mod__MODULE_ID__tab' + i)
-        });
-  }
-
-  this.adjustHeight();
-}
-
-class__MODULE_ID__.prototype = {
-
-adjustHeight : function()
-{
-  if(!this.isInline)
-  {
-    _IG_AdjustIFrameHeight();
-  }
-},
-
-getCurrentText : function(save)
-{
-  var index = this.tabs.getSelectedTab().getIndex() + 1;
-  if(1 <= index && index <= this.numTexts)
-  {
-    var text = _gel('mod__MODULE_ID__text' + index).value;
-    if(save)
-    {
-      this.prefs.set('text' + index, text);
-    }
-    return text;
-  }
-  else
-  {
-    return null;
-  }
-},
-
-clearCurrentText : function(save)
-{
-  var index = this.tabs.getSelectedTab().getIndex() + 1;
-  if(1 <= index && index <= this.numTexts)
-  {
-    _gel('mod__MODULE_ID__text' + index).value = "";
-    if(save)
-    {
-      this.prefs.set('text' + index, "");
-    }
-  }
-},
-
-runAsScript : function()
-{
-  var text = this.getCurrentText(true);
-  if(text)
-  {
-    (function() {
-      var r = eval(text);
-      var e = _gel('mod__MODULE_ID__result');
-      if(e.innerText)
-        e.innerText = r;
-      else
-        e.innerHTML = _hesc(String(r));
-    })();
-    this.adjustHeight();
-  }
-},
-
-replaceHTML : function()
-{
-  var text = this.getCurrentText(true);
-  if(text)
-  {
-    _gel('mod__MODULE_ID__contents').innerHTML = text;
-    this.adjustHeight();
-  }
-}
-
-};
-
-_IG_RegisterOnloadHandler(function(){ window.mod__MODULE_ID__ = new class__MODULE_ID__(); });
-
-}
+var modId = __MODULE_ID__;
+document.open();
+document.write('<scr' + 'ipt type="text/javascript" src="' + _IG_GetCachedUrl('http://webos-goodies.googlecode.com/svn/trunk/products/google-gadgets/jsconsole/script.js?v=1') + '"></scr' + 'ipt>');
+document.close();
 </script>
 
 <style type="text/css">
 @import url(http://www.google.com/ig/tablib.css);
-#mod__MODULE_ID__outer {
-  font-size: __UP_fontsize__px;
+.mmlib_table__MODULE_ID__ {
+	__MSG_minimessage_style__
+	padding:4px;
+	margin:0px;
 }
-.mod__MODULE_ID__textarea {
-  width:     100%;
-  height:    __UP_textrows__em;
-  font-size: __UP_fontsize__px;
-}
-.mod__MODULE_ID__frame {
-  margin:  0px;
-  padding: 4px;
-  border:  solid 1px black;
-}
-.mod__MODULE_ID__title{
-  margin:      4px 0px 2px 0px;
-  padding:     0px;
-  font-weight: bold;
-}
-#mod__MODULE_ID__buttonframe {
-  margin:  4px 0px;
-  padding: 0px;
-}
-#mod__MODULE_ID__buttonframe input{
-  font-size: __UP_fontsize__px;
-}
-#mod__MODULE_ID__result {
-  width:      100%;
-  max-height: __UP_resultrows__em;
-  margin:     0px;
-  overflow:   auto;
+.mod__MODULE_ID__extraframe {
+	border: 1px solid #676767;
+	border-top-style: none;
+	padding: 4px;
 }
 </style>
 
-<div id="mod__MODULE_ID__outer">
+<div id="mod__MODULE_ID__buttons"></div>
+<div id="mod__MODULE_ID__extraview"></div>
 
-<div id="mod__MODULE_ID__container"></div>
-
-<div id="mod__MODULE_ID__buttonframe">
-<div style="float:right;">
-<input type="button" value="Clear" onclick="mod__MODULE_ID__.clearCurrentText(true);"/>
+<div id="mod__MODULE_ID__gadgetframe" style="display:none;">
+	<div id="mod__MODULE_ID__gadgetmsg" style="font-size:__UP_fs__px;">__MSG_msg_gad__</div>
+	<div id="mod__MODULE_ID__gadgetborder" style="border:1px dotted #676767;margin:0px auto;overflow:auto;display:none;">
+		<iframe id="mod__MODULE_ID__gadgetpreview" name="mod__MODULE_ID__gadgetpreview" frameborder='0'></iframe>
+	</div>
 </div>
+
+<div style="font-size:10px;float:right;margin-top:4px;">
+<a target="_blank" href="http://www.google.com/ig/add?synd=open&moduleurl=http://webos-goodies.googlecode.com/svn/trunk/products/google-gadgets/jsconsole/inline.xml">__MSG_inline__</a>
+|
+<a target="_blank" href="http://groups.google.com/group/webos-goodies">__MSG_support__</a>
+</div>
+
+<div id="mod__MODULE_ID__gadgetForm" style="display:none"></div>
+
 <div>
-<input type="button" value="Run as script" onclick="mod__MODULE_ID__.runAsScript();"/>
-<input type="button" value="Replace HTML"  onclick="mod__MODULE_ID__.replaceHTML();"/>
-</div>
-</div>
-
-<div class="mod__MODULE_ID__title">Script Result</div>
-<div class="mod__MODULE_ID__frame">
-<pre id="mod__MODULE_ID__result"></pre>
-</div>
-
-<div class="mod__MODULE_ID__title">HTML</div>
-<div class="mod__MODULE_ID__frame">
-<div id="mod__MODULE_ID__contents"></div>
-</div>
-
+<script type="text/javascript">
+	if(SWFObject)
+	{
+		var so = new SWFObject(
+			_IG_GetCachedUrl("http://webos-goodies.googlecode.com/svn/trunk/products/google-gadgets/jsconsole/flash/FlashStorage.swf"),
+			'mod' + __MODULE_ID__ + "JsConsoleStorage", "10", "10", "9", "#ffffff");
+		so.addVariable('prefix', 'mod' + __MODULE_ID__ + 'Gadget.onStorage');
+		document.write(so.getSWFHTML());
+	}
+</script>
 </div>
 
     ]]>
