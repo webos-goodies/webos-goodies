@@ -35,7 +35,7 @@
 <script type="text/javascript">
 var modId = __MODULE_ID__;
 document.open();
-document.write('<scr' + 'ipt type="text/javascript" src="' + _IG_GetCachedUrl('http://webos-goodies.googlecode.com/svn/trunk/products/google-gadgets/jsconsole/script.js?v=1') + '"></scr' + 'ipt>');
+document.write('<scr' + 'ipt type="text/javascript" src="' + _IG_GetCachedUrl('http://webos-goodies.googlecode.com/svn/trunk/products/google-gadgets/jsconsole/script.js') + '"></scr' + 'ipt>');
 document.close();
 </script>
 
@@ -70,19 +70,6 @@ document.close();
 </div>
 
 <div id="mod__MODULE_ID__gadgetForm" style="display:none"></div>
-
-<div>
-<script type="text/javascript">
-	if(SWFObject)
-	{
-		var so = new SWFObject(
-			_IG_GetCachedUrl("http://webos-goodies.googlecode.com/svn/trunk/products/google-gadgets/jsconsole/flash/FlashStorage.swf"),
-			'mod' + __MODULE_ID__ + "JsConsoleStorage", "10", "10", "9", "#ffffff");
-		so.addVariable('prefix', 'mod' + __MODULE_ID__ + 'Gadget.onStorage');
-		document.write(so.getSWFHTML());
-	}
-</script>
-</div>
 
     ]]>
   </Content>

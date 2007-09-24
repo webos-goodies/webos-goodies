@@ -43,7 +43,7 @@
   <msg name="minimessage_style">font-size:10px;font-weight:normal;line-height:1.3;</msg>
   <msg name="msg_sav">
   <![CDATA[
-このガジェットを削除したときは、<a href="http://www.macromedia.com/support/documentation/jp/flashplayer/help/settings_manager07.html">このページ</a>で __MODULE_ID__.gmodules.com を削除してください。
+このガジェットを削除したときは、<a href="http://www.macromedia.com/support/documentation/jp/flashplayer/help/settings_manager07.html" target="_blank">このページ</a>で __MODULE_ID__.gmodules.com を削除してください。
 そうしないと保存したテキストが別のガジェットに盗まれる可能性があります。
   ]]></msg>
 

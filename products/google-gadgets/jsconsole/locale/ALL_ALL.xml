@@ -53,7 +53,7 @@
 	<msg name="minimessage_style">font-size:10px;</msg>
 	<msg name="msg_sav">
 	<![CDATA[
-You should erase __MODULE_ID__.gmodules.com at <a href="http://www.macromedia.com/support/documentation/en/flashplayer/help/settings_manager07.html">this page</a> when you remove this gadget.
+You should erase __MODULE_ID__.gmodules.com at <a href="http://www.macromedia.com/support/documentation/en/flashplayer/help/settings_manager07.html" target="_blank">this page</a> when you remove this gadget.
 Otherwise the saved texts are possibly stolen by another gadget.
 	]]></msg>
 
