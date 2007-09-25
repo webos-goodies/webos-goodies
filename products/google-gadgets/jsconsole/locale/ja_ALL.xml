@@ -1,6 +1,7 @@
 <messagebundle>
 
   <msg name="description">iGoogle上で動くJavaScriptコンソールです。JavaScriptコードの実行、HTMLの表示、それらをもとにしたiGoogleガジェットの生成などが行えます。</msg>
+	<msg name="screenshot">http://webos-goodies.googlecode.com/svn/trunk/products/google-gadgets/jsconsole/img/screenshot_jp.png</msg>
 
   <msg name="prf_fon">フォントサイズ</msg>
   <msg name="prf_txt">テキストの行数</msg>

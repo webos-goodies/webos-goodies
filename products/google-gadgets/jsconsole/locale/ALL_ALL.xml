@@ -1,6 +1,7 @@
 <messagebundle>
 
-	<msg name="description">Put a JavaScript console on your iGoogle. You can execute javascript code, render HTML and generate an iGoogle Gadget based on them.</msg>
+	<msg name="description">Put a JavaScript console on your iGoogle. You can execute javascript code, render HTML and generate an iGoogle Gadget.</msg>
+	<msg name="screenshot">http://webos-goodies.googlecode.com/svn/trunk/products/google-gadgets/jsconsole/img/screenshot_en.png</msg>
 
 	<msg name="prf_fon">Font Size</msg>
 	<msg name="prf_txt">Text Rows</msg>

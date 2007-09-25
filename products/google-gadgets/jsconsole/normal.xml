@@ -1,36 +1,45 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <Module>
-  <ModulePrefs
-      title="JavaScript Console"
-      title_url="http://webos-goodies.jp/"
-      scrolling="false"
-      height="200">
-    <Require feature="setprefs"/>
-    <Require feature="dynamic-height"/>
-    <Require feature="settitle"/>
-    <Require feature="tabs"/>
-    <Require feature="drag"/>
-    <Require feature="grid"/>
-    <Require feature="minimessage"/>
-    <Require feature="analytics"/>
-    <Require feature="flash"/>
-    <Locale messages="http://webos-goodies.googlecode.com/svn/trunk/products/google-gadgets/jsconsole/locale/ALL_ALL.xml"/>
-    <Locale messages="http://webos-goodies.googlecode.com/svn/trunk/products/google-gadgets/jsconsole/locale/ja_ALL.xml" lang="ja"/>
-  </ModulePrefs>
-  <UserPref name="pr" datatype="hidden" default_value="1"/><!-- Preference revision -->
-  <UserPref name="sm" datatype="hidden" default_value="1"/><!-- Show message about Save Text -->
-  <UserPref name="sv" display_name="__MSG_prf_sav__" datatype="bool"   required="true" default_value="0"/>
-  <UserPref name="fs" display_name="__MSG_prf_fon__" datatype="string" required="true" default_value="12"/>
-  <UserPref name="tr" display_name="__MSG_prf_txt__" datatype="string" required="true" default_value="15"/>
-  <UserPref name="or" display_name="__MSG_prf_out__" datatype="string" required="true" default_value="8"/>
-  <UserPref name="lr" display_name="__MSG_prf_log__" datatype="string" required="true" default_value="8"/>
-  <UserPref name="gh" display_name="__MSG_prf_gad__" datatype="string" required="true" default_value="200"/>
-  <UserPref name="u1" display_name="__MSG_prf_usr__ 1" datatype="string"/>
-  <UserPref name="u2" display_name="__MSG_prf_usr__ 2" datatype="string"/>
-  <UserPref name="u3" display_name="__MSG_prf_usr__ 3" datatype="string"/>
-  <UserPref name="u4" display_name="__MSG_prf_usr__ 4" datatype="string"/>
-  <Content type="html">
-    <![CDATA[
+	<ModulePrefs
+			title="JavaScript Console"
+			directory_title="JavaScript Console"
+			title_url="http://webos-goodies.jp/"
+			description="__MSG_description__"
+			scrolling="false"
+			height="200"
+			screenshot="__MSG_screenshot__"
+			thumbnail="http://webos-goodies.googlecode.com/svn/trunk/products/google-gadgets/jsconsole/img/thumbnail.png"
+			author="WebOS Goodies"
+			author_email="support@webos-goodies.jp"
+			author_affiliation="WebOS Goodies"
+			author_location="Tokyo, Japan"
+			author_link="http://webos-goodies.jp/">
+		<Require feature="setprefs"/>
+		<Require feature="dynamic-height"/>
+		<Require feature="settitle"/>
+		<Require feature="tabs"/>
+		<Require feature="drag"/>
+		<Require feature="grid"/>
+		<Require feature="minimessage"/>
+		<Require feature="analytics"/>
+		<Require feature="flash"/>
+		<Locale messages="http://webos-goodies.googlecode.com/svn/trunk/products/google-gadgets/jsconsole/locale/ALL_ALL.xml"/>
+		<Locale messages="http://webos-goodies.googlecode.com/svn/trunk/products/google-gadgets/jsconsole/locale/ja_ALL.xml" lang="ja"/>
+	</ModulePrefs>
+	<UserPref name="pr" datatype="hidden" default_value="1"/><!-- Preference revision -->
+	<UserPref name="sm" datatype="hidden" default_value="1"/><!-- Show message about Save Text -->
+	<UserPref name="sv" display_name="__MSG_prf_sav__" datatype="bool"   required="true" default_value="0"/>
+	<UserPref name="fs" display_name="__MSG_prf_fon__" datatype="string" required="true" default_value="12"/>
+	<UserPref name="tr" display_name="__MSG_prf_txt__" datatype="string" required="true" default_value="15"/>
+	<UserPref name="or" display_name="__MSG_prf_out__" datatype="string" required="true" default_value="8"/>
+	<UserPref name="lr" display_name="__MSG_prf_log__" datatype="string" required="true" default_value="8"/>
+	<UserPref name="gh" display_name="__MSG_prf_gad__" datatype="string" required="true" default_value="200"/>
+	<UserPref name="u1" display_name="__MSG_prf_usr__ 1" datatype="string"/>
+	<UserPref name="u2" display_name="__MSG_prf_usr__ 2" datatype="string"/>
+	<UserPref name="u3" display_name="__MSG_prf_usr__ 3" datatype="string"/>
+	<UserPref name="u4" display_name="__MSG_prf_usr__ 4" datatype="string"/>
+	<Content type="html">
+		<![CDATA[
 
 <script type="text/javascript">
 var modId = __MODULE_ID__;
@@ -99,6 +108,6 @@ document.close();
 </script>
 </div>
 
-    ]]>
-  </Content>
+		]]>
+	</Content>
 </Module>
