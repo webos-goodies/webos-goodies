@@ -761,18 +761,27 @@ ToolBookmarkletize.prototype = {
 		var $text     = Gadget.getCurrentText();
 		var $literals = [];
 		$text = $text.replace(/\r\n?/g, '\n');
-		$text = $text.replace(/\/\/.*\n|\/\*(?:.|\n)*\*\//g, '');
 		$text = $text.replace(/\~/g, '~T');
-		$text = $text.replace(/((?:[^-+.)}\]$\w\s]|[^-]\-|[^+]\+)\s*)(([\'\"\/])(?:[^\3]|\\\3)*\3)/g,
+		$text = $text.replace(/\+\+/g, '~P');
+		$text = $text.replace(/\-\-/g, '~M');
+		$text = $text.replace(/\/\/.*|\/\*(?:[^*]|\*(?!\/))+\*\/|([^.)\]$\w\s]\s*)(([\'\"]|\/(?![\/\*]))(?:[^\\\3]|\\.)*?\3)/g,
 													function(m0, m1, m2) {
-			$literals[$literals.length] = m2.replace(/\~T/, '~');
-			return m1 + '~S';
+			if(m2)
+			{
+				$literals[$literals.length] = m2;
+				return m1 + '~S';
+			}
+			else
+			{
+				return '';
+			}
 		});
 		$text = $text.replace(/\s+/g, ' ');
 		$text = $text.replace(/^ +| +$/g, '');
-		$text = $text.replace(/\~(.)/, function(m0, m1){
-			return m1 == 'S' ? $literals.shift() : '~';
+		$text = $text.replace(/\~S/g, function(){
+			return $literals.shift();
 		});
+		$text = $text.replace(/\~P/g, '++').replace(/\~M/g, '--').replace(/\~T/g, '~');
 
 		this.$doms.link.href    = 'javascript:' + '(function(){' + $text + '})()';
 		this.$doms.source.value = $text;
