@@ -754,6 +754,12 @@ function ToolBookmarkletize($frame)
 		]}
 	]);
 	this.$doms = $builder.getElements();
+	this.$pattern = new RegExp([
+		'//.*',
+		'/\\*(?:[^*]|\\*(?!/))+\\*/',
+		'(\'|")(?:[^\\\\\\1]|\\\\.)*?\\1',
+		'([^.)\\]$\\w\\s]\\s*)(/(?![/\\*])(?:[^\\\\/\\[]|\\\\.|\\[(?:[^\\\\\\]]|\\\\.)*\\])*?/)'
+	].join('|'), 'g');
 }
 ToolBookmarkletize.prototype = {
 	onExecute : function()
@@ -764,12 +770,16 @@ ToolBookmarkletize.prototype = {
 		$text = $text.replace(/\~/g, '~T');
 		$text = $text.replace(/\+\+/g, '~P');
 		$text = $text.replace(/\-\-/g, '~M');
-		$text = $text.replace(/\/\/.*|\/\*(?:[^*]|\*(?!\/))+\*\/|([^.)\]$\w\s]\s*)(([\'\"]|\/(?![\/\*]))(?:[^\\\3]|\\.)*?\3)/g,
-													function(m0, m1, m2) {
-			if(m2)
+		$text = $text.replace(this.$pattern, function(m0, m1, m2, m3) {
+			if(m1)
 			{
-				$literals[$literals.length] = m2;
-				return m1 + '~S';
+				$literals[$literals.length] = m0;
+				return '~S';
+			}
+			else if(m2 && m3)
+			{
+				$literals[$literals.length] = m3;
+				return m2 + '~S';
 			}
 			else
 			{
