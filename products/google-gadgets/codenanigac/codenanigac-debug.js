@@ -433,7 +433,7 @@ if(!window.WebOSGoodies.CodeNanigaC)
 	  this.$styleCommentCaption = { margin:'0px 0px 4px 0px', padding:'0px' };
 	  this.$styleCommentBody = { margin:'0px 0px 0px 1em', padding:'0px' };
 	  this.$styleCommentFooter = { margin:'4px', padding:'0px', textAlign:'right', fontSize:'10px' };
-	  this.$styleFooter = { margin:'0px', padding:'0px', textAlign:'right', fontSize:'12px' };
+	  this.$styleFooter = { margin:'3px 0px 0px 0px', padding:'0px', textAlign:'right', fontSize:'12px', border:'none', lineHeight:'1' };
 	  this.$stylePre = 'margin:0.8em 0px;padding:0.8em;background-color:#eee;border:solid 1px #888;';
 
 	  var $showComments = this.$showComments && $content.commnt.length > 0;
