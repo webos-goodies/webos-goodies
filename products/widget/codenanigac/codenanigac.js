@@ -48,45 +48,45 @@ return $A;},$U:function($V,$W)
 {var d=RegExp.$1,t=RegExp.$2;return d.replace(/-/g,'/')+' '+t;}
 else
 {return'';}},$Z:function($W)
-{var $10=[];$W=$W.replace(/~/g,'~T');$W=$W.replace(/(\s)(https?:\/\/[^\s]+)/g,function(d,$11,$12){$10[$10.length]=$12;return $11+'~L';});$W=$W.replace(/\r\n|\r|\n/g,'~N');$W=$8($W);$W=$W.replace(/~L/g,function(){var $13=$10.shift();var $14=$13;if($14.length>60)
-$14=$14.slice(0,60)+'...';return'<a href="'+$13+'">'+$14+'</a>';});$W=$W.replace(/~N/g,'<br/>').replace(/~T/g,'~');return $W;},$15:function($C,$b)
-{var $A=$1('DIV');$e($A,this.$16);if(this.$t)
+{var $10=[],$11=[],$12=this.$12;$W=$W.replace(/~/g,'~T');$W=$W.replace(/(\s)(https?:\/\/[^\s]+)/g,function(d,$13,$14){$10[$10.length]=$14;return $13+'~L';});$W=$W.replace(/\s*\[block\]((?:.|[\r\n])*?)\[\/block\]\s*/g,function(d,$14){$11[$11.length]=$14;return'~B';});$W=$W.replace(/\r\n|\r|\n/g,'~N');$W=$W;$W=$W.replace(/~B/g,function(){var $15=$11.shift();return'<pre style="'+$12+'">'+$15+'</pre>';});$W=$W.replace(/~L/g,function(){var $16=$10.shift();var $15=$16;if($15.length>60)
+$15=$15.slice(0,60)+'...';return'<a href="'+$16+'">'+$15+'</a>';});$W=$W.replace(/~N/g,'<br/>').replace(/~T/g,'~');return $W;},$17:function($C,$b)
+{var $A=$1('DIV');$e($A,this.$18);if(this.$t)
 this.$t.addTab($C,{content:$A});else
-this.$q.appendChild($A);$b.call(this,$A);},$17:function($18)
-{var $19;this.$15('ソース',function($A){$A.innerHTML='<pre style="margin:0px;padding:0px;border:none;">'+$18.entry.src_sourcecode+'</pre>';$A.firstChild.className=this.$O;});},$1a:function($18)
-{this.$15('詳細',function($A){var $v=$1('TABLE');var $w=$1('TBODY');var $1b=$1('DIV');var $1c=$18.entry;var $1d=[['タイトル',this.$U('/source/view/'+$1c.src_id,$1c.src_title)],['ソースコードID',$1c.src_id],['登録者',this.$U('/user/profile/'+$18.auth_id,$18.auth_name)],['登録日時',this.$X($18.auth_regdate)],['最終更新者',this.$U('/user/profile/'+$18.modifier_id,$18.auth_modifier_name)],['最終更新日時',this.$X($18.auth_modify_date)],['GoodJob数',$1c.src_gj],['アクセス数',$1c.src_access_num],['コメント数',$1c.src_comment_num]];if($18.tagdata.length>0)
-{var $1e=$18.tagdata,$1f=[];for(var i=0;i<$1e.length;++i)
-{var $1g=$1e[i].tag;$1f[$1f.length]=this.$U('/code/search?q='+$1g+'&tag=1&code_type=1',$1g);}
-$1d[$1d.length]=['タグ',$1f.join('&nbsp;')];}
-if($1c.src_relate_name)
-$1d[$1d.length]=['関連トピック',$8($1c.src_relate_name)];$e($v,this.$f);$w.appendChild(this.$P($1d));$v.appendChild($w);$A.appendChild($v);$e($1b,this.$1h);$1b.innerHTML=this.$Z($1c.src_description);$A.appendChild($1b);});},$1i:function($18)
-{var $1j=$18.commnt;$1j.sort(function(a,b){return a.com_num-b.com_num;});this.$15('コメント',function($A){for(var i=0;i<$1j.length;++i)
-{var $1k=$1j[i];var $1l=$1('DIV');var $1m=$1('DIV');var $1n=$1('DIV');$e($1l,this.$1o);$e($1m,this.$1p);$e($1n,this.$1q);if(i!=$18.entry.src_comment_num-1)
-$1l.style.borderBottom='dotted 1px #333';$1m.innerHTML=($1k.com_num+': '+
-this.$U('/user/profile/'+$1k.com_id,$1k.com_name)+' ('+
-this.$X($1k.com_regdate)+')');$1n.innerHTML=$1k.com_description.replace(/\r\n|\r|\n/g,'<br/>');$1l.appendChild($1m);$1l.appendChild($1n);$A.appendChild($1l);}
-if($1j.length!=$18.entry.src_comment_num)
-{var $G=$1('DIV');$e($G,this.$1r);$G.innerHTML=this.$U('/source/view/'+$18.entry.src_id,'>> もっと読む');$A.appendChild($G);}});},$1s:function($18)
-{this.$G=$1('DIV');$e(this.$G,this.$1t);this.$G.innerHTML=this.$U('/source/view/'+$18.entry.src_id,'説明')+' | '+
-this.$U('/source/history/'+$18.entry.src_id+' ?pid=1','履歴')+' | '+
-this.$U('/source/download/'+$18.entry.src_id+' ?pid=1','コピペ用');$0(this.$F).appendChild(this.$G);},$1u:function($18)
-{this.$1v={width:'100%',margin:'0px',padding:'4px',overflow:'auto',borderWidth:'1px',borderColor:'#666'};this.$16={margin:'0px',padding:'0px'};this.$f={margin:'8px 8px',padding:'0px',borderCollapse:'separate',borderSpacing:'0px',emptyCells:'show',lineHeight:'1.5'};this.$S={fontSize:'11px',textAlign:'right',padding:'0px 8px 0px 0px',whiteSpace:'pre'};this.$T={fontSize:'12px',textAlign:'left',padding:'0px'};this.$1h={margin:'12px 8px 0px 8px',padding:'8px',border:'dotted 1px #333'};this.$1o={margin:'0px',padding:'8px 0px'};this.$1p={margin:'0px 0px 4px 0px',padding:'0px'};this.$1q={margin:'0px 0px 0px 1em',padding:'0px'};this.$1r={margin:'4px',padding:'0px',textAlign:'right',fontSize:'10px'};this.$1t={margin:'0px',padding:'0px',textAlign:'right',fontSize:'12px'};var $K=this.$K&&$18.commnt.length>0;var $1w=(this.$I?1:0)+(this.$J?1:0)+($K?1:0);var $L=$1w>=2||this.$L;if($L)
-{this.$t=new WebOSGoodies.SimpleTab(this.$F);this.$q=this.$t.getContentContainer();$e(this.$q,this.$1v);this.$q.style.borderStyle='none solid solid solid';}
+this.$q.appendChild($A);$b.call(this,$A);},$19:function($1a)
+{var $1b;this.$17('ソース',function($A){$A.innerHTML='<pre style="margin:0px;padding:0px;border:none;">'+$1a.entry.src_sourcecode+'</pre>';$A.firstChild.className=this.$O;});},$1c:function($1a)
+{this.$17('詳細',function($A){var $v=$1('TABLE');var $w=$1('TBODY');var $1d=$1('DIV');var $1e=$1a.entry;var $1f=[['タイトル',this.$U('/source/view/'+$1e.src_id,$1e.src_title)],['ソースコードID',$1e.src_id],['登録者',this.$U('/user/profile/'+$1a.auth_id,$1a.auth_name)],['登録日時',this.$X($1a.auth_regdate)],['最終更新者',this.$U('/user/profile/'+$1a.modifier_id,$1a.auth_modifier_name)],['最終更新日時',this.$X($1a.auth_modify_date)],['GoodJob数',$1e.src_gj],['アクセス数',$1e.src_access_num],['コメント数',$1e.src_comment_num]];if($1a.tagdata.length>0)
+{var $1g=$1a.tagdata,$1h=[];for(var i=0;i<$1g.length;++i)
+{var $1i=$1g[i].tag;$1h[$1h.length]=this.$U('/code/search?q='+$1i+'&tag=1&code_type=1',$1i);}
+$1f[$1f.length]=['タグ',$1h.join('&nbsp;')];}
+if($1e.src_relate_name)
+$1f[$1f.length]=['関連トピック',$8($1e.src_relate_name)];$e($v,this.$f);$w.appendChild(this.$P($1f));$v.appendChild($w);$A.appendChild($v);$e($1d,this.$1j);$1d.innerHTML=this.$Z($1e.src_description);$A.appendChild($1d);});},$1k:function($1a)
+{var $1l=$1a.commnt;$1l.sort(function(a,b){return a.com_num-b.com_num;});this.$17('コメント',function($A){for(var i=0;i<$1l.length;++i)
+{var $1m=$1l[i];var $1n=$1('DIV');var $1o=$1('DIV');var $1p=$1('DIV');$e($1n,this.$1q);$e($1o,this.$1r);$e($1p,this.$1s);if(i!=$1a.entry.src_comment_num-1)
+$1n.style.borderBottom='dotted 1px #333';$1o.innerHTML=($1m.com_num+': '+
+this.$U('/user/profile/'+$1m.com_id,$1m.com_name)+' ('+
+this.$X($1m.com_regdate)+')');$1p.innerHTML=$1m.com_description.replace(/\r\n|\r|\n/g,'<br/>');$1n.appendChild($1o);$1n.appendChild($1p);$A.appendChild($1n);}
+if($1l.length!=$1a.entry.src_comment_num)
+{var $G=$1('DIV');$e($G,this.$1t);$G.innerHTML=this.$U('/source/view/'+$1a.entry.src_id,'>> もっと読む');$A.appendChild($G);}});},$1u:function($1a)
+{this.$G=$1('DIV');$e(this.$G,this.$1v);this.$G.innerHTML=this.$U('/source/view/'+$1a.entry.src_id,'説明')+' | '+
+this.$U('/source/history/'+$1a.entry.src_id+' ?pid=1','履歴')+' | '+
+this.$U('/source/download/'+$1a.entry.src_id+' ?pid=1','コピペ用');$0(this.$F).appendChild(this.$G);},$1w:function($1a)
+{this.$1x={width:'100%',margin:'0px',padding:'4px',overflow:'auto',borderWidth:'1px',borderColor:'#666'};this.$18={margin:'0px',padding:'0px'};this.$f={margin:'8px 8px',padding:'0px',borderCollapse:'separate',borderSpacing:'0px',emptyCells:'show',lineHeight:'1.5'};this.$S={fontSize:'11px',textAlign:'right',padding:'0px 8px 0px 0px',whiteSpace:'pre'};this.$T={fontSize:'12px',textAlign:'left',padding:'0px'};this.$1j={margin:'12px 8px 0px 8px',padding:'8px',border:'dashed 1px #888'};this.$1q={margin:'0px',padding:'8px 0px'};this.$1r={margin:'0px 0px 4px 0px',padding:'0px'};this.$1s={margin:'0px 0px 0px 1em',padding:'0px'};this.$1t={margin:'4px',padding:'0px',textAlign:'right',fontSize:'10px'};this.$1v={margin:'0px',padding:'0px',textAlign:'right',fontSize:'12px'};this.$12='margin:0.8em 0px;padding:0.8em;background-color:#eee;border:solid 1px #888;';var $K=this.$K&&$1a.commnt.length>0;var $1y=(this.$I?1:0)+(this.$J?1:0)+($K?1:0);var $L=$1y>=2||this.$L;if($L)
+{this.$t=new WebOSGoodies.SimpleTab(this.$F);this.$q=this.$t.getContentContainer();$e(this.$q,this.$1x);this.$q.style.borderStyle='none solid solid solid';}
 else
-{this.$q=$1('DIV');$e(this.$q,this.$1v);this.$q.style.borderStyle='solid';$0(this.$F).appendChild(this.$q);}
+{this.$q=$1('DIV');$e(this.$q,this.$1x);this.$q.style.borderStyle='solid';$0(this.$F).appendChild(this.$q);}
 if(window.Components)
 this.$q.style.setProperty('-moz-box-sizing','border-box',null);else if($5(this.$q.style.setProperty))
 this.$q.style.setProperty('box-sizing','border-box',null);if(!this.$N)
 this.$q.style.borderStyle='none';if(this.$H)
 this.$q.style.height=this.$H+'px';if(this.$I)
-this.$17($18);if(this.$J)
-this.$1a($18);if($K)
-this.$1i($18);if(this.$M)
-this.$1s($18);if(window.ActiveXObject)
+this.$19($1a);if(this.$J)
+this.$1c($1a);if($K)
+this.$1k($1a);if(this.$M)
+this.$1u($1a);if(window.ActiveXObject)
 {var $A=$0(this.$F).parentNode;if($A.offsetWidth<this.$q.offsetWidth)
 {this.$q.style.width=$A.offsetWidth-(this.$q.offsetWidth-$A.offsetWidth);}}},getTabs:function()
 {return this.$t;},getContentContainer:function()
 {return this.$q;},getFooterContainer:function()
-{return this.$G;}};window.WebOSGoodies.CodeNanigaC={$b:function($1x,$18)
-{$1x.$1u($18);},write:function($1y,$n)
-{var $1z=$E++;var $F=$D+$1z;var $b='callback'+$1z;var $1x=new Widget($F,$n);this[$b]=$9(this,this.$b,$1x);document.open();document.write('<div id="'+$F+'" style="width:100%;"></div>');document.write('<scr'+'ipt type="text/javascript" src="http://api.code.nanigac.com/getSource.php?id='+parseInt($1y,10)+'&fmt=json&jsonp=window.WebOSGoodies.CodeNanigaC.'+$b+'&comment=1-10"></scr'+'ipt>');document.close();return $1x;}};}})();
+{return this.$G;}};window.WebOSGoodies.CodeNanigaC={$b:function($1z,$1a)
+{$1z.$1w($1a);},write:function($1A,$n)
+{var $1B=$E++;var $F=$D+$1B;var $b='callback'+$1B;var $1z=new Widget($F,$n);this[$b]=$9(this,this.$b,$1z);document.open();document.write('<div id="'+$F+'" style="width:100%;"></div>');document.write('<scr'+'ipt type="text/javascript" src="http://api.code.nanigac.com/getSource.php?id='+parseInt($1A,10)+'&fmt=json&jsonp=window.WebOSGoodies.CodeNanigaC.'+$b+'&comment=1-10"></scr'+'ipt>');document.close();return $1z;}};}})();

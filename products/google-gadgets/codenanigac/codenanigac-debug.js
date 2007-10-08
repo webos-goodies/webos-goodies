@@ -285,14 +285,22 @@ if(!window.WebOSGoodies.CodeNanigaC)
 
 	$markup : function($text)
 	{
-	  var $links = [];
+	  var $links = [], $blocks = [], $stylePre = this.$stylePre;
 	  $text = $text.replace(/~/g, '~T');
 	  $text = $text.replace(/(\s)(https?:\/\/[^\s]+)/g, function(d, $preceding, $match) {
 		$links[$links.length] = $match;
 		return $preceding + '~L';
 	  });
+	  $text = $text.replace(/\s*\[block\]((?:.|[\r\n])*?)\[\/block\]\s*/g, function(d, $match) {
+		$blocks[$blocks.length] = $match;
+		return '~B';
+	  });
 	  $text = $text.replace(/\r\n|\r|\n/g, '~N');
-	  $text = $hesc($text);
+	  $text = $text;
+	  $text = $text.replace(/~B/g, function() {
+		var $str = $blocks.shift();
+		return '<pre style="' + $stylePre + '">' + $str + '</pre>';
+	  });
 	  $text = $text.replace(/~L/g, function() {
 		var $url = $links.shift();
 		var $str = $url;
@@ -420,12 +428,13 @@ if(!window.WebOSGoodies.CodeNanigaC)
 	  this.$styleTable = { margin:'8px 8px', padding:'0px', borderCollapse:'separate', borderSpacing:'0px', emptyCells:'show', lineHeight: '1.5' };
 	  this.$styleLeft = { fontSize:'11px', textAlign:'right', padding:'0px 8px 0px 0px', whiteSpace:'pre' };
 	  this.$styleRight = { fontSize:'12px', textAlign:'left', padding:'0px' };
-	  this.$styleDesc = { margin:'12px 8px 0px 8px', padding:'8px', border:'dotted 1px #333' };
+	  this.$styleDesc = { margin:'12px 8px 0px 8px', padding:'8px', border:'dashed 1px #888' };
 	  this.$styleComment = { margin:'0px', padding:'8px 0px' };
 	  this.$styleCommentCaption = { margin:'0px 0px 4px 0px', padding:'0px' };
 	  this.$styleCommentBody = { margin:'0px 0px 0px 1em', padding:'0px' };
 	  this.$styleCommentFooter = { margin:'4px', padding:'0px', textAlign:'right', fontSize:'10px' };
 	  this.$styleFooter = { margin:'0px', padding:'0px', textAlign:'right', fontSize:'12px' };
+	  this.$stylePre = 'margin:0.8em 0px;padding:0.8em;background-color:#eee;border:solid 1px #888;';
 
 	  var $showComments = this.$showComments && $content.commnt.length > 0;
 	  var $numTabs      = (this.$showSource ? 1 : 0) + (this.$showInfo ? 1 : 0) + ($showComments ? 1 : 0);
