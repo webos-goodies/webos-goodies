@@ -51,6 +51,7 @@ function $applyStyles(el, styles)
 
 $styleTable = {
   width:          '100%',
+  height:         'auto',
   borderCollapse: 'separate',
   borderSpacing:  '0px',
   emptyCells:     'show',
@@ -69,6 +70,7 @@ $styleTabBase = {
   borderWidth:     '1px',
   borderColor:     '#aaa #aaa #666 #aaa',
   width:           '80px',
+  height:          'auto',
   cursor:          'pointer'
 };
 
@@ -86,7 +88,8 @@ $styleTabSpacer = {
   borderStyle:  'none none solid none',
   borderWidth:  '1px',
   borderColor:  '#666',
-  width:        '3px'
+  width:        '3px',
+  height:       'auto'
 };
 
 function $TabEntry($index, $labelEl, $contentEl, $options)
@@ -327,7 +330,7 @@ if(!window.WebOSGoodies.CodeNanigaC)
 	{
 	  var $el;
 	  this.$addTab('ソース', function($element) {
-		$element.innerHTML = '<pre style="margin:0px;padding:0px;border:none;">'+$content.entry.src_sourcecode+'</pre>';
+		$element.innerHTML = '<pre style="' + this.$styleSource + '">'+$content.entry.src_sourcecode+'</pre>';
 		$element.firstChild.className = this.$sourceClass;
 	  });
 	},
@@ -423,18 +426,19 @@ if(!window.WebOSGoodies.CodeNanigaC)
 
 	$setContent : function($content)
 	{
-	  this.$styleContainer = { width:'100%', margin:'0px', padding:'4px', overflow:'auto', borderWidth:'1px', borderColor:'#666' };
-	  this.$styleContent = { margin:'0px', padding:'0px' };
-	  this.$styleTable = { margin:'8px 8px', padding:'0px', borderCollapse:'separate', borderSpacing:'0px', emptyCells:'show', lineHeight: '1.5' };
+	  this.$styleContainer = { width:'100%', height:'auto', margin:'0px', padding:'4px', overflow:'auto', borderWidth:'1px', borderColor:'#666' };
+	  this.$styleContent = { width:'auto', height:'auto', margin:'0px', padding:'0px' };
+	  this.$styleSource = 'margin:0px;padding:0px;border:none;width:auto;height:auto;overflow:visible;';
+	  this.$styleTable = { width:'auto', height:'auto', margin:'8px 8px', padding:'0px', borderCollapse:'separate', borderSpacing:'0px', emptyCells:'show', lineHeight: '1.5' };
 	  this.$styleLeft = { fontSize:'11px', textAlign:'right', padding:'0px 8px 0px 0px', whiteSpace:'pre' };
 	  this.$styleRight = { fontSize:'12px', textAlign:'left', padding:'0px' };
-	  this.$styleDesc = { margin:'12px 8px 0px 8px', padding:'8px', border:'dashed 1px #888' };
-	  this.$styleComment = { margin:'0px', padding:'8px 0px' };
-	  this.$styleCommentCaption = { margin:'0px 0px 4px 0px', padding:'0px' };
-	  this.$styleCommentBody = { margin:'0px 0px 0px 1em', padding:'0px' };
-	  this.$styleCommentFooter = { margin:'4px', padding:'0px', textAlign:'right', fontSize:'10px' };
-	  this.$styleFooter = { margin:'0px', padding:'3px 0px 0px 0px', textAlign:'right', fontSize:'12px', border:'none', lineHeight:'1' };
-	  this.$stylePre = 'margin:0.8em 0px;padding:0.8em;background-color:#eee;border:solid 1px #888;';
+	  this.$styleDesc = { width:'auto', height:'auto', margin:'12px 8px 0px 8px', padding:'8px', border:'dashed 1px #888' };
+	  this.$styleComment = { width:'auto', height:'auto', margin:'0px', padding:'8px 0px' };
+	  this.$styleCommentCaption = { width:'auto', height:'auto', margin:'0px 0px 4px 0px', padding:'0px' };
+	  this.$styleCommentBody = { width:'auto', height:'auto', margin:'0px 0px 0px 1em', padding:'0px' };
+	  this.$styleCommentFooter = { width:'auto', height:'auto', margin:'4px', padding:'0px', textAlign:'right', fontSize:'10px' };
+	  this.$styleFooter = { width:'auto', height:'auto', margin:'0px', padding:'3px 0px 0px 0px', textAlign:'right', fontSize:'12px', border:'none', lineHeight:'1' };
+	  this.$stylePre = 'width:auto;height:auto;margin:0.8em 0px;padding:0.8em;background-color:#eee;border:solid 1px #888;';
 
 	  var $showComments = this.$showComments && $content.commnt.length > 0;
 	  var $numTabs      = (this.$showSource ? 1 : 0) + (this.$showInfo ? 1 : 0) + ($showComments ? 1 : 0);
