@@ -82,7 +82,7 @@
   document.close();
 </script>
 
-<div id="wrap">
+<div id="wrap" style="overflow:hidden; width:100%">
 <script type="text/javascript">
   var options = {
     showSource:   prefs.getBool('showsource'),
