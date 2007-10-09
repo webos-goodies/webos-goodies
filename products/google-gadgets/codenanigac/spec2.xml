@@ -98,7 +98,7 @@
     var wrapHeight = _gel('wrap').clientHeight;
     var tabHeight  = tabs ? tabs.getHeaderContainer().offsetHeight : 0;
   	var footHeight = footer ? footer.offsetHeight : 0;
-    container.style.height = wrapHeight - tabHeight - footHeight;
+    container.style.height = (wrapHeight - tabHeight - footHeight) + 'px';
     if(typeof prettyPrint === 'function')
       prettyPrint();
   });
