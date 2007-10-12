@@ -10,9 +10,9 @@ function $isFunction(o) { return typeof o === 'function'; };
 function $isString(o) { return typeof o === 'string'; }
 function $isElement(o, t) { return typeof o === 'object' && (!t || o.nodeType == t); }
 
-function $hesc(a)
+function $hesc(a, l)
 {
-  a = a.replace(/&/g, '&amp;');
+  if(!l) a = a.replace(/&/g, '&amp;');
   a = a.replace(/</g, '&lt;').replace(/>/g, '&gt;');
   a = a.replace(/\"/g, '&quot;').replace(/\'/g, '&#39;');
   return a;
@@ -270,7 +270,7 @@ if(!window.WebOSGoodies.CodeNanigaC)
 
 	$buildLink : function($path, $text)
 	{
-	  return '<a href="http://code.nanigac.com' + $hesc($path) + '" target="_blank">' + $hesc($text) + '</a>';
+	  return '<a href="http://code.nanigac.com' + $hesc($path, true) + '" target="_blank">' + $hesc($text, true) + '</a>';
 	},
 
 	$buildDate : function($date)
@@ -289,6 +289,7 @@ if(!window.WebOSGoodies.CodeNanigaC)
 	$markup : function($text)
 	{
 	  var $links = [], $blocks = [], $stylePre = this.$stylePre;
+	  $text = $hesc($text, true);
 	  $text = $text.replace(/~/g, '~T');
 	  $text = $text.replace(/(\s)(https?:\/\/[^\s]+)/g, function(d, $preceding, $match) {
 		$links[$links.length] = $match;
@@ -344,14 +345,14 @@ if(!window.WebOSGoodies.CodeNanigaC)
 		var $entry = $content.entry;
 		var $data = [
 		  ['タイトル', this.$buildLink('/source/view/' + $entry.src_id, $entry.src_title)],
-		  ['ソースコードID', $entry.src_id],
+		  ['ソースコードID', $hesc($entry.src_id.toString(10), true)],
 		  ['登録者', this.$buildLink('/user/profile/' + $content.auth_id, $content.auth_name)],
 		  ['登録日時', this.$buildDate($content.auth_regdate)],
 		  ['最終更新者', this.$buildLink('/user/profile/' + $content.modifier_id, $content.auth_modifier_name)],
 		  ['最終更新日時', this.$buildDate($content.auth_modify_date)],
-		  ['GoodJob数', $entry.src_gj],
-		  ['アクセス数', $entry.src_access_num],
-		  ['コメント数', $entry.src_comment_num]
+		  ['GoodJob数', $hesc($entry.src_gj.toString(10), true)],
+		  ['アクセス数', $hesc($entry.src_access_num.toString(10), true)],
+		  ['コメント数', $hesc($entry.src_comment_num.toString(10), true)]
 		];
 		if($content.tagdata.length > 0)
 		{
@@ -364,7 +365,7 @@ if(!window.WebOSGoodies.CodeNanigaC)
 		  $data[$data.length] = ['タグ', $tags.join('&nbsp;')];
 		}
 		if($entry.src_relate_name)
-		  $data[$data.length] = ['関連トピック', $hesc($entry.src_relate_name)];
+		  $data[$data.length] = ['関連トピック', $hesc($entry.src_relate_name, true)];
 
 		$applyStyles($table, this.$styleTable);
 		$tbody.appendChild(this.$buildTable($data));
@@ -393,12 +394,12 @@ if(!window.WebOSGoodies.CodeNanigaC)
 		  $applyStyles($outer, this.$styleComment);
 		  $applyStyles($caption, this.$styleCommentCaption);
 		  $applyStyles($body, this.$styleCommentBody);
-		  if(i != $content.entry.src_comment_num - 1)
+		  if(i != parseInt($content.entry.src_comment_num, 10) - 1)
 			$outer.style.borderBottom = 'dotted 1px #333';
-		  $caption.innerHTML = ($comment.com_num + ': ' +
+		  $caption.innerHTML = (parseInt($comment.com_num, 10) + ': ' +
 								this.$buildLink('/user/profile/' + $comment.com_id, $comment.com_name) + ' (' +
 								this.$buildDate($comment.com_regdate) + ')');
-		  $body.innerHTML = $comment.com_description.replace(/\r\n|\r|\n/g, '<br/>');
+		  $body.innerHTML = $hesc($comment.com_description, true).replace(/\r\n|\r|\n/g, '<br/>');
 		  $outer.appendChild($caption);
 		  $outer.appendChild($body);
 		  $element.appendChild($outer);
@@ -418,9 +419,9 @@ if(!window.WebOSGoodies.CodeNanigaC)
 	  this.$footer = $nel('DIV');
 	  $applyStyles(this.$footer, this.$styleFooter);
 	  this.$footer.innerHTML =
-		this.$buildLink('/source/view/' + $content.entry.src_id, '説明') + ' | ' +
-		this.$buildLink('/source/history/' + $content.entry.src_id + ' ?pid=1', '履歴') + ' | ' +
-		this.$buildLink('/source/download/' + $content.entry.src_id + ' ?pid=1', 'コピペ用');
+		this.$buildLink('/source/view/' + parseInt($content.entry.src_id, 10), '説明') + ' | ' +
+		this.$buildLink('/source/history/' + parseInt($content.entry.src_id, 10) + ' ?pid=1', '履歴') + ' | ' +
+		this.$buildLink('/source/download/' + parseInt($content.entry.src_id, 10) + ' ?pid=1', 'コピペ用');
 	  $gel(this.$domId).appendChild(this.$footer);
 	},
 

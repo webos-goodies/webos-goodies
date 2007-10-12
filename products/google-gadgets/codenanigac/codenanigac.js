@@ -4,8 +4,8 @@ function $2(){return document.createDocumentFragment();}
 function $3(o){return typeof o==='undefined';};function $4(o){return o&&(typeof o==='object'||typeof o==='function');}
 function $5(o){return typeof o==='function';};function $6(o){return typeof o==='string';}
 function $7(o,t){return typeof o==='object'&&(!t||o.nodeType==t);}
-function $8(a)
-{a=a.replace(/&/g,'&amp;');a=a.replace(/</g,'&lt;').replace(/>/g,'&gt;');a=a.replace(/\"/g,'&quot;').replace(/\'/g,'&#39;');return a;}
+function $8(a,l)
+{if(!l)a=a.replace(/&/g,'&amp;');a=a.replace(/</g,'&lt;').replace(/>/g,'&gt;');a=a.replace(/\"/g,'&quot;').replace(/\'/g,'&#39;');return a;}
 function $9($a,$b)
 {var $c=[];for(var i=2;i<arguments.length;++i)
 $c[$c.length]=arguments[i];return function(){var $d=$c.slice(0);for(var i=0;i<arguments.length;++i)
@@ -43,33 +43,33 @@ return $z;},getTabs:function()
 {var $A=$2();for(var i=0;i<$Q.length;++i)
 {var $R=$Q[i];var tr=$1('TR');var td0=$1('TD');var td1=$1('TD');$e(td0,this.$S);$e(td1,this.$T);td0.innerHTML=$R[0];td1.innerHTML=$R[1];tr.appendChild(td0);tr.appendChild(td1);$A.appendChild(tr);}
 return $A;},$U:function($V,$W)
-{return'<a href="http://code.nanigac.com'+$8($V)+'" target="_blank">'+$8($W)+'</a>';},$X:function($Y)
+{return'<a href="http://code.nanigac.com'+$8($V,true)+'" target="_blank">'+$8($W,true)+'</a>';},$X:function($Y)
 {if(/(\d+-\d+-\d+)T(\d+:\d+)/.exec($Y))
 {var d=RegExp.$1,t=RegExp.$2;return d.replace(/-/g,'/')+' '+t;}
 else
 {return'';}},$Z:function($W)
-{var $10=[],$11=[],$12=this.$12;$W=$W.replace(/~/g,'~T');$W=$W.replace(/(\s)(https?:\/\/[^\s]+)/g,function(d,$13,$14){$10[$10.length]=$14;return $13+'~L';});$W=$W.replace(/\s*\[block\]((?:.|[\r\n])*?)\[\/block\]\s*/g,function(d,$14){$11[$11.length]=$14;return'~B';});$W=$W.replace(/\r\n|\r|\n/g,'~N');$W=$W;$W=$W.replace(/~B/g,function(){var $15=$11.shift();return'<pre style="'+$12+'">'+$15+'</pre>';});$W=$W.replace(/~L/g,function(){var $16=$10.shift();var $15=$16;if($15.length>60)
+{var $10=[],$11=[],$12=this.$12;$W=$8($W,true);$W=$W.replace(/~/g,'~T');$W=$W.replace(/(\s)(https?:\/\/[^\s]+)/g,function(d,$13,$14){$10[$10.length]=$14;return $13+'~L';});$W=$W.replace(/\s*\[block\]((?:.|[\r\n])*?)\[\/block\]\s*/g,function(d,$14){$11[$11.length]=$14;return'~B';});$W=$W.replace(/\r\n|\r|\n/g,'~N');$W=$W;$W=$W.replace(/~B/g,function(){var $15=$11.shift();return'<pre style="'+$12+'">'+$15+'</pre>';});$W=$W.replace(/~L/g,function(){var $16=$10.shift();var $15=$16;if($15.length>60)
 $15=$15.slice(0,60)+'...';return'<a href="'+$16+'">'+$15+'</a>';});$W=$W.replace(/~N/g,'<br/>').replace(/~T/g,'~');return $W;},$17:function($C,$b)
 {var $A=$1('DIV');$e($A,this.$18);if(this.$t)
 this.$t.addTab($C,{content:$A});else
 this.$q.appendChild($A);$b.call(this,$A);},$19:function($1a)
 {var $1b;this.$17('ソース',function($A){$A.innerHTML='<pre style="'+this.$1c+'">'+$1a.entry.src_sourcecode+'</pre>';$A.firstChild.className=this.$O;});},$1d:function($1a)
-{this.$17('詳細',function($A){var $v=$1('TABLE');var $w=$1('TBODY');var $1e=$1('DIV');var $1f=$1a.entry;var $1g=[['タイトル',this.$U('/source/view/'+$1f.src_id,$1f.src_title)],['ソースコードID',$1f.src_id],['登録者',this.$U('/user/profile/'+$1a.auth_id,$1a.auth_name)],['登録日時',this.$X($1a.auth_regdate)],['最終更新者',this.$U('/user/profile/'+$1a.modifier_id,$1a.auth_modifier_name)],['最終更新日時',this.$X($1a.auth_modify_date)],['GoodJob数',$1f.src_gj],['アクセス数',$1f.src_access_num],['コメント数',$1f.src_comment_num]];if($1a.tagdata.length>0)
+{this.$17('詳細',function($A){var $v=$1('TABLE');var $w=$1('TBODY');var $1e=$1('DIV');var $1f=$1a.entry;var $1g=[['タイトル',this.$U('/source/view/'+$1f.src_id,$1f.src_title)],['ソースコードID',$8($1f.src_id.toString(10),true)],['登録者',this.$U('/user/profile/'+$1a.auth_id,$1a.auth_name)],['登録日時',this.$X($1a.auth_regdate)],['最終更新者',this.$U('/user/profile/'+$1a.modifier_id,$1a.auth_modifier_name)],['最終更新日時',this.$X($1a.auth_modify_date)],['GoodJob数',$8($1f.src_gj.toString(10),true)],['アクセス数',$8($1f.src_access_num.toString(10),true)],['コメント数',$8($1f.src_comment_num.toString(10),true)]];if($1a.tagdata.length>0)
 {var $1h=$1a.tagdata,$1i=[];for(var i=0;i<$1h.length;++i)
 {var $1j=$1h[i].tag;$1i[$1i.length]=this.$U('/code/search?q='+$1j+'&tag=1&code_type=1',$1j);}
 $1g[$1g.length]=['タグ',$1i.join('&nbsp;')];}
 if($1f.src_relate_name)
-$1g[$1g.length]=['関連トピック',$8($1f.src_relate_name)];$e($v,this.$f);$w.appendChild(this.$P($1g));$v.appendChild($w);$A.appendChild($v);$e($1e,this.$1k);$1e.innerHTML=this.$Z($1f.src_description);$A.appendChild($1e);});},$1l:function($1a)
+$1g[$1g.length]=['関連トピック',$8($1f.src_relate_name,true)];$e($v,this.$f);$w.appendChild(this.$P($1g));$v.appendChild($w);$A.appendChild($v);$e($1e,this.$1k);$1e.innerHTML=this.$Z($1f.src_description);$A.appendChild($1e);});},$1l:function($1a)
 {var $1m=$1a.commnt;$1m.sort(function(a,b){return a.com_num-b.com_num;});this.$17('コメント',function($A){for(var i=0;i<$1m.length;++i)
-{var $1n=$1m[i];var $1o=$1('DIV');var $1p=$1('DIV');var $1q=$1('DIV');$e($1o,this.$1r);$e($1p,this.$1s);$e($1q,this.$1t);if(i!=$1a.entry.src_comment_num-1)
-$1o.style.borderBottom='dotted 1px #333';$1p.innerHTML=($1n.com_num+': '+
+{var $1n=$1m[i];var $1o=$1('DIV');var $1p=$1('DIV');var $1q=$1('DIV');$e($1o,this.$1r);$e($1p,this.$1s);$e($1q,this.$1t);if(i!=parseInt($1a.entry.src_comment_num,10)-1)
+$1o.style.borderBottom='dotted 1px #333';$1p.innerHTML=(parseInt($1n.com_num,10)+': '+
 this.$U('/user/profile/'+$1n.com_id,$1n.com_name)+' ('+
-this.$X($1n.com_regdate)+')');$1q.innerHTML=$1n.com_description.replace(/\r\n|\r|\n/g,'<br/>');$1o.appendChild($1p);$1o.appendChild($1q);$A.appendChild($1o);}
+this.$X($1n.com_regdate)+')');$1q.innerHTML=$8($1n.com_description,true).replace(/\r\n|\r|\n/g,'<br/>');$1o.appendChild($1p);$1o.appendChild($1q);$A.appendChild($1o);}
 if($1m.length!=$1a.entry.src_comment_num)
 {var $G=$1('DIV');$e($G,this.$1u);$G.innerHTML=this.$U('/source/view/'+$1a.entry.src_id,'>> もっと読む');$A.appendChild($G);}});},$1v:function($1a)
-{this.$G=$1('DIV');$e(this.$G,this.$1w);this.$G.innerHTML=this.$U('/source/view/'+$1a.entry.src_id,'説明')+' | '+
-this.$U('/source/history/'+$1a.entry.src_id+' ?pid=1','履歴')+' | '+
-this.$U('/source/download/'+$1a.entry.src_id+' ?pid=1','コピペ用');$0(this.$F).appendChild(this.$G);},$1x:function($1a)
+{this.$G=$1('DIV');$e(this.$G,this.$1w);this.$G.innerHTML=this.$U('/source/view/'+parseInt($1a.entry.src_id,10),'説明')+' | '+
+this.$U('/source/history/'+parseInt($1a.entry.src_id,10)+' ?pid=1','履歴')+' | '+
+this.$U('/source/download/'+parseInt($1a.entry.src_id,10)+' ?pid=1','コピペ用');$0(this.$F).appendChild(this.$G);},$1x:function($1a)
 {this.$1y={width:'100%',height:'auto',margin:'0px',padding:'4px',overflow:'auto',borderWidth:'1px',borderColor:'#666'};this.$18={width:'auto',height:'auto',margin:'0px',padding:'0px'};this.$1c='margin:0px;padding:0px;border:none;width:auto;height:auto;overflow:visible;';this.$f={width:'auto',height:'auto',margin:'8px 8px',padding:'0px',borderCollapse:'separate',borderSpacing:'0px',emptyCells:'show',lineHeight:'1.5'};this.$S={fontSize:'11px',textAlign:'right',padding:'0px 8px 0px 0px',whiteSpace:'pre'};this.$T={fontSize:'12px',textAlign:'left',padding:'0px'};this.$1k={width:'auto',height:'auto',margin:'12px 8px 0px 8px',padding:'8px',border:'dashed 1px #888'};this.$1r={width:'auto',height:'auto',margin:'0px',padding:'8px 0px'};this.$1s={width:'auto',height:'auto',margin:'0px 0px 4px 0px',padding:'0px'};this.$1t={width:'auto',height:'auto',margin:'0px 0px 0px 1em',padding:'0px'};this.$1u={width:'auto',height:'auto',margin:'4px',padding:'0px',textAlign:'right',fontSize:'10px'};this.$1w={width:'auto',height:'auto',margin:'0px',padding:'3px 0px 0px 0px',textAlign:'right',fontSize:'12px',border:'none',lineHeight:'1'};this.$12='width:auto;height:auto;margin:0.8em 0px;padding:0.8em;background-color:#eee;border:solid 1px #888;';var $K=this.$K&&$1a.commnt.length>0;var $1z=(this.$I?1:0)+(this.$J?1:0)+($K?1:0);var $L=$1z>=2||this.$L;if($L)
 {this.$t=new WebOSGoodies.SimpleTab(this.$F);this.$q=this.$t.getContentContainer();$e(this.$q,this.$1y);this.$q.style.borderStyle='none solid solid solid';}
 else
