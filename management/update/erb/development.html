@@ -4,6 +4,54 @@
  来たるべき WebOS 時代には、アプリケーションプログラミングの形も今とは様変わりしていることでしょう。従来のデスクトップ向けの技術に変わって <a href="http://wiki.livedoor.jp/sourcewalker/d/HTML" class="iw_lw">HTML</a> / <a href="http://wiki.livedoor.jp/sourcewalker/d/XML" class="iw_lw">XML</a> や <a href="http://wiki.livedoor.jp/sourcewalker/d/JavaScript" class="iw_lw">JavaScript</a> などが基礎技術として使われるようになり、そこにデスクトップアプリケーション構築のノウハウが融合されていくと思われます。また、ネットワークへの依存が高まるにつれ、サーバーサイドの重要性もより増していくでしょう。このカテゴリーでは、そうした WebOS 時代の開発技術を模索し、ご紹介していきます。
 </p>
 
+<h1><a href="web-development.html"><%= escapeHTML(@captions['web-development']) %></a></h1>
+
+<p>
+Web アプリケーションが従来のデスクトップアプリケーションと大きく異なる点のひとつは、プログラミング言語による開発以外にも HTML, CSS, Web サーバー, データベースといったさまざまな技術を組み合わせて構成されていることです。さらに最近ではさまざまなサービスが API を提供しており、それらをマッシュアップして開発の効率化を図るといったことも普通に行われています。このカテゴリーでは、そういった幅広いトピックをざっくばらんに取り上げていくことで、他のカテゴリーではフォローしきれない部分に光を当てていきます。
+</p>
+
+<fieldset id="tpl_relatedframe">
+<legend>最新記事</legend>
+<div id="tpl_related">
+<ul><%= list_articles('web-development', 3) %></ul>
+<div class="morecategory">
+<a href="web-development.html">&gt;&gt; もっと読む</a>
+</div>
+</div>
+</fieldset>
+
+<h1><a href="javascript.html"><%= escapeHTML(@captions['javascript']) %></a></h1>
+
+<p>
+クライアントサイド（Web ブラウザ）で利用できるスクリプト言語として、 Web 開発になくてはならない言語が JavaScript です。かつては Web ページに簡単な（ときには鬱陶しい）アニメーションを入れるだけの玩具のような言語と思われていましたが、現在では活用ノウハウがかなり確立されてきており、高度なオブジェクト指向プログラミングにも耐える実用的な言語として認知されています。このカテゴリーでは、便利な Tips やライブラリなど、 JavaScript の活用ノウハウをどんどんご紹介していきます。ぜひ目を通していただいて、リッチクライアントの実装にお役立てください。
+</p>
+
+<fieldset id="tpl_relatedframe">
+<legend>最新記事</legend>
+<div id="tpl_related">
+<ul><%= list_articles('javascript', 3) %></ul>
+<div class="morecategory">
+<a href="javascript.html">&gt;&gt; もっと読む</a>
+</div>
+</div>
+</fieldset>
+
+<h1><a href="ruby.html"><%= escapeHTML(@captions['ruby']) %></a></h1>
+
+<p>
+<a href="rails.html">Ruby on Rails</a> の台頭で一気に Web 開発の表舞台に躍り出た感のある Ruby 。洗練された使い易い言語仕様に加え、標準で非常に強力な日本語テキストの処理機能を搭載しており、日本での Web 開発には最も適した言語と言えるのではないでしょうか。このカテゴリーでは、そんな Ruby の活用ノウハウをどんどんご紹介していきます。オリジナルのライブラリなども公開していく予定ですので、どうぞご期待ください！
+</p>
+
+<fieldset id="tpl_relatedframe">
+<legend>最新記事</legend>
+<div id="tpl_related">
+<ul><%= list_articles('ruby', 3) %></ul>
+<div class="morecategory">
+<a href="ruby.html">&gt;&gt; もっと読む</a>
+</div>
+</div>
+</fieldset>
+
 <h1><a href="canvas.html"><%= escapeHTML(@captions['canvas']) %></a></h1>
 
 <p>
@@ -32,22 +80,6 @@
 <ul><%= list_articles('rails', 3) %></ul>
 <div class="morecategory">
 <a href="rails.html">&gt;&gt; もっと読む</a>
-</div>
-</div>
-</fieldset>
-
-<h1><a href="web-development.html"><%= escapeHTML(@captions['web-development']) %></a></h1>
-
-<p>
- 主に <a href="http://wiki.livedoor.jp/sourcewalker/d/Ruby" class="iw_lw">Ruby</a> と <a href="http://wiki.livedoor.jp/sourcewalker/d/JavaScript" class="iw_lw">JavaScript</a> を中心として、 Web プログラミングのテクニックやアイディアをご紹介していきます。現在のところ思いつくままに記事化しているので少し迷走気味ですが、記事数が増えいくにしたがって整理していきたいと思っています。
-</p>
-
-<fieldset id="tpl_relatedframe">
-<legend>最新記事</legend>
-<div id="tpl_related">
-<ul><%= list_articles('web-development', 3) %></ul>
-<div class="morecategory">
-<a href="web-development.html">&gt;&gt; もっと読む</a>
 </div>
 </div>
 </fieldset>

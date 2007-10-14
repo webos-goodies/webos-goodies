@@ -49,13 +49,15 @@ class Update
     end
 
     def list_articles(tag, max = nil, reverse = true)
-      posts = max ? @articles[tag][0, max] : @articles[tag]
-      posts = posts.reverse if posts.size >= 2 && !reverse
       text = ''
-      posts.each do |post|
-        url     = post[:url]
-        title   = post[:title]
-        text += '<li><a href="' + url + '">' + title + "</a></li>\n"
+      if @articles.has_key?(tag)
+        posts = max ? @articles[tag][0, max] : @articles[tag]
+        posts = posts.reverse if posts.size >= 2 && !reverse
+        posts.each do |post|
+          url     = post[:url]
+          title   = post[:title]
+          text += '<li><a href="' + url + '">' + title + "</a></li>\n"
+        end
       end
       text
     end
