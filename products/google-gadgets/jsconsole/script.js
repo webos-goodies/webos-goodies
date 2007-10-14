@@ -963,7 +963,7 @@ var Gadget = {
 		{
 			if(this.$prefs.getBool('sm'))
 			{
-				var $msg = this.getMsg('msg_sav').replace(/__MODULE_ID__/, this.$moduleId).replace(/^\s+|\s+$/,'');
+				var $msg = this.getMsg('msg_sav').replace(/_\_MODULE_ID__/, this.$moduleId).replace(/^\s+|\s+$/,'');
 				this.$minimsg.createDismissibleMessage($msg, u.generateHandler(this, '$onSaveWarningDismissed'));
 			}
 		}

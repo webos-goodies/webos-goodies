@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Module>
+  <ModulePrefs
+<% if target == 'normal' %>
+	 title="JavaScript Console"
+	 directory_title="JavaScript Console"
+<% else %>
+	 title="JavaScript Console (inline)"
+	 directory_title="JavaScript Console (inline)"
+<% end %>
+	 title_url="http://webos-goodies.jp/"
+	 description="__MSG_description__"
+	 scrolling="false"
+	 height="200"
+	 screenshot="__MSG_screenshot__"
+	 thumbnail="http://webos-goodies.googlecode.com/svn/trunk/products/google-gadgets/jsconsole/img/thumbnail.png"
+	 author="WebOS Goodies"
+	 author_email="support@webos-goodies.jp"
+	 author_affiliation="WebOS Goodies"
+	 author_location="Tokyo, Japan"
+	 author_link="http://webos-goodies.jp/">
+	<Require feature="setprefs" />
+	<Require feature="dynamic-height" />
+	<Require feature="settitle" />
+	<Require feature="tabs" />
+	<Require feature="drag" />
+	<Require feature="grid" />
+	<Require feature="minimessage" />
+	<Require feature="analytics" />
+	<Require feature="flash" />
+	<Locale messages="http://webos-goodies.googlecode.com/svn/trunk/products/google-gadgets/jsconsole/locale/ALL_ALL.xml" />
+	<Locale messages="http://webos-goodies.googlecode.com/svn/trunk/products/google-gadgets/jsconsole/locale/ja_ALL.xml" lang="ja" />
+  </ModulePrefs>
+  <UserPref name="pr" datatype="hidden" default_value="1" /><!-- Preference revision -->
+  <UserPref name="sm" datatype="hidden" default_value="1" /><!-- Show message about Save Text -->
+<% if target == 'normal' %>
+  <UserPref name="sv" display_name="__MSG_prf_sav__" datatype="bool"   required="true" default_value="0" />
+<% else %>
+  <UserPref name="sv" datatype="hidden" default_value="0" /><!-- Save Text feature is not available for inline version since there is no way to put a .swf file under www.google.com domain. -->
+<% end %>
+  <UserPref name="fs" display_name="__MSG_prf_fon__" datatype="string" required="true" default_value="12" />
+  <UserPref name="tr" display_name="__MSG_prf_txt__" datatype="string" required="true" default_value="15" />
+  <UserPref name="or" display_name="__MSG_prf_out__" datatype="string" required="true" default_value="8" />
+  <UserPref name="lr" display_name="__MSG_prf_log__" datatype="string" required="true" default_value="8" />
+  <UserPref name="gh" display_name="__MSG_prf_gad__" datatype="string" required="true" default_value="200" />
+  <UserPref name="u1" display_name="__MSG_prf_usr__ 1" datatype="string" />
+  <UserPref name="u2" display_name="__MSG_prf_usr__ 2" datatype="string" />
+  <UserPref name="u3" display_name="__MSG_prf_usr__ 3" datatype="string" />
+  <UserPref name="u4" display_name="__MSG_prf_usr__ 4" datatype="string" />
+  <Content type="<%= target == 'normal' ? 'html' : 'html-inline' %>">
+	<![CDATA[
+
+<script type="text/javascript">
+  var modId = __MODULE_ID__;
+  // If you need the unpacked version of the following script, see http://webos-goodies.googlecode.com/svn/trunk/products/google-gadgets/jsconsole/script.js
+  <%= jspack('script.js') %>
+</script>
+
+<style type="text/css">
+  @import url(http://www.google.com/ig/tablib.css);
+  .mmlib_table__MODULE_ID__ {
+    __MSG_minimessage_style__
+    padding:4px;
+    margin:0px;
+  }
+  .mod__MODULE_ID__extraframe {
+    border: 1px solid #676767;
+    border-top-style: none;
+    padding: 4px;
+  }
+</style>
+
+<div id="mod__MODULE_ID__buttons"></div>
+<div id="mod__MODULE_ID__extraview"></div>
+
+<div id="mod__MODULE_ID__gadgetframe" style="display:none;">
+  <div id="mod__MODULE_ID__gadgetmsg" style="font-size:__UP_fs__px;">__MSG_msg_gad__</div>
+  <div id="mod__MODULE_ID__gadgetborder" style="border:1px dotted #676767;margin:0px auto;overflow:auto;display:none;">
+	<iframe id="mod__MODULE_ID__gadgetpreview" name="mod__MODULE_ID__gadgetpreview" frameborder='0'></iframe>
+  </div>
+</div>
+
+<% if target == 'normal' %>
+<div style="font-size:10px;float:right;margin-top:4px;">
+  <a target="_blank" href="http://www.google.com/ig/add?synd=open&moduleurl=<%= $root %>/inline.xml">__MSG_inline__</a>
+  |
+  <a target="_blank" href="http://groups.google.com/group/webos-goodies">__MSG_support__</a>
+</div>
+<% else %>
+<div style="font-size:10px;float:right;margin-top:4px;">
+  <a target="_blank" href="http://www.google.com/ig/add?synd=open&moduleurl=<%= $root %>/normal.xml">__MSG_iframe__</a>
+  |
+  <a target="_blank" href="http://groups.google.com/group/webos-goodies">__MSG_support__</a>
+</div>
+<% end %>
+
+<div id="mod__MODULE_ID__gadgetForm" style="display:none"></div>
+
+<% if target == 'normal' %>
+<div>
+  <script type="text/javascript">
+    if(mod__MODULE_ID__Gadget.getPrefBool('saveText'))
+    {
+      document.open();
+      if(window.ActiveXObject)
+      {
+        document.write([
+          '<object id="' + 'mod' + __MODULE_ID__ + 'JsConsoleStorage' + '" classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=9,0,0,0" width="10" height="10">',
+          '    <param name="src" value="' + _IG_GetCachedUrl('<%= $root %>/flash/FlashStorage.swf') + '" />',
+          '    <param name="flashVars" value="prefix=' + 'mod' + __MODULE_ID__ + 'Gadget.onStorage' + '" />',
+          '</object>'].join('\n'));
+      }
+      else
+      {
+        document.write([
+          '<embed',
+          '    id="' + 'mod' + __MODULE_ID__ + 'JsConsoleStorage"',
+          '    src="' + _IG_GetCachedUrl('<%= $root %>/flash/FlashStorage.swf') + '"',
+          '    pluginspage="http://www.macromedia.com/shockwave/download/index.cgi?P1_Prod_Version=ShockwaveFlash"',
+          '    width="10" height="10"',
+          '    flashVars="prefix=' + 'mod' + __MODULE_ID__ + 'Gadget.onStorage"'].join('\n'));
+      }
+      document.close();
+    }
+  </script>
+</div>
+<% end %>
+
+    ]]>
+  </Content>
+</Module>
