@@ -40,15 +40,42 @@
 
 <div class="rights"></div>
 <div id="search">
-<form class="search" id="search_engine" method="GET" action="http://google.com/cse">
+<form id="searchbox_011600946954025377643:3gub1bav68w" class="search" method="GET" action="http://google.com/cse">
 <p>
-<input class="text" name="q" type="text" id="keywords" value="Google Custom Search" onfocus="document.forms['search_engine'].keywords.value='';" onblur="if (document.forms['search_engine'].keywords.value == '') document.forms['search_engine'].keywords.value='Google Custom Search';" />
-<input class="searchbutton" name="submit" type="submit" value="Search" /></p>
+<input class="text" name="q" type="text" id="keywords" />
+<input class="searchbutton" name="submit" type="submit" value="Search" />
+</p>
 <input type="hidden" name="cx" value="011600946954025377643:3gub1bav68w" />
 <input type="hidden" name="cof" value="FORID:0" />
 <input type="hidden" name="ie" value="EUC-JP" />
 </form>
 </div><!-- search -->
+
+<!-- Google CSE code begins -->
+<script src="http://www.google.com/coop/cse/brand?form=searchbox_011600946954025377643:3gub1bav68w"></script>
+
+<div id="results_011600946954025377643:3gub1bav68w" style="display:none">
+  <div class="cse-closeResults"> 
+    <a>&times; close</a>
+  </div>
+  <div class="cse-resultsContainer"></div>
+</div>
+
+<style type="text/css">
+@import url(http://www.google.com/cse/api/overlay.css);
+</style>
+
+<script src="http://www.google.com/uds/api?file=uds.js&v=1.0&key=ABQIAAAADFolcpMzeDEXDBR65zomPRSdobuQ8nl73Zh0G-Y7QnxRnfXdORRvX5O5---NvrXXjsKrVcjvSimLkw" type="text/javascript"></script>
+<script src="http://www.google.com/cse/api/overlay.js"></script>
+<script type="text/javascript">
+function OnLoad() {
+  new CSEOverlay("011600946954025377643:3gub1bav68w",
+                 document.getElementById("searchbox_011600946954025377643:3gub1bav68w"),
+                 document.getElementById("results_011600946954025377643:3gub1bav68w"));
+}
+GSearch.setOnLoadCallback(OnLoad);
+</script>
+<!-- Google CSE Code ends -->
 
 <div class="lefts">
 <!-- <h1<a href="http://webos-goodies.jp/">WebOS Goodies</a></h1> -->
