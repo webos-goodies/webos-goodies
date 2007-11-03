@@ -75,7 +75,7 @@ package
 
 	public function jsSetData(name:String, value:*) : void
 	{
-	  storage.data[name] = value;
+	  storage.data[name] = value.replace(/\\/, '\\\\');
 	}
 
 	public function jsGetData(name:String) : *

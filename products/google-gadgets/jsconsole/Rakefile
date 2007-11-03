@@ -1,9 +1,11 @@
+require 'rake/clean'
 require 'erb'
 
 $KCODE = 'U'
 $root  = 'http://webos-goodies.googlecode.com/svn/trunk/products/google-gadgets/jsconsole'
 
 TARGETS = ['normal.xml', 'inline.xml']
+CLOBBER.include(TARGETS)
 
 task :default => TARGETS
 task :local => [:sourcewalker, TARGETS].flatten
