@@ -41,10 +41,44 @@
   <Content type="html">
 	<![CDATA[
 
+<style type="text/css">
+  @import url(http://www.google.com/ig/tablib.css);
+  .mmlib_table__MODULE_ID__ {
+    __MSG_minimessage_style__
+    padding:4px;
+    margin:0px;
+  }
+  .mod__MODULE_ID__extraframe {
+    border: 1px solid #676767;
+    border-top-style: none;
+    padding: 4px;
+  }
+</style>
+
+<div id="mod__MODULE_ID__buttons"></div>
+<div id="mod__MODULE_ID__extraview"></div>
+
+<div id="mod__MODULE_ID__gadgetframe" style="display:none;">
+  <div id="mod__MODULE_ID__gadgetmsg" style="font-size:__UP_fs__px;">__MSG_msg_gad__</div>
+  <div id="mod__MODULE_ID__gadgetborder" style="border:1px dotted #676767;margin:0px auto;overflow:auto;display:none;">
+	<iframe id="mod__MODULE_ID__gadgetpreview" name="mod__MODULE_ID__gadgetpreview" frameborder='0'></iframe>
+  </div>
+</div>
+
+<div style="font-size:10px;float:right;margin-top:4px;">
+  <a target="_blank" href="http://www.google.com/ig/add?synd=open&moduleurl=http://webos-goodies.googlecode.com/svn/trunk/products/google-gadgets/jsconsole/inline.xml">__MSG_inline__</a>
+  |
+  <a target="_blank" href="http://groups.google.com/group/webos-goodies">__MSG_support__</a>
+</div>
+
+<div id="mod__MODULE_ID__gadgetForm" style="display:none"></div>
+
 <script type="text/javascript">
-  var modId = __MODULE_ID__;
-  // If you need the unpacked version of the following script, see http://webos-goodies.googlecode.com/svn/trunk/products/google-gadgets/jsconsole/script.js
-  (function(){if(_args()['webos-goodies']!='noinline'){var u={};u.isNull=function(obj){return obj===null;};u.isFunction=function(obj){return typeof obj==='function';};u.isString=function(obj){return typeof obj==='string';};u.generateHandler=function($self,$name)
+(function() {
+  if(_args()['webos-goodies'] != 'noinline') {
+    var modId = __MODULE_ID__;
+    // You can get an unpacked version of the following script at http://webos-goodies.googlecode.com/svn/trunk/products/google-gadgets/jsconsole/script.js
+    var u={};u.isNull=function(obj){return obj===null;};u.isFunction=function(obj){return typeof obj==='function';};u.isString=function(obj){return typeof obj==='string';};u.generateHandler=function($self,$name)
 {var $method=$self[$name];return function(){$method.apply($self,arguments)};};u.generateProxy=function($self,$name)
 {var $method=$self[$name];var $args=[];for(var i=2;i<arguments.length;++i)
 $args[$args.length]=arguments[i];return function(){$method.apply($self,$args)};};u.nel=function(tag)
@@ -226,39 +260,10 @@ this.$flash.flush();},storageSetData:function($name,$value)
 {if(this.$storageHdl)
 {this.$flash.setData($name,$value);this.$storageHdl.invoke();}},storageGetData:function($name)
 {return this.$flash?this.$flash.getData($name):null;},storageIsOk:function()
-{return this.$flash?this.$flash.isOk():false;}};window[Gadget.getPrefix('Gadget')]=Gadget;_IG_RegisterOnloadHandler(function(){Gadget.init();});}})();</script>
-
-<style type="text/css">
-  @import url(http://www.google.com/ig/tablib.css);
-  .mmlib_table__MODULE_ID__ {
-    __MSG_minimessage_style__
-    padding:4px;
-    margin:0px;
+{return this.$flash?this.$flash.isOk():false;}};window[Gadget.getPrefix('Gadget')]=Gadget;    Gadget.init();
   }
-  .mod__MODULE_ID__extraframe {
-    border: 1px solid #676767;
-    border-top-style: none;
-    padding: 4px;
-  }
-</style>
-
-<div id="mod__MODULE_ID__buttons"></div>
-<div id="mod__MODULE_ID__extraview"></div>
-
-<div id="mod__MODULE_ID__gadgetframe" style="display:none;">
-  <div id="mod__MODULE_ID__gadgetmsg" style="font-size:__UP_fs__px;">__MSG_msg_gad__</div>
-  <div id="mod__MODULE_ID__gadgetborder" style="border:1px dotted #676767;margin:0px auto;overflow:auto;display:none;">
-	<iframe id="mod__MODULE_ID__gadgetpreview" name="mod__MODULE_ID__gadgetpreview" frameborder='0'></iframe>
-  </div>
-</div>
-
-<div style="font-size:10px;float:right;margin-top:4px;">
-  <a target="_blank" href="http://www.google.com/ig/add?synd=open&moduleurl=http://webos-goodies.googlecode.com/svn/trunk/products/google-gadgets/jsconsole/inline.xml">__MSG_inline__</a>
-  |
-  <a target="_blank" href="http://groups.google.com/group/webos-goodies">__MSG_support__</a>
-</div>
-
-<div id="mod__MODULE_ID__gadgetForm" style="display:none"></div>
+})();
+</script>
 
 <div>
   <script type="text/javascript">

@@ -50,12 +50,6 @@
   <Content type="<%= target == 'normal' ? 'html' : 'html-inline' %>">
 	<![CDATA[
 
-<script type="text/javascript">
-  var modId = __MODULE_ID__;
-  // If you need the unpacked version of the following script, see http://webos-goodies.googlecode.com/svn/trunk/products/google-gadgets/jsconsole/script.js
-  <%= jspack('script.js') %>
-</script>
-
 <style type="text/css">
   @import url(http://www.google.com/ig/tablib.css);
   .mmlib_table__MODULE_ID__ {
@@ -95,6 +89,21 @@
 <% end %>
 
 <div id="mod__MODULE_ID__gadgetForm" style="display:none"></div>
+
+<script type="text/javascript">
+(function() {
+  if(_args()['webos-goodies'] != 'noinline') {
+    var modId = __MODULE_ID__;
+    // You can get an unpacked version of the following script at http://webos-goodies.googlecode.com/svn/trunk/products/google-gadgets/jsconsole/script.js
+    <%= jspack('script.js') %>
+<% if target == 'normal' %>
+    Gadget.init();
+<% else %>
+    _IG_RegisterOnloadHandler(function(){ Gadget.init(); });
+<% end %>
+  }
+})();
+</script>
 
 <% if target == 'normal' %>
 <div>
