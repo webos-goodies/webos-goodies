@@ -260,7 +260,10 @@ this.$flash.flush();},storageSetData:function($name,$value)
 {if(this.$storageHdl)
 {this.$flash.setData($name,$value);this.$storageHdl.invoke();}},storageGetData:function($name)
 {return this.$flash?this.$flash.getData($name):null;},storageIsOk:function()
-{return this.$flash?this.$flash.isOk():false;}};window[Gadget.getPrefix('Gadget')]=Gadget;    Gadget.init();
+{return this.$flash?this.$flash.isOk():false;}};window[Gadget.getPrefix('Gadget')]=Gadget;    if(window.Components)
+      Gadget.init();
+    else
+      _IG_RegisterOnloadHandler(function(){ Gadget.init(); });
   }
 })();
 </script>

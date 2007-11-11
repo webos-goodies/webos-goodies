@@ -97,7 +97,10 @@
     // You can get an unpacked version of the following script at http://webos-goodies.googlecode.com/svn/trunk/products/google-gadgets/jsconsole/script.js
     <%= jspack('script.js') %>
 <% if target == 'normal' %>
-    Gadget.init();
+    if(window.Components)
+      Gadget.init();
+    else
+      _IG_RegisterOnloadHandler(function(){ Gadget.init(); });
 <% else %>
     _IG_RegisterOnloadHandler(function(){ Gadget.init(); });
 <% end %>
