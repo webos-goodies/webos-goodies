@@ -117,22 +117,17 @@ var DragResize = (function() {
   {
     var info = this.$dragInfo;
     if(!info)
-      return $true;
+      return;
     if(DragResize.$ie && !(event.button & 1))
     {
       this.$finish();
-      return $true;
+      return;
     }
     info.$currentX = event.clientX;
     info.$currentY = event.clientY;
     if(this.$ie)
     {
       $stopEvent(event);
-      return $false;
-    }
-    else
-    {
-      return $true;
     }
   };
 
@@ -166,7 +161,6 @@ var DragResize = (function() {
       info.$minY  = 0;
       info.$maxX  = $documentElement[$scroll+$width]  - container[$offset+$width];
       info.$maxY  = $documentElement[$scroll+$height] - container[$offset+$height];
-      return $false;
     },
 
     $drag_onInterval : function()
@@ -210,7 +204,6 @@ var DragResize = (function() {
       info.$minY    = container[$offset+$top]  + info.$adjustY + minHeight;
       info.$maxX    = $documentElement[$scroll+$width];
       info.$maxY    = container.style.position != 'absolute' ? 65536 : $documentElement[$scroll+$height];
-      return $false;
     },
 
     $resize_onInterval : function()
