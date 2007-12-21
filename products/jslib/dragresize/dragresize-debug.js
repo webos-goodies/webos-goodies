@@ -1,24 +1,24 @@
 var DragResize = (function() {
 
   var $window         = window,
-	$document         = document,
-	$addEventListener = 'addEventListener',
-	$offset           = 'offset',
-	$client           = 'client',
-	$scroll           = 'scroll',
-	$min              = 'min',
-	$left             = 'Left',
-	$top              = 'Top',
-	$width            = 'Width',
-	$height           = 'Height',
-	$drag             = 'drag',
-	$resize           = 'resize',
-	$handle           = 'Handle',
-	$style            = 'style',
-	$null             = null;
+    $document         = document,
+    $addEventListener = 'addEventListener',
+    $offset           = 'offset',
+    $client           = 'client',
+    $scroll           = 'scroll',
+    $min              = 'min',
+    $left             = 'Left',
+    $top              = 'Top',
+    $width            = 'Width',
+    $height           = 'Height',
+    $drag             = 'drag',
+    $resize           = 'resize',
+    $handle           = 'Handle',
+    $style            = 'style',
+    $null             = null;
 
   var $body          = $document.body,
-	$documentElement = $document.documentElement;
+    $documentElement = $document.documentElement;
 
   var $methodWrapper = function(method, scope)
   {
@@ -50,30 +50,30 @@ var DragResize = (function() {
     return typeof id === 'string' ? $document.getElementById(id) : id;
   },
   $getScroll = (typeof $window.pageXOffset === 'number' ?
-				function() {
-				  return { x: $window.pageXOffset, y: $window.pageYOffset };
-				} :
-				($documentElement && $documentElement[$client+$width] ?
-				 function() {
-				   return { x: $documentElement[$scroll+$left], y: $documentElement[$scroll+$top] };
-				 } :
-				 function() {
-				   return { x: $body[$scroll+$left], y: $body[$scroll+$top] };
-				 })),
+                function() {
+                  return { x: $window.pageXOffset, y: $window.pageYOffset };
+                } :
+                ($documentElement && $documentElement[$client+$width] ?
+                 function() {
+                   return { x: $documentElement[$scroll+$left], y: $documentElement[$scroll+$top] };
+                 } :
+                 function() {
+                   return { x: $body[$scroll+$left], y: $body[$scroll+$top] };
+                 })),
   $getWindowSize = ($window.innerWidth ?
-					function() {
-					  return { x: $window.innerWidth, y: $window.innerHeight };
-					} :
-					($documentElement && $documentElement[$client+$width] ?
-					 function() {
-					   return { x: $documentElement[$client+$width], y: $documentElement[$client+$height] };
-					 } :
-					 function() {
-					   return { x: $body[$offset+$width], y: $body[$client+$height] };
-					 })),
+                    function() {
+                      return { x: $window.innerWidth, y: $window.innerHeight };
+                    } :
+                    ($documentElement && $documentElement[$client+$width] ?
+                     function() {
+                       return { x: $documentElement[$client+$width], y: $documentElement[$client+$height] };
+                     } :
+                     function() {
+                       return { x: $body[$offset+$width], y: $body[$client+$height] };
+                     })),
   DragResize = function(container, options)
   {
-	var self                 = this;
+    var self                 = this;
     options                  = options || {};
     options[$resize+$handle] = $getElement(options[$resize+$handle]);
     self.$container          = (container = $getElement(container));
@@ -104,16 +104,16 @@ var DragResize = (function() {
   {
     var info = DragResize.$dragInfo;
     if(info)
-	{
+    {
       if(DragResize.$ie && !(event.button & 1))
       {
-		DragResize.$finish();
-		return;
+        DragResize.$finish();
+        return;
       }
       info.$currentX = event.clientX;
       info.$currentY = event.clientY;
       DragResize.$ie && $stopEvent(event);
-	}
+    }
   };
 
   DragResize.$onMouseUp = function(event)
@@ -134,7 +134,7 @@ var DragResize = (function() {
     {
       $stopEvent(event);
       var info    = DragResize.$dragInfo = this.$beginDrag(event, this.$drag_onInterval),
-		container = this.$container;
+        container = this.$container;
       info.$baseX = container[$offset+$left];
       info.$baseY = container[$offset+$top];
       info.$minX  = 0;
@@ -151,8 +151,8 @@ var DragResize = (function() {
         if(this[$scroll])
         {
           var frameSize = $getWindowSize(),
-			right = x + container[$offset+$width], bottom = y + container[$offset+$height],
-			sx = scroll.x, sy = scroll.y;
+            right = x + container[$offset+$width], bottom = y + container[$offset+$height],
+            sx = scroll.x, sy = scroll.y;
           x < sx ? (sx = x) : (right > (sx + frameSize.x) && (sx = right - frameSize.x));
           y < sy ? (sy = y) : (bottom > (sy + frameSize.y) && (sy = bottom - frameSize.y));
           (sx != scroll.x || sy != scroll.y) && $window[$scroll](sx, sy);
@@ -163,11 +163,11 @@ var DragResize = (function() {
     $resize_onMouseDown : function(event)
     {
       $stopEvent(event);
-	  var self      = this;
+      var self      = this;
       var info      = DragResize.$dragInfo = self.$beginDrag(event, self.$resize_onInterval),
-		container   = self.$container,
-		minWidth    = (typeof self.$minWidth  === 'number' ? self.$minWidth  : DragResize[$min+$width]),
-		minHeight   = (typeof self.$minHeight === 'number' ? self.$minHeight : DragResize[$min+$height]);
+        container   = self.$container,
+        minWidth    = (typeof self.$minWidth  === 'number' ? self.$minWidth  : DragResize[$min+$width]),
+        minHeight   = (typeof self.$minHeight === 'number' ? self.$minHeight : DragResize[$min+$height]);
       info.$baseX   = container[$offset+$left] + container[$offset+$width];
       info.$baseY   = container[$offset+$top]  + container[$offset+$height];
       info.$adjustX = container[$offset+$width]  - container[$client+$width];
@@ -186,8 +186,8 @@ var DragResize = (function() {
         if(this[$scroll])
         {
           var frameSize = $getWindowSize(),
-			left        = container[$offset+$left], top = container[$offset+$top],
-			sx          = scroll.x, sy = scroll.y;
+            left        = container[$offset+$left], top = container[$offset+$top],
+            sx          = scroll.x, sy = scroll.y;
 
           left < sx              && (sx = left);
           x > (sx + frameSize.x) && (sx = x - frameSize.x);
@@ -203,8 +203,8 @@ var DragResize = (function() {
       $stopEvent(event);
       DragResize.$finish();
       var container = this.$container, scroll = $getScroll(),
-		mouseX = event.clientX, mouseY = event.clientY,
-		scrollX = scroll.x, scrollY = scroll.y;
+        mouseX = event.clientX, mouseY = event.clientY,
+        scrollX = scroll.x, scrollY = scroll.y;
       return {
         $manager:    this,
         $intervalId: setInterval($methodWrapper(updateProc, this), 30),
@@ -242,7 +242,7 @@ var DragResize = (function() {
 
     detach : function()
     {
-	  var self = this;
+      var self = this;
       DragResize.$dragInfo && DragResize.$dragInfo.$manager == self &&  DragResize.$finish();
       while(self.$events.length > 0)
         $removeEvent(self.$events.pop());
