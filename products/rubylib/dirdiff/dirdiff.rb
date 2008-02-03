@@ -4,22 +4,22 @@ class DirDiff
 
   def initialize(old_path = nil, new_path = nil, options = {})
     @entries = []
-    if block_given?
-      raise ArgumentError.new('paths are required when a block is given.') unless old_path && new_path
-      if scan(old_path, new_path, options)
+    if old_path
+      raise ArgumentError.new('the second argument is required if you specify the first one.') unless new_path
+      if scan(old_path, new_path, options) && block_given?
         yield(self)
       end
     end
-    self
   end
 
   # options は以下の値を持つハッシュです。
   # :shallow   true なら、ディレクトリが追加・削除された際にディレクトリの中身をスキャンしない。デフォルト false。
+  # :ignore    無視するファイル名を表す正規表現、または正規表現の配列。
   def scan(old_path, new_path, options = {})
     old_path = old_path.to_s
     new_path = new_path.to_s
-    @old_base = old_path.empty? ? './' : old_path.to_s.sub!(/\/*\z/, '/')
-    @new_base = new_path.empty? ? './' : new_path.to_s.sub!(/\/*\z/, '/')
+    @old_base = old_path.empty? ? './' : old_path.to_s.sub!(/\/*\z/n, '/')
+    @new_base = new_path.empty? ? './' : new_path.to_s.sub!(/\/*\z/n, '/')
     @options  = options.clone
     @entries  = []
     scan_dir('')
@@ -30,9 +30,15 @@ class DirDiff
     @entries.empty?
   end
 
-  def each
-    @entries.each do |entry|
-      yield(entry[0], entry[1], entry[2])
+  def each(filter = nil)
+    if !filter
+      @entries.each do |entry|
+        yield(entry[0], entry[1], entry[2])
+      end
+    else
+      @entries.each do |entry|
+        yield(entry[0], entry[1], entry[2]) if filter[entry[2]]
+      end
     end
   end
 
@@ -66,10 +72,26 @@ class DirDiff
   def dir_entries(path)
     entries = {}
     Dir.foreach(path) do |fname|
-      next if fname == '.' || fname == '..'
-      entries[fname] = File.ftype(path + fname).to_sym
+      path_fname = path + fname
+      next if fname == '.' || fname == '..' || filter_fname(path_fname)
+      entries[fname] = File.ftype(path_fname).to_sym
     end
     entries
+  end
+
+  def filter_fname(fname)
+    cond = @options[:ignore]
+    case
+    when Regexp === cond
+      cond === fname
+    when Array === cond
+      cond.each do |c|
+        return true if c === fname
+      end
+      false
+    else
+      false
+    end
   end
 
   def compare_file(fname, type)
@@ -85,23 +107,23 @@ class DirDiff
 
   # path must have a trailing slash.
   def add_dir(path)
-    Dir.chdir(@new_base) do
-      Dir.glob(path + '**/*', File::FNM_NOESCAPE | File::FNM_PATHNAME | File::FNM_DOTMATCH) do |fname|
-        unless /\/\.\.?\z/ === fname
-          @entries << [fname, File.ftype(fname).to_sym, :added]
-        end
-      end
+    Dir.foreach(@new_base + path) do |fname|
+      path_fname = path + fname
+      next if fname == '.' || fname == '..' || filter_fname(path_fname)
+      type  = File.ftype(@new_base + path_fname).to_sym
+      @entries << [path_fname, type, :added]
+      add_dir(path_fname + '/') if type == :directory
     end
   end
 
   # path must have a trailing slash.
   def delete_dir(path)
     Dir.foreach(@old_base + path) do |fname|
-      next if fname == '.' || fname == '..'
-      fname = path + fname
-      type  = File.ftype(@old_base + fname).to_sym
-      delete_dir(fname + '/') if type == :directory
-      @entries << [fname, type, :deleted]
+      path_fname = path + fname
+      next if fname == '.' || fname == '..' || filter_fname(path_fname)
+      type  = File.ftype(@old_base + path_fname).to_sym
+      delete_dir(path_fname + '/') if type == :directory
+      @entries << [path_fname, type, :deleted]
     end
   end
 
