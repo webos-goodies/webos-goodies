@@ -18,8 +18,8 @@ class DirDiff
   def scan(old_path, new_path, options = {})
     old_path = old_path.to_s
     new_path = new_path.to_s
-    @old_base = old_path.empty? ? './' : old_path.to_s.sub!(/\/*\z/n, '/')
-    @new_base = new_path.empty? ? './' : new_path.to_s.sub!(/\/*\z/n, '/')
+    @old_base = old_path.empty? ? './' : old_path.to_s.sub(/\/*\z/n, '/')
+    @new_base = new_path.empty? ? './' : new_path.to_s.sub(/\/*\z/n, '/')
     @options  = options.clone
     @entries  = []
     scan_dir('')

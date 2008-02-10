@@ -8,12 +8,16 @@ class TC_DirDiff < Test::Unit::TestCase
   def test_add_file
     expect = ['new_file', :file, :added]
     result = []
-    DirDiff.new('add_file/old', 'add_file/new', :ignore => /(^|\/)\.svn\z/) do |diff|
+    old_path = 'add_file/old'
+    new_path = 'add_file/new'
+    DirDiff.new(old_path, new_path, :ignore => /(^|\/)\.svn\z/) do |diff|
       diff.each do |fname, type, operation|
         result << fname << type << operation
       end
     end
     assert_equal(expect, result)
+    assert_equal('add_file/old', old_path)
+    assert_equal('add_file/new', new_path)
 
     result.clear
     Dir.chdir('add_file/new') do
