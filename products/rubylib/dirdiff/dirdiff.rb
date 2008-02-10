@@ -46,8 +46,8 @@ class DirDiff
 
   # path must have a trailing slash.
   def scan_dir(path)
-    old_files = dir_entries(@old_base + path)
-    new_files = dir_entries(@new_base + path)
+    old_files = dir_entries(@old_base, path)
+    new_files = dir_entries(@new_base, path)
     old_files.each do |fname, type|
       unless new_files.has_key?(fname) && new_files[fname] == type
         delete_dir(path + fname + '/') if type == :directory && !@options[:shallow]
@@ -69,12 +69,12 @@ class DirDiff
   end
 
   # path must have a trailing slash.
-  def dir_entries(path)
+  def dir_entries(base_path, path)
     entries = {}
-    Dir.foreach(path) do |fname|
-      path_fname = path + fname
-      next if fname == '.' || fname == '..' || filter_fname(path_fname)
-      entries[fname] = File.ftype(path_fname).to_sym
+    effective_path = base_path + path
+    Dir.foreach(effective_path) do |fname|
+      next if fname == '.' || fname == '..' || filter_fname(path + fname)
+      entries[fname] = File.ftype(effective_path + fname).to_sym
     end
     entries
   end
