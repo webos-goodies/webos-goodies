@@ -6,9 +6,7 @@ class DirDiff
     @entries = []
     if old_path
       raise ArgumentError.new('the second argument is required if you specify the first one.') unless new_path
-      if scan(old_path, new_path, options) && block_given?
-        yield(self)
-      end
+      scan(old_path, new_path, options)
     end
   end
 
@@ -18,9 +16,9 @@ class DirDiff
   def scan(old_path, new_path, options = {})
     old_path = old_path.to_s
     new_path = new_path.to_s
-    @old_base = old_path.empty? ? './' : old_path.to_s.sub(/\/*\z/n, '/')
-    @new_base = new_path.empty? ? './' : new_path.to_s.sub(/\/*\z/n, '/')
-    @options  = options.clone
+    @old_base = old_path.empty? ? './' : old_path.sub(/\/*\z/n, '/')
+    @new_base = new_path.empty? ? './' : new_path.sub(/\/*\z/n, '/')
+    @options  = options.dup
     @entries  = []
     scan_dir('')
     !empty?
@@ -30,15 +28,9 @@ class DirDiff
     @entries.empty?
   end
 
-  def each(filter = nil)
-    if !filter
-      @entries.each do |entry|
-        yield(entry[0], entry[1], entry[2])
-      end
-    else
-      @entries.each do |entry|
-        yield(entry[0], entry[1], entry[2]) if filter[entry[2]]
-      end
+  def each
+    @entries.each do |entry|
+      yield(entry[0], entry[1], entry[2])
     end
   end
 
