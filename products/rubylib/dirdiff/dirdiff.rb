@@ -21,7 +21,6 @@ class DirDiff
     @options  = options.dup
     @entries  = []
     scan_dir('')
-    !empty?
   end
 
   def empty?
