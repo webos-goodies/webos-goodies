@@ -10,9 +10,6 @@ class DirDiff
     end
   end
 
-  # options は以下の値を持つハッシュです。
-  # :shallow   true なら、ディレクトリが追加・削除された際にディレクトリの中身をスキャンしない。デフォルト false。
-  # :ignore    無視するファイル名を表す文字列、正規表現、またはそれらの配列。
   def scan(old_path, new_path, options = {})
     old_path = old_path.to_s
     new_path = new_path.to_s
