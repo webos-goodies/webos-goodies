@@ -1,0 +1,66 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Google Visialization API テスト</title>
+<style type="text/css">
+  table td { padding: 4px; width: 100px; }
+</style>
+</head>
+
+<body>
+
+<!-- Google AJAX API の共通ライブラリを読み込む（APIキーは不要） -->
+<script type="text/javascript" src="http://www.google.com/jsapi"></script>
+<script type="text/javascript">
+
+  // Google Visualization API のライブラリを読み込む
+  google.load("visualization", "1");
+
+  // データソース URL
+  var dataSource = 'http://spreadsheets.google.com/tq?key=pMIBrnJ4PHK-SHF_4IqAcVQ&gid=0&pub=1';
+
+  // Query Language
+  var queryLanguage = 'select A, B, E';
+
+  // ページ読み込みの完了後にデータをリクエスト
+  google.setOnLoadCallback(function() {
+    var query = new google.visualization.Query(dataSource);
+    query.setQuery(queryLanguage);
+    query.send(handleResponse);
+  });
+
+  // データを取得できると、この関数が呼ばれる
+  function handleResponse(response)
+  {
+    var el = document.getElementById('result');
+    if(response.isError()) {
+      el.innerHTML = escapeHtml(response.getDetailedMessage());
+      return;
+    }
+
+    var data = response.getDataTable();
+    var html = [];
+    for (var row = 0; row < data.getNumberOfRows(); row++)
+    {
+      var line = [];
+      for (var col = 0; col < data.getNumberOfColumns(); col++)
+        line.push(escapeHtml(data.getFormattedValue(row, col)));
+      html.push('<tr><td>' + line.join("</td><td>") + '</td></tr>');
+    }
+    el.innerHTML = '<table>' + html.join('') + '</table>';
+  }
+
+  // HTML エスケープするヘルパー関数
+  function escapeHtml(text) {
+    return (text || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\u0022/g, '&quot;');
+  }
+
+</script>
+
+<!-- この DIV に取得したデータを表示する -->
+<div id="result">読み込み中...</div>
+
+</body>
