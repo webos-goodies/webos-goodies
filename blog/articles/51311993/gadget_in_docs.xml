@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Module>
-  <ModulePrefs title="Simple Table Gadget">
+  <ModulePrefs title="Gadget-in-Docs Sample">
 	<Require feature="idi"/>
 	<Require feature="locked-domain"/>
   </ModulePrefs>
