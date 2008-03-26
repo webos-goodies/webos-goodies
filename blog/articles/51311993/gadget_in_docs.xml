@@ -20,10 +20,13 @@
   // Query Language
   var queryLanguage = 'select A, B, E';
 
+  // ヘルパーオブジェクトを格納する変数
+  var helper = null;
+
   // ページ読み込みの完了後にデータをリクエスト
   google.setOnLoadCallback(function() {
-    var helper = new google.visualization.GadgetHelper();
-    var query  = helper.createQueryFromPrefs(new _IG_Prefs());
+    helper = new google.visualization.GadgetHelper();
+    var query = helper.createQueryFromPrefs(new _IG_Prefs());
     query.setQuery(queryLanguage);
     query.send(handleResponse);
   });
@@ -31,12 +34,11 @@
   // データを取得できると、この関数が呼ばれる
   function handleResponse(response)
   {
-    var el = document.getElementById('result');
-    if(response.isError()) {
-      el.innerHTML = escapeHtml(response.getDetailedMessage());
+    // エラー処理
+    if(!helper.validateResponse(response))
       return;
-    }
 
+    var el   = document.getElementById('result');
     var data = response.getDataTable();
     var html = [];
     for (var row = 0; row < data.getNumberOfRows(); row++)
