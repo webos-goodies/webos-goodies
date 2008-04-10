@@ -8,7 +8,6 @@
 <script type="text/javascript">
 function display_image() {
   if(/(?:\?|&)file=([^&]+)/.exec(location.search)) {
-    alert(unescape(RegExp.$1));
     var img = document.createElement('IMG');
     img.src = unescape(RegExp.$1);
     document.body.appendChild(img);
