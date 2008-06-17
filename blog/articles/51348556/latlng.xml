@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Module>
+
+<!--
+Mapplets 特有の記述にのみコメントを入れています。
+Google Gadgets API 共通の部分については以下の投稿を参照。
+http://code.nanigac.com/source/view/209
+-->
+
+<ModulePrefs
+  title="Show LatLng"
+  title_url="http://code.nanigac.com/"
+  height="100"
+  scrolling="false">
+    <!-- Mapplets の機能を利用するためのライブラリ -->
+    <Require feature="sharedmap" />
+</ModulePrefs>
+
+<UserPref name="message" display_name="表示メッセージ" datatype="string" default_value="地図上をクリックすると緯度・経度を表示します。"/>
+
+<Content type="html">
+<![CDATA[
+
+<div style="font-size:16px; font-weight:bold;">__UP_message__</div>
+
+<!-- 経度・緯度をここに表示 -->
+<div id="result"></div>
+
+<script type="text/javascript">
+
+// Mapplets の機能を利用するためのインターフェースを作成
+var map = new GMap2();
+
+// 経度・緯度を表示するクリックイベントのハンドラを登録
+GEvent.addListener(map, 'click', function(marker, point) {
+  _gel('result').innerHTML = '緯度：' + point.lat() + '<br />経度：' + point.lng();
+});
+
+</script>
+
+]]>
+</Content>
+</Module>
