@@ -33,6 +33,13 @@
   <div id="resizehdl-resize" style="width: 100px; height: 20px; border: solid 1px black; padding 4px;">resize</div>
   drag
 </div>
+<div id="dragignore" style="position: absolute; left: 100px; top: 850px; width: 200px; height: 200px; background-color: #ccc;">
+  <a href="http://www.google.co.jp/">This link is clickable.</a>
+</div>
+<div id="resizeignore" style="position: absolute; left: 350px; top: 850px; width: 200px; height: 200px; background-color: #ccc;">
+  <a href="http://www.google.co.jp/">This link is <b>clickable</b>.</a>
+  <textarea></textarea>
+</div>
 
 <script type="text/javascript" src="dragresize-debug.js"></script>
 
@@ -46,6 +53,8 @@
   objs.push(new DragResize('handle', { dragHandle: 'handle-drag', resizeHandle: 'handle-resize', scroll: true }));
   objs.push(new DragResize('draghdl', { dragHandle: 'draghdl-drag', scroll: true }));
   objs.push(new DragResize('resizehdl', { resizeHandle: 'resizehdl-resize', scroll: true }));
+  objs.push(new DragResize('dragignore', { ignoreTags:'A', scroll: true }));
+  objs.push(new DragResize('resizeignore', { resizeHandle: 'resizeignore', ignoreTags:['A', 'TEXTAREA'], scroll: true }));
 
   function selectionMode(mode)
   {

@@ -15,6 +15,7 @@ var DragResize = (function() {
     $resize           = 'resize',
     $handle           = 'Handle',
     $style            = 'style',
+    $ignoreTags       = 'ignoreTags',
     $null             = null;
 
   var $body          = $document.body,
@@ -73,25 +74,35 @@ var DragResize = (function() {
                      })),
   DragResize = function(container, options)
   {
-    var self                 = this;
     options                  = options || {};
+    var self                 = this;
     options[$resize+$handle] = $getElement(options[$resize+$handle]);
     self.$container          = (container = $getElement(container));
     self.$minWidth           = options[$min+$width];
     self.$minHeight          = options[$min+$height];
     self[$scroll]            = options[$scroll];
+	self.$ignoreTags         = {};
     self.$events             = [];
     if((options[$drag+$handle] = $getElement(options[$drag+$handle])) || options[$resize+$handle] != container)
     {
       self.$dragHandle = options[$drag+$handle] || container;
       self.$events.push($addEvent(self.$dragHandle, 'mousedown', self.$drag_onMouseDown, self));
-      self.$events.push($addEvent(self.$dragHandle, 'click',     $stopEvent,             $window));
+      self.$events.push($addEvent(self.$dragHandle, 'click',     self.$onClick,          self));
     }
     if(self.$dragHandle != container || (options[$resize+$handle] && options[$resize+$handle] != self.$dragHandle))
     {
       self.$resizeHandle = options[$resize+$handle] || container;
       self.$events.push($addEvent(self.$resizeHandle, 'mousedown', self.$resize_onMouseDown, self));
-      self.$events.push($addEvent(self.$resizeHandle, 'click',     $stopEvent,               $window));
+      self.$events.push($addEvent(self.$resizeHandle, 'click',     self.$onClick,            self));
+    }
+    var ignoreTags = options[$ignoreTags];
+    if(typeof ignoreTags === 'string') {
+	  ignoreTags = [ignoreTags];
+    }
+    if(ignoreTags) {
+      for(var i = 0 ; i < ignoreTags.length ; ++i) {
+        self.$ignoreTags[ignoreTags[i].toUpperCase()] = true;
+      }
     }
   };
 
@@ -132,9 +143,12 @@ var DragResize = (function() {
 
     $drag_onMouseDown : function(event)
     {
+	  var self = this;
+	  if(self.$checkIgnoreTags(event))
+	    return;
       $stopEvent(event);
-      var info    = DragResize.$dragInfo = this.$beginDrag(event, this.$drag_onInterval),
-        container = this.$container;
+      var info    = DragResize.$dragInfo = self.$beginDrag(event, self.$drag_onInterval),
+        container = self.$container;
       info.$baseX = container[$offset+$left];
       info.$baseY = container[$offset+$top];
       info.$minX  = 0;
@@ -162,8 +176,10 @@ var DragResize = (function() {
 
     $resize_onMouseDown : function(event)
     {
+      var self = this;
+	  if(self.$checkIgnoreTags(event))
+	    return;
       $stopEvent(event);
-      var self      = this;
       var info      = DragResize.$dragInfo = self.$beginDrag(event, self.$resize_onInterval),
         container   = self.$container,
         minWidth    = (typeof self.$minWidth  === 'number' ? self.$minWidth  : DragResize[$min+$width]),
@@ -196,6 +212,21 @@ var DragResize = (function() {
           (sx != scroll.x || sy != scroll.y) && $window[$scroll](sx, sy);
         }
       });
+    },
+
+	$onClick : function(event) {
+	  if(!self.$checkIgnoreTags(event))
+	    $stopEvent(event);
+    },
+
+	$checkIgnoreTags : function(event) {
+      var element = event.target || event.srcElement;
+      while(element) {
+        if(element.nodeType == 1 && this.$ignoreTags[element.tagName.toUpperCase()])
+          return element;
+        element = element.parentNode;
+      }
+      return null;
     },
 
     $beginDrag : function(event, updateProc)
