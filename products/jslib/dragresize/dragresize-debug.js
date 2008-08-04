@@ -81,6 +81,8 @@ var DragResize = (function() {
     self.$minWidth           = options[$min+$width];
     self.$minHeight          = options[$min+$height];
     self[$scroll]            = options[$scroll];
+	self.$onClickCallback    = options['onclick'];
+    self.$onClickScope       = options['scope'];
 	self.$ignoreTags         = {};
     self.$events             = [];
     if((options[$drag+$handle] = $getElement(options[$drag+$handle])) || options[$resize+$handle] != container)
@@ -129,6 +131,13 @@ var DragResize = (function() {
 
   DragResize.$onMouseUp = function(event)
   {
+    var info = DragResize.$dragInfo, scroll = $getScroll();
+	var self = info.$manager;
+    if(info && typeof self.$onClickCallback === 'function' &&
+       info.$clickX + info.$baseScX == event.clientX + scroll.x &&
+       info.$clickY + info.$baseScY == event.clientY + scroll.y) {
+      self.$onClickCallback.call(self.$onClickScope, event);
+    }
     DragResize.$finish();
   };
 
@@ -215,8 +224,8 @@ var DragResize = (function() {
     },
 
 	$onClick : function(event) {
-	  if(!self.$checkIgnoreTags(event))
-	    $stopEvent(event);
+	  if(!this.$checkIgnoreTags(event))
+        $stopEvent(event);
     },
 
 	$checkIgnoreTags : function(event) {

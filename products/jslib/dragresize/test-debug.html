@@ -44,6 +44,10 @@
 <script type="text/javascript" src="dragresize-debug.js"></script>
 
 <script type="text/javascript">
+  function click() {
+    alert(this);
+  }
+
   var objs = [];
   DragResize.minWidth  = 10;
   DragResize.minHeight = 10;
@@ -53,8 +57,8 @@
   objs.push(new DragResize('handle', { dragHandle: 'handle-drag', resizeHandle: 'handle-resize', scroll: true }));
   objs.push(new DragResize('draghdl', { dragHandle: 'draghdl-drag', scroll: true }));
   objs.push(new DragResize('resizehdl', { resizeHandle: 'resizehdl-resize', scroll: true }));
-  objs.push(new DragResize('dragignore', { ignoreTags:'A', scroll: true }));
-  objs.push(new DragResize('resizeignore', { resizeHandle: 'resizeignore', ignoreTags:['A', 'TEXTAREA'], scroll: true }));
+  objs.push(new DragResize('dragignore', { ignoreTags:'A', scroll: true, onclick: click, scope: 'ok' }));
+  objs.push(new DragResize('resizeignore', { resizeHandle: 'resizeignore', ignoreTags:['A', 'TEXTAREA'], scroll: true, onclick: click, scope: 'ok' }));
 
   function selectionMode(mode)
   {
