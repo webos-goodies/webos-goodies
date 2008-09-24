@@ -1,0 +1,50 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
+<html>
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <title>CalVis サンプル</title>
+  <link rel="stylesheet" type="text/css" href="http://gcal.appspot.com/calvis/default.css" />
+  <script src="http://gcal.appspot.com/calvis/calvis.js" type="text/javascript"></script>
+  <script type="text/javascript">
+    window.onload = function() {
+      calvis.ready(main);
+    };
+
+    function main() {
+      // オブジェクトを作成
+      var calendar = new calvis.Calendar();
+
+      // 各ビジュアルコンポーネントの CSS ID を指定
+      calendar.setCalendarBody('calendarBodyDiv');
+      calendar.setStatusControl('statusControlDiv');
+      calendar.setNavControl('navControlDiv');
+      calendar.setViewControl('viewControlDiv');
+
+      // 予定クリック時の処理を指定（ここでは空の関数）
+      calendar.setEventCallback('click', function() {});
+
+      // 表示する公開カレンダーを指定
+      calendar.setPublicCalendar('pdighgf028nmbjbrno8oed8vsg@group.calendar.google.com');
+
+      // 準備が整ったので、カレンダーを表示
+      calendar.render();
+    }
+  </script>
+</head>
+
+<body>
+<div align="center">
+
+<div style="width:800px; margin:0px auto;">
+<div id="statusControlDiv" style="text-align:right;"></div>
+<div id="navControlDiv" style="float:left;"></div></td>
+<div id="viewControlDiv" style="float:right;"></div></td>
+<div id="calendarBodyDiv" style="clear:both;"></div>
+</div>
+
+</div>
+</body>
+
+</html>
