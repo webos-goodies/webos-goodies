@@ -24,10 +24,10 @@
       calendar.setLoginControl('loginControlDiv');
 
       // 予定クリック時の処理を指定（ここでは空の関数）
-      calendar.setPrivateCalendar('default');
+      calendar.setEventCallback('click', function() {});
 
       // 表示する公開カレンダーを指定
-      calendar.setPublicCalendar('pdighgf028nmbjbrno8oed8vsg@group.calendar.google.com');
+      calendar.setPrivateCalendar('default');
 
       // 準備が整ったので、カレンダーを表示
       calendar.render();
@@ -42,7 +42,7 @@
 <div style="width:800px; margin:0px auto;">
 <div id="loginControlDiv" style="float:left;"></div>
 <div id="statusControlDiv" style="float:right;"></div>
-<div style="claer:both"></div>
+<div style="clear:both"></div>
 <div id="navControlDiv" style="float:left;"></div></td>
 <div id="viewControlDiv" style="float:right;"></div></td>
 <div id="calendarBodyDiv" style="clear:both;"></div>
