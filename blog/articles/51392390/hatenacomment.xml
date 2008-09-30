@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Module>
+  <ModulePrefs title="はてなコメント"
+               height="50"
+               scrolling="true">
+    <Require feature="dynamic-height" />
+  </ModulePrefs>
+  <UserPref name="url" display_name="URL" />
+
+  <Content type="html"><![CDATA[
+
+<style type="text/css">
+.item {
+  font-size: 12px;
+  background-color: #ffe;
+  border: solid 1px #ccc;
+  padding: 2px 4px;
+  margin: 2px 0px;
+}
+</style>
+
+<script type="text/javascript">
+
+var prefs = new _IG_Prefs();
+var api   = 'http://b.hatena.ne.jp/entry/json/?url=';
+var url   = prefs.getString('url');
+
+if(url) {
+  _IG_FetchContent(api + _esc(url), function(content) {
+    if(content) {
+      var bookmarks = eval(content)['bookmarks'];
+      var html      = [];
+      for(var i = 0, l = bookmarks.length ; i < l ; ++i) {
+        if(bookmarks[i]['comment']) {
+          html.push('<DIV class="item">' +
+                    _hesc(bookmarks[i]['comment'])+
+                    '</DIV>');
+        }
+      }
+      var container = _gel('container');
+      container.innerHTML = html.join('');
+      var h = container.scrollHeight + 4;
+      _IG_AdjustIFrameHeight(h < 300 ? h : 300);
+    }
+  });
+}
+
+</script>
+
+<div id="container">
+URLを指定してください。
+</div>
+
+  ]]></Content>
+
+</Module>
