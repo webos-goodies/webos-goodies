@@ -40,7 +40,7 @@ if(url) {
       var container = _gel('container');
       container.innerHTML = html.join('');
       var h = container.scrollHeight + 4;
-      _IG_AdjustIFrameHeight(h < 300 ? h : 300);
+      _IG_AdjustIFrameHeight();
     }
   });
 }
