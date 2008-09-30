@@ -10,4 +10,5 @@
     <gadget whole-dropdown="true" height="100" url="page_url" host="page_host" query="rawquery" selection="selectedtext" option1="option1">
       http://webos-goodies.googlecode.com/svn/trunk/blog/articles/51392390/sample_gadget.xml
     </gadget>
+  </button>
 </custombuttons>

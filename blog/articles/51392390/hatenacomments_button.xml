@@ -6,4 +6,5 @@
     <gadget whole-dropdown="true" height="300" url="page_url">
       http://webos-goodies.googlecode.com/svn/trunk/blog/articles/51392390/hatenacomments_gadget.xml
     </gadget>
+  </button>
 </custombuttons>
