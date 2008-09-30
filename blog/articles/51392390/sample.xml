@@ -4,11 +4,11 @@
                height="100"
                scrolling="true">
   </ModulePrefs>
-  <UserPref name="page_url" display_name="URL" />
-  <UserPref name="page_host" display_name="HOST" />
-  <UserPref name="rawquery" display_name="検索文字列" />
-  <UserPref name="selectedtext" display_name="選択文字列" />
-  <UserPref name="option1" display_name="Option1" />
+  <UserPref name="page_url" display_name="URL" datatype="hidden" />
+  <UserPref name="page_host" display_name="HOST" datatype="hidden" />
+  <UserPref name="rawquery" display_name="検索文字列" datatype="hidden" />
+  <UserPref name="selectedtext" display_name="選択文字列" datatype="hidden" />
+  <UserPref name="option1" display_name="Option1" datatype="hidden" />
 
   <Content type="html"><![CDATA[
 
