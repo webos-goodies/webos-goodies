@@ -12,11 +12,13 @@
 
   <Content type="html"><![CDATA[
 
+<div style="font-size: 12px;">
 URL : __UP_page_url__<br>
 HOST : __UP_page_host__<br>
 検索文字列 : __UP_rawquery__<br>
 選択文字列 : __UP_selectedtext__<br>
 option1 : __UP_option1__<br>
+</div>
 
   ]]></Content>
 
