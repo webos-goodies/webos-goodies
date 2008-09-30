@@ -5,7 +5,7 @@
                scrolling="true">
     <Require feature="dynamic-height" />
   </ModulePrefs>
-  <UserPref name="url" display_name="URL" />
+  <UserPref name="page_url" display_name="URL" />
 
   <Content type="html"><![CDATA[
 
@@ -23,7 +23,7 @@
 
 var prefs = new _IG_Prefs();
 var api   = 'http://b.hatena.ne.jp/entry/json/?url=';
-var url   = prefs.getString('url');
+var url   = prefs.getString('page_url');
 
 if(url) {
   _IG_FetchContent(api + _esc(url), function(content) {
