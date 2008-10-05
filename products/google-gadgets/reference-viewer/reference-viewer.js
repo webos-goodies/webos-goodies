@@ -1,12 +1,28 @@
-var ReferenceSearch = (function() {
-
-var useLegacy     = !window.gadgets;
-var useOpenSocial = !!window.opensocial;
+var useLegacy     = !(window.gadgets && gadgets.views && gadgets.views.getCurrentView() !== undefined);
+var useOpenSocial = !useLegacy && !!window.opensocial;
 
 function gel(id)
 {
   return document.getElementById(id);
 }
+
+function adjustHeight(height) {
+  if(useLegacy) {
+	_IG_AdjustIFrameHeight(height);
+  } else {
+    gadgets.window.adjustHeight(height);
+  }
+}
+
+function registerOnLoadHandler(func) {
+  if(useLegacy) {
+	_IG_RegisterOnloadHandler(func);
+  } else {
+	gadgets.util.registerOnLoadHandler(func);
+  }
+}
+
+var ReferenceSearch = (function() {
 
 function nel(tag)
 {
@@ -309,6 +325,10 @@ function SearchControl(opts)
 	}
   };
 
+  self.getPrefs = function() {
+	return prefs;
+  };
+
   self.find = function(str)
   {
 	if(query != str) {
@@ -565,7 +585,6 @@ function SearchControl(opts)
 }
 
 return {
-  RDocSearcher  : RDocSearcher,
   SearchControl : SearchControl
 };
 

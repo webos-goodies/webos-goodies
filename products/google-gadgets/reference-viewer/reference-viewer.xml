@@ -11,6 +11,7 @@
     <Require feature="opensocial-0.7" />
     <Require feature="setprefs" />
     <Require feature="dynamic-height" />
+	<Require feature="views" />
   </ModulePrefs>
   <UserPref name="type" display_name="タイプ" default_value="rdoc" datatype="enum">
 	<EnumValue display_value="RDoc" value="rdoc" />
@@ -133,26 +134,11 @@
 </style>
 <![endif]-->
 
-<script type="text/javascript">
-  var scriptUrl = '';
-  if(gadgets && gadgets.io && gadgets.io.getProxyUrl) {
-    scriptUrl = gadgets.io.getProxyUrl('http://webos-goodies.googlecode.com/svn/trunk/products/google-gadgets/reference-viewer/reference-viewer.js', {REFRESH_INTERVAL:3600});
-  } else {
-    scriptUrl = _IG_GetCachedUrl('http://webos-goodies.googlecode.com/svn/trunk/products/google-gadgets/reference-viewer/reference-viewer.js', {refreshInterval:3600});
-  }
-  document.open();
-  document.write('<scr'+'ipt type="text/javascript" src="' + scriptUrl + '"></scr' + 'ipt>');
-  document.close();
-</script>
+<script type="text/javascript" src="http://webos-goodies.googlecode.com/svn/trunk/products/google-gadgets/reference-viewer/reference-viewer.js"></script>
 
 <script type="text/javascript">
 
 var control = null;
-
-function gel(id)
-{
-  return document.getElementById(id);
-}
 
 function doSearch()
 {
@@ -178,13 +164,13 @@ function onChangeQuery(html)
   e.innerHTML = html;
   e.style.display = html ? 'block' : 'none';
   if(h + 4 < e.offsetHeight) {
-    gadgets.window.adjustHeight();
+    adjustHeight();
   }
 }
 
 function onIdle()
 {
-  gadgets.window.adjustHeight();
+  adjustHeight();
 }
 
 function onSelectSearcher()
@@ -195,7 +181,7 @@ function onSelectSearcher()
     control.initConfig('searcher_list', 'searcher_type', 'searcher_name', 'searcher_url');
     gel('normal_view').style.display = 'none';
     gel('config_view').style.display = 'block';
-    gadgets.window.adjustHeight();
+    adjustHeight();
   } else {
     if(control.changeSearcher(value)) {
       gel('loading').style.display = 'block';
@@ -223,24 +209,32 @@ function closeConfig()
   }
   gel('normal_view').style.display = 'block';
   gel('config_view').style.display = 'none';
-  gadgets.window.adjustHeight();
+  adjustHeight();
 }
 
-gadgets.util.registerOnLoadHandler(function() {
+registerOnLoadHandler(function() {
   control = new ReferenceSearch.SearchControl({
-    selectorID : 'searcher',
+    selectorID : useLegacy ? null : 'searcher',
     onready    : onSearcherReady,
     onchange   : onChangeQuery,
     onidle     : onIdle
   });
+  if(useLegacy) {
+    adjustHeight();
+  }
 });
 
 </script>
 
 <div id="normal_view">
-  <div id="searcher_frame">
-	<select id="searcher" onchange="onSelectSearcher();"></select>
-  </div>
+
+  <script type="text/javascript">
+	if(!useLegacy) {
+	  document.open();
+	  document.write('<div id="searcher_frame"><select id="searcher" onchange="onSelectSearcher();"></select></div>');
+	  document.close();
+	}
+  </script>
 
   <table id="searchbox_frame" cellspacing="0">
 	<tr>
@@ -442,17 +436,7 @@ gadgets.util.registerOnLoadHandler(function() {
 </style>
 <![endif]-->
 
-<script type="text/javascript">
-  var scriptUrl = '';
-  if(gadgets && gadgets.io && gadgets.io.getProxyUrl) {
-    scriptUrl = gadgets.io.getProxyUrl('http://webos-goodies.googlecode.com/svn/trunk/products/google-gadgets/reference-viewer/reference-viewer.js', {REFRESH_INTERVAL:3600});
-  } else {
-    scriptUrl = _IG_GetCachedUrl('http://webos-goodies.googlecode.com/svn/trunk/products/google-gadgets/reference-viewer/reference-viewer.js', {refreshInterval:3600});
-  }
-  document.open();
-  document.write('<scr'+'ipt type="text/javascript" src="' + scriptUrl + '"></scr' + 'ipt>');
-  document.close();
-</script>
+<script type="text/javascript" src="http://webos-goodies.googlecode.com/svn/trunk/products/google-gadgets/reference-viewer/reference-viewer.js"></script>
 
 <script type="text/javascript">
 
@@ -521,13 +505,13 @@ function onChangeQuery(html)
   e.innerHTML = html || '';
   resultControl.setEmpty(html ? false : true);
   if(h + 4 < e.offsetHeight) {
-    gadgets.window.adjustHeight();
+    adjustHeight();
   }
 }
 
 function onIdle()
 {
-  gadgets.window.adjustHeight();
+  adjustHeight();
 }
 
 function onSelectSearcher()
@@ -538,7 +522,7 @@ function onSelectSearcher()
     control.initConfig('searcher_list', 'searcher_type', 'searcher_name', 'searcher_url');
     gel('normal_view').style.display = 'none';
     gel('config_view').style.display = 'block';
-    gadgets.window.adjustHeight();
+    adjustHeight();
   } else {
     if(control.changeSearcher(value)) {
       gel('loading').style.display = 'block';
@@ -591,10 +575,10 @@ function closeConfig()
   }
   gel('normal_view').style.display = 'block';
   gel('config_view').style.display = 'none';
-  gadgets.window.adjustHeight();
+  adjustHeight();
 }
 
-gadgets.util.registerOnLoadHandler(function() {
+registerOnLoadHandler(function() {
   control = new ReferenceSearch.SearchControl({
     selectorID : 'searcher',
     onready    : onSearcherReady,
@@ -603,7 +587,7 @@ gadgets.util.registerOnLoadHandler(function() {
   });
   resultControl = new ResultControl();
 
-  var prefs = new gadgets.Prefs();
+  var prefs = control.getPrefs();
   gel('result').style.maxHeight = prefs.getString('preview_height') + 'px';
   gel('preview').style.height = prefs.getString('preview_height') + 'px';
 });
