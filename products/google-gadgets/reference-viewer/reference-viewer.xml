@@ -136,9 +136,7 @@
 <script type="text/javascript">
   var scriptUrl = '';
   if(gadgets && gadgets.io && gadgets.io.getProxyUrl) {
-    var scriptParams = {};
-    scriptParams[gadgets.io.ProxyUrlRequestParameters.REFRESH_INTERVAL] = 3600;
-    scriptUrl = gadgets.io.getProxyUrl('http://webos-goodies.googlecode.com/svn/trunk/products/google-gadgets/reference-viewer/reference-viewer.js');
+    scriptUrl = gadgets.io.getProxyUrl('http://webos-goodies.googlecode.com/svn/trunk/products/google-gadgets/reference-viewer/reference-viewer.js', {REFRESH_INTERVAL:3600});
   } else {
     scriptUrl = _IG_GetCachedUrl('http://webos-goodies.googlecode.com/svn/trunk/products/google-gadgets/reference-viewer/reference-viewer.js', {refreshInterval:3600});
   }
@@ -449,7 +447,7 @@ gadgets.util.registerOnLoadHandler(function() {
   if(gadgets && gadgets.io && gadgets.io.getProxyUrl) {
     var scriptParams = {};
     scriptParams[gadgets.io.ProxyUrlRequestParameters.REFRESH_INTERVAL] = 3600;
-    scriptUrl = gadgets.io.getProxyUrl('http://webos-goodies.googlecode.com/svn/trunk/products/google-gadgets/reference-viewer/reference-viewer.js');
+    scriptUrl = gadgets.io.getProxyUrl('http://webos-goodies.googlecode.com/svn/trunk/products/google-gadgets/reference-viewer/reference-viewer.js', {REFRESH_INTERVAL:3600});
   } else {
     scriptUrl = _IG_GetCachedUrl('http://webos-goodies.googlecode.com/svn/trunk/products/google-gadgets/reference-viewer/reference-viewer.js', {refreshInterval:3600});
   }
