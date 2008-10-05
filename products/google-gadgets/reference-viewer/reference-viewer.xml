@@ -1,0 +1,689 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Module>
+  <ModulePrefs title="Reference Viewer"
+               height="50"
+               scrolling="false"
+               author="WebOS Goodies"
+               author_email="support@webos-goodies.jp"
+               author_affiliation="WebOS Goodies"
+               author_location="Tokyo, Japan"
+               author_link="http://code.google.com/p/webos-goodies/">
+    <Require feature="opensocial-0.7" />
+    <Require feature="setprefs" />
+    <Require feature="dynamic-height" />
+  </ModulePrefs>
+  <UserPref name="type" display_name="タイプ" default_value="rdoc" datatype="enum">
+	<EnumValue display_value="RDoc" value="rdoc" />
+	<EnumValue display_value="JavaDoc / JSDoc" value="javadoc" />
+  </UserPref>
+  <UserPref name="label" display_name="名前" default_value="Rails Framework Documentation" />
+  <UserPref name="url" display_name="URL" default_value="http://api.rubyonrails.org/" />
+  <UserPref name="preview_height" display_name="Preview Height" default_value="300"/>
+
+<Content type="html" view="home,profile,default"><![CDATA[
+
+<div id="_std_content">
+
+<style type="text/css">
+  .tbox_frame {
+    border: solid 1px #ccc;
+    padding: 2px 4px;
+    margin: 0px;
+    background-color: #ffd;
+  }
+  .tbox {
+    font-size: 12px;
+    line-height: 1;
+    margin:  0px;
+    padding: 0px;
+    border: none;
+    width: 100%;
+    background-color: #ffd;
+  }
+
+  #searcher_frame {
+    margin: 0px 0px 4px 0px;
+  }
+  #searcher {
+    width: 100%;
+  }
+  #searchbox_frame {
+    width: 100%;
+    margin: 0px;
+    padding:0px;
+    font-size: 12px;
+  }
+  #cse_form {
+    margin: 0px;
+    padding: 0px;
+  }
+  #cse_submit {
+    font-size: 10px;
+  }
+  #result {
+    font-size: 12px;
+    line-height: 1.5;
+    overflow : auto;
+    max-height: 300px;
+    margin: 4px 0px 0px 0px;
+    padding: 0px 0px 0px 4px;
+    border: solid 1px #ccc;
+    display: none;
+    white-space: nowrap;
+  }
+  #loading {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    z-index: 10;
+    font-size: 12px;
+    font-weight: bold;
+    color: white;
+    background-color: red;
+    border: solid 2px #800;
+    padding: 2px 8px;
+  }
+
+  #config_view {
+    font-size: 12px;
+    display: none;
+  }
+  #searcher_list {
+    overflow: auto;
+    margin: 0px;
+    padding: 0px;
+    border: solid 1px #888;
+    background-color: white;
+    height: 77px;
+  }
+  #searcher_list a {
+    display: block;
+    overflow: hidden;
+    margin: 1px;
+    padding: 2px 8px;
+    border: solid 1px #888;
+    text-decoration: none;
+    color: black;
+    background-color: #ccc;
+    line-height: 1;
+    height: 12px;
+  }
+  #searcher_list a.selected {
+    color: #22f;
+    background-color: white;
+    font-weight: bold;
+  }
+  #searcher_list a:hover {
+    border-color: black;
+  }
+  #config_view .row {
+    margin: 4px 0px 0px 0px;
+  }
+</style>
+
+<!--[if IE]>
+<style type="text/css">
+  .tbox {
+    height: 14px;
+  }
+  #cse_submit {
+    font-size: 10px;
+    height: 20px;
+  }
+</style>
+<![endif]-->
+
+<script type="text/javascript">
+  var scriptUrl = '';
+  if(gadgets && gadgets.io && gadgets.io.getProxyUrl) {
+    var scriptParams = {};
+    scriptParams[gadgets.io.ProxyUrlRequestParameters.REFRESH_INTERVAL] = 3600;
+    scriptUrl = gadgets.io.getProxyUrl('http://webos-goodies.googlecode.com/svn/trunk/products/google-gadgets/reference-viewer/reference-viewer.js');
+  } else {
+    scriptUrl = _IG_GetCachedUrl('http://webos-goodies.googlecode.com/svn/trunk/products/google-gadgets/reference-viewer/reference-viewer.js', {refreshInterval:3600});
+  }
+  document.open();
+  document.write('<scr'+'ipt type="text/javascript" src="' + scriptUrl + '"></scr' + 'ipt>');
+  document.close();
+</script>
+
+<script type="text/javascript">
+
+var control = null;
+
+function gel(id)
+{
+  return document.getElementById(id);
+}
+
+function doSearch()
+{
+  control.find(gel('searchbox').value);
+}
+
+function onSearcherReady()
+{
+  gel('loading').style.display = 'none';
+  var spec = control.getSearchEngine();
+  if(spec) {
+    gel('cse_url').value = spec;
+    gel('cse_submit').removeAttribute('disabled');
+  } else {
+    gel('cse_submit').setAttribute('disabled', 'disabled');
+  }
+}
+
+function onChangeQuery(html)
+{
+  var e = gel('result');
+  var h = e.offsetHeight;
+  e.innerHTML = html;
+  e.style.display = html ? 'block' : 'none';
+  if(h + 4 < e.offsetHeight) {
+    gadgets.window.adjustHeight();
+  }
+}
+
+function onIdle()
+{
+  gadgets.window.adjustHeight();
+}
+
+function onSelectSearcher()
+{
+  var e     = gel('searcher');
+  var value = e.value;
+  if(value == 'edit') {
+    control.initConfig('searcher_list', 'searcher_type', 'searcher_name', 'searcher_url');
+    gel('normal_view').style.display = 'none';
+    gel('config_view').style.display = 'block';
+    gadgets.window.adjustHeight();
+  } else {
+    if(control.changeSearcher(value)) {
+      gel('loading').style.display = 'block';
+    } else {
+      onSearcherReady();
+    }
+  }
+}
+
+function onClickGoogleSearch()
+{
+  gel('cse_query').value = gel('searchbox').value;
+}
+
+function onClickNewSearcher()
+{
+  control.updateSearcher();
+  control.addSearcher();
+}
+
+function closeConfig()
+{
+  if(control.applyConfiguration()) {
+    gel('loading').style.display = 'block';
+  }
+  gel('normal_view').style.display = 'block';
+  gel('config_view').style.display = 'none';
+  gadgets.window.adjustHeight();
+}
+
+gadgets.util.registerOnLoadHandler(function() {
+  control = new ReferenceSearch.SearchControl({
+    selectorID : 'searcher',
+    onready    : onSearcherReady,
+    onchange   : onChangeQuery,
+    onidle     : onIdle
+  });
+});
+
+</script>
+
+<div id="normal_view">
+  <div id="searcher_frame">
+	<select id="searcher" onchange="onSelectSearcher();"></select>
+  </div>
+
+  <table id="searchbox_frame" cellspacing="0">
+	<tr>
+	  <td class="tbox_frame">
+		<input type="text" id="searchbox" class="tbox" onkeyup="doSearch();" />
+	  </td>
+	  <td style="width: 1px;">
+		<form id="cse_form" action="http://www.google.com/cse" target="_blank" onsubmit="onClickGoogleSearch();">
+		  <input id="cse_url" type="hidden" name="cref" value="" />
+		  <input id="cse_query" type="hidden" name="q" />
+		  <input id="cse_submit" disabled="disabled" type="submit" name="sa" value="google検索" />
+		</form>
+	  </td>
+	</tr>
+  </table>
+
+  <div id="result"></div>
+
+</div>
+
+<div id="config_view">
+
+  <div id="searcher_list" onclick="control.onClickSearcherList(event);"></div>
+
+  <div class="row" style="text-align: right;">
+	<input type="button" value="新規追加" onclick="control.addSearcher();" />
+	<input type="button" value="削除" onclick="control.deleteSearcher();" style="margin-left: 10px;" />
+  </div>
+
+  <div class="row">
+	<div class="label">タイプ</div>
+	<select id="searcher_type" onchange="control.updateSearcher();">
+	  <option value="rdoc">RDoc</option>
+	  <option value="javadoc">JavaDoc / JSDoc</option>
+	</select>
+  </div>
+
+  <div class="row">
+	<div class="label">名前</div>
+	<div class="tbox_frame">
+	  <input type="text" id="searcher_name" class="tbox" onblur="control.updateSearcher();" />
+	</div>
+  </div>
+
+  <div class="row">
+	<div class="label">URL</div>
+	<div class="tbox_frame">
+	  <input type="text" id="searcher_url" class="tbox" onblur="control.updateSearcher();" />
+	</div>
+  </div>
+
+  <div class="row" style="text-align: center;">
+	<input type="button" value="閉じる" onclick="closeConfig();" />
+  </div>
+
+</div>
+
+<div id="loading">loading...</div>
+
+</div>
+
+]]></Content>
+
+<Content type="html" view="canvas"><![CDATA[
+
+<div id="_std_content">
+
+<style type="text/css">
+  .tbox_frame {
+    border: solid 1px #ccc;
+    padding: 2px 4px;
+    margin: 0px;
+    background-color: #ffd;
+  }
+  .tbox {
+    font-size: 12px;
+    line-height: 1;
+    margin:  0px;
+    padding: 0px;
+    border: none;
+    width: 100%;
+    background-color: #ffd;
+  }
+
+  #searchbox_frame {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 64%;
+    margin: 0px;
+    padding: 0px;
+    font-size: 12px;
+  }
+  #cse_form {
+    margin: 0px;
+    padding: 0px;
+  }
+  #cse_submit {
+    font-size: 10px;
+  }
+  #searcher_frame {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    width: 35%;
+    margin: 0px;
+    padding: 0px;
+  }
+  #searcher {
+    width: 100%;
+  }
+  #result {
+    position: absolute;
+    top: 22px;
+    left: 0px;
+    width: 59%;
+    z-index: 2;
+    font-size: 12px;
+    line-height: 1.5;
+    overflow : auto;
+    max-height: __UP_preview_height__px;
+    padding: 0px 0px 0px 4px;
+    border: solid 1px #ccc;
+    display: none;
+    white-space: nowrap;
+    background-color: white;
+  }
+  #preview_frame {
+    margin: 24px 0px 0px 0px;
+    padding: 0px;
+    border: solid 1px #ccc;
+  }
+  #preview {
+    margin: 0px;
+    padding: 0px;
+    border: none;
+    width: 100%;
+    height: __UP_preview_height__px;
+  }
+  #loading {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    z-index: 10;
+    font-size: 12px;
+    font-weight: bold;
+    color: white;
+    background-color: red;
+    border: solid 2px #800;
+    padding: 2px 8px;
+  }
+
+  #config_view {
+    font-size: 12px;
+    display: none;
+  }
+  #searcher_list {
+    overflow: auto;
+    margin: 0px;
+    padding: 0px;
+    border: solid 1px #888;
+    background-color: white;
+    height: 77px;
+  }
+  #searcher_list a {
+    display: block;
+    overflow: hidden;
+    margin: 1px;
+    padding: 2px 8px;
+    border: solid 1px #888;
+    text-decoration: none;
+    color: black;
+    background-color: #ccc;
+    line-height: 1;
+    height: 12px;
+  }
+  #searcher_list a.selected {
+    color: #22f;
+    background-color: white;
+    font-weight: bold;
+  }
+  #searcher_list a:hover {
+    border-color: black;
+  }
+  #config_view .row {
+    margin: 4px 0px 0px 0px;
+  }
+</style>
+
+<!--[if IE]>
+<style type="text/css">
+  .tbox {
+    height: 14px;
+  }
+  #cse_submit {
+    font-size: 10px;
+    height: 20px;
+  }
+</style>
+<![endif]-->
+
+<script type="text/javascript">
+  var scriptUrl = '';
+  if(gadgets && gadgets.io && gadgets.io.getProxyUrl) {
+    var scriptParams = {};
+    scriptParams[gadgets.io.ProxyUrlRequestParameters.REFRESH_INTERVAL] = 3600;
+    scriptUrl = gadgets.io.getProxyUrl('http://webos-goodies.googlecode.com/svn/trunk/products/google-gadgets/reference-viewer/reference-viewer.js');
+  } else {
+    scriptUrl = _IG_GetCachedUrl('http://webos-goodies.googlecode.com/svn/trunk/products/google-gadgets/reference-viewer/reference-viewer.js', {refreshInterval:3600});
+  }
+  document.open();
+  document.write('<scr'+'ipt type="text/javascript" src="' + scriptUrl + '"></scr' + 'ipt>');
+  document.close();
+</script>
+
+<script type="text/javascript">
+
+var control = null;
+var resultControl = null;
+
+var ResultControl = function() {
+  this.$focus = false;
+  this.$empty = true;
+  this.$hover = false;
+};
+ResultControl.prototype = {
+  setFocus : function(focus)
+  {
+    this.$focus = focus;
+    this.$update();
+  },
+  setEmpty : function(empty)
+  {
+    this.$empty = empty;
+    this.$update();
+  },
+  setHover : function(hover)
+  {
+    this.$hover = hover;
+    this.$update();
+  },
+  $update : function()
+  {
+    var e = gel('result');
+    if((this.$focus || this.$hover) && !this.$empty) {
+      e.style.display = 'block';
+    } else {
+      e.style.display = 'none';
+    }
+  }
+};
+
+function gel(id)
+{
+  return document.getElementById(id);
+}
+
+function doSearch()
+{
+  control.find(gel('searchbox').value);
+}
+
+function onSearcherReady()
+{
+  gel('loading').style.display = 'none';
+  gel('preview').src = control.getLandingPage();
+  var spec = control.getSearchEngine();
+  if(spec) {
+    gel('cse_url').value = spec;
+    gel('cse_submit').removeAttribute('disabled');
+  } else {
+    gel('cse_submit').setAttribute('disabled', 'disabled');
+  }
+}
+
+function onChangeQuery(html)
+{
+  var e = gel('result');
+  var h = e.offsetHeight;
+  e.innerHTML = html || '';
+  resultControl.setEmpty(html ? false : true);
+  if(h + 4 < e.offsetHeight) {
+    gadgets.window.adjustHeight();
+  }
+}
+
+function onIdle()
+{
+  gadgets.window.adjustHeight();
+}
+
+function onSelectSearcher()
+{
+  var e     = gel('searcher');
+  var value = e.value;
+  if(value == 'edit') {
+    control.initConfig('searcher_list', 'searcher_type', 'searcher_name', 'searcher_url');
+    gel('normal_view').style.display = 'none';
+    gel('config_view').style.display = 'block';
+    gadgets.window.adjustHeight();
+  } else {
+    if(control.changeSearcher(value)) {
+      gel('loading').style.display = 'block';
+    } else {
+      onSearcherReady();
+    }
+  }
+}
+
+function onClickGoogleSearch()
+{
+  gel('cse_query').value = gel('searchbox').value;
+}
+
+function onClickResult(event)
+{
+  event       = event || window.event;
+  var element = event.target || event.srcElement;
+  while(element) {
+    if(element.nodeType == 1 && element.tagName.toUpperCase() == 'A') {
+      gel('preview').src = element.href;
+      break;
+    }
+    element = element.parentNode;
+  }
+  event.preventDefault && event.preventDefault();
+  event.returnValue = false;
+}
+
+function onMouseOverResult(event)
+{
+  resultControl.setHover(true);
+}
+
+function onMouseOutResult(event)
+{
+  resultControl.setHover(false);
+}
+
+function onClickNewSearcher()
+{
+  control.updateSearcher();
+  control.addSearcher();
+}
+
+function closeConfig()
+{
+  if(control.applyConfiguration()) {
+    gel('loading').style.display = 'block';
+  }
+  gel('normal_view').style.display = 'block';
+  gel('config_view').style.display = 'none';
+  gadgets.window.adjustHeight();
+}
+
+gadgets.util.registerOnLoadHandler(function() {
+  control = new ReferenceSearch.SearchControl({
+    selectorID : 'searcher',
+    onready    : onSearcherReady,
+    onchange   : onChangeQuery,
+    onidle     : onIdle
+  });
+  resultControl = new ResultControl();
+
+  var prefs = new gadgets.Prefs();
+  gel('result').style.maxHeight = prefs.getString('preview_height') + 'px';
+  gel('preview').style.height = prefs.getString('preview_height') + 'px';
+});
+
+</script>
+
+<div id="normal_view">
+
+  <div id="searcher_frame">
+    <select id="searcher" onchange="onSelectSearcher();"></select>
+  </div>
+
+  <table id="searchbox_frame" cellspacing="0">
+	<tr>
+	  <td class="tbox_frame">
+		<input type="text" id="searchbox" class="tbox" onkeyup="doSearch();" onfocus="resultControl.setFocus(true);" onblur="resultControl.setFocus(false);" />
+	  </td>
+	  <td style="width: 1px;">
+		<form id="cse_form" action="http://www.google.com/cse" target="_blank" onsubmit="onClickGoogleSearch();">
+		  <input id="cse_url" type="hidden" name="cref" value="" />
+		  <input id="cse_query" type="hidden" name="q" />
+		  <input id="cse_submit" disabled="disabled" type="submit" name="sa" value="google検索" />
+		</form>
+	  </td>
+	</tr>
+  </table>
+
+  <div id="result" onclick="onClickResult(event);" onmouseover="onMouseOverResult(event);" onmouseout="onMouseOutResult(event);"></div>
+
+  <div id="preview_frame">
+    <iframe id="preview"></iframe>
+  </div>
+
+</div>
+
+<div id="config_view">
+
+  <div id="searcher_list" onclick="control.onClickSearcherList(event);"></div>
+
+  <div class="row" style="text-align: right;">
+	<input type="button" value="新規追加" onclick="control.addSearcher();" />
+	<input type="button" value="削除" onclick="control.deleteSearcher();" style="margin-left: 10px;" />
+  </div>
+
+  <div class="row">
+	<div class="label">タイプ</div>
+	<select id="searcher_type" onchange="control.updateSearcher();">
+	  <option value="rdoc">RDoc</option>
+	  <option value="javadoc">JavaDoc / JSDoc</option>
+	</select>
+  </div>
+
+  <div class="row">
+	<div class="label">名前</div>
+	<div class="tbox_frame">
+	  <input type="text" id="searcher_name" class="tbox" onblur="control.updateSearcher();" />
+	</div>
+  </div>
+
+  <div class="row">
+	<div class="label">URL</div>
+	<div class="tbox_frame">
+	  <input type="text" id="searcher_url" class="tbox" onblur="control.updateSearcher();" />
+	</div>
+  </div>
+
+  <div class="row" style="text-align: center;">
+	<input type="button" value="閉じる" onclick="closeConfig();" />
+  </div>
+
+</div>
+
+<div id="loading">loading...</div>
+
+</div>
+
+]]></Content>
+
+</Module>
