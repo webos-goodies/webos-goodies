@@ -134,7 +134,12 @@
 </style>
 <![endif]-->
 
-<script type="text/javascript" src="http://webos-goodies.googlecode.com/svn/trunk/products/google-gadgets/reference-viewer/reference-viewer.js"></script>
+<script type="text/javascript">
+  var scriptUrl = "http://webos-goodies.googlecode.com/svn/trunk/products/google-gadgets/reference-viewer/reference-viewer.js";
+  document.open();
+  document.write('<scr' + 'ipt type="text/javascript" src="'+ _IG_GetCachedUrl(scriptUrl) + '"></scr' + 'ipt>');
+  document.close();
+</script>
 
 <script type="text/javascript">
 
@@ -436,7 +441,12 @@ registerOnLoadHandler(function() {
 </style>
 <![endif]-->
 
-<script type="text/javascript" src="http://webos-goodies.googlecode.com/svn/trunk/products/google-gadgets/reference-viewer/reference-viewer.js"></script>
+<script type="text/javascript">
+  var scriptUrl = "http://webos-goodies.googlecode.com/svn/trunk/products/google-gadgets/reference-viewer/reference-viewer.js";
+  document.open();
+  document.write('<scr' + 'ipt type="text/javascript" src="'+ _IG_GetCachedUrl(scriptUrl) + '"></scr' + 'ipt>');
+  document.close();
+</script>
 
 <script type="text/javascript">
 
