@@ -224,9 +224,7 @@ registerOnLoadHandler(function() {
     onchange   : onChangeQuery,
     onidle     : onIdle
   });
-  if(useLegacy) {
-    adjustHeight();
-  }
+  adjustHeight();
 });
 
 </script>
@@ -600,6 +598,7 @@ registerOnLoadHandler(function() {
   var prefs = control.getPrefs();
   gel('result').style.maxHeight = prefs.getString('preview_height') + 'px';
   gel('preview').style.height = prefs.getString('preview_height') + 'px';
+  adjustHeight();
 });
 
 </script>
