@@ -135,7 +135,7 @@
 <![endif]-->
 
 <script type="text/javascript">
-  var scriptUrl = "http://webos-goodies.googlecode.com/svn/trunk/products/google-gadgets/reference-viewer/reference-viewer.js";
+  var scriptUrl = "http://webos-goodies.googlecode.com/svn/trunk/products/google-gadgets/reference-viewer/reference-viewer.js?1";
   document.open();
   document.write('<scr' + 'ipt type="text/javascript" src="'+ _IG_GetCachedUrl(scriptUrl) + '"></scr' + 'ipt>');
   document.close();
@@ -440,7 +440,7 @@ registerOnLoadHandler(function() {
 <![endif]-->
 
 <script type="text/javascript">
-  var scriptUrl = "http://webos-goodies.googlecode.com/svn/trunk/products/google-gadgets/reference-viewer/reference-viewer.js";
+  var scriptUrl = "http://webos-goodies.googlecode.com/svn/trunk/products/google-gadgets/reference-viewer/reference-viewer.js?1";
   document.open();
   document.write('<scr' + 'ipt type="text/javascript" src="'+ _IG_GetCachedUrl(scriptUrl) + '"></scr' + 'ipt>');
   document.close();
