@@ -1,6 +1,12 @@
 var u = {};
 
 //--------------------------------------------------------------------
+// Enviroment detection
+
+u.useLegacy     = !(window.gadgets && gadgets.views && gadgets.views.getCurrentView() !== undefined);
+u.useOpenSocial = !u.useLegacy && !!window.opensocial;
+
+//--------------------------------------------------------------------
 // type detection
 
 u.isNull     = function(obj) { return obj === null; };
@@ -182,6 +188,158 @@ u.DomBuilder.prototype = {
 
 
 //--------------------------------------------------------------------
+// SocialGoodies
+
+SocialGoodies = (function() {
+
+  var dataRequest    = null,
+      requestTimerId = null,
+	  requestRecords = [],
+	  nextRequestKey = 0;
+
+  var DataRequest = {
+	fetchPerson : function(idSpec, opts)
+	{
+	  dataRequestTemplate(opts, function(key, opts) {
+		dataRequest.add(dataRequest.newFetchPersonRequest(idSpec), key);
+		return { type : 'fetchPerson', hasData : true };
+	  });
+	},
+	fetchPeople : function(idSpec, opts)
+	{
+	  dataRequestTemplate(opts, function(key, opts) {
+		dataRequest.add(dataRequest.newFetchPeopleRequest(makeIdSpec(idSpec)), key);
+		return { type : 'fetchPeople', hasData : true };
+	  });
+	},
+	storeAppData : function(idSpec, field, value, opts)
+	{
+	  dataRequestTemplate(opts, function(key, opts) {
+		dataRequest.add(dataRequest.newUpdatePersonAppDataRequest(idSpec, field, value), key);
+		return { type : 'storeAppData', hasData : false };
+	  });
+	},
+	fetchAppData : function(idSpec, fields, opts)
+	{
+	  dataRequestTemplate(opts, function(key, opts) {
+		dataRequest.add(dataRequest.newFetchPersonAppDataRequest(makeIdSpec(idSpec), fields, opts.params), key);
+		return { type: 'fetchAppData', hasData: true };
+	  });
+	},
+	removeAppData : function(idSpec, fields, opts)
+	{
+	  dataRequestTemplate(opts, function(key, opts) {
+		dataRequest.add(dataRequest.newRemovePersonAppDataRequest(idSpec, fields), key);
+		return { type: 'removeAppData', hasData: false };
+	  });
+	},
+	send : function() {
+	  clearTimeout(requestTimerId);
+	  requestTimerId = null;
+	  sendDataRequest();
+	},
+	Error : function(errorCode, errorMessage, isBatchLevelError) {
+	  var self = this;
+	  self.getErrorCode = function() {
+		return errorCode || errorMessage;
+	  }
+	  self.getErrorMessage = function() {
+		return errorMessage || errorCode;
+	  }
+	  self.isBatchLevelError = function() {
+		return isBatchLevelError;
+	  }
+	}
+  };
+
+  function dataRequestTemplate(opts, func) {
+	opts = opts || {};
+	setupDataRequest();
+	var params = {};
+	if(opts.escape == 'none') {
+	  params[opensocial.DataRequest.DataRequestFields.ESCAPE_TYPE] =
+		opensocial.EscapeType.NONE;
+	}
+	opts.params = params;
+	var key    = generateUniqueKey();
+	var record = func(key, opts || {});
+	record['key']      = key;
+	record['callback'] = opts.callback;
+	record['scope']    = opts.scope;
+	requestRecords.push(record);
+  }
+
+  function generateUniqueKey()
+  {
+	return 'uniqueKey' + nextRequestKey++;
+  }
+
+  function setupDataRequest()
+  {
+	if(!dataRequest) {
+	  dataRequest = opensocial.newDataRequest();
+	}
+	if(requestTimerId === null) {
+	  requestTimerId = setTimeout(sendDataRequest, 0);
+	}
+  }
+
+  function makeIdSpec(idSpec) {
+	if(typeof idSpec == 'string') {
+	  if(/^(.+)_FRIENDS$/.exec(idSpec)) {
+		idSpec = opensocial.newIdSpec({ userId: RegExp.$1, groupId: 'FRIENDS' });
+	  } else {
+		idSpec = opensocial.newIdSpec({ userId: idSpec, groupId: 'SELF' });
+	  }
+	}
+	return idSpec;
+  }
+
+  function sendDataRequest()
+  {
+	var req     = dataRequest,
+	    records = requestRecords;
+
+	requestTimerId = null;
+	dataRequest    = null;
+	requestRecords = [];
+
+	if(records.length > 0) {
+	  req.send(function(response) {
+		if(!response.hadError()) {
+		  for(var i = 0, l = records.length ; i < l ; ++i) {
+			var record = records[i];
+			if(typeof record.callback == 'function') {
+			  var item  = response.get(record.key),
+			      data  = null,
+			      error = null;
+			  if(!item || item.hadError()) {
+				error = new DataRequest.Error(item.getErrorCode(), item.getErrorMessage(), false);
+			  } else if(record.hasData) {
+				data = item.getData();
+			  }
+			  record.callback.call(record.scope, data, error);
+			}
+		  }
+		} else {
+		  var error = new DataRequest.Error('', response.getErrorMessage(), true);
+		  for(var i = 0, l = records.length ; i < l ; ++i) {
+			var record = records[i];
+			if(typeof response.callback == 'function') {
+			  record.callback.call(record.scope, null, error);
+			}
+		  }
+		}
+	  });
+	}
+  }
+
+  return {
+	DataRequest : DataRequest
+  };
+})();
+
+//--------------------------------------------------------------------
 // DelayCall
 
 u.DelayCall = function($callback, $interval)
@@ -207,16 +365,15 @@ u.DelayCall.prototype = {
 
 function GadgetScratchPad(preview, formContainer, option)
 {
-  if(typeof option != 'object')
-	option = {};
+  option = option || {};
 
   this.preview       = preview;
   this.formContainer = formContainer;
   this.form          = document.createElement('FORM');
   this.textarea      = document.createElement('TEXTAREA');
-  this.defaultTitle  = option['title'] ? option['title'] : 'no title';
-  this.defaultWidth  = option['width'] ? parseInt(option['width']) : 320;
-  this.defaultHeight = option['height'] ? parseInt(option['height']) : 200;
+  this.defaultTitle  = option['title'] || 'no title';
+  this.defaultWidth  = parseInt(option['width'] || 320, 10);
+  this.defaultHeight = parseInt(option['height'] || 200, 10);
   this.title         = this.defaultTitle;
   this.width         = this.defaultWidth;
   this.height        = this.defaultHeight;
@@ -237,25 +394,24 @@ GadgetScratchPad.prototype = {
   {
 	var prefs  = spec.substring(0, spec.search(/<(?:UserPref|Content)/));
 
-	this.title  = (prefs.match(/title="([^"]*)"/)) ? RegExp.$1 : this.defaultTitle;
-		this.width  = (prefs.match(/width="(\d+)"/))   ? parseInt(RegExp.$1, 10) : this.defaultWidth;
-		this.height = (prefs.match(/height="(\d+)"/))  ? parseInt(RegExp.$1, 10) : this.defaultHeight;
+	this.title  = (prefs.match(/title="([^\u0022]*)"/)) ? RegExp.$1 : this.defaultTitle;
+	this.width  = (prefs.match(/width="(\d+)"/))   ? parseInt(RegExp.$1, 10) : this.defaultWidth;
+	this.height = (prefs.match(/height="(\d+)"/))  ? parseInt(RegExp.$1, 10) : this.defaultHeight;
 
-		this.preview.style.width  = this.width  + 'px';
-		this.preview.style.height = this.height + 'px';
+	this.preview.style.width  = this.width  + 'px';
+	this.preview.style.height = this.height + 'px';
 
-		this.textarea.value = spec;
+	this.textarea.value = spec;
 
-		this.form.action = [
-			"http://gmodules.com/ig/ifr?",
-	"title=" + _esc(this.title).replace(/%20/g, "+"),
-	"w=" + this.width,
-	"h=" + this.height,
-	"synd=open",
-	"nocache=1",
-	"output=html"
-  ].join("&");
-  this.form.submit();
+	this.form.action = [
+		"http://www.gmodules.com/ig/ifr?",
+		"title=" + _esc(this.title).replace(/%20/g, "+"),
+		"w=" + this.width,
+		"h=" + this.height,
+		"synd=open",
+		"nocache=1",
+		"output=html"].join("&");
+	this.form.submit();
 },
 
 getPreviewIFrame : function() { return this.preview; },
@@ -274,9 +430,9 @@ getDefaultHeight : function() { return this.defaultHeight; }
 
 function TextView()
 {
-  this.$tabs     = new _IG_Tabs(Gadget.getModuleId());
-  this.$numTexts = 5;
-  this.$doms     = null;
+  this.$tabs      = new _IG_Tabs(Gadget.getModuleId());
+  this.$numTexts  = 5;
+  this.$doms      = null;
 
   // create tab contents.
   var $tree      = [];
@@ -341,10 +497,11 @@ TextView.prototype = {
 	{
 	  for(var i = 1 ; i <= this.$numTexts ; ++i)
 	  {
-		var $index = 'text' + i;
-		var $value = Gadget.storageGetData($index);
-		if($value)
-		  this.$doms[$index].value = $value;
+		Gadget.storageGetData('text' + i, this, function($name, $value) {
+		  if($value) {
+			this.$doms[$name].value = $value;
+		  }
+		});
 	  }
 	}
   },
@@ -647,15 +804,15 @@ GadgetView.prototype = {
 	  '<?xml version="1.0" encoding="UTF-8" ?>',
 	  '<Module>',
 	  '  <ModulePrefs' + title + width + height + '>',
-	  '    <Require feature="setprefs"/>',
-	  '    <Require feature="dynamic-height"/>',
-	  '    <Require feature="settitle"/>',
-	  '    <Require feature="tabs"/>',
-	  '    <Require feature="drag"/>',
-	  '    <Require feature="grid"/>',
-	  '    <Require feature="minimessage"/>',
-	  '    <Require feature="analytics"/>',
-	  '    <Require feature="flash"/>',
+	  '    <Require feature="setprefs" />',
+	  '    <Require feature="settitle" />',
+	  '    <Require feature="dynamic-height" />',
+	  '    <Require feature="tabs" />',
+	  '    <Require feature="drag" />',
+	  '    <Require feature="grid" />',
+	  '    <Require feature="minimessage" />',
+	  '    <Require feature="analytics" />',
+	  '    <Require feature="flash" />',
 	  '  </ModulePrefs>',
 	  '  <Content type="html">',
 	  '    <![' + 'CDATA[',
@@ -923,13 +1080,13 @@ JSConsole.prototype = {
 var Gadget = {
 
   $moduleId   : modId,
-  $isInline   : location.hostname != modId + '.gmodules.com',
   $nextId     : 0,
   $prefs      : new _IG_Prefs(modId),
   $prefix     : 'mod' + modId,
   $flash      : null,
   $storageId  : 'mod' + modId + 'JsConsoleStorage',
   $storageHdl : null,
+  $storage    : {},
   $textView   : null,
   $extraTabs  : null,
   $outputView : null,
@@ -951,10 +1108,11 @@ var Gadget = {
 
   init : function()
   {
-	this.$textView = new TextView();
-	this.$minimsg  = new _IG_MiniMessage(this.$moduleId);
+	this.$textView   = new TextView();
+	this.$minimsg    = new _IG_MiniMessage(this.$moduleId);
+	this.$storageHdl = new u.DelayCall(u.generateProxy(this, 'onStorageFlush'), 3000);
 
-	if(this.$prefs.getBool('sv'))
+	if(this.$prefs.getBool('sv') && !u.useOpenSocial)
 	{
 	  if(this.$prefs.getBool('sm'))
 	  {
@@ -1069,8 +1227,7 @@ var Gadget = {
 
   adjustHeight : function()
   {
-	if(!this.$isInline)
-	  _IG_AdjustIFrameHeight();
+	_IG_AdjustIFrameHeight();
   },
 
   generateId : function()
@@ -1130,36 +1287,58 @@ var Gadget = {
 
   onStorageReady : function()
   {
-	this.$flash = u.gel(Gadget.getPrefix('JsConsoleStorage'));
-	this.$flash.open(this.$storageId);
-	this.$storageHdl = new u.DelayCall(u.generateProxy(this, 'onStorageFlush'), 3000);
-	if(this.$textView)
-	  this.$textView.onStorageReady();
+	if(!u.useOpenSocial) {
+	  this.$flash = u.gel(Gadget.getPrefix('JsConsoleStorage'));
+	  this.$flash.open(this.$storageId);
+	  if(this.$textView) {
+		this.$textView.onStorageReady();
+	  }
+	}
   },
 
   onStorageFlush : function()
   {
-	if(this.$flash)
+	if(u.useOpenSocial) {
+	  var $storage = this.$storage;
+	  for(var i in $storage) {
+		SocialGoodies.DataRequest.storeAppData('VIEWER', i, $storage[i]);
+	  }
+	} else if(this.$flash) {
 	  this.$flash.flush();
+	}
   },
 
   storageSetData : function($name, $value)
   {
-	if(this.$storageHdl)
-	{
+	if(u.useOpenSocial) {
+	  this.$storage[$name] = $value;
+	  this.$storageHdl.invoke();
+	} else if(this.$flash) {
 	  this.$flash.setData($name, $value);
 	  this.$storageHdl.invoke();
 	}
   },
 
-  storageGetData : function($name)
+  storageGetData : function($name, $scope, $callback)
   {
-	return this.$flash ? this.$flash.getData($name) : null;
+	if(u.useOpenSocial) {
+	  SocialGoodies.DataRequest.fetchAppData('VIEWER', $name, {
+		escape   : 'none',
+		callback : function($data) {
+		  for(var i in $data) {
+			$callback.call($scope, $name, $data[i][$name]);
+			break;
+		  }
+		}
+	  });
+	} else if(this.$flash) {
+	  $callback.call($scope, $name, this.$flash.getData($name));
+	}
   },
 
   storageIsOk : function()
   {
-	return this.$flash ? this.$flash.isOk() : false;
+	return this.$flash ? this.$flash.isOk() : u.useOpenSocial;
   }
 
 };

@@ -1,13 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <Module>
   <ModulePrefs
-<% if target == 'normal' %>
 	 title="JavaScript Console"
 	 directory_title="JavaScript Console"
-<% else %>
-	 title="JavaScript Console (inline)"
-	 directory_title="JavaScript Console (inline)"
-<% end %>
 	 title_url="http://webos-goodies.jp/"
 	 description="__MSG_description__"
 	 scrolling="false"
@@ -20,24 +15,23 @@
 	 author_location="Tokyo, Japan"
 	 author_link="http://webos-goodies.jp/">
 	<Require feature="setprefs" />
-	<Require feature="dynamic-height" />
 	<Require feature="settitle" />
+	<Require feature="dynamic-height" />
 	<Require feature="tabs" />
 	<Require feature="drag" />
 	<Require feature="grid" />
 	<Require feature="minimessage" />
 	<Require feature="analytics" />
 	<Require feature="flash" />
+	<Require feature="views" />
+	<Require feature="skins" />
+	<Require feature="opensocial-0.8" />
 	<Locale messages="http://webos-goodies.googlecode.com/svn/trunk/products/google-gadgets/jsconsole/locale/ALL_ALL.xml" />
 	<Locale messages="http://webos-goodies.googlecode.com/svn/trunk/products/google-gadgets/jsconsole/locale/ja_ALL.xml" lang="ja" />
   </ModulePrefs>
   <UserPref name="pr" datatype="hidden" default_value="1" /><!-- Preference revision -->
   <UserPref name="sm" datatype="hidden" default_value="1" /><!-- Show message about Save Text -->
-<% if target == 'normal' %>
   <UserPref name="sv" display_name="__MSG_prf_sav__" datatype="bool"   required="true" default_value="0" />
-<% else %>
-  <UserPref name="sv" datatype="hidden" default_value="0" /><!-- Save Text feature is not available for inline version since there is no way to put a .swf file under www.google.com domain. -->
-<% end %>
   <UserPref name="fs" display_name="__MSG_prf_fon__" datatype="string" required="true" default_value="12" />
   <UserPref name="tr" display_name="__MSG_prf_txt__" datatype="string" required="true" default_value="15" />
   <UserPref name="or" display_name="__MSG_prf_out__" datatype="string" required="true" default_value="8" />
@@ -74,44 +68,29 @@
   </div>
 </div>
 
-<% if target == 'normal' %>
 <div style="font-size:10px;float:right;margin-top:4px;">
-  <a target="_blank" href="http://www.google.com/ig/add?synd=open&moduleurl=<%= $root %>/inline.xml">__MSG_inline__</a>
-  |
   <a target="_blank" href="http://groups.google.com/group/webos-goodies">__MSG_support__</a>
 </div>
-<% else %>
-<div style="font-size:10px;float:right;margin-top:4px;">
-  <a target="_blank" href="http://www.google.com/ig/add?synd=open&moduleurl=<%= $root %>/normal.xml">__MSG_iframe__</a>
-  |
-  <a target="_blank" href="http://groups.google.com/group/webos-goodies">__MSG_support__</a>
-</div>
-<% end %>
 
 <div id="mod__MODULE_ID__gadgetForm" style="display:none"></div>
 
 <script type="text/javascript">
 (function() {
-  if(_args()['webos-goodies'] != 'noinline') {
-    var modId = __MODULE_ID__;
-    // You can get an unpacked version of the following script at http://webos-goodies.googlecode.com/svn/trunk/products/google-gadgets/jsconsole/script.js
-    <%= jspack('script.js') %>
-<% if target == 'normal' %>
-    if(window.Components)
-      Gadget.init();
-    else
-      _IG_RegisterOnloadHandler(function(){ Gadget.init(); });
-<% else %>
+  var modId = __MODULE_ID__;
+  // You can get an unpacked version of the following script at http://webos-goodies.googlecode.com/svn/trunk/products/google-gadgets/jsconsole/script.js
+  <%= jspack('script.js') %>
+  if(window.Components) {
+    Gadget.init();
+  } else {
     _IG_RegisterOnloadHandler(function(){ Gadget.init(); });
-<% end %>
   }
+  window.useOpenSocial = u.useOpenSocial;
 })();
 </script>
 
-<% if target == 'normal' %>
 <div>
   <script type="text/javascript">
-    if(mod__MODULE_ID__Gadget.getPrefBool('saveText'))
+    if(mod__MODULE_ID__Gadget.getPrefBool('saveText') && !useOpenSocial)
     {
       document.open();
       if(window.ActiveXObject)
@@ -136,7 +115,8 @@
     }
   </script>
 </div>
-<% end %>
+
+<div style="clear:both;"></div>
 
     ]]>
   </Content>

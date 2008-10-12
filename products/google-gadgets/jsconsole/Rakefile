@@ -4,13 +4,13 @@ require 'erb'
 $KCODE = 'U'
 $root  = 'http://webos-goodies.googlecode.com/svn/trunk/products/google-gadgets/jsconsole'
 
-TARGETS = ['normal.xml', 'inline.xml']
+TARGETS = ['normal.xml']
 CLOBBER.include(TARGETS)
 
 task :default => TARGETS
-task :local => [:sourcewalker, TARGETS].flatten
-task :sourcewalker do
-  $root = 'http://public.sourcewalker.com/jsconsole'
+task :lab => [:lab_webos_goodies_jp, TARGETS].flatten
+task :lab_webos_goodies_jp do
+  $root = 'http://lab.webos-goodies.jp/jsconsole'
 end
 
 def jspack(fname)
