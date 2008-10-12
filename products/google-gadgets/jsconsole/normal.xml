@@ -41,6 +41,9 @@
   <UserPref name="u2" display_name="__MSG_prf_usr__ 2" datatype="string" />
   <UserPref name="u3" display_name="__MSG_prf_usr__ 3" datatype="string" />
   <UserPref name="u4" display_name="__MSG_prf_usr__ 4" datatype="string" />
+
+  <UserPref name="n000" datatype="hidden" default_value="1" />
+
   <Content type="html">
 	<![CDATA[
 
@@ -63,16 +66,13 @@
 
 <div id="mod__MODULE_ID__gadgetframe" style="display:none;">
   <div id="mod__MODULE_ID__gadgetmsg" style="font-size:__UP_fs__px;">__MSG_msg_gad__</div>
-  <div id="mod__MODULE_ID__gadgetborder" style="border:1px dotted #676767;margin:0px auto;overflow:auto;display:none;">
-	<iframe id="mod__MODULE_ID__gadgetpreview" name="mod__MODULE_ID__gadgetpreview" frameborder='0'></iframe>
-  </div>
+  <div id="mod__MODULE_ID__gadgetborder" style="border:1px dotted #676767;margin:0px auto;overflow:auto;display:none;"></div>
 </div>
 
 <div style="font-size:10px;float:right;margin-top:4px;">
+  <a target="_blank" href="http://webos-goodies.jp/">__MSG_blog__</a> |
   <a target="_blank" href="http://groups.google.com/group/webos-goodies">__MSG_support__</a>
 </div>
-
-<div id="mod__MODULE_ID__gadgetForm" style="display:none"></div>
 
 <script type="text/javascript">
 (function() {
@@ -85,9 +85,7 @@ $args[$args.length]=arguments[i];return function(){$method.apply($self,$args)};}
 {return document.createElement(tag);};u.nfg=function()
 {return document.createDocumentFragment();};u.gel=function(id)
 {return document.getElementById(id);};u.gtx=function($element_or_id)
-{var $el=u.isString($element_or_id)?u.gel($element_or_id):$element_or_id;if($el.textContent)
-return String($el.textContent);else
-return String($el.innerText);};u.hesc=function(a)
+{var $el=u.isString($element_or_id)?u.gel($element_or_id):$element_or_id;return $el.textContent!==undefined?$el.textContent:$el.innerText;};u.hesc=function(a)
 {a=a.replace(/&/g,'&amp;');a=a.replace(/</g,'&lt;').replace(/>/g,'&gt;');a=a.replace(/\"/g,'&quot;').replace(/\'/g,'&#39;');return a;};u.esc=function(a)
 {return(window.encodeURIComponent?encodeURIComponent(a):escape(a)).replace(/\%20/g,'+');};u.unesc=function(a)
 {a=a.replace(/\+/g,'%20');return window.decodeURIComponent?decodeURIComponent(a):unescape(a);};u.DomBuilder=function()
@@ -135,9 +133,14 @@ function sendDataRequest()
 record.callback.call(record.scope,data,error);}}}else{var error=new DataRequest.Error('',response.getErrorMessage(),true);for(var i=0,l=records.length;i<l;++i){var record=records[i];if(typeof response.callback=='function'){record.callback.call(record.scope,null,error);}}}});}}
 return{DataRequest:DataRequest};})();u.DelayCall=function($callback,$interval)
 {this.$callback=$callback;this.$interval=$interval;this.$timerId=null;};u.DelayCall.prototype={invoke:function()
-{if(u.isNull(this.$timerId))clearTimeout(this.$timerId);this.$timerId=setTimeout(this.$callback,this.$interval);}};function GadgetScratchPad(preview,formContainer,option)
-{option=option||{};this.preview=preview;this.formContainer=formContainer;this.form=document.createElement('FORM');this.textarea=document.createElement('TEXTAREA');this.defaultTitle=option['title']||'no title';this.defaultWidth=parseInt(option['width']||320,10);this.defaultHeight=parseInt(option['height']||200,10);this.title=this.defaultTitle;this.width=this.defaultWidth;this.height=this.defaultHeight;this.textarea.name='rawxml';this.form.method='POST';this.form.target=this.preview.name;this.form.appendChild(this.textarea);this.formContainer.appendChild(this.form);this.preview.style.width=this.width+'px';this.preview.style.height=this.height+'px';};GadgetScratchPad.prototype={updatePreview:function(spec)
-{var prefs=spec.substring(0,spec.search(/<(?:UserPref|Content)/));this.title=(prefs.match(/title="([^\u0022]*)"/))?RegExp.$1:this.defaultTitle;this.width=(prefs.match(/width="(\d+)"/))?parseInt(RegExp.$1,10):this.defaultWidth;this.height=(prefs.match(/height="(\d+)"/))?parseInt(RegExp.$1,10):this.defaultHeight;this.preview.style.width=this.width+'px';this.preview.style.height=this.height+'px';this.textarea.value=spec;this.form.action=["http://www.gmodules.com/ig/ifr?","title="+_esc(this.title).replace(/%20/g,"+"),"w="+this.width,"h="+this.height,"synd=open","nocache=1","output=html"].join("&");this.form.submit();},getPreviewIFrame:function(){return this.preview;},getTitle:function(){return this.title;},getWidth:function(){return this.width;},getHeight:function(){return this.height;},getDefaultTitle:function(){return this.defaultTitle;},getDefaultWidth:function(){return this.defaultWidth;},getDefaultHeight:function(){return this.defaultHeight;}};function TextView()
+{if(u.isNull(this.$timerId))clearTimeout(this.$timerId);this.$timerId=setTimeout(this.$callback,this.$interval);}};function GadgetPreview(previewFrame,option){var self=this;option=option||{};previewFrame=(typeof previewFrame=='string'?document.getElementById(previewFrame):previewFrame);var previewName=option['previewName']||'gadgetPreview',defaultTitle=option['title']||'no title',defaultWidth=parseInt(option['width']||320,10),defaultHeight=parseInt(option['height']||200,10),title=defaultTitle,width=defaultWidth,height=defaultHeight;var div=document.createElement('DIV'),form=document.createElement('FORM'),textarea=document.createElement('TEXTAREA');textarea.name='rawxml';form.method='POST';div.style.display='none';form.appendChild(textarea);div.appendChild(form);document.body.appendChild(div);function htmlUnescape(html)
+{html=html.replace(/</g,'&lt;').replace(/>/g,'&gt;');html=html.replace(/\"/g,'&quot;').replace(/\'/g,'&#39;');var div=document.createElement('DIV');div.innerHTML=html;return div.textContent!==undefined?div.textContent:div.innerText;}
+self.update=function(spec)
+{var self=this;var prefs=spec.substring(0,spec.search(/<(?:UserPref|Content)/));title=prefs.match(/title="([^\u0022]*)"/)?htmlUnescape(RegExp.$1):defaultTitle;width=prefs.match(/width="(\d+)"/)?parseInt(RegExp.$1,10):defaultWidth;height=prefs.match(/height="(\d+)"/)?parseInt(RegExp.$1,10):defaultHeight;try{delete window.frames[previewName];}catch(e){}
+previewFrame.innerHTML=['<iframe id="'+previewName+'" name="'+previewName+'"','src="about:blank" frameborder=0','width='+width,'height='+height,,'></iframe>'].join(' ')
+textarea.value=spec;form.action=["http://www.gmodules.com/ig/ifr?","title="+_esc(title).replace(/%20/g,"+"),"w="+width,"h="+height,"synd=open","nocache=1","output=html"].join("&");form.target=previewName;form.submit();};self.getTitle=function(){return title;},self.getWidth=function(){return width;},self.getHeight=function(){return height;},self.getDefaultTitle=function(){return defaultTitle;},self.getDefaultWidth=function(){return defaultWidth;},self.getDefaultHeight=function(){return defaultHeight;}
+self=null;}
+function TextView()
 {this.$tabs=new _IG_Tabs(Gadget.getModuleId());this.$numTexts=5;this.$doms=null;var $tree=[];var $textStyle='width:100%;'+'height:'+parseInt(Gadget.getPrefValue('textRows'),10)+'em;'+'font-size:'+parseInt(Gadget.getPrefValue('fontSize'),10)+'px;';for(var i=1;i<=this.$numTexts;++i)
 {$tree.push({tag:'DIV',index:'tab'+i,id:Gadget.generateId(),cn:[{tag:'TEXTAREA',index:'text'+i,id:Gadget.generateId(),wrap:'off',style:$textStyle}]});}
 var $builder=new u.DomBuilder();$builder.build($tree);this.$doms=$builder.getElements();this.$tabs.alignTabs('left');for(var i=1;i<=this.$numTexts;++i)
@@ -185,13 +188,13 @@ GadgetView.prototype={$initSettingTab:function()
 {var $tableStyle='width:98%;margin:0px;';var $labelStyle='width:10%; text-align:right; font-size:12px; overflow:hidden;';var $formStyle1='width:89%;';var $formStyle2='width:39%;';var $tboxStyle='width:100%;font-size:12px;'
 var $selStyle='width:100%;font-size:12px;'
 var $builder=new u.DomBuilder();$builder.build({tag:'DIV',index:'frame',cn:{tag:'TABLE',style:$tableStyle,cn:{tag:'TBODY',cn:[{tag:'TR',cn:[{tag:'TD',style:$labelStyle,html:Gadget.getMsg('gad_ttl')},{tag:'TD',colSpan:'3',style:$formStyle1,cn:{tag:'INPUT',index:'title',type:'text',style:$tboxStyle}}]},{tag:'TR',cn:[{tag:'TD',style:$labelStyle,html:Gadget.getMsg('gad_wdt')},{tag:'TD',style:$formStyle2,cn:{tag:'INPUT',index:'width',type:'text',style:$tboxStyle}},{tag:'TD',style:$labelStyle,html:Gadget.getMsg('gad_hgt')},{tag:'TD',style:$formStyle2,cn:{tag:'INPUT',index:'height',type:'text',style:$tboxStyle}}]},{tag:'TR',cn:[{tag:'TD',style:$labelStyle,html:Gadget.getMsg('gad_htm')},{tag:'TD',style:$formStyle2,cn:{tag:'SELECT',index:'html',style:$selStyle,cn:[{tag:'OPTION',value:'1',html:Gadget.getMsg('tab')+' 1'},{tag:'OPTION',value:'2',html:Gadget.getMsg('tab')+' 2'},{tag:'OPTION',value:'3',html:Gadget.getMsg('tab')+' 3'},{tag:'OPTION',value:'4',html:Gadget.getMsg('tab')+' 4'},{tag:'OPTION',value:'5',html:Gadget.getMsg('tab')+' 5'}]}},{tag:'TD',style:$labelStyle,html:Gadget.getMsg('gad_scp')},{tag:'TD',style:$formStyle2,cn:{tag:'SELECT',index:'script',style:$selStyle,cn:[{tag:'OPTION',value:'0',html:'----'},{tag:'OPTION',value:'1',html:Gadget.getMsg('tab')+' 1'},{tag:'OPTION',value:'2',html:Gadget.getMsg('tab')+' 2'},{tag:'OPTION',value:'3',html:Gadget.getMsg('tab')+' 3'},{tag:'OPTION',value:'4',html:Gadget.getMsg('tab')+' 4'},{tag:'OPTION',value:'5',html:Gadget.getMsg('tab')+' 5'}]}}]}]}}});this.$settingDoms=$builder.getElements();this.$tabs.addTab(Gadget.getMsg('tab_set'),{contentContainer:this.$settingDoms.frame,callback:u.generateHandler(this,'$onChangeTab')});},$initPreviewTab:function()
-{this.$previewDoms={frame:_gel(Gadget.getPrefix('gadgetframe')),msg:_gel(Gadget.getPrefix('gadgetmsg')),border:_gel(Gadget.getPrefix('gadgetborder')),preview:_gel(Gadget.getPrefix('gadgetpreview'))};this.$tabs.addTab(Gadget.getMsg('tab_prv'),{contentContainer:this.$previewDoms.frame,callback:u.generateHandler(this,'$onChangeTab')});this.$gadget=new GadgetScratchPad(this.$previewDoms.preview,_gel(Gadget.getPrefix('gadgetForm')),{'height':parseInt(Gadget.getPrefValue('maxGadgetHeight'),10)});},$initSourceTab:function()
+{this.$previewDoms={frame:_gel(Gadget.getPrefix('gadgetframe')),msg:_gel(Gadget.getPrefix('gadgetmsg')),border:_gel(Gadget.getPrefix('gadgetborder'))};this.$tabs.addTab(Gadget.getMsg('tab_prv'),{contentContainer:this.$previewDoms.frame,callback:u.generateHandler(this,'$onChangeTab')});this.$gadget=new GadgetPreview(this.$previewDoms.border,{'height':parseInt(Gadget.getPrefValue('maxGadgetHeight'),10)});},$initSourceTab:function()
 {var $textStyle={width:'100%',height:'10em',fontSize:parseInt(Gadget.getPrefValue('fontSize'),10)+'px'};var $builder=new u.DomBuilder();$builder.build({tag:'DIV',index:'frame',cn:{tag:'TEXTAREA',index:'source',style:$textStyle,readonly:'true'}});this.$sourceDoms=$builder.getElements();this.$tabs.addTab(Gadget.getMsg('tab_src'),{contentContainer:this.$sourceDoms.frame,callback:u.generateHandler(this,'$onChangeTab')});},$onGenerate:function()
 {var title=this.$settingDoms.title.value;var width=parseInt(this.$settingDoms.width.value,10);var height=parseInt(this.$settingDoms.height.value,10);var html=Gadget.getText(this.$settingDoms.html.value);var script=Gadget.getText(this.$settingDoms.script.value);if(title){title='\n      title="'+u.hesc(title)+'"';}else{title='';}
 if(width){width='\n      width="'+width+'"';}else{width='';}
 if(height){height='\n      height="'+height+'"';}else{height='';}
 if(script)
-script='<scr'+'ipt type="text/javascript">\n'+script+'\n</scr'+'ipt>';var text=['<?xml version="1.0" encoding="UTF-8" ?>','<Module>','  <ModulePrefs'+title+width+height+'>','    <Require feature="setprefs" />','    <Require feature="settitle" />','    <Require feature="dynamic-height" />','    <Require feature="tabs" />','    <Require feature="drag" />','    <Require feature="grid" />','    <Require feature="minimessage" />','    <Require feature="analytics" />','    <Require feature="flash" />','  </ModulePrefs>','  <Content type="html">','    <!['+'CDATA[',html,script,'    ]'+']>','  </Content>','</Module>'].join('\n');this.$sourceDoms.source.value=text;this.$previewDoms.msg.style.display='none';this.$previewDoms.border.style.display='block';this.$gadget.updatePreview(text);this.$centeringPreview();Gadget.adjustHeight();},$onChangeTab:function($tabId)
+script='<scr'+'ipt type="text/javascript">\n'+script+'\n</scr'+'ipt>';var text=['<?xml version="1.0" encoding="UTF-8" ?>','<Module>','  <ModulePrefs'+title+width+height+'>','    <Require feature="setprefs" />','    <Require feature="settitle" />','    <Require feature="dynamic-height" />','    <Require feature="tabs" />','    <Require feature="drag" />','    <Require feature="grid" />','    <Require feature="minimessage" />','    <Require feature="analytics" />','    <Require feature="flash" />','  </ModulePrefs>','  <Content type="html">','    <!['+'CDATA[',html,script,'    ]'+']>','  </Content>','</Module>'].join('\n');this.$sourceDoms.source.value=text;this.$previewDoms.msg.style.display='none';this.$previewDoms.border.style.display='block';this.$gadget.update(text);this.$centeringPreview();Gadget.adjustHeight();},$onChangeTab:function($tabId)
 {if(this.$previewDoms&&this.$previewDoms.frame.id==$tabId)
 this.$centeringPreview();Gadget.adjustHeight();},$centeringPreview:function()
 {var $border=this.$previewDoms.border;var $maxWidth=$border.parentNode.offsetWidth;var $maxHeight=this.$gadget.getDefaultHeight();if($maxWidth>0)
@@ -243,6 +246,7 @@ JSConsole.prototype={log:function($text)
 {var $msg=this.getMsg('msg_sav').replace(/_\_MODULE_ID__/,this.$moduleId).replace(/^\s+|\s+$/,'');this.$minimsg.createDismissibleMessage($msg,u.generateHandler(this,'$onSaveWarningDismissed'));}}
 else if(!this.$prefs.getBool('sm'))
 {this.$prefs.set('sm',1);}
+if(/synd=ig/.test(document.location)){for(var i=0;i<=0;++i){var prefs=this.$prefs;var index=('00'+i).substr(-3);var msg=(this.getMsg('notification'+index)||'').replace(/_\_MODULE_ID__/,this.$moduleId);if(msg&&prefs.getBool('n'+index)){this.$minimsg.createDismissibleMessage(msg,function(){prefs.set('n'+index,'0');setTimeout(function(){_IG_AdjustIFrameHeight();},0);return true;});}}}
 this.$initExtraViews();this.$initButtons();this.adjustHeight();},$initButtons:function()
 {var $builder=new u.DomBuilder();var $container=u.gel(this.$prefix+'buttons');$container.style.margin='4px 0px';var $style={marginRight:'8px'};$builder.build($container,[{tag:'DIV',style:'float:right',cn:[{tag:'INPUT',index:'clr',type:'button',value:this.getMsg('btn_clr')}]},{tag:'DIV',cn:[{tag:'INPUT',index:'run',type:'button',value:this.getMsg('btn_run'),style:$style},{tag:'INPUT',index:'htm',type:'button',value:this.getMsg('btn_htm'),style:$style}]}]);var $self=this;$builder.getEl('run').onclick=u.generateHandler(this,'$onRunAsScript');$builder.getEl('htm').onclick=u.generateHandler(this,'$onReplaceHTML');$builder.getEl('clr').onclick=u.generateHandler(this,'$onClearText');},$initExtraViews:function()
 {this.$extraTabs=new _IG_Tabs(this.$moduleId,0,u.gel(this.$prefix+'extraview'));this.$outputView=new OutputView();this.$logView=new LogView();this.$htmlView=new HtmlView();this.$gadgetView=new GadgetView();this.$toolsView=new ToolsView();this.$extraTabs.alignTabs('left');var $views=[this.$outputView,this.$logView,this.$htmlView,this.$gadgetView,this.$toolsView];for(var i=0;i<$views.length;++i)

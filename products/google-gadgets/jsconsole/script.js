@@ -54,10 +54,7 @@ u.gel = function(id)
 u.gtx = function($element_or_id)
 {
   var $el = u.isString($element_or_id) ? u.gel($element_or_id) : $element_or_id;
-  if($el.textContent)
-	return String($el.textContent);
-  else
-	return String($el.innerText);
+  return $el.textContent !== undefined ? $el.textContent : $el.innerText;
 };
 
 
@@ -361,68 +358,82 @@ u.DelayCall.prototype = {
 
 
 //--------------------------------------------------------------------
-// GadgetScratchPad
+// GadgetPreview
 
-function GadgetScratchPad(preview, formContainer, option)
-{
-  option = option || {};
+function GadgetPreview(previewFrame, option) {
+  var self      = this;
+  option        = option || {};
+  previewFrame  = (typeof previewFrame == 'string' ?
+				   document.getElementById(previewFrame) : previewFrame);
 
-  this.preview       = preview;
-  this.formContainer = formContainer;
-  this.form          = document.createElement('FORM');
-  this.textarea      = document.createElement('TEXTAREA');
-  this.defaultTitle  = option['title'] || 'no title';
-  this.defaultWidth  = parseInt(option['width'] || 320, 10);
-  this.defaultHeight = parseInt(option['height'] || 200, 10);
-  this.title         = this.defaultTitle;
-  this.width         = this.defaultWidth;
-  this.height        = this.defaultHeight;
+  var previewName   = option['previewName'] || 'gadgetPreview',
+	  defaultTitle  = option['title'] || 'no title',
+	  defaultWidth  = parseInt(option['width'] || 320, 10),
+	  defaultHeight = parseInt(option['height'] || 200, 10),
+	  title         = defaultTitle,
+	  width         = defaultWidth,
+	  height        = defaultHeight;
 
-  this.textarea.name = 'rawxml';
-  this.form.method   = 'POST';
-  this.form.target   = this.preview.name;
-  this.form.appendChild(this.textarea);
-  this.formContainer.appendChild(this.form);
+  var div      = document.createElement('DIV'),
+	  form     = document.createElement('FORM'),
+	  textarea = document.createElement('TEXTAREA');
+  textarea.name     = 'rawxml';
+  form.method       = 'POST';
+  div.style.display = 'none';
+  form.appendChild(textarea);
+  div.appendChild(form);
+  document.body.appendChild(div);
 
-  this.preview.style.width  = this.width  + 'px';
-  this.preview.style.height = this.height + 'px';
-};
-
-GadgetScratchPad.prototype = {
-
-  updatePreview : function(spec)
+  function htmlUnescape(html)
   {
-	var prefs  = spec.substring(0, spec.search(/<(?:UserPref|Content)/));
+	html = html.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+	html = html.replace(/\"/g, '&quot;').replace(/\'/g, '&#39;');
+	var div = document.createElement('DIV');
+	div.innerHTML = html;
+	return div.textContent !== undefined ? div.textContent : div.innerText;
+  }
 
-	this.title  = (prefs.match(/title="([^\u0022]*)"/)) ? RegExp.$1 : this.defaultTitle;
-	this.width  = (prefs.match(/width="(\d+)"/))   ? parseInt(RegExp.$1, 10) : this.defaultWidth;
-	this.height = (prefs.match(/height="(\d+)"/))  ? parseInt(RegExp.$1, 10) : this.defaultHeight;
+  self.update = function(spec)
+  {
+	var self  = this;
+	var prefs = spec.substring(0, spec.search(/<(?:UserPref|Content)/));
 
-	this.preview.style.width  = this.width  + 'px';
-	this.preview.style.height = this.height + 'px';
+	title  = prefs.match(/title="([^\u0022]*)"/) ? htmlUnescape(RegExp.$1) : defaultTitle;
+	width  = prefs.match(/width="(\d+)"/)   ? parseInt(RegExp.$1, 10) : defaultWidth;
+	height = prefs.match(/height="(\d+)"/)  ? parseInt(RegExp.$1, 10) : defaultHeight;
 
-	this.textarea.value = spec;
+	try { delete window.frames[previewName]; } catch(e) {}
 
-	this.form.action = [
+	previewFrame.innerHTML = [
+	  '<iframe id="' + previewName + '" name="' + previewName + '"',
+	  'src="about:blank" frameborder=0',
+	  'width=' + width,
+	  'height=' + height,
+	  ,'></iframe>'].join(' ')
+
+	textarea.value = spec;
+
+	form.action = [
 		"http://www.gmodules.com/ig/ifr?",
-		"title=" + _esc(this.title).replace(/%20/g, "+"),
-		"w=" + this.width,
-		"h=" + this.height,
+		"title=" + _esc(title).replace(/%20/g, "+"),
+		"w=" + width,
+		"h=" + height,
 		"synd=open",
 		"nocache=1",
 		"output=html"].join("&");
-	this.form.submit();
-},
+	form.target = previewName;
+	form.submit();
+  };
 
-getPreviewIFrame : function() { return this.preview; },
-getTitle  : function() { return this.title; },
-getWidth  : function() { return this.width; },
-getHeight : function() { return this.height; },
-getDefaultTitle  : function() { return this.defaultTitle; },
-getDefaultWidth  : function() { return this.defaultWidth; },
-getDefaultHeight : function() { return this.defaultHeight; }
+  self.getTitle         = function() { return title; },
+  self.getWidth         = function() { return width; },
+  self.getHeight        = function() { return height; },
+  self.getDefaultTitle  = function() { return defaultTitle; },
+  self.getDefaultWidth  = function() { return defaultWidth; },
+  self.getDefaultHeight = function() { return defaultHeight; }
 
-};
+  self = null;
+}
 
 
 //--------------------------------------------------------------------
@@ -757,16 +768,14 @@ GadgetView.prototype = {
 	this.$previewDoms = {
 	  frame:   _gel(Gadget.getPrefix('gadgetframe')),
 	  msg:     _gel(Gadget.getPrefix('gadgetmsg')),
-	  border:  _gel(Gadget.getPrefix('gadgetborder')),
-	  preview: _gel(Gadget.getPrefix('gadgetpreview'))
+	  border:  _gel(Gadget.getPrefix('gadgetborder'))
 	};
 	this.$tabs.addTab(Gadget.getMsg('tab_prv'), {
 	  contentContainer : this.$previewDoms.frame,
 	  callback         : u.generateHandler(this, '$onChangeTab') });
 
-	this.$gadget = new GadgetScratchPad(
-	  this.$previewDoms.preview,
-	  _gel(Gadget.getPrefix('gadgetForm')),
+	this.$gadget = new GadgetPreview(
+	  this.$previewDoms.border,
 	  { 'height' : parseInt(Gadget.getPrefValue('maxGadgetHeight'), 10) });
   },
 
@@ -826,7 +835,7 @@ GadgetView.prototype = {
 	this.$previewDoms.msg.style.display    = 'none';
 	this.$previewDoms.border.style.display = 'block';
 
-	this.$gadget.updatePreview(text);
+	this.$gadget.update(text);
 
 	this.$centeringPreview();
 	Gadget.adjustHeight();
@@ -1123,6 +1132,21 @@ var Gadget = {
 	else if(!this.$prefs.getBool('sm'))
 	{
 	  this.$prefs.set('sm', 1);
+	}
+
+	if(/synd=ig/.test(document.location)) {
+	  for(var i = 0 ; i <= 0 ; ++i) {
+		var prefs = this.$prefs;
+		var index = ('00' + i).substr(-3);
+		var msg   = (this.getMsg('notification' + index)||'').replace(/_\_MODULE_ID__/, this.$moduleId);
+		if(msg && prefs.getBool('n' + index)) {
+		  this.$minimsg.createDismissibleMessage(msg, function() {
+			prefs.set('n' + index, '0');
+			setTimeout(function() { _IG_AdjustIFrameHeight(); }, 0);
+			return true;
+		  });
+		}
+	  }
 	}
 
 	this.$initExtraViews();

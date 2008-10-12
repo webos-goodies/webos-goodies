@@ -37,15 +37,12 @@
   <msg name="msg_gad">「ガジェットを生成」ボタンを押すと、「設定」タブで指定したHTMLとスクリプト（省略可）を基にしてGoogle Universalガジェットを生成し、ここに表示します。</msg>
 
   <msg name="tab">タブ</msg>
-  <msg name="inline">インラインバージョン</msg>
-  <msg name="iframe">IFrame バージョン</msg>
+  <msg name="blog">ブログ</msg>
   <msg name="support">サポートはこちら</msg>
 
   <msg name="minimessage_style">font-size:10px;font-weight:normal;line-height:1.3;</msg>
-  <msg name="msg_sav">
-  <![CDATA[
-このガジェットを削除したときは、<a href="http://www.macromedia.com/support/documentation/jp/flashplayer/help/settings_manager07.html" target="_blank">このページ</a>で __MODULE_ID__.gmodules.com を削除してください。
-そうしないと保存したテキストが別のガジェットに盗まれる可能性があります。
-  ]]></msg>
+  <msg name="msg_sav"><![CDATA[このガジェットを削除したときは、<a href="http://www.macromedia.com/support/documentation/jp/flashplayer/help/settings_manager07.html" target="_blank">このページ</a>で __MODULE_ID__.gmodules.com を削除してください。そうしないと保存したテキストが別のガジェットに盗まれる可能性があります。]]></msg>
+
+  <msg name="notification000"><![CDATA[「テキストを保存」機能は削除される予定です。もし使用している場合は、テキストをバックアップして設定をオフにしておいてください。その後、<a href="http://www.macromedia.com/support/documentation/jp/flashplayer/help/settings_manager07.html" target="_blank">このページ</a>で __MODULE_ID__.gmodules.com を削除することをお勧めします。]]></msg>
 
 </messagebundle>

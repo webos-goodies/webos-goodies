@@ -26,8 +26,8 @@
 	<Require feature="views" />
 	<Require feature="skins" />
 	<Require feature="opensocial-0.8" />
-	<Locale messages="http://webos-goodies.googlecode.com/svn/trunk/products/google-gadgets/jsconsole/locale/ALL_ALL.xml" />
-	<Locale messages="http://webos-goodies.googlecode.com/svn/trunk/products/google-gadgets/jsconsole/locale/ja_ALL.xml" lang="ja" />
+	<Locale messages="<%= $root %>/locale/ALL_ALL.xml" />
+	<Locale messages="<%= $root %>/locale/ja_ALL.xml" lang="ja" />
   </ModulePrefs>
   <UserPref name="pr" datatype="hidden" default_value="1" /><!-- Preference revision -->
   <UserPref name="sm" datatype="hidden" default_value="1" /><!-- Show message about Save Text -->
@@ -41,7 +41,10 @@
   <UserPref name="u2" display_name="__MSG_prf_usr__ 2" datatype="string" />
   <UserPref name="u3" display_name="__MSG_prf_usr__ 3" datatype="string" />
   <UserPref name="u4" display_name="__MSG_prf_usr__ 4" datatype="string" />
-  <Content type="<%= target == 'normal' ? 'html' : 'html-inline' %>">
+
+  <UserPref name="n000" datatype="hidden" default_value="1" />
+
+  <Content type="html">
 	<![CDATA[
 
 <style type="text/css">
@@ -63,16 +66,13 @@
 
 <div id="mod__MODULE_ID__gadgetframe" style="display:none;">
   <div id="mod__MODULE_ID__gadgetmsg" style="font-size:__UP_fs__px;">__MSG_msg_gad__</div>
-  <div id="mod__MODULE_ID__gadgetborder" style="border:1px dotted #676767;margin:0px auto;overflow:auto;display:none;">
-	<iframe id="mod__MODULE_ID__gadgetpreview" name="mod__MODULE_ID__gadgetpreview" frameborder='0'></iframe>
-  </div>
+  <div id="mod__MODULE_ID__gadgetborder" style="border:1px dotted #676767;margin:0px auto;overflow:auto;display:none;"></div>
 </div>
 
 <div style="font-size:10px;float:right;margin-top:4px;">
+  <a target="_blank" href="http://webos-goodies.jp/">__MSG_blog__</a> |
   <a target="_blank" href="http://groups.google.com/group/webos-goodies">__MSG_support__</a>
 </div>
-
-<div id="mod__MODULE_ID__gadgetForm" style="display:none"></div>
 
 <script type="text/javascript">
 (function() {
