@@ -7,7 +7,7 @@
 
 <body style="margin:0px; padding:0px;">
 
-<textarea id="demoGadgetSource" style="width: 450px; height: 20em;" wrap="off">
+<textarea id="demoGadgetSource" style="width: 450px; height: 20em; font-size: 12px;" wrap="off">
 &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt; 
 &lt;Module&gt;
   &lt;ModulePrefs title=&quot;@nifty 翻訳&quot; height=&quot;150&quot; /&gt;
@@ -16,7 +16,7 @@
       &lt;form action=&quot;http://nifty.amikai.com/amitext/indexUTF8.jsp&quot;
             method=&quot;post&quot; target=&quot;_blank&quot; style=&quot;width:100%&quot;&gt;
         &lt;div style=&quot;width:100%;&quot;&gt;
-          &lt;textarea name=&quot;sourceText&quot; rows=&quot;5&quot; wrap=&quot;virtual&quot; style=&quot;width:100%&quot;&gt;&lt;/textarea&gt;
+          &lt;textarea name=&quot;sourceText&quot; rows=&quot;5&quot; wrap=&quot;virtual&quot; style=&quot;width:100%; font-size:12px;&quot;&gt;&lt;/textarea&gt;
         &lt;/div&gt;
         &lt;input type=&quot;radio&quot; name=&quot;langpair&quot; value=&quot;EN,JA&quot; checked=&quot;1&quot;&gt;英→日&lt;/input&gt;
         &lt;input type=&quot;radio&quot; name=&quot;langpair&quot; value=&quot;JA,EN&quot;&gt;日→英&lt;/input&gt;
@@ -47,8 +47,8 @@ var GadgetPreview = (function() {
   {
 	html = html.replace(/</g, '&lt;').replace(/>/g, '&gt;');
 	html = html.replace(/\"/g, '&quot;').replace(/\'/g, '&#39;');
-	var div = nel('DIV');
-	div.innerHTML = html;
+	var div = nel('div');
+	div.innerHTML = '<pre>' + html + '</pre>';
 	return div.textContent !== undefined ? div.textContent : div.innerText;
   }
 
