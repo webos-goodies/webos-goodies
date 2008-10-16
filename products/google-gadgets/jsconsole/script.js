@@ -360,81 +360,98 @@ u.DelayCall.prototype = {
 //--------------------------------------------------------------------
 // GadgetPreview
 
-function GadgetPreview(previewFrame, option) {
-  var self      = this;
-  option        = option || {};
-  previewFrame  = (typeof previewFrame == 'string' ?
-				   document.getElementById(previewFrame) : previewFrame);
+var GadgetPreview = (function() {
 
-  var previewName   = option['previewName'] || 'gadgetPreview',
-	  defaultTitle  = option['title'] || 'no title',
-	  defaultWidth  = parseInt(option['width'] || 320, 10),
-	  defaultHeight = parseInt(option['height'] || 200, 10),
-	  title         = defaultTitle,
-	  width         = defaultWidth,
-	  height        = defaultHeight;
+  var nextID = 0, form = null, textarea = null;
 
-  var div      = document.createElement('DIV'),
-	  form     = document.createElement('FORM'),
-	  textarea = document.createElement('TEXTAREA');
-  textarea.name     = 'rawxml';
-  form.method       = 'POST';
-  div.style.display = 'none';
-  form.appendChild(textarea);
-  div.appendChild(form);
-  document.body.appendChild(div);
+  function nel(tag)
+  {
+	return document.createElement(tag);
+  }
 
   function htmlUnescape(html)
   {
 	html = html.replace(/</g, '&lt;').replace(/>/g, '&gt;');
 	html = html.replace(/\"/g, '&quot;').replace(/\'/g, '&#39;');
-	var div = document.createElement('DIV');
-	div.innerHTML = html;
+	var div = nel('div');
+	div.innerHTML = '<pre>' + html + '</pre>';
 	return div.textContent !== undefined ? div.textContent : div.innerText;
   }
 
-  self.update = function(spec)
-  {
-	var self  = this;
-	var prefs = spec.substring(0, spec.search(/<(?:UserPref|Content)/));
+  function GadgetPreview(previewFrameId, option) {
+    if(!(this instanceof GadgetPreview)) {
+	  return new GadgetPreview(previewFrameId, option);
+	}
 
-	title  = prefs.match(/title="([^\u0022]*)"/) ? htmlUnescape(RegExp.$1) : defaultTitle;
-	width  = prefs.match(/width="(\d+)"/)   ? parseInt(RegExp.$1, 10) : defaultWidth;
-	height = prefs.match(/height="(\d+)"/)  ? parseInt(RegExp.$1, 10) : defaultHeight;
+	var self = this;
+	option   = option || {};
 
-	try { delete window.frames[previewName]; } catch(e) {}
+	var previewName   = option['previewName'] || 'gadgetPreview' + nextID++,
+	    defaultTitle  = option['title'] || 'no title',
+	    defaultWidth  = parseInt(option['width'] || 320, 10),
+	    defaultHeight = parseInt(option['height'] || 200, 10),
+	    title         = defaultTitle,
+	    width         = defaultWidth,
+	    height        = defaultHeight,
+	    border        = option['border'] ? 1 : 0;
 
-	previewFrame.innerHTML = [
-	  '<iframe id="' + previewName + '" name="' + previewName + '"',
-	  'src="about:blank" frameborder=0',
-	  'width=' + width,
-	  'height=' + height,
-	  ,'></iframe>'].join(' ')
+	if(!form) {
+	  var div  = nel('DIV');
+	  textarea = textarea || nel('TEXTAREA');
+	  form     = nel('FORM');
+	  textarea.name     = 'rawxml';
+	  form.method       = 'POST';
+	  div.style.display = 'none';
+	  form.appendChild(textarea);
+	  div.appendChild(form);
+	  document.body.appendChild(div);
+	}
 
-	textarea.value = spec;
+	self.update = function(spec)
+	{
+	  var self  = this;
+	  var prefs = spec.substring(0, spec.search(/<(?:UserPref|Content)/));
 
-	form.action = [
+	  title  = prefs.match(/title="([^\u0022]*)"/) ? htmlUnescape(RegExp.$1) : defaultTitle;
+	  width  = prefs.match(/width="(\d+)"/)   ? parseInt(RegExp.$1, 10) : defaultWidth;
+	  height = prefs.match(/height="(\d+)"/)  ? parseInt(RegExp.$1, 10) : defaultHeight;
+
+	  try { delete window.frames[previewName]; } catch(e) {}
+
+	  document.getElementById(previewFrameId).innerHTML = [
+		'<iframe id="' + previewName + '" name="' + previewName + '"',
+		'src="about:blank" frameborder=' + border,
+		'width=' + width,
+		'height=' + height,
+		,'></iframe>'].join(' ')
+
+	  textarea.value = spec;
+
+	  form.action = [
 		"http://www.gmodules.com/ig/ifr?",
-		"title=" + _esc(title).replace(/%20/g, "+"),
+		"title=" + (window.encodeURIComponent ? encodeURIComponent : escape)(title).replace(/%20/g, "+"),
 		"w=" + width,
 		"h=" + height,
 		"synd=open",
 		"nocache=1",
 		"output=html"].join("&");
-	form.target = previewName;
-	form.submit();
-  };
+	  form.target = previewName;
+	  form.submit();
+	};
 
-  self.getTitle         = function() { return title; },
-  self.getWidth         = function() { return width; },
-  self.getHeight        = function() { return height; },
-  self.getDefaultTitle  = function() { return defaultTitle; },
-  self.getDefaultWidth  = function() { return defaultWidth; },
-  self.getDefaultHeight = function() { return defaultHeight; }
+	self.getPreviewName   = function() { return previewName; };
+	self.getTitle         = function() { return title; };
+	self.getWidth         = function() { return width; };
+	self.getHeight        = function() { return height; };
+	self.getDefaultTitle  = function() { return defaultTitle; };
+	self.getDefaultWidth  = function() { return defaultWidth; };
+	self.getDefaultHeight = function() { return defaultHeight; };
 
-  self = null;
-}
+	self = null;
+  }
 
+  return GadgetPreview;
+})();
 
 //--------------------------------------------------------------------
 // Text editor
@@ -775,7 +792,7 @@ GadgetView.prototype = {
 	  callback         : u.generateHandler(this, '$onChangeTab') });
 
 	this.$gadget = new GadgetPreview(
-	  this.$previewDoms.border,
+	  this.$previewDoms.border.id,
 	  { 'height' : parseInt(Gadget.getPrefValue('maxGadgetHeight'), 10) });
   },
 
@@ -886,8 +903,8 @@ function toolHtmlUnescape()
   var $text = Gadget.getCurrentText();
   $text = $text.replace(/</g, '&lt;').replace(/>/g, '&gt;');
   $text = $text.replace(/\"/g, '&quot;').replace(/\'/g, '&#39;');
-  var $div = u.nel('DIV');
-  $div.innerHTML = $text;
+  var $div = u.nel('div');
+  $div.innerHTML = '<pre>' + $text + '</pre>';
   Gadget.setCurrentText(u.gtx($div));
 }
 
