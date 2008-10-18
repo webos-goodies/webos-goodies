@@ -1,67 +1,70 @@
-var u = {};
+var Gadget = (function() {
 
 //--------------------------------------------------------------------
 // Enviroment detection
 
-u.useLegacy     = !(window.gadgets && gadgets.views && gadgets.views.getCurrentView() !== undefined);
-u.useOpenSocial = !u.useLegacy && !!window.opensocial;
+var moduleId      = __MODULE_ID__;
+var useLegacy     = !(window.gadgets && gadgets.views && gadgets.views.getCurrentView() !== undefined);
+var useOpenSocial = !useLegacy && !!window.opensocial;
+
 
 //--------------------------------------------------------------------
 // type detection
 
-u.isNull     = function(obj) { return obj === null; };
-u.isFunction = function(obj) { return typeof obj === 'function'; };
-u.isString   = function(obj) { return typeof obj === 'string'; };
+function isNull(obj)     { return obj === null; };
+function isFunction(obj) { return typeof obj === 'function'; };
+function isString(obj)   { return typeof obj === 'string'; };
 
 
 //--------------------------------------------------------------------
 // Utilities
 
-u.generateHandler = function($self, $name)
+function generateHandler(self, name)
 {
-  var $method = $self[$name];
-  return function() { $method.apply($self, arguments) };
+  var method = self[name];
+  return function() { method.apply(self, arguments) };
 };
 
-u.generateProxy = function($self, $name)
+function generateProxy(self, name)
 {
-  var $method = $self[$name];
-  var $args   = [];
-  for(var i = 2 ; i < arguments.length ; ++i)
-	$args[$args.length] = arguments[i];
-  return function() { $method.apply($self, $args) };
+  var method = self[name];
+  var args   = [];
+  for(var i = 2 ; i < arguments.length ; ++i) {
+	args[args.length] = arguments[i];
+  }
+  return function() { method.apply(self, args) };
 };
 
 
 //--------------------------------------------------------------------
 // DOM handling
 
-u.nel = function(tag)
+function nel(tag)
 {
   return document.createElement(tag);
 };
 
-u.nfg = function()
+function nfg()
 {
   return document.createDocumentFragment();
 };
 
-u.gel = function(id)
+function gel(id)
 {
   return document.getElementById(id);
 };
 
-u.gtx = function($element_or_id)
+function gtx(element_or_id)
 {
-  var $el = u.isString($element_or_id) ? u.gel($element_or_id) : $element_or_id;
-  return $el.textContent !== undefined ? $el.textContent : $el.innerText;
+  var el = isString(element_or_id) ? gel(element_or_id) : element_or_id;
+  return el.textContent !== undefined ? el.textContent : el.innerText;
 };
 
 
 //--------------------------------------------------------------------
 // text operation
 
-u.hesc = function(a)
+function escapeHtml(a)
 {
   a = a.replace(/&/g, '&amp;');
   a = a.replace(/</g, '&lt;').replace(/>/g, '&gt;');
@@ -69,12 +72,12 @@ u.hesc = function(a)
   return a;
 };
 
-u.esc = function(a)
+function escapeUrl(a)
 {
   return (window.encodeURIComponent ? encodeURIComponent(a) : escape(a)).replace(/\%20/g, '+');
 };
 
-u.unesc = function (a)
+function unescapeUrl(a)
 {
   a = a.replace(/\+/g, '%20');
   return window.decodeURIComponent ? decodeURIComponent(a) : unescape(a);
@@ -84,12 +87,12 @@ u.unesc = function (a)
 //--------------------------------------------------------------------
 // DomBuilder
 
-u.DomBuilder = function()
+function DomBuilder()
 {
   this._nodes = {};
 };
 
-u.DomBuilder.prototype = {
+DomBuilder.prototype = {
 
   getEl : function(index)
   {
@@ -173,7 +176,7 @@ u.DomBuilder.prototype = {
 	}
 	else
 	{
-	  for(i in styles)
+	  for(var i in styles)
 	  {
 		if(typeof styles[i] === 'string')
 		  el.style[i] = styles[i];
@@ -339,19 +342,20 @@ SocialGoodies = (function() {
 //--------------------------------------------------------------------
 // DelayCall
 
-u.DelayCall = function($callback, $interval)
+function DelayCall(callback, interval)
 {
-  this.$callback = $callback;
-  this.$interval = $interval;
+  this.$callback = callback;
+  this.$interval = interval;
   this.$timerId  = null;
 };
 
-u.DelayCall.prototype = {
+DelayCall.prototype = {
 
   invoke : function()
   {
-	if(u.isNull(this.$timerId)) clearTimeout(this.$timerId);
-	this.$timerId = setTimeout(this.$callback, this.$interval);
+	var self = this;
+	if(isNull(self.$timerId)) clearTimeout(self.$timerId);
+	self.$timerId = setTimeout(self.$callback, self.$interval);
   }
 
 };
@@ -463,28 +467,28 @@ function TextView()
   this.$doms      = null;
 
   // create tab contents.
-  var $tree      = [];
-  var $textStyle =
+  var tree      = [];
+  var textStyle =
 	'width:100%;' +
 	'height:' + parseInt(Gadget.getPrefValue('textRows'), 10) + 'em;' +
 	'font-size:' + parseInt(Gadget.getPrefValue('fontSize'), 10) + 'px;';
   for(var i = 1 ; i <= this.$numTexts ; ++i)
   {
-	$tree.push({
+	tree.push({
 	  tag: 'DIV', index: 'tab' + i, id: Gadget.generateId(),	cn: [
-		{ tag: 'TEXTAREA', index: 'text' + i, id: Gadget.generateId(), wrap: 'off', style: $textStyle }
+		{ tag: 'TEXTAREA', index: 'text' + i, id: Gadget.generateId(), wrap: 'off', style: textStyle }
 	  ]
 	});
   }
-  var $builder = new u.DomBuilder();
-  $builder.build($tree);
-  this.$doms = $builder.getElements();
+  var builder = new DomBuilder();
+  builder.build(tree);
+  this.$doms = builder.getElements();
 
   this.$tabs.alignTabs('left');
   for(var i = 1 ; i <= this.$numTexts ; ++i)
   {
-	var $dom = this.$doms['text' + i];
-	$dom.onchange = u.generateProxy(this, '$onChange', i);
+	var dom = this.$doms['text' + i];
+	dom.onchange = generateProxy(this, '$onChange', i);
 	this.$tabs.addTab(i, {
 	  contentContainer : this.$doms['tab' + i] });
   }
@@ -494,10 +498,10 @@ function TextView()
 
 TextView.prototype = {
 
-  $getContent : function($index)
+  $getContent : function(index)
   {
-	var i = parseInt($index, 10);
-	return (0 < $index && $index <= this.$numTexts) ? this.$doms['text' + $index] : null;
+	var i = parseInt(index, 10);
+	return (0 < i && i <= this.$numTexts) ? this.$doms['text' + i] : null;
   },
 
   $getCurrentIndex : function()
@@ -505,17 +509,17 @@ TextView.prototype = {
 	return this.$tabs.getSelectedTab().getIndex() + 1;
   },
 
-  $onChange : function($index)
+  $onChange : function(index)
   {
-	this.$saveText($index);
+	this.$saveText(index);
   },
 
-  $saveText : function($index)
+  $saveText : function(index)
   {
-	if(0 < $index && $index <= this.$numTexts)
+	if(0 < index && index <= this.$numTexts)
 	{
-	  $index = 'text' + $index;
-	  Gadget.storageSetData($index, this.$doms[$index].value);
+	  index = 'text' + index;
+	  Gadget.storageSetData(index, this.$doms[index].value);
 	}
   },
 
@@ -525,42 +529,42 @@ TextView.prototype = {
 	{
 	  for(var i = 1 ; i <= this.$numTexts ; ++i)
 	  {
-		Gadget.storageGetData('text' + i, this, function($name, $value) {
-		  if($value) {
-			this.$doms[$name].value = $value;
+		Gadget.storageGetData('text' + i, this, function(name, value) {
+		  if(value) {
+			this.$doms[name].value = value;
 		  }
 		});
 	  }
 	}
   },
 
-  getText : function($index)
+  getText : function(index)
   {
-	var $content = this.$getContent($index);
-	return $content ? $content.value : '';
+	var content = this.$getContent(index);
+	return content ? content.value : '';
   },
 
   getCurrentText : function()
   {
-	var $current = this.$getContent(this.$getCurrentIndex());
-	return $current ? $current.value : '';
+	var current = this.$getContent(this.$getCurrentIndex());
+	return current ? current.value : '';
   },
 
-  setCurrentText : function($newText)
+  setCurrentText : function(newText)
   {
-	var $index   = this.$getCurrentIndex();
-	var $current = this.$getContent($index);
-	if($current)
-	  $current.value = $newText;
-	this.$saveText($index);
+	var index   = this.$getCurrentIndex();
+	var current = this.$getContent(index);
+	if(current)
+	  current.value = newText;
+	this.$saveText(index);
   },
 
   clearCurrentText : function()
   {
-	var $index   = this.$getCurrentIndex();
-	var $current = this.$getContent($index);
-	if($current) $current.value = '';
-	this.$saveText($index);
+	var index   = this.$getCurrentIndex();
+	var current = this.$getContent(index);
+	if(current) current.value = '';
+	this.$saveText(index);
   }
 
 };
@@ -571,7 +575,7 @@ TextView.prototype = {
 
 function OutputView()
 {
-  this.$frame = u.nel('DIV');
+  this.$frame = nel('DIV');
 
   this.$frame.id        = Gadget.generateId();
   this.$frame.className = Gadget.getPrefix('extraframe');
@@ -590,16 +594,16 @@ OutputView.prototype = {
 	return this.$frame;
   },
 
-  setText : function($text, $error)
+  setText : function(text, error)
   {
-	var $msg = typeof $text === 'undefined' ? Gadget.getMsg('msg_out') : u.hesc(String($text));
-	var $style =
+	var msg = typeof text === 'undefined' ? Gadget.getMsg('msg_out') : escapeHtml(String(text));
+	var style =
 	  'margin:0px; padding:0px; overflow:auto;' +
 	  'font-size:' + parseInt(Gadget.getPrefValue('fontSize'), 10) + 'px;' +
 	  'max-height:' + parseInt(Gadget.getPrefValue('maxOutputRows'), 10) + 'em;';
-	if($error)
-	  $style += 'background-color:#ffaaaa';
-	this.$frame.innerHTML = '<pre style="' + $style + '">' + $msg + '</pre>';
+	if(error)
+	  style += 'background-color:#ffaaaa';
+	this.$frame.innerHTML = '<pre style="' + style + '">' + msg + '</pre>';
   }
 
 }
@@ -612,22 +616,22 @@ function LogView()
 {
   this.$doms = null;
 
-  var $builder = new u.DomBuilder();
-  var $textStyle =
+  var builder = new DomBuilder();
+  var textStyle =
 	'width:100%;' +
 	'height:' + parseInt(Gadget.getPrefValue('logRows'), 10) + 'em;' +
 	'font-size:' + parseInt(Gadget.getPrefValue('fontSize'), 10) + 'px;';
-  $builder.build({
+  builder.build({
 	tag:'DIV', index:'frame', id:Gadget.generateId(), cn:[
 	  { tag:'DIV', cn:
-		{ tag:'TEXTAREA', index:'log', style:$textStyle, wrap:'off', readonly:'true' } },
+		{ tag:'TEXTAREA', index:'log', style:textStyle, wrap:'off', readonly:'true' } },
 	  { tag:'DIV', style:{ textAlign:'right', marginTop:'4px' }, cn:
 		{ tag:'INPUT', index:'clr', type:'button', value:Gadget.getMsg('btn_clr') } }
 	]
   });
-  this.$doms = $builder.getElements();
+  this.$doms = builder.getElements();
   this.$doms.log.value   = Gadget.getMsg('msg_log');
-  this.$doms.clr.onclick = u.generateHandler(this, '$onClear');
+  this.$doms.clr.onclick = generateHandler(this, '$onClear');
 }
 
 LogView.prototype = {
@@ -647,9 +651,9 @@ LogView.prototype = {
 	return this.$doms.frame;
   },
 
-  log : function($text)
+  log : function(text)
   {
-	this.$doms.log.value += $text;
+	this.$doms.log.value += text;
   }
 
 }
@@ -660,7 +664,7 @@ LogView.prototype = {
 
 function HtmlView()
 {
-  this.$frame = u.nel('DIV');
+  this.$frame = nel('DIV');
 
   this.$frame.id        = Gadget.generateId();
   this.$frame.className = Gadget.getPrefix('extraframe');
@@ -679,16 +683,16 @@ HtmlView.prototype = {
 	return this.$frame;
   },
 
-  setHTML : function($html)
+  setHTML : function(html)
   {
-	if(typeof $html === 'undefined')
+	if(typeof html === 'undefined')
 	{
-	  var $style = 'font-size:' + parseInt(Gadget.getPrefValue('fontSize'), 10) + 'px;';
-	  this.$frame.innerHTML = '<div style="' + $style + '">' + Gadget.getMsg('msg_htm') + '</div>';
+	  var style = 'font-size:' + parseInt(Gadget.getPrefValue('fontSize'), 10) + 'px;';
+	  this.$frame.innerHTML = '<div style="' + style + '">' + Gadget.getMsg('msg_htm') + '</div>';
 	}
 	else
 	{
-	  this.$frame.innerHTML = String($html);
+	  this.$frame.innerHTML = String(html);
 	}
   }
 
@@ -707,15 +711,15 @@ function GadgetView()
   this.$sourceDoms  = null;
   this.$gadget      = null;
 
-  var $builder = new u.DomBuilder();
-  $builder.build({
+  var builder = new DomBuilder();
+  builder.build({
 	tag:'DIV', index:'frame', id:Gadget.generateId(), cls:Gadget.getPrefix('extraframe'), style:{display:'none'}, cn:[
 	  { tag:'DIV', index:'tabs' },
 	  { tag:'DIV', style:{margin:'4px 0px', textAlign:'right'}, cn:[
 		{ tag:'INPUT', index:'generate', type:'button', value:Gadget.getMsg('btn_gad') } ] }
 	]
   });
-  this.$doms = $builder.getElements();
+  this.$doms = builder.getElements();
 
   this.$tabs = new _IG_Tabs(Gadget.getModuleId(), 0, this.$doms.tabs);
   this.$tabs.alignTabs('left');
@@ -723,37 +727,37 @@ function GadgetView()
   this.$initPreviewTab();
   this.$initSourceTab();
 
-  this.$doms.generate.onclick = u.generateHandler(this, '$onGenerate');
+  this.$doms.generate.onclick = generateHandler(this, '$onGenerate');
 }
 
 GadgetView.prototype = {
 
   $initSettingTab : function()
   {
-	var $tableStyle = 'width:98%;margin:0px;';
-	var $labelStyle = 'width:10%; text-align:right; font-size:12px; overflow:hidden;';
-	var $formStyle1 = 'width:89%;';
-	var $formStyle2 = 'width:39%;';
-	var $tboxStyle  = 'width:100%;font-size:12px;'
-	  var $selStyle   = 'width:100%;font-size:12px;'
+	var tableStyle = 'width:98%;margin:0px;';
+	var labelStyle = 'width:10%; text-align:right; font-size:12px; overflow:hidden;';
+	var formStyle1 = 'width:89%;';
+	var formStyle2 = 'width:39%;';
+	var tboxStyle  = 'width:100%;font-size:12px;';
+	var selStyle   = 'width:100%;font-size:12px;';
 
-	var $builder = new u.DomBuilder();
-	$builder.build({ tag:'DIV', index:'frame', cn:{ tag:'TABLE', style:$tableStyle, cn:{ tag:'TBODY', cn:[
+	var builder = new DomBuilder();
+	builder.build({ tag:'DIV', index:'frame', cn:{ tag:'TABLE', style:tableStyle, cn:{ tag:'TBODY', cn:[
 	  { tag:'TR', cn:[
-		{ tag:'TD', style:$labelStyle, html:Gadget.getMsg('gad_ttl') },
-		{ tag:'TD', colSpan:'3', style:$formStyle1, cn:
-		  { tag:'INPUT', index:'title', type:'text', style:$tboxStyle } }
+		{ tag:'TD', style:labelStyle, html:Gadget.getMsg('gad_ttl') },
+		{ tag:'TD', colSpan:'3', style:formStyle1, cn:
+		  { tag:'INPUT', index:'title', type:'text', style:tboxStyle } }
 	  ] },
 	  { tag:'TR', cn:[
-		{ tag:'TD', style:$labelStyle, html:Gadget.getMsg('gad_wdt') },
-		{ tag:'TD', style:$formStyle2, cn:{ tag:'INPUT', index:'width', type:'text', style:$tboxStyle } },
-		{ tag:'TD', style:$labelStyle, html:Gadget.getMsg('gad_hgt') },
-		{ tag:'TD', style:$formStyle2, cn:{ tag:'INPUT', index:'height', type:'text', style:$tboxStyle } }
+		{ tag:'TD', style:labelStyle, html:Gadget.getMsg('gad_wdt') },
+		{ tag:'TD', style:formStyle2, cn:{ tag:'INPUT', index:'width', type:'text', style:tboxStyle } },
+		{ tag:'TD', style:labelStyle, html:Gadget.getMsg('gad_hgt') },
+		{ tag:'TD', style:formStyle2, cn:{ tag:'INPUT', index:'height', type:'text', style:tboxStyle } }
 	  ] },
 	  { tag:'TR', cn:[
-		{ tag:'TD', style:$labelStyle, html:Gadget.getMsg('gad_htm') },
-		{ tag:'TD', style:$formStyle2, cn:
-		  { tag:'SELECT', index:'html', style:$selStyle, cn:[
+		{ tag:'TD', style:labelStyle, html:Gadget.getMsg('gad_htm') },
+		{ tag:'TD', style:formStyle2, cn:
+		  { tag:'SELECT', index:'html', style:selStyle, cn:[
 			{ tag:'OPTION', value:'1', html:Gadget.getMsg('tab') + ' 1' },
 			{ tag:'OPTION', value:'2', html:Gadget.getMsg('tab') + ' 2' },
 			{ tag:'OPTION', value:'3', html:Gadget.getMsg('tab') + ' 3' },
@@ -761,9 +765,9 @@ GadgetView.prototype = {
 			{ tag:'OPTION', value:'5', html:Gadget.getMsg('tab') + ' 5' }
 		  ] }
 		},
-		{ tag:'TD', style:$labelStyle, html:Gadget.getMsg('gad_scp') },
-		{ tag:'TD', style:$formStyle2, cn:
-		  { tag:'SELECT', index:'script', style:$selStyle, cn:[
+		{ tag:'TD', style:labelStyle, html:Gadget.getMsg('gad_scp') },
+		{ tag:'TD', style:formStyle2, cn:
+		  { tag:'SELECT', index:'script', style:selStyle, cn:[
 			{ tag:'OPTION', value:'0', html:'----' },
 			{ tag:'OPTION', value:'1', html:Gadget.getMsg('tab') + ' 1' },
 			{ tag:'OPTION', value:'2', html:Gadget.getMsg('tab') + ' 2' },
@@ -774,10 +778,10 @@ GadgetView.prototype = {
 		}
 	  ] }
 	] } } });
-	this.$settingDoms = $builder.getElements();
+	this.$settingDoms = builder.getElements();
 	this.$tabs.addTab(Gadget.getMsg('tab_set'), {
 	  contentContainer : this.$settingDoms.frame,
-	  callback         : u.generateHandler(this, '$onChangeTab') });
+	  callback         : generateHandler(this, '$onChangeTab') });
   },
 
   $initPreviewTab : function()
@@ -789,7 +793,7 @@ GadgetView.prototype = {
 	};
 	this.$tabs.addTab(Gadget.getMsg('tab_prv'), {
 	  contentContainer : this.$previewDoms.frame,
-	  callback         : u.generateHandler(this, '$onChangeTab') });
+	  callback         : generateHandler(this, '$onChangeTab') });
 
 	this.$gadget = new GadgetPreview(
 	  this.$previewDoms.border.id,
@@ -798,17 +802,17 @@ GadgetView.prototype = {
 
   $initSourceTab : function()
   {
-	var $textStyle = {width:'100%',height:'10em',fontSize:parseInt(Gadget.getPrefValue('fontSize'),10)+'px'};
-	var $builder   = new u.DomBuilder();
-	$builder.build({
+	var textStyle = {width:'100%',height:'10em',fontSize:parseInt(Gadget.getPrefValue('fontSize'),10)+'px'};
+	var builder   = new DomBuilder();
+	builder.build({
 	  tag:'DIV', index:'frame', cn:{
-		tag:'TEXTAREA', index:'source', style:$textStyle, readonly:'true'
+		tag:'TEXTAREA', index:'source', style:textStyle, readonly:'true'
 	  }
 	});
-	this.$sourceDoms = $builder.getElements();
+	this.$sourceDoms = builder.getElements();
 	this.$tabs.addTab(Gadget.getMsg('tab_src'), {
 	  contentContainer : this.$sourceDoms.frame,
-	  callback         : u.generateHandler(this, '$onChangeTab') });
+	  callback         : generateHandler(this, '$onChangeTab') });
   },
 
   $onGenerate : function()
@@ -819,12 +823,12 @@ GadgetView.prototype = {
 	var html   = Gadget.getText(this.$settingDoms.html.value);
 	var script = Gadget.getText(this.$settingDoms.script.value);
 
-	if(title)  { title  = '\n      title="'  + u.hesc(title) + '"'; } else { title  = ''; }
-	if(width)  { width  = '\n      width="'  + width         + '"'; } else { width  = ''; }
-	if(height) { height = '\n      height="' + height        + '"'; } else { height = ''; }
+	if(title)  { title  = '\n      title="'  + escapeHtml(title) + '"'; } else { title  = ''; }
+	if(width)  { width  = '\n      width="'  + width             + '"'; } else { width  = ''; }
+	if(height) { height = '\n      height="' + height            + '"'; } else { height = ''; }
 
 	if(script)
-	  script = '<scr' + 'ipt type="text/javascript">\n' + script + '\n</scr' + 'ipt>';
+	  script = '\u003cscript type="text/javascript"\u003e\n' + script + '\n\u003c/script\u003e';
 
 	var text = [
 	  '<?xml version="1.0" encoding="UTF-8" ?>',
@@ -841,10 +845,10 @@ GadgetView.prototype = {
 	  '    <Require feature="flash" />',
 	  '  </ModulePrefs>',
 	  '  <Content type="html">',
-	  '    <![' + 'CDATA[',
+	  '    \u003c![CDATA[',
 	  html,
 	  script,
-	  '    ]' + ']>',
+	  '    ]]\u003e',
 	  '  </Content>',
 	  '</Module>'].join('\n');
 	this.$sourceDoms.source.value = text;
@@ -858,22 +862,22 @@ GadgetView.prototype = {
 	Gadget.adjustHeight();
   },
 
-  $onChangeTab : function($tabId)
+  $onChangeTab : function(tabId)
   {
-	if(this.$previewDoms && this.$previewDoms.frame.id == $tabId)
+	if(this.$previewDoms && this.$previewDoms.frame.id == tabId)
 	  this.$centeringPreview();
 	Gadget.adjustHeight();
   },
 
   $centeringPreview : function()
   {
-	var $border = this.$previewDoms.border;
-    var $maxWidth  = $border.parentNode.offsetWidth;
-    var $maxHeight = this.$gadget.getDefaultHeight();
-    if($maxWidth > 0)
+	var border    = this.$previewDoms.border;
+    var maxWidth  = border.parentNode.offsetWidth;
+    var maxHeight = this.$gadget.getDefaultHeight();
+    if(maxWidth > 0)
     {
-	  $border.style.width  = (_min($maxWidth,  this.$gadget.getWidth())  + 2) + 'px';
-	  $border.style.height = (_min($maxHeight, this.$gadget.getHeight()) + 2) + 'px';
+	  border.style.width  = (_min(maxWidth,  this.$gadget.getWidth())  + 2) + 'px';
+	  border.style.height = (_min(maxHeight, this.$gadget.getHeight()) + 2) + 'px';
     }
   },
 
@@ -895,33 +899,33 @@ GadgetView.prototype = {
 
 function toolHtmlEscape()
 {
-  Gadget.setCurrentText(u.hesc(Gadget.getCurrentText()));
+  Gadget.setCurrentText(escapeHtml(Gadget.getCurrentText()));
 }
 
 function toolHtmlUnescape()
 {
-  var $text = Gadget.getCurrentText();
-  $text = $text.replace(/</g, '&lt;').replace(/>/g, '&gt;');
-  $text = $text.replace(/\"/g, '&quot;').replace(/\'/g, '&#39;');
-  var $div = u.nel('div');
-  $div.innerHTML = '<pre>' + $text + '</pre>';
-  Gadget.setCurrentText(u.gtx($div));
+  var text = Gadget.getCurrentText();
+  text = text.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  text = text.replace(/\"/g, '&quot;').replace(/\'/g, '&#39;');
+  var div = nel('div');
+  div.innerHTML = '<pre>' + text + '</pre>';
+  Gadget.setCurrentText(gtx(div));
 }
 
 function toolUrlEscape()
 {
-  Gadget.setCurrentText(u.esc(Gadget.getCurrentText()));
+  Gadget.setCurrentText(escapeUrl(Gadget.getCurrentText()));
 }
 
 function toolUrlUnescape()
 {
-  Gadget.setCurrentText(u.unesc(Gadget.getCurrentText()));
+  Gadget.setCurrentText(unescapeUrl(Gadget.getCurrentText()));
 }
 
-function ToolBookmarkletize($frame)
+function ToolBookmarkletize(frame)
 {
-  var $builder = new u.DomBuilder();
-  $builder.build($frame, [
+  var builder = new DomBuilder();
+  builder.build(frame, [
 	{ tag:'DIV', index:'msg', html:Gadget.getMsg('tol_bkm') },
 	{ tag:'DIV', index:'result', style:{display:'none'}, cn:[
 	  { tag:'DIV', cn: { tag:'A', index:'link', html:Gadget.getMsg('tol_bkc')} },
@@ -931,7 +935,7 @@ function ToolBookmarkletize($frame)
 	  ]}
 	]}
   ]);
-  this.$doms = $builder.getElements();
+  this.$doms = builder.getElements();
   this.$pattern = new RegExp([
 	'//.*',
 	'/\\*(?:[^*]|\\*(?!/))+\\*/',
@@ -942,21 +946,21 @@ function ToolBookmarkletize($frame)
 ToolBookmarkletize.prototype = {
   onExecute : function()
   {
-	var $text     = Gadget.getCurrentText();
-	var $literals = [];
-	$text = $text.replace(/\r\n?/g, '\n');
-	$text = $text.replace(/\~/g, '~T');
-	$text = $text.replace(/\+\+/g, '~P');
-	$text = $text.replace(/\-\-/g, '~M');
-	$text = $text.replace(this.$pattern, function(m0, m1, m2, m3) {
+	var text     = Gadget.getCurrentText();
+	var literals = [];
+	text = text.replace(/\r\n?/g, '\n');
+	text = text.replace(/\~/g, '~T');
+	text = text.replace(/\+\+/g, '~P');
+	text = text.replace(/\-\-/g, '~M');
+	text = text.replace(this.$pattern, function(m0, m1, m2, m3) {
 	  if(m1)
 	  {
-		$literals[$literals.length] = m0;
+		literals[literals.length] = m0;
 		return '~S';
 	  }
 	  else if(m2 && m3)
 	  {
-		$literals[$literals.length] = m3;
+		literals[literals.length] = m3;
 		return m2 + '~S';
 	  }
 	  else
@@ -964,15 +968,15 @@ ToolBookmarkletize.prototype = {
 		return '';
 	  }
 	});
-	$text = $text.replace(/\s+/g, ' ');
-	$text = $text.replace(/^ +| +$/g, '');
-	$text = $text.replace(/\~S/g, function(){
-	  return $literals.shift();
+	text = text.replace(/\s+/g, ' ');
+	text = text.replace(/^ +| +$/g, '');
+	text = text.replace(/\~S/g, function(){
+	  return literals.shift();
 	});
-	$text = $text.replace(/\~P/g, '++').replace(/\~M/g, '--').replace(/\~T/g, '~');
+	text = text.replace(/\~P/g, '++').replace(/\~M/g, '--').replace(/\~T/g, '~');
 
-	this.$doms.link.href    = 'javascript:' + '(function(){' + $text + '})()';
-	this.$doms.source.value = $text;
+	this.$doms.link.href    = 'javascript:' + '(function(){' + text + '})()';
+	this.$doms.source.value = text;
 
 	this.$doms.msg.style.display    = 'none';
 	this.$doms.result.style.display = 'block';
@@ -986,43 +990,43 @@ function ToolsView()
   this.$doms    = null;
   this.$entries = [];
 
-  var $options = [];
+  var options = [];
   for(var i = 0 ; i < ToolsView.$template.length ; ++i)
   {
-	var $template = ToolsView.$template[i];
-	$options[i] = {tag:'OPTION', value:i, html:Gadget.getMsg($template.label)};
-	var $entry = {};
-	if(u.isFunction($template.cls))
+	var template = ToolsView.$template[i];
+	options[i] = {tag:'OPTION', value:i, html:Gadget.getMsg(template.label)};
+	var entry = {};
+	if(isFunction(template.cls))
 	{
-	  $div = u.nel('DIV');
-	  $div.style.display   = 'none';
-	  $div.style.fontSize  = Gadget.getPrefValue('fontSize') + 'px';
-	  $div.style.marginTop = '4px';
-	  $entry.scope = new $template.cls($div);
-	  $entry.func  = $entry.scope.onExecute;
-	  $entry.frame = $div;
+	  var div = nel('DIV');
+	  div.style.display   = 'none';
+	  div.style.fontSize  = Gadget.getPrefValue('fontSize') + 'px';
+	  div.style.marginTop = '4px';
+	  entry.scope = new template.cls(div);
+	  entry.func  = entry.scope.onExecute;
+	  entry.frame = div;
 	}
-	else if(u.isFunction($template.func))
+	else if(isFunction(template.func))
 	{
-	  $entry.scope = window;
-	  $entry.func  = $template.func;
+	  entry.scope = window;
+	  entry.func  = template.func;
 	}
-	this.$entries[i] = $entry;
+	this.$entries[i] = entry;
   }
 
-  var $builder = new u.DomBuilder();
-  $builder.build({
+  var builder = new DomBuilder();
+  builder.build({
 	tag:'DIV', index:'frame', id:Gadget.generateId(), cls:Gadget.getPrefix('extraframe'), cn:[
 	  { tag:'DIV', cn:[
-		{ tag:'SELECT', index:'select', cn:$options},
+		{ tag:'SELECT', index:'select', cn:options},
 		{ tag:'INPUT', index:'execute', type:'button', value:Gadget.getMsg('tol_exe'), style:{marginLeft:'8px'} }
 	  ]},
 	  { tag:'DIV', index:'content' }
 	]
   });
-  this.$doms = $builder.getElements();
-  this.$doms.execute.onclick = u.generateHandler(this, '$onExecute');
-  this.$doms.select.onchange = u.generateHandler(this, '$onChange');
+  this.$doms = builder.getElements();
+  this.$doms.execute.onclick = generateHandler(this, '$onExecute');
+  this.$doms.select.onchange = generateHandler(this, '$onChange');
 
   for(var i = 0 ; i < this.$entries.length ; ++i)
   {
@@ -1043,22 +1047,22 @@ ToolsView.prototype = {
 
   $onExecute : function()
   {
-	var $value = parseInt(this.$doms.select.value, 10);
-	if(0 <= $value && $value < this.$entries.length)
+	var value = parseInt(this.$doms.select.value, 10);
+	if(0 <= value && value < this.$entries.length)
 	{
-	  var $entry = this.$entries[$value];
-	  if(typeof $entry.func === 'function')
-		$entry.func.call($entry.scope);
+	  var entry = this.$entries[value];
+	  if(typeof entry.func === 'function')
+		entry.func.call(entry.scope);
 	}
   },
 
   $onChange : function()
   {
-	var $selected = parseInt(this.$doms.select.value, 10);
+	var selected = parseInt(this.$doms.select.value, 10);
 	for(var i = 0 ; i < this.$entries.length ; ++i)
 	{
 	  if(this.$entries[i].frame)
-		this.$entries[i].frame.style.display = (i == $selected ? 'block' : 'none');
+		this.$entries[i].frame.style.display = (i == selected ? 'block' : 'none');
 	}
 	Gadget.adjustHeight();
   },
@@ -1086,9 +1090,9 @@ function JSConsole()
 
 JSConsole.prototype = {
 
-  log : function($text)
+  log : function(text)
   {
-    Gadget.log(this.$prefix + $text);
+    Gadget.log(this.$prefix + text);
     this.$prefix = '';
   },
 
@@ -1105,12 +1109,11 @@ JSConsole.prototype = {
 
 var Gadget = {
 
-  $moduleId   : modId,
   $nextId     : 0,
-  $prefs      : new _IG_Prefs(modId),
-  $prefix     : 'mod' + modId,
+  $prefs      : new _IG_Prefs(moduleId),
+  $prefix     : 'mod' + moduleId,
   $flash      : null,
-  $storageId  : 'mod' + modId + 'JsConsoleStorage',
+  $storageId  : 'mod' + moduleId + 'JsConsoleStorage',
   $storageHdl : null,
   $storage    : {},
   $textView   : null,
@@ -1135,15 +1138,15 @@ var Gadget = {
   init : function()
   {
 	this.$textView   = new TextView();
-	this.$minimsg    = new _IG_MiniMessage(this.$moduleId);
-	this.$storageHdl = new u.DelayCall(u.generateProxy(this, 'onStorageFlush'), 3000);
+	this.$minimsg    = new _IG_MiniMessage(moduleId);
+	this.$storageHdl = new DelayCall(generateProxy(this, 'onStorageFlush'), 3000);
 
-	if(this.$prefs.getBool('sv') && !u.useOpenSocial)
+	if(this.$prefs.getBool('sv') && !useOpenSocial)
 	{
 	  if(this.$prefs.getBool('sm'))
 	  {
-		var $msg = this.getMsg('msg_sav').replace(/_\_MODULE_ID__/, this.$moduleId).replace(/^\s+|\s+$/,'');
-		this.$minimsg.createDismissibleMessage($msg, u.generateHandler(this, '$onSaveWarningDismissed'));
+		var msg = this.getMsg('msg_sav').replace(/_\_MODULE_ID__/, moduleId).replace(/^\s+|\s+$/,'');
+		this.$minimsg.createDismissibleMessage(msg, generateHandler(this, '$onSaveWarningDismissed'));
 	  }
 	}
 	else if(!this.$prefs.getBool('sm'))
@@ -1155,7 +1158,7 @@ var Gadget = {
 	  for(var i = 0 ; i <= 0 ; ++i) {
 		var prefs = this.$prefs;
 		var index = ('00' + i).substr(-3);
-		var msg   = (this.getMsg('notification' + index)||'').replace(/_\_MODULE_ID__/, this.$moduleId);
+		var msg   = (this.getMsg('notification' + index)||'').replace(/_\_MODULE_ID__/, moduleId);
 		if(msg && prefs.getBool('n' + index)) {
 		  this.$minimsg.createDismissibleMessage(msg, function() {
 			prefs.set('n' + index, '0');
@@ -1173,29 +1176,29 @@ var Gadget = {
 
   $initButtons : function()
   {
-	var $builder   = new u.DomBuilder();
-	var $container = u.gel(this.$prefix + 'buttons');
+	var self      = this;
+	var builder   = new DomBuilder();
+	var container = gel(self.$prefix + 'buttons');
 
-	$container.style.margin = '4px 0px';
+	container.style.margin = '4px 0px';
 
-	var $style = { marginRight:'8px' };
-	$builder.build($container, [
+	var style = { marginRight:'8px' };
+	builder.build(container, [
 	  { tag:'DIV', style:'float:right', cn:[
-		{ tag:'INPUT', index:'clr', type:'button', value:this.getMsg('btn_clr')} ] },
+		{ tag:'INPUT', index:'clr', type:'button', value:self.getMsg('btn_clr')} ] },
 	  { tag:'DIV', cn:[
-		{ tag:'INPUT', index:'run', type:'button', value:this.getMsg('btn_run'), style:$style },
-		{ tag:'INPUT', index:'htm', type:'button', value:this.getMsg('btn_htm'), style:$style } ] }
+		{ tag:'INPUT', index:'run', type:'button', value:self.getMsg('btn_run'), style:style },
+		{ tag:'INPUT', index:'htm', type:'button', value:self.getMsg('btn_htm'), style:style } ] }
 	]);
 
-	var $self = this;
-	$builder.getEl('run').onclick = u.generateHandler(this, '$onRunAsScript');
-	$builder.getEl('htm').onclick = u.generateHandler(this, '$onReplaceHTML');
-	$builder.getEl('clr').onclick = u.generateHandler(this, '$onClearText');
+	builder.getEl('run').onclick = generateHandler(self, '$onRunAsScript');
+	builder.getEl('htm').onclick = generateHandler(self, '$onReplaceHTML');
+	builder.getEl('clr').onclick = generateHandler(self, '$onClearText');
   },
 
   $initExtraViews : function()
   {
-	this.$extraTabs  = new _IG_Tabs(this.$moduleId, 0, u.gel(this.$prefix + 'extraview'));
+	this.$extraTabs  = new _IG_Tabs(moduleId, 0, gel(this.$prefix + 'extraview'));
 	this.$outputView = new OutputView();
 	this.$logView    = new LogView();
 	this.$htmlView   = new HtmlView();
@@ -1204,38 +1207,37 @@ var Gadget = {
 
 	this.$extraTabs.alignTabs('left');
 
-	var $views = [this.$outputView, this.$logView, this.$htmlView, this.$gadgetView, this.$toolsView];
-	for(var i = 0 ; i < $views.length ; ++i)
+	var views = [this.$outputView, this.$logView, this.$htmlView, this.$gadgetView, this.$toolsView];
+	for(var i = 0 ; i < views.length ; ++i)
 	{
-	  var $view     = $views[i];
-	  var $label    = $view.getTabLabel();
-	  var $content  = $view.getContent();
-	  var $callback = u.generateHandler(this, '$onChangeTab');
-	  this.$extraTabs.addTab($label, {
-		contentContainer : $content,
-		callback         : $callback});
+	  var view     = views[i];
+	  var label    = view.getTabLabel();
+	  var content  = view.getContent();
+	  var callback = generateHandler(this, '$onChangeTab');
+	  this.$extraTabs.addTab(label, {
+		contentContainer : content,
+		callback         : callback});
 	}
   },
 
   $onRunAsScript : function()
   {
-	var $text = this.$textView.getCurrentText();
-	var $output = '';
-	var $error  = false;
+	var text = this.$textView.getCurrentText();
+	var output = '';
+	var error  = false;
 	try
 	{
-	  var $self = this;
-	  $output = (function() {
-		var jsconsole = new JSConsole();
-		return eval($text);
+	  output = (function() {
+		window.jsconsole = new JSConsole();
+		return this.$eval(text);
 	  })();
 	}
 	catch(e)
 	{
-	  $output = e.message || e.description || String(e);
-	  $error  = true;
+	  output = e.message || e.description || String(e);
+	  error  = true;
 	}
-	this.$outputView.setText($output, $error);
+	this.$outputView.setText(output, error);
 	this.adjustHeight();
   },
 
@@ -1246,10 +1248,10 @@ var Gadget = {
 
   $onReplaceHTML : function()
   {
-    var $text = this.$textView.getCurrentText();
-    if($text)
+    var text = this.$textView.getCurrentText();
+    if(text)
     {
-	  this.$htmlView.setHTML($text);
+	  this.$htmlView.setHTML(text);
 	  this.adjustHeight();
     }
   },
@@ -1278,12 +1280,12 @@ var Gadget = {
 
   getModuleId : function()
   {
-	return this.$moduleId;
+	return moduleId;
   },
 
-  getPrefix : function($text)
+  getPrefix : function(text)
   {
-	return this.$prefix + $text;
+	return this.$prefix + text;
   },
 
   getPrefs : function()
@@ -1291,14 +1293,14 @@ var Gadget = {
 	return this.$prefs;
   },
 
-  getPrefValue : function($name)
+  getPrefValue : function(name)
   {
-	return this.$prefs.getString(this.$prefsMap[$name] || $name);
+	return this.$prefs.getString(this.$prefsMap[name] || name);
   },
 
-  getPrefBool : function($name)
+  getPrefBool : function(name)
   {
-	return this.$prefs.getBool(this.$prefsMap[$name] || $name);
+	return this.$prefs.getBool(this.$prefsMap[name] || name);
   },
 
   getMsg : function(id)
@@ -1306,9 +1308,9 @@ var Gadget = {
 	return this.$prefs.getMsg(id);
   },
 
-  getText : function($index)
+  getText : function(index)
   {
-	return this.$textView.getText($index)
+	return this.$textView.getText(index)
   },
 
   getCurrentText : function()
@@ -1316,20 +1318,20 @@ var Gadget = {
 	return this.$textView.getCurrentText();
   },
 
-  setCurrentText : function($newText)
+  setCurrentText : function(newText)
   {
-	this.$textView.setCurrentText($newText);
+	this.$textView.setCurrentText(newText);
   },
 
-  log : function($text)
+  log : function(text)
   {
-	this.$logView.log($text);
+	this.$logView.log(text);
   },
 
   onStorageReady : function()
   {
-	if(!u.useOpenSocial) {
-	  this.$flash = u.gel(Gadget.getPrefix('JsConsoleStorage'));
+	if(!useOpenSocial) {
+	  this.$flash = gel(Gadget.getPrefix('JsConsoleStorage'));
 	  this.$flash.open(this.$storageId);
 	  if(this.$textView) {
 		this.$textView.onStorageReady();
@@ -1339,49 +1341,65 @@ var Gadget = {
 
   onStorageFlush : function()
   {
-	if(u.useOpenSocial) {
-	  var $storage = this.$storage;
-	  for(var i in $storage) {
-		SocialGoodies.DataRequest.storeAppData('VIEWER', i, $storage[i]);
+	if(useOpenSocial) {
+	  var storage = this.$storage;
+	  for(var i in storage) {
+		SocialGoodies.DataRequest.storeAppData('VIEWER', i, storage[i]);
 	  }
 	} else if(this.$flash) {
 	  this.$flash.flush();
 	}
   },
 
-  storageSetData : function($name, $value)
+  storageSetData : function(name, value)
   {
-	if(u.useOpenSocial) {
-	  this.$storage[$name] = $value;
+	if(useOpenSocial) {
+	  this.$storage[name] = value;
 	  this.$storageHdl.invoke();
 	} else if(this.$flash) {
-	  this.$flash.setData($name, $value);
+	  this.$flash.setData(name, value);
 	  this.$storageHdl.invoke();
 	}
   },
 
-  storageGetData : function($name, $scope, $callback)
+  storageGetData : function(name, scope, callback)
   {
-	if(u.useOpenSocial) {
-	  SocialGoodies.DataRequest.fetchAppData('VIEWER', $name, {
+	if(useOpenSocial) {
+	  SocialGoodies.DataRequest.fetchAppData('VIEWER', name, {
 		escape   : 'none',
-		callback : function($data) {
-		  for(var i in $data) {
-			$callback.call($scope, $name, $data[i][$name]);
+		callback : function(data) {
+		  for(var i in data) {
+			callback.call(scope, name, data[i][name]);
 			break;
 		  }
 		}
 	  });
 	} else if(this.$flash) {
-	  $callback.call($scope, $name, this.$flash.getData($name));
+	  callback.call(scope, name, this.$flash.getData(name));
 	}
   },
 
   storageIsOk : function()
   {
-	return this.$flash ? this.$flash.isOk() : u.useOpenSocial;
-  }
+	return this.$flash ? this.$flash.isOk() : useOpenSocial;
+  },
+
+  useLegacy     : useLegacy,
+  useOpenSocial : useOpenSocial
 
 };
 
-window[Gadget.getPrefix('Gadget')] = Gadget;
+if(window.Components) {
+  Gadget.init();
+} else {
+  _IG_RegisterOnloadHandler(function(){ Gadget.init(); });
+}
+
+return Gadget;
+
+})();
+
+// If eval is directly called in the above namespace, YUI Compressor cannot shorten symbols.
+Gadget.$eval = function(text) {
+  return eval(text);
+}

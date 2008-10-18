@@ -2,29 +2,42 @@ require 'rake/clean'
 require 'erb'
 
 $KCODE = 'U'
-$root  = 'http://webos-goodies.googlecode.com/svn/trunk/products/google-gadgets/jsconsole'
 
 TARGETS = ['normal.xml']
+HOSTS = {
+  'googlecode' => 'http://webos-goodies.googlecode.com/svn/trunk/products/google-gadgets/jsconsole',
+  'lab'        => 'http://lab.webos-goodies.jp/jsconsole'
+}
 CLOBBER.include(TARGETS)
 
 task :default => TARGETS
-task :lab => [:lab_webos_goodies_jp, TARGETS].flatten
-task :lab_webos_goodies_jp do
-  $root = 'http://lab.webos-goodies.jp/jsconsole'
+
+def execCmd(cmd, stdin)
+  stdout = ''
+  IO.popen(cmd, 'r+') do |pipe|
+    pipe.write(stdin)
+    pipe.close_write
+    stdout = pipe.read
+  end
+  stdout
 end
 
 def jspack(fname)
   source = IO.read(fname)
-  packed = ''
-  IO.popen('jsjuicer -sm', 'r+') do |pipe|
-    pipe.write(source)
-    pipe.close_write
-    packed = pipe.read
+  unless ENV.has_key?('DEBUG')
+    source = execCmd('yuicompressor --type js --charset UTF-8', source)
+    source = execCmd('jsjuicer -sm', source)
   end
-  packed
+  source
 end
 
 TARGETS.each do |fname|
+  if ENV.has_key?('HOST')
+    raise 'illegal host.' unless HOSTS.has_key?(ENV['HOST'])
+	$root = HOSTS[ENV['HOST']]
+  else
+    $root = HOSTS['googlecode']
+  end
   file fname => ['jsconsole.xml', 'script.js'] do |t|
     target = File.basename(t.name, '.xml')
     result = ERB.new(IO.read(t.prerequisites[0]), nil, '>').result(binding)
