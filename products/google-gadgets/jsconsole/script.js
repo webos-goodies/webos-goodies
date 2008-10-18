@@ -1,11 +1,14 @@
 var Gadget = (function() {
 
 //--------------------------------------------------------------------
-// Enviroment detection
+// Global variables
 
+var _document     = document;
 var moduleId      = __MODULE_ID__;
+var prefs         = new _IG_Prefs(moduleId);
 var useLegacy     = !(window.gadgets && gadgets.views && gadgets.views.getCurrentView() !== undefined);
 var useOpenSocial = !useLegacy && !!window.opensocial;
+var nextId        = 1;
 
 
 //--------------------------------------------------------------------
@@ -41,17 +44,17 @@ function generateProxy(self, name)
 
 function nel(tag)
 {
-  return document.createElement(tag);
+  return _document.createElement(tag);
 };
 
 function nfg()
 {
-  return document.createDocumentFragment();
+  return _document.createDocumentFragment();
 };
 
 function gel(id)
 {
-  return document.getElementById(id);
+  return _document.getElementById(id);
 };
 
 function gtx(element_or_id)
@@ -70,18 +73,30 @@ function escapeHtml(a)
   a = a.replace(/</g, '&lt;').replace(/>/g, '&gt;');
   a = a.replace(/\"/g, '&quot;').replace(/\'/g, '&#39;');
   return a;
-};
+}
 
 function escapeUrl(a)
 {
   return (window.encodeURIComponent ? encodeURIComponent(a) : escape(a)).replace(/\%20/g, '+');
-};
+}
 
 function unescapeUrl(a)
 {
   a = a.replace(/\+/g, '%20');
   return window.decodeURIComponent ? decodeURIComponent(a) : unescape(a);
-};
+}
+
+function generateUniqueId()
+{
+  return 'JsConsole8395' + nextId++;
+}
+
+function tinyTemplate(template, args)
+{
+  return template.replace(/\$(\d+)/g, function(str, p1) {
+	return args[parseInt(p1, 10)];
+  });
+}
 
 
 //--------------------------------------------------------------------
@@ -111,7 +126,7 @@ DomBuilder.prototype = {
   {
 	this._nodes = {};
 	if(!tree) { tree = root; root = null; }
-	if(!root) root = document.createDocumentFragment();
+	if(!root) root = _document.createDocumentFragment();
 	return this._build(root, tree);
   },
 
@@ -128,7 +143,7 @@ DomBuilder.prototype = {
 	}
 	else
 	{
-	  var el = document.createElement(tree.tag ? tree.tag : 'DIV');
+	  var el = _document.createElement(tree.tag ? tree.tag : 'DIV');
 	  var sa = el.setAttribute ? true : false, cn = null;
 	  for(var i in tree)
 	  {
@@ -460,37 +475,59 @@ var GadgetPreview = (function() {
 //--------------------------------------------------------------------
 // Text editor
 
-function TextView()
+function EditorPanel(index)
 {
-  this.$tabs      = new _IG_Tabs(Gadget.getModuleId());
-  this.$numTexts  = 5;
-  this.$doms      = null;
+  var self       = this,
+      div        = nel('div'),
+	  divId      = generateUniqueId(),
+	  textId     = generateUniqueId(),
+	  storageTag = 'text' + index,
+      template   = ('<textarea id="$0" wrap="off" style="width:100%; height:$1em; font-size:$2px;">' +
+					'</textarea>');
 
-  // create tab contents.
-  var tree      = [];
-  var textStyle =
-	'width:100%;' +
-	'height:' + parseInt(Gadget.getPrefValue('textRows'), 10) + 'em;' +
-	'font-size:' + parseInt(Gadget.getPrefValue('fontSize'), 10) + 'px;';
-  for(var i = 1 ; i <= this.$numTexts ; ++i)
+  div.id            = divId;
+  div.innerHTML     = tinyTemplate(template, [textId, prefs.getInt('tr'), prefs.getInt('fs')]);
+  div.style.display = 'none';
+  _document.body.appendChild(div);
+
+  self.$getId      = function()  { return divId; };
+  self.$getTitle   = function()  { return '' + index; };
+  self.$getContent = function()  { return gel(textId).value; };
+  self.$setContent = function(t) { gel(textId).value = t; };
+
+  self.$save = function()
   {
-	tree.push({
-	  tag: 'DIV', index: 'tab' + i, id: Gadget.generateId(),	cn: [
-		{ tag: 'TEXTAREA', index: 'text' + i, id: Gadget.generateId(), wrap: 'off', style: textStyle }
-	  ]
+	Gadget.storageSetData(storageTag, gel(textId).value);
+  };
+
+  self.$load = function()
+  {
+	Gadget.storageGetData(storageTag, this, function(name, value) {
+	  if(value) {
+		this.$setContent(value);
+	  }
 	});
   }
-  var builder = new DomBuilder();
-  builder.build(tree);
-  this.$doms = builder.getElements();
+
+  gel(textId).onchange = generateProxy(self, '$save');
+
+  self = div = null;
+}
+
+function TextView()
+{
+  this.$tabs   = new _IG_Tabs(Gadget.getModuleId());
+  this.$panels = [];
+
+  for(var i = 1 ; i <= 5 ; ++i) {
+	this.$panels.push(new EditorPanel(i));
+  }
 
   this.$tabs.alignTabs('left');
-  for(var i = 1 ; i <= this.$numTexts ; ++i)
+  for(var i = 1, l = this.$panels.length ; i <= l ; ++i)
   {
-	var dom = this.$doms['text' + i];
-	dom.onchange = generateProxy(this, '$onChange', i);
-	this.$tabs.addTab(i, {
-	  contentContainer : this.$doms['tab' + i] });
+	var panel = this.$panels[i - 1];
+	this.$tabs.addTab(panel.$getTitle(), { contentContainer : gel(panel.$getId()) });
   }
 
   this.onStorageReady();
@@ -498,10 +535,9 @@ function TextView()
 
 TextView.prototype = {
 
-  $getContent : function(index)
+  $getPanel : function(index)
   {
-	var i = parseInt(index, 10);
-	return (0 < i && i <= this.$numTexts) ? this.$doms['text' + i] : null;
+	return this.$panels[parseInt(index, 10) - 1];
   },
 
   $getCurrentIndex : function()
@@ -509,62 +545,44 @@ TextView.prototype = {
 	return this.$tabs.getSelectedTab().getIndex() + 1;
   },
 
-  $onChange : function(index)
-  {
-	this.$saveText(index);
-  },
-
   $saveText : function(index)
   {
-	if(0 < index && index <= this.$numTexts)
-	{
-	  index = 'text' + index;
-	  Gadget.storageSetData(index, this.$doms[index].value);
-	}
+	var panel = this.$getPanel(index);
+	panel && panel.$save();
   },
 
   onStorageReady : function()
   {
-	if(Gadget.storageIsOk())
-	{
-	  for(var i = 1 ; i <= this.$numTexts ; ++i)
-	  {
-		Gadget.storageGetData('text' + i, this, function(name, value) {
-		  if(value) {
-			this.$doms[name].value = value;
-		  }
-		});
+	if(Gadget.storageIsOk()) {
+	  for(var i = 0, l = this.$panels.length ; i < l ; ++i) {
+		this.$panels[i].$load();
 	  }
 	}
   },
 
   getText : function(index)
   {
-	var content = this.$getContent(index);
-	return content ? content.value : '';
+	var panel = this.$getPanel(index);
+	return (panel && panel.$getContent()) || '';
   },
 
   getCurrentText : function()
   {
-	var current = this.$getContent(this.$getCurrentIndex());
-	return current ? current.value : '';
+	return this.getText(this.$getCurrentIndex());
   },
 
   setCurrentText : function(newText)
   {
-	var index   = this.$getCurrentIndex();
-	var current = this.$getContent(index);
-	if(current)
-	  current.value = newText;
-	this.$saveText(index);
+	var panel = this.$getPanel(this.$getCurrentIndex());
+	if(panel) {
+	  panel.$setContent(newText);
+	  panel.$save();
+	}
   },
 
   clearCurrentText : function()
   {
-	var index   = this.$getCurrentIndex();
-	var current = this.$getContent(index);
-	if(current) current.value = '';
-	this.$saveText(index);
+	this.setCurrentText('');
   }
 
 };
@@ -1110,7 +1128,7 @@ JSConsole.prototype = {
 var Gadget = {
 
   $nextId     : 0,
-  $prefs      : new _IG_Prefs(moduleId),
+  $prefs      : prefs,
   $prefix     : 'mod' + moduleId,
   $flash      : null,
   $storageId  : 'mod' + moduleId + 'JsConsoleStorage',
@@ -1154,7 +1172,7 @@ var Gadget = {
 	  this.$prefs.set('sm', 1);
 	}
 
-	if(/synd=ig/.test(document.location)) {
+	if(/synd=ig/.test(_document.location)) {
 	  for(var i = 0 ; i <= 0 ; ++i) {
 		var prefs = this.$prefs;
 		var index = ('00' + i).substr(-3);
@@ -1230,7 +1248,7 @@ var Gadget = {
 	  output = (function() {
 		window.jsconsole = new JSConsole();
 		return this.$eval(text);
-	  })();
+	  }).call(this);
 	}
 	catch(e)
 	{
