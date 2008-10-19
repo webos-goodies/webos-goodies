@@ -3,12 +3,13 @@ var Gadget = (function() {
 //--------------------------------------------------------------------
 // Global variables
 
-var _document     = document;
-var moduleId      = __MODULE_ID__;
-var prefs         = new _IG_Prefs(moduleId);
-var useLegacy     = !(window.gadgets && gadgets.views && gadgets.views.getCurrentView() !== undefined);
-var useOpenSocial = !useLegacy && !!window.opensocial;
-var nextId        = 1;
+var _document      = document;
+var moduleId       = __MODULE_ID__;
+var prefs          = new _IG_Prefs(moduleId);
+var useLegacy      = !(window.gadgets && gadgets.views && gadgets.views.getCurrentView() !== undefined);
+var useOpenSocial  = !useLegacy && !!window.opensocial;
+var nextId         = 1;
+var tabBorderStyle = 'border: 1px solid #676767; border-top-style: none; padding: 4px;';
 
 
 //--------------------------------------------------------------------
@@ -45,23 +46,38 @@ function generateProxy(self, name)
 function nel(tag)
 {
   return _document.createElement(tag);
-};
+}
 
 function nfg()
 {
   return _document.createDocumentFragment();
-};
+}
 
 function gel(id)
 {
   return _document.getElementById(id);
-};
+}
 
 function gtx(element_or_id)
 {
   var el = isString(element_or_id) ? gel(element_or_id) : element_or_id;
   return el.textContent !== undefined ? el.textContent : el.innerText;
-};
+}
+
+function appendBodyChild(child)
+{
+  _document.body.appendChild(child);
+}
+
+function createHiddenDiv(id, style, html)
+{
+  var div           = nel('div');
+  div.id            = id;
+  div.style.cssText = 'display:none;' + (style || '');
+  div.innerHTML     = html || '';
+  appendBodyChild(div);
+  return div;
+}
 
 
 //--------------------------------------------------------------------
@@ -472,26 +488,77 @@ var GadgetPreview = (function() {
   return GadgetPreview;
 })();
 
+
+//--------------------------------------------------------------------
+// TabView
+
+function TabView(opts)
+{
+  opts = opts || {};
+
+  var self     = this,
+	  tabs     = new _IG_Tabs(moduleId, 0, opts.parentId ? gel(opts.parentId) : null),
+	  panels   = [],
+	  callback = opts.callback,
+	  scope    = opts.scope;
+
+  tabs.alignTabs('left');
+
+  function onChange(tabId) {
+	for(var i = 0, l = panels.length ; i < l ; ++i) {
+	  var panel = panels[i];
+	  if(panel.$getId() == tabId && isFunction(panel.$onActivate)) {
+		panel.$onActivate.call(panel);
+	  }
+	}
+	if(isFunction(callback)) {
+	  callback.call(scope, tabId);
+	}
+  }
+
+  self.$getPanel  = function(i) { return panels[i]; }
+  self.$numPanels = function(i) { return panels.length; }
+
+  self.$getCurrentPanel = function()
+  {
+	var tab = tabs.getSelectedTab();
+	return tab ? panels[tab.getIndex()] : null;
+  };
+
+  self.$addPanel = function(panel)
+  {
+	panels.push(panel);
+	tabs.addTab(panel.$getLabel(), {
+	  contentContainer : gel(panel.$getId()),
+	  callback         : onChange });
+  };
+
+  self.$forEach = function(func, scope) {
+	for(var i = 0, l = panels.length ; i < l ; ++i) {
+	  func.call(scope, panels[i], i, panels);
+	}
+  };
+
+  self = opts = null;
+}
+
+
 //--------------------------------------------------------------------
 // Text editor
 
 function EditorPanel(index)
 {
   var self       = this,
-      div        = nel('div'),
 	  divId      = generateUniqueId(),
 	  textId     = generateUniqueId(),
 	  storageTag = 'text' + index,
       template   = ('<textarea id="$0" wrap="off" style="width:100%; height:$1em; font-size:$2px;">' +
 					'</textarea>');
 
-  div.id            = divId;
-  div.innerHTML     = tinyTemplate(template, [textId, prefs.getInt('tr'), prefs.getInt('fs')]);
-  div.style.display = 'none';
-  _document.body.appendChild(div);
+  createHiddenDiv(divId, '', tinyTemplate(template, [textId, prefs.getInt('tr'), prefs.getInt('fs')]));
 
   self.$getId      = function()  { return divId; };
-  self.$getTitle   = function()  { return '' + index; };
+  self.$getLabel   = function()  { return '' + index; };
   self.$getContent = function()  { return gel(textId).value; };
   self.$setContent = function(t) { gel(textId).value = t; };
 
@@ -511,81 +578,8 @@ function EditorPanel(index)
 
   gel(textId).onchange = generateProxy(self, '$save');
 
-  self = div = null;
+  self = null;
 }
-
-function TextView()
-{
-  this.$tabs   = new _IG_Tabs(Gadget.getModuleId());
-  this.$panels = [];
-
-  for(var i = 1 ; i <= 5 ; ++i) {
-	this.$panels.push(new EditorPanel(i));
-  }
-
-  this.$tabs.alignTabs('left');
-  for(var i = 1, l = this.$panels.length ; i <= l ; ++i)
-  {
-	var panel = this.$panels[i - 1];
-	this.$tabs.addTab(panel.$getTitle(), { contentContainer : gel(panel.$getId()) });
-  }
-
-  this.onStorageReady();
-}
-
-TextView.prototype = {
-
-  $getPanel : function(index)
-  {
-	return this.$panels[parseInt(index, 10) - 1];
-  },
-
-  $getCurrentIndex : function()
-  {
-	return this.$tabs.getSelectedTab().getIndex() + 1;
-  },
-
-  $saveText : function(index)
-  {
-	var panel = this.$getPanel(index);
-	panel && panel.$save();
-  },
-
-  onStorageReady : function()
-  {
-	if(Gadget.storageIsOk()) {
-	  for(var i = 0, l = this.$panels.length ; i < l ; ++i) {
-		this.$panels[i].$load();
-	  }
-	}
-  },
-
-  getText : function(index)
-  {
-	var panel = this.$getPanel(index);
-	return (panel && panel.$getContent()) || '';
-  },
-
-  getCurrentText : function()
-  {
-	return this.getText(this.$getCurrentIndex());
-  },
-
-  setCurrentText : function(newText)
-  {
-	var panel = this.$getPanel(this.$getCurrentIndex());
-	if(panel) {
-	  panel.$setContent(newText);
-	  panel.$save();
-	}
-  },
-
-  clearCurrentText : function()
-  {
-	this.setCurrentText('');
-  }
-
-};
 
 
 //--------------------------------------------------------------------
@@ -593,37 +587,30 @@ TextView.prototype = {
 
 function OutputView()
 {
-  this.$frame = nel('DIV');
+  var self     = this,
+      divId    = generateUniqueId(),
+      template = ('<pre style="' +
+				  'margin:0px; padding:0px; overflow:auto; font-size:$0px; max-height:$1em; $2' +
+				  '">$3</pre>');
 
-  this.$frame.id        = Gadget.generateId();
-  this.$frame.className = Gadget.getPrefix('extraframe');
-  this.setText();
-}
+  createHiddenDiv(divId, tabBorderStyle);
 
-OutputView.prototype = {
+  self.$getId    = function() { return divId; };
+  self.$getLabel = function() { return Gadget.getMsg('tab_out'); };
 
-  getTabLabel : function()
+  self.$setText  = function(text, error)
   {
-	return Gadget.getMsg('tab_out');
-  },
+	gel(divId).innerHTML = tinyTemplate(template, [
+	  prefs.getInt('fs'),
+	  prefs.getInt('or'),
+	  error ? 'background-color:#ffaaaa' : '',
+	  typeof text === 'undefined' ? Gadget.getMsg('msg_out') : escapeHtml('' + text)]);
+  };
 
-  getContent : function()
-  {
-	return this.$frame;
-  },
+  self.$setText();
+  Gadget.$addEventHandler('output', generateHandler(this, '$setText'));
 
-  setText : function(text, error)
-  {
-	var msg = typeof text === 'undefined' ? Gadget.getMsg('msg_out') : escapeHtml(String(text));
-	var style =
-	  'margin:0px; padding:0px; overflow:auto;' +
-	  'font-size:' + parseInt(Gadget.getPrefValue('fontSize'), 10) + 'px;' +
-	  'max-height:' + parseInt(Gadget.getPrefValue('maxOutputRows'), 10) + 'em;';
-	if(error)
-	  style += 'background-color:#ffaaaa';
-	this.$frame.innerHTML = '<pre style="' + style + '">' + msg + '</pre>';
-  }
-
+  self = null;
 }
 
 
@@ -632,48 +619,32 @@ OutputView.prototype = {
 
 function LogView()
 {
-  this.$doms = null;
+  var self     = this,
+	  divId    = generateUniqueId(),
+	  logId    = generateUniqueId(),
+	  btnId    = generateUniqueId(),
+	  template = ('<div><textarea id="$0" wrap="off" readonly="true"' +
+				  ' style="width:100%; height:$1em; font-size:$2px;"></textarea></div>' +
+				  '<div style="text-align:right; marginTop:4px;">' +
+				  '<input type="button" id="$3" value="$4" /></div>');
 
-  var builder = new DomBuilder();
-  var textStyle =
-	'width:100%;' +
-	'height:' + parseInt(Gadget.getPrefValue('logRows'), 10) + 'em;' +
-	'font-size:' + parseInt(Gadget.getPrefValue('fontSize'), 10) + 'px;';
-  builder.build({
-	tag:'DIV', index:'frame', id:Gadget.generateId(), cn:[
-	  { tag:'DIV', cn:
-		{ tag:'TEXTAREA', index:'log', style:textStyle, wrap:'off', readonly:'true' } },
-	  { tag:'DIV', style:{ textAlign:'right', marginTop:'4px' }, cn:
-		{ tag:'INPUT', index:'clr', type:'button', value:Gadget.getMsg('btn_clr') } }
-	]
-  });
-  this.$doms = builder.getElements();
-  this.$doms.log.value   = Gadget.getMsg('msg_log');
-  this.$doms.clr.onclick = generateHandler(this, '$onClear');
-}
+  createHiddenDiv(divId, '', tinyTemplate(template, [
+	logId,
+	prefs.getInt('lr'),
+	prefs.getInt('fs'),
+	btnId,
+	Gadget.getMsg('btn_clr')]));
 
-LogView.prototype = {
+  self.$getId    = function()  { return divId; };
+  self.$onClear  = function()  { gel(logId).value = ''; };
+  self.$getLabel = function()  { return Gadget.getMsg('tab_log'); };
+  self.$log      = function(t) { gel(logId).value += t; };
 
-  $onClear : function()
-  {
-	this.$doms.log.value = '';
-  },
+  gel(logId).value   = Gadget.getMsg('msg_log');
+  gel(btnId).onclick = generateHandler(self, '$onClear');
+  Gadget.$addEventHandler('log', generateHandler(self, '$log'));
 
-  getTabLabel : function()
-  {
-	return Gadget.getMsg('tab_log');
-  },
-
-  getContent : function()
-  {
-	return this.$doms.frame;
-  },
-
-  log : function(text)
-  {
-	this.$doms.log.value += text;
-  }
-
+  self = null;
 }
 
 
@@ -682,38 +653,22 @@ LogView.prototype = {
 
 function HtmlView()
 {
-  this.$frame = nel('DIV');
+  var self     = this,
+	  divId    = generateUniqueId(),
+	  template = '<div style="font-size:$0px;">$1</div>';
 
-  this.$frame.id        = Gadget.generateId();
-  this.$frame.className = Gadget.getPrefix('extraframe');
-  this.setHTML();
-}
+  createHiddenDiv(divId, tabBorderStyle);
 
-HtmlView.prototype = {
+  self.$getId    = function() { return divId; };
+  self.$getLabel = function() { return Gadget.getMsg('tab_htm'); };
 
-  getTabLabel : function()
+  self.$setHTML = function(html)
   {
-	return Gadget.getMsg('tab_htm');
-  },
+	gel(divId).innerHTML = html || tinyTemplate(template, [prefs.getInt('fs'), Gadget.getMsg('msg_htm')]);
+  };
 
-  getContent : function()
-  {
-	return this.$frame;
-  },
-
-  setHTML : function(html)
-  {
-	if(typeof html === 'undefined')
-	{
-	  var style = 'font-size:' + parseInt(Gadget.getPrefValue('fontSize'), 10) + 'px;';
-	  this.$frame.innerHTML = '<div style="' + style + '">' + Gadget.getMsg('msg_htm') + '</div>';
-	}
-	else
-	{
-	  this.$frame.innerHTML = String(html);
-	}
-  }
-
+  self.$setHTML();
+  Gadget.$addEventHandler('html', generateHandler(self, '$setHTML'));
 }
 
 
@@ -722,124 +677,154 @@ HtmlView.prototype = {
 
 function GadgetView()
 {
-  this.$doms        = null;
-  this.$tabs        = null;
-  this.$settingDoms = null;
-  this.$previewDoms = null;
-  this.$sourceDoms  = null;
-  this.$gadget      = null;
+  var divId    = generateUniqueId(),
+	  tabId    = generateUniqueId(),
+	  btnId    = generateUniqueId(),
+	  tabs     = null,
+	  template = ('<div id="$0"></div>' +
+				  '<div style="margin:4px 0px; text-align:right;">' +
+				  '<input id="$1" type="button" value="$2" />' +
+				  '</div>');
 
-  var builder = new DomBuilder();
-  builder.build({
-	tag:'DIV', index:'frame', id:Gadget.generateId(), cls:Gadget.getPrefix('extraframe'), style:{display:'none'}, cn:[
-	  { tag:'DIV', index:'tabs' },
-	  { tag:'DIV', style:{margin:'4px 0px', textAlign:'right'}, cn:[
-		{ tag:'INPUT', index:'generate', type:'button', value:Gadget.getMsg('btn_gad') } ] }
-	]
-  });
-  this.$doms = builder.getElements();
+  createHiddenDiv(divId, tabBorderStyle,
+				  tinyTemplate(template, [tabId, btnId, Gadget.getMsg('btn_gad')]));
 
-  this.$tabs = new _IG_Tabs(Gadget.getModuleId(), 0, this.$doms.tabs);
-  this.$tabs.alignTabs('left');
-  this.$initSettingTab();
-  this.$initPreviewTab();
-  this.$initSourceTab();
-
-  this.$doms.generate.onclick = generateHandler(this, '$onGenerate');
-}
-
-GadgetView.prototype = {
-
-  $initSettingTab : function()
+  var SettingPanel = function()
   {
-	var tableStyle = 'width:98%;margin:0px;';
-	var labelStyle = 'width:10%; text-align:right; font-size:12px; overflow:hidden;';
-	var formStyle1 = 'width:89%;';
-	var formStyle2 = 'width:39%;';
-	var tboxStyle  = 'width:100%;font-size:12px;';
-	var selStyle   = 'width:100%;font-size:12px;';
+	var self     = this,
+	    divId    = generateUniqueId(),
+	    titleId  = generateUniqueId(),
+	    widthId  = generateUniqueId(),
+	    heightId = generateUniqueId(),
+	    htmlId   = generateUniqueId(),
+	    scriptId = generateUniqueId(),
+	    options  = '',
+	    tabMsg   = Gadget.getMsg('tab') + ' ',
+	    template = ('<table style="width:98%;margin:0px;"><tr>' +
+					'<td style="$0">$5</td>' +
+					'<td colspan="3" style="$1"><input id="$6" type="text" style="$3" /></td>' +
+					'</tr><tr>' +
+					'<td style="$0">$7</td>' +
+					'<td style="$2"><input id="$8" type="text" style="$3" /></td>' +
+					'<td style="$0">$9</td>' +
+					'<td style="$2"><input id="$10" type="text" style="$3" /></td>' +
+					'</tr><tr>' +
+					'<td style="$0">$11</td>' +
+					'<td style="$2"><select id="$12" style="$4">$15</select></td>' +
+					'<td style="$0">$13</td>' +
+					'<td style="$2"><select id="$14" style="$4">' +
+					'<option value="0">----</option>$15' +
+					'</select></td>' +
+					'</table>');
 
-	var builder = new DomBuilder();
-	builder.build({ tag:'DIV', index:'frame', cn:{ tag:'TABLE', style:tableStyle, cn:{ tag:'TBODY', cn:[
-	  { tag:'TR', cn:[
-		{ tag:'TD', style:labelStyle, html:Gadget.getMsg('gad_ttl') },
-		{ tag:'TD', colSpan:'3', style:formStyle1, cn:
-		  { tag:'INPUT', index:'title', type:'text', style:tboxStyle } }
-	  ] },
-	  { tag:'TR', cn:[
-		{ tag:'TD', style:labelStyle, html:Gadget.getMsg('gad_wdt') },
-		{ tag:'TD', style:formStyle2, cn:{ tag:'INPUT', index:'width', type:'text', style:tboxStyle } },
-		{ tag:'TD', style:labelStyle, html:Gadget.getMsg('gad_hgt') },
-		{ tag:'TD', style:formStyle2, cn:{ tag:'INPUT', index:'height', type:'text', style:tboxStyle } }
-	  ] },
-	  { tag:'TR', cn:[
-		{ tag:'TD', style:labelStyle, html:Gadget.getMsg('gad_htm') },
-		{ tag:'TD', style:formStyle2, cn:
-		  { tag:'SELECT', index:'html', style:selStyle, cn:[
-			{ tag:'OPTION', value:'1', html:Gadget.getMsg('tab') + ' 1' },
-			{ tag:'OPTION', value:'2', html:Gadget.getMsg('tab') + ' 2' },
-			{ tag:'OPTION', value:'3', html:Gadget.getMsg('tab') + ' 3' },
-			{ tag:'OPTION', value:'4', html:Gadget.getMsg('tab') + ' 4' },
-			{ tag:'OPTION', value:'5', html:Gadget.getMsg('tab') + ' 5' }
-		  ] }
-		},
-		{ tag:'TD', style:labelStyle, html:Gadget.getMsg('gad_scp') },
-		{ tag:'TD', style:formStyle2, cn:
-		  { tag:'SELECT', index:'script', style:selStyle, cn:[
-			{ tag:'OPTION', value:'0', html:'----' },
-			{ tag:'OPTION', value:'1', html:Gadget.getMsg('tab') + ' 1' },
-			{ tag:'OPTION', value:'2', html:Gadget.getMsg('tab') + ' 2' },
-			{ tag:'OPTION', value:'3', html:Gadget.getMsg('tab') + ' 3' },
-			{ tag:'OPTION', value:'4', html:Gadget.getMsg('tab') + ' 4' },
-			{ tag:'OPTION', value:'5', html:Gadget.getMsg('tab') + ' 5' }
-		  ] }
-		}
-	  ] }
-	] } } });
-	this.$settingDoms = builder.getElements();
-	this.$tabs.addTab(Gadget.getMsg('tab_set'), {
-	  contentContainer : this.$settingDoms.frame,
-	  callback         : generateHandler(this, '$onChangeTab') });
-  },
+	for(var i = 1 ; i <= 5 ; ++i) {
+	  options += '<option value="' + i + '">' + tabMsg + i + '</option>';
+	}
 
-  $initPreviewTab : function()
-  {
-	this.$previewDoms = {
-	  frame:   _gel(Gadget.getPrefix('gadgetframe')),
-	  msg:     _gel(Gadget.getPrefix('gadgetmsg')),
-	  border:  _gel(Gadget.getPrefix('gadgetborder'))
+	createHiddenDiv(divId, '', tinyTemplate(template, [
+	  'width:10%; text-align:right; font-size:12px; overflow:hidden;', // $0
+	  'width:89%;',                 // $1
+	  'width:39%;',                 // $2
+	  'width:100%;font-size:12px;', // $3
+	  'width:100%;font-size:12px;', // $4
+	  Gadget.getMsg('gad_ttl'),     // $5
+	  titleId,                      // $6
+	  Gadget.getMsg('gad_wdt'),     // $7
+	  widthId,                      // $8
+	  Gadget.getMsg('gad_hgt'),     // $9
+	  heightId,                     // $10
+	  Gadget.getMsg('gad_htm'),     // $11
+	  htmlId,                       // $12
+	  Gadget.getMsg('gad_scp'),     // $13
+	  scriptId,                     // $14
+	  options                       // $15
+	]));
+
+	self.$getId    = function() { return divId; };
+	self.$getLabel = function() { return Gadget.getMsg('tab_set'); };
+
+	self.$getContent = function() {
+	  return {
+		title:  gel(titleId).value,
+		width:  parseInt(gel(widthId).value, 10),
+		height: parseInt(gel(heightId).value, 10),
+		html:   Gadget.getText(gel(htmlId).value),
+		script: Gadget.getText(gel(scriptId).value)
+	  };
 	};
-	this.$tabs.addTab(Gadget.getMsg('tab_prv'), {
-	  contentContainer : this.$previewDoms.frame,
-	  callback         : generateHandler(this, '$onChangeTab') });
 
-	this.$gadget = new GadgetPreview(
-	  this.$previewDoms.border.id,
-	  { 'height' : parseInt(Gadget.getPrefValue('maxGadgetHeight'), 10) });
-  },
+	self = null;
+  };
 
-  $initSourceTab : function()
+  var PreviewPanel = function()
   {
-	var textStyle = {width:'100%',height:'10em',fontSize:parseInt(Gadget.getPrefValue('fontSize'),10)+'px'};
-	var builder   = new DomBuilder();
-	builder.build({
-	  tag:'DIV', index:'frame', cn:{
-		tag:'TEXTAREA', index:'source', style:textStyle, readonly:'true'
-	  }
-	});
-	this.$sourceDoms = builder.getElements();
-	this.$tabs.addTab(Gadget.getMsg('tab_src'), {
-	  contentContainer : this.$sourceDoms.frame,
-	  callback         : generateHandler(this, '$onChangeTab') });
-  },
+	var self     = this,
+	    divId    = generateUniqueId();
+	    msgId    = generateUniqueId();
+	    borderId = generateUniqueId();
+	    preview  = null,
+	    template = ('<div id="$0" style="font-size:$1px; margin-top: 4px;">$2</div>' +
+					'<div id="$3" style="border:1px dotted #676767;margin:0px auto;overflow:auto;display:none;"></div>');
 
-  $onGenerate : function()
+	createHiddenDiv(divId, '', tinyTemplate(template, [
+	  msgId, prefs.getInt('fs'), Gadget.getMsg('msg_gad'), borderId]));
+
+	preview = new GadgetPreview( borderId, { height : prefs.getInt('gh') });
+
+	self.$getId      = function() { return divId; };
+	self.$getLabel   = function() { return Gadget.getMsg('tab_prv'); };
+	self.$onActivate = function() { this.$centering(); }
+
+	self.$centering = function()
+	{
+	  var border    = gel(borderId),
+		  maxWidth  = border.parentNode.offsetWidth,
+		  maxHeight = preview.getDefaultHeight();
+      if(maxWidth > 0) {
+		border.style.width  = (_min(maxWidth,  preview.getWidth())  + 2) + 'px';
+		border.style.height = (_min(maxHeight, preview.getHeight()) + 2) + 'px';
+      }
+	};
+
+	self.$update = function(xml)
+	{
+	  gel(msgId).style.display    = 'none';
+	  gel(borderId).style.display = 'block';
+	  preview.update(xml);
+	};
+
+	self = null;
+  };
+
+  var SourcePanel = function()
   {
-	var title  = this.$settingDoms.title.value;
-	var width  = parseInt(this.$settingDoms.width.value,  10);
-	var height = parseInt(this.$settingDoms.height.value, 10);
-	var html   = Gadget.getText(this.$settingDoms.html.value);
-	var script = Gadget.getText(this.$settingDoms.script.value);
+	var self = this,
+	  divId = generateUniqueId(),
+	  srcId = generateUniqueId(),
+	  template = ('<textarea id="$0" wrap="off" readonly="true"' +
+				  ' style="width:100%; height:10em; font-size:$1px;"></textarea>');
+
+	createHiddenDiv(divId, '', tinyTemplate(template, [srcId, prefs.getInt('fs')]));
+
+	self.$getId    = function() { return divId; };
+	self.$getLabel = function() { return Gadget.getMsg('tab_src'); };
+
+	self.$setContent = function(xml)
+	{
+	  gel(srcId).value = xml;
+	};
+
+	self = null;
+  };
+
+  this.$onGenerate = function()
+  {
+	var settings = tabs.$getPanel(0).$getContent();
+	var title    = settings.title;
+	var width    = settings.width;
+	var height   = settings.height;
+	var html     = settings.html;
+	var script   = settings.script;
 
 	if(title)  { title  = '\n      title="'  + escapeHtml(title) + '"'; } else { title  = ''; }
 	if(width)  { width  = '\n      width="'  + width             + '"'; } else { width  = ''; }
@@ -869,46 +854,24 @@ GadgetView.prototype = {
 	  '    ]]\u003e',
 	  '  </Content>',
 	  '</Module>'].join('\n');
-	this.$sourceDoms.source.value = text;
 
-	this.$previewDoms.msg.style.display    = 'none';
-	this.$previewDoms.border.style.display = 'block';
+	tabs.$getPanel(2).$setContent(text);
+	tabs.$getPanel(1).$update(text);
+	tabs.$getPanel(1).$centering();
 
-	this.$gadget.update(text);
-
-	this.$centeringPreview();
 	Gadget.adjustHeight();
-  },
+  };
 
-  $onChangeTab : function(tabId)
-  {
-	if(this.$previewDoms && this.$previewDoms.frame.id == tabId)
-	  this.$centeringPreview();
-	Gadget.adjustHeight();
-  },
+  this.$getId       = function() { return divId; };
+  this.$getLabel    = function() { return Gadget.getMsg('tab_gad'); };
+  this.$onChangeTab = function() { Gadget.adjustHeight(); };
 
-  $centeringPreview : function()
-  {
-	var border    = this.$previewDoms.border;
-    var maxWidth  = border.parentNode.offsetWidth;
-    var maxHeight = this.$gadget.getDefaultHeight();
-    if(maxWidth > 0)
-    {
-	  border.style.width  = (_min(maxWidth,  this.$gadget.getWidth())  + 2) + 'px';
-	  border.style.height = (_min(maxHeight, this.$gadget.getHeight()) + 2) + 'px';
-    }
-  },
+  tabs = new TabView({ parentId: tabId, callback: generateHandler(this, '$onChangeTab') });
+  tabs.$addPanel(new SettingPanel());
+  tabs.$addPanel(new PreviewPanel());
+  tabs.$addPanel(new SourcePanel());
 
-  getTabLabel : function()
-  {
-	return Gadget.getMsg('tab_gad');
-  },
-
-  getContent : function()
-  {
-	return this.$doms.frame;
-  }
-
+  gel(btnId).onclick = generateHandler(this, '$onGenerate');
 }
 
 
@@ -949,7 +912,7 @@ function ToolBookmarkletize(frame)
 	  { tag:'DIV', cn: { tag:'A', index:'link', html:Gadget.getMsg('tol_bkc')} },
 	  { tag:'DIV', style:{marginTop:'4px'}, cn: [
 		{ tag:'DIV', html:Gadget.getMsg('tol_src') },
-		{ tag:'TEXTAREA', index:'source', style:{width:'100%', height:'5em'}, readonly:'true', wrap:'soft' }
+		{ tag:'TEXTAREA', index:'source', style:{width:'100%', height:'5em', fontSize:'12px'}, readonly:'true', wrap:'soft' }
 	  ]}
 	]}
   ]);
@@ -1045,6 +1008,7 @@ function ToolsView()
   this.$doms = builder.getElements();
   this.$doms.execute.onclick = generateHandler(this, '$onExecute');
   this.$doms.select.onchange = generateHandler(this, '$onChange');
+  _document.body.appendChild(this.$doms.frame);
 
   for(var i = 0 ; i < this.$entries.length ; ++i)
   {
@@ -1085,14 +1049,14 @@ ToolsView.prototype = {
 	Gadget.adjustHeight();
   },
 
-  getTabLabel : function()
+  $getId : function()
   {
-	return Gadget.getMsg('tab_tol');
+	return this.$doms.frame.id;
   },
 
-  getContent : function()
+  $getLabel : function()
   {
-	return this.$doms.frame;
+	return Gadget.getMsg('tab_tol');
   }
 
 };
@@ -1136,12 +1100,9 @@ var Gadget = {
   $storage    : {},
   $textView   : null,
   $extraTabs  : null,
-  $outputView : null,
-  $logView    : null,
-  $htmlView   : null,
-  $gadgetView : null,
-  $toolsView  : null,
+  $extraPanels: [],
   $minimsg    : null,
+  $events     : { output:[], log:[], html:[] },
 
   $prefsMap : {
 	prefsVer        : 'pr',
@@ -1153,22 +1114,33 @@ var Gadget = {
 	saveText        : 'sv'
   },
 
+  $addEventHandler : function(event, func)
+  {
+	if(this.$events[event]) {
+	  this.$events[event].push(func);
+	}
+  },
+
+  $invokeEvent : function(event) {
+	var handlers = this.$events[event] || [],
+	    args     = Array.prototype.slice.call(arguments, 1);
+	for(var i = 0, l = handlers.length ; i < l ; ++i) {
+	  handlers[i].apply(window, args);
+	}
+  },
+
   init : function()
   {
-	this.$textView   = new TextView();
+	this.$textView   = new TabView();
 	this.$minimsg    = new _IG_MiniMessage(moduleId);
 	this.$storageHdl = new DelayCall(generateProxy(this, 'onStorageFlush'), 3000);
 
-	if(this.$prefs.getBool('sv') && !useOpenSocial)
-	{
-	  if(this.$prefs.getBool('sm'))
-	  {
+	if(this.$prefs.getBool('sv') && !useOpenSocial) {
+	  if(this.$prefs.getBool('sm')) {
 		var msg = this.getMsg('msg_sav').replace(/_\_MODULE_ID__/, moduleId).replace(/^\s+|\s+$/,'');
 		this.$minimsg.createDismissibleMessage(msg, generateHandler(this, '$onSaveWarningDismissed'));
 	  }
-	}
-	else if(!this.$prefs.getBool('sm'))
-	{
+	} else if(!this.$prefs.getBool('sm')) {
 	  this.$prefs.set('sm', 1);
 	}
 
@@ -1185,6 +1157,13 @@ var Gadget = {
 		  });
 		}
 	  }
+	}
+
+	for(var i = 0 ; i < 5 ; ++i) {
+	  this.$textView.$addPanel(new EditorPanel(i + 1));
+	}
+	if(this.storageIsOk()) {
+	  this.$textView.$forEach(function(panel) { panel.$load(); });
 	}
 
 	this.$initExtraViews();
@@ -1216,22 +1195,23 @@ var Gadget = {
 
   $initExtraViews : function()
   {
+	var panels = this.$extraPanels;
+
 	this.$extraTabs  = new _IG_Tabs(moduleId, 0, gel(this.$prefix + 'extraview'));
-	this.$outputView = new OutputView();
-	this.$logView    = new LogView();
-	this.$htmlView   = new HtmlView();
-	this.$gadgetView = new GadgetView();
-	this.$toolsView  = new ToolsView();
+	panels.push(new OutputView());
+	panels.push(new LogView());
+	panels.push(new HtmlView());
+	panels.push(new GadgetView());
+	panels.push(new ToolsView());
 
 	this.$extraTabs.alignTabs('left');
 
-	var views = [this.$outputView, this.$logView, this.$htmlView, this.$gadgetView, this.$toolsView];
-	for(var i = 0 ; i < views.length ; ++i)
+	for(var i = 0 ; i < panels.length ; ++i)
 	{
-	  var view     = views[i];
-	  var label    = view.getTabLabel();
-	  var content  = view.getContent();
-	  var callback = generateHandler(this, '$onChangeTab');
+	  var panel    = panels[i],
+		  label    = panel.$getLabel(),
+		  content  = gel(panel.$getId()),
+		  callback = generateHandler(this, '$onChangeTab');
 	  this.$extraTabs.addTab(label, {
 		contentContainer : content,
 		callback         : callback});
@@ -1240,7 +1220,7 @@ var Gadget = {
 
   $onRunAsScript : function()
   {
-	var text = this.$textView.getCurrentText();
+	var text = this.$textView.$getCurrentPanel().$getContent();
 	var output = '';
 	var error  = false;
 	try
@@ -1255,23 +1235,21 @@ var Gadget = {
 	  output = e.message || e.description || String(e);
 	  error  = true;
 	}
-	this.$outputView.setText(output, error);
+	this.$invokeEvent('output', output, error);
 	this.adjustHeight();
   },
 
   $onClearText : function()
   {
-	this.$textView.clearCurrentText();
+	var panel = this.$textView.$getCurrentPanel();
+	panel.$setContent('');
+	panel.$save();
   },
 
   $onReplaceHTML : function()
   {
-    var text = this.$textView.getCurrentText();
-    if(text)
-    {
-	  this.$htmlView.setHTML(text);
-	  this.adjustHeight();
-    }
+	this.$invokeEvent('html', this.$textView.$getCurrentPanel().$getContent());
+	this.adjustHeight();
   },
 
   $onChangeTab : function()
@@ -1328,22 +1306,23 @@ var Gadget = {
 
   getText : function(index)
   {
-	return this.$textView.getText(index)
+	var panel = this.$textView.$getPanel(index - 1);
+	return panel ? panel.$getContent() : '';
   },
 
   getCurrentText : function()
   {
-	return this.$textView.getCurrentText();
+	return this.$textView.$getCurrentPanel().$getContent();
   },
 
   setCurrentText : function(newText)
   {
-	this.$textView.setCurrentText(newText);
+	this.$textView.$getCurrentPanel().$setContent(newText);
   },
 
   log : function(text)
   {
-	this.$logView.log(text);
+	this.$invokeEvent('log', text);
   },
 
   onStorageReady : function()
@@ -1352,7 +1331,7 @@ var Gadget = {
 	  this.$flash = gel(Gadget.getPrefix('JsConsoleStorage'));
 	  this.$flash.open(this.$storageId);
 	  if(this.$textView) {
-		this.$textView.onStorageReady();
+		this.$textView.$forEach(function(panel) { panel.$load() });
 	  }
 	}
   },

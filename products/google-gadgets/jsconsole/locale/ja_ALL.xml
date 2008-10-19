@@ -25,16 +25,26 @@
   <msg name="tab_src">ソース</msg>
   <msg name="tab_tol">ツール</msg>
 
+  <msg name="msg_out">スクリプトの実行結果が表示されます。</msg>
+  <msg name="msg_log">jsconsole.log(&quot;msg&quot;) で任意のテキストをここに出力できます。</msg>
+  <msg name="msg_htm">「HTMLを表示」ボタンを押すと、カレントテキストがHTMLとしてここにレンダリングされます。注：innerHTMLの制限により、scriptタグはすべて無視されます。</msg>
+  <msg name="msg_gad">「ガジェットを生成」ボタンを押すと、「設定」タブで指定したHTMLとスクリプト（省略可）を基にしてGoogle Universalガジェットを生成し、ここに表示します。</msg>
+
   <msg name="gad_ttl">タイトル</msg>
   <msg name="gad_wdt">幅</msg>
   <msg name="gad_hgt">高さ</msg>
   <msg name="gad_htm">HTML</msg>
   <msg name="gad_scp">スクリプト</msg>
 
-  <msg name="msg_out">スクリプトの実行結果が表示されます。</msg>
-  <msg name="msg_log">jsconsole.log(&quot;msg&quot;) で任意のテキストをここに出力できます。</msg>
-  <msg name="msg_htm">「HTMLを表示」ボタンを押すと、カレントテキストがHTMLとしてここにレンダリングされます。注：innerHTMLの制限により、scriptタグはすべて無視されます。</msg>
-  <msg name="msg_gad">「ガジェットを生成」ボタンを押すと、「設定」タブで指定したHTMLとスクリプト（省略可）を基にしてGoogle Universalガジェットを生成し、ここに表示します。</msg>
+  <msg name="tol_exe">実行</msg>
+  <msg name="tol_src">ソース</msg>
+  <msg name="tol_hes">HTML エスケープ</msg>
+  <msg name="tol_hue">HTML エスケープの解除</msg>
+  <msg name="tol_ues">URL エスケープ</msg>
+  <msg name="tol_uue">URL エスケープの解除</msg>
+  <msg name="tol_bkl">ブックマークレット化</msg>
+  <msg name="tol_bkm">現在のテキストボックスの内容をブックマークレットにします。 &lt;b&gt;注意:&lt;/b&gt; ステートメントの最後のセミコロンが省略されていると、ブックマークレットが動作しません。</msg>
+  <msg name="tol_bkc">このリンクをブックマークしてください</msg>
 
   <msg name="tab">タブ</msg>
   <msg name="blog">ブログ</msg>

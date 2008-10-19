@@ -64,11 +64,6 @@
 <div id="mod__MODULE_ID__buttons"></div>
 <div id="mod__MODULE_ID__extraview"></div>
 
-<div id="mod__MODULE_ID__gadgetframe" style="display:none;">
-  <div id="mod__MODULE_ID__gadgetmsg" style="font-size:__UP_fs__px;">__MSG_msg_gad__</div>
-  <div id="mod__MODULE_ID__gadgetborder" style="border:1px dotted #676767;margin:0px auto;overflow:auto;display:none;"></div>
-</div>
-
 <div style="font-size:10px;float:right;margin-top:4px;">
   <a target="_blank" href="http://webos-goodies.jp/">__MSG_blog__</a> |
   <a target="_blank" href="http://groups.google.com/group/webos-goodies">__MSG_support__</a>
