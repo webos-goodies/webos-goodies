@@ -69,10 +69,9 @@
   <a target="_blank" href="http://groups.google.com/group/webos-goodies">__MSG_support__</a>
 </div>
 
-<script type="text/javascript">
-  // You can get an unpacked version of the following script at http://webos-goodies.googlecode.com/svn/trunk/products/google-gadgets/jsconsole/script.js
-  <%= jspack('script.js') %>
-</script>
+<script type="text/javascript">var moduleId = __MODULE_ID__;</script>
+
+<%= jspack('script.js') %>
 
 <div>
   <script type="text/javascript">

@@ -1,10 +1,9 @@
-var Gadget = (function() {
+var Gadget = (function(moduleId) {
 
 //--------------------------------------------------------------------
 // Global variables
 
 var _document      = document;
-var moduleId       = __MODULE_ID__;
 var prefs          = new _IG_Prefs(moduleId);
 var useLegacy      = !(window.gadgets && gadgets.views && gadgets.views.getCurrentView() !== undefined);
 var useOpenSocial  = !useLegacy && !!window.opensocial;
@@ -39,6 +38,19 @@ function generateProxy(self, name)
   return function() { method.apply(self, args) };
 };
 
+function toInteger(value, defaultValue)
+{
+  value = parseInt(value, 10);
+  return isNaN(value) ? defaultValue : value;
+}
+
+function forEach(array, func, scope)
+{
+  for(var i = 0, l = array.length ; i < l ; ++i) {
+	func.call(scope, array[i], i, array);
+  }
+}
+
 
 //--------------------------------------------------------------------
 // DOM handling
@@ -64,18 +76,13 @@ function gtx(element_or_id)
   return el.textContent !== undefined ? el.textContent : el.innerText;
 }
 
-function appendBodyChild(child)
-{
-  _document.body.appendChild(child);
-}
-
 function createHiddenDiv(id, style, html)
 {
   var div           = nel('div');
   div.id            = id;
   div.style.cssText = 'display:none;' + (style || '');
   div.innerHTML     = html || '';
-  appendBodyChild(div);
+  _document.body.appendChild(div);
   return div;
 }
 
@@ -505,12 +512,11 @@ function TabView(opts)
   tabs.alignTabs('left');
 
   function onChange(tabId) {
-	for(var i = 0, l = panels.length ; i < l ; ++i) {
-	  var panel = panels[i];
+	forEach(panels, function(panel) {
 	  if(panel.$getId() == tabId && isFunction(panel.$onActivate)) {
 		panel.$onActivate.call(panel);
 	  }
-	}
+	});
 	if(isFunction(callback)) {
 	  callback.call(scope, tabId);
 	}
@@ -518,6 +524,7 @@ function TabView(opts)
 
   self.$getPanel  = function(i) { return panels[i]; }
   self.$numPanels = function(i) { return panels.length; }
+  self.$forEach   = function(func, scope) { forEach(panels, func, scope); };
 
   self.$getCurrentPanel = function()
   {
@@ -533,13 +540,15 @@ function TabView(opts)
 	  callback         : onChange });
   };
 
-  self.$forEach = function(func, scope) {
-	for(var i = 0, l = panels.length ; i < l ; ++i) {
-	  func.call(scope, panels[i], i, panels);
-	}
-  };
-
   self = opts = null;
+}
+
+function EmptyPanel(label)
+{
+  var divId = generateUniqueId();
+  this.$getId    = function() { return divId; }
+  this.$getLabel = function() { return label; }
+  createHiddenDiv(divId);
 }
 
 
@@ -629,11 +638,7 @@ function LogView()
 				  '<input type="button" id="$3" value="$4" /></div>');
 
   createHiddenDiv(divId, '', tinyTemplate(template, [
-	logId,
-	prefs.getInt('lr'),
-	prefs.getInt('fs'),
-	btnId,
-	Gadget.getMsg('btn_clr')]));
+	logId, prefs.getInt('lr'), prefs.getInt('fs'), btnId, Gadget.getMsg('btn_clr')]));
 
   self.$getId    = function()  { return divId; };
   self.$onClear  = function()  { gel(logId).value = ''; };
@@ -677,7 +682,8 @@ function HtmlView()
 
 function GadgetView()
 {
-  var divId    = generateUniqueId(),
+  var self     = this,
+	  divId    = generateUniqueId(),
 	  tabId    = generateUniqueId(),
 	  btnId    = generateUniqueId(),
 	  tabs     = null,
@@ -745,11 +751,11 @@ function GadgetView()
 
 	self.$getContent = function() {
 	  return {
-		title:  gel(titleId).value,
-		width:  parseInt(gel(widthId).value, 10),
-		height: parseInt(gel(heightId).value, 10),
-		html:   Gadget.getText(gel(htmlId).value),
-		script: Gadget.getText(gel(scriptId).value)
+		$title:  gel(titleId).value,
+		$width:  toInteger(gel(widthId).value, null),
+		$height: toInteger(gel(heightId).value, null),
+		$html:   Gadget.getText(gel(htmlId).value),
+		$script: Gadget.getText(gel(scriptId).value)
 	  };
 	};
 
@@ -799,10 +805,10 @@ function GadgetView()
   var SourcePanel = function()
   {
 	var self = this,
-	  divId = generateUniqueId(),
-	  srcId = generateUniqueId(),
-	  template = ('<textarea id="$0" wrap="off" readonly="true"' +
-				  ' style="width:100%; height:10em; font-size:$1px;"></textarea>');
+	    divId = generateUniqueId(),
+	    srcId = generateUniqueId(),
+	    template = ('<textarea id="$0" wrap="off" readonly="true"' +
+					' style="width:100%; height:10em; font-size:$1px;"></textarea>');
 
 	createHiddenDiv(divId, '', tinyTemplate(template, [srcId, prefs.getInt('fs')]));
 
@@ -817,26 +823,21 @@ function GadgetView()
 	self = null;
   };
 
-  this.$onGenerate = function()
+  self.$onGenerate = function()
   {
-	var settings = tabs.$getPanel(0).$getContent();
-	var title    = settings.title;
-	var width    = settings.width;
-	var height   = settings.height;
-	var html     = settings.html;
-	var script   = settings.script;
+	var s = tabs.$getPanel(0).$getContent();
 
-	if(title)  { title  = '\n      title="'  + escapeHtml(title) + '"'; } else { title  = ''; }
-	if(width)  { width  = '\n      width="'  + width             + '"'; } else { width  = ''; }
-	if(height) { height = '\n      height="' + height            + '"'; } else { height = ''; }
+	if(s.$title)  { s.$title  = '\n      title="'  + escapeHtml(s.$title) + '"'; } else { s.$title  = ''; }
+	if(s.$width)  { s.$width  = '\n      width="'  + s.$width             + '"'; } else { s.$width  = ''; }
+	if(s.$height) { s.$height = '\n      height="' + s.$height            + '"'; } else { s.$height = ''; }
 
-	if(script)
-	  script = '\u003cscript type="text/javascript"\u003e\n' + script + '\n\u003c/script\u003e';
+	if(s.$script)
+	  s.$script = '\u003cscript type="text/javascript"\u003e\n' + s.$script + '\n\u003c/script\u003e';
 
 	var text = [
 	  '<?xml version="1.0" encoding="UTF-8" ?>',
 	  '<Module>',
-	  '  <ModulePrefs' + title + width + height + '>',
+	  '  <ModulePrefs' + s.$title + s.$width + s.$height + '>',
 	  '    <Require feature="setprefs" />',
 	  '    <Require feature="settitle" />',
 	  '    <Require feature="dynamic-height" />',
@@ -849,8 +850,8 @@ function GadgetView()
 	  '  </ModulePrefs>',
 	  '  <Content type="html">',
 	  '    \u003c![CDATA[',
-	  html,
-	  script,
+	  s.$html,
+	  s.$script,
 	  '    ]]\u003e',
 	  '  </Content>',
 	  '</Module>'].join('\n');
@@ -862,204 +863,178 @@ function GadgetView()
 	Gadget.adjustHeight();
   };
 
-  this.$getId       = function() { return divId; };
-  this.$getLabel    = function() { return Gadget.getMsg('tab_gad'); };
-  this.$onChangeTab = function() { Gadget.adjustHeight(); };
+  self.$getId       = function() { return divId; };
+  self.$getLabel    = function() { return Gadget.getMsg('tab_gad'); };
+  self.$onChangeTab = function() { Gadget.adjustHeight(); };
 
-  tabs = new TabView({ parentId: tabId, callback: generateHandler(this, '$onChangeTab') });
+  tabs = new TabView({ parentId: tabId, callback: generateHandler(self, '$onChangeTab') });
   tabs.$addPanel(new SettingPanel());
   tabs.$addPanel(new PreviewPanel());
   tabs.$addPanel(new SourcePanel());
 
-  gel(btnId).onclick = generateHandler(this, '$onGenerate');
+  gel(btnId).onclick = generateHandler(self, '$onGenerate');
+
+  self = null;
 }
 
 
 //--------------------------------------------------------------------
 // ToolsView
 
-function toolHtmlEscape()
+function HtmlEscapePanel()
 {
-  Gadget.setCurrentText(escapeHtml(Gadget.getCurrentText()));
+  EmptyPanel.call(this, Gadget.getMsg('tol_hes'));
+  this.$execute = function() { Gadget.setCurrentText(escapeHtml(Gadget.getCurrentText())); };
 }
 
-function toolHtmlUnescape()
+function HtmlUnescapePanel()
 {
-  var text = Gadget.getCurrentText();
-  text = text.replace(/</g, '&lt;').replace(/>/g, '&gt;');
-  text = text.replace(/\"/g, '&quot;').replace(/\'/g, '&#39;');
-  var div = nel('div');
-  div.innerHTML = '<pre>' + text + '</pre>';
-  Gadget.setCurrentText(gtx(div));
+  EmptyPanel.call(this, Gadget.getMsg('tol_hue'));
+  this.$execute = function() {
+	var text = Gadget.getCurrentText(), div = nel('div');
+	text = text.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+	text = text.replace(/\"/g, '&quot;').replace(/\'/g, '&#39;');
+	div.innerHTML = '<pre>' + text + '</pre>';
+	Gadget.setCurrentText(gtx(div));
+  }
 }
 
-function toolUrlEscape()
+function UrlEscapePanel()
 {
-  Gadget.setCurrentText(escapeUrl(Gadget.getCurrentText()));
+  EmptyPanel.call(this, Gadget.getMsg('tol_ues'));
+  this.$execute = function() { Gadget.setCurrentText(escapeUrl(Gadget.getCurrentText())); };
 }
 
-function toolUrlUnescape()
+function UrlUnescapePanel()
 {
-  Gadget.setCurrentText(unescapeUrl(Gadget.getCurrentText()));
+  EmptyPanel.call(this, Gadget.getMsg('tol_uue'));
+  this.$execute = function() { Gadget.setCurrentText(unescapeUrl(Gadget.getCurrentText())); };
 }
 
-function ToolBookmarkletize(frame)
+function BookmarkletizePanel()
 {
-  var builder = new DomBuilder();
-  builder.build(frame, [
-	{ tag:'DIV', index:'msg', html:Gadget.getMsg('tol_bkm') },
-	{ tag:'DIV', index:'result', style:{display:'none'}, cn:[
-	  { tag:'DIV', cn: { tag:'A', index:'link', html:Gadget.getMsg('tol_bkc')} },
-	  { tag:'DIV', style:{marginTop:'4px'}, cn: [
-		{ tag:'DIV', html:Gadget.getMsg('tol_src') },
-		{ tag:'TEXTAREA', index:'source', style:{width:'100%', height:'5em', fontSize:'12px'}, readonly:'true', wrap:'soft' }
-	  ]}
-	]}
-  ]);
-  this.$doms = builder.getElements();
-  this.$pattern = new RegExp([
+  var self     = this,
+	  divId    = generateUniqueId(),
+	  msgId    = generateUniqueId(),
+	  resId    = generateUniqueId(),
+	  lnkId    = generateUniqueId(),
+	  srcId    = generateUniqueId(),
+	  template = ('<div id="$0">$1</div>' +
+				  '<div id="$2" style="display:none;">' +
+				  '<div><a id="$3" href="#">$4</a></div>' +
+				  '<div style="margin-top:4px;">' +
+				  '<div>$5</div>' +
+				  '<textarea id="$6" style="width:100%; height:5em; font-size:$7px;" readonly="true" wrap="soft"></textarea>' +
+				  '</div></div>');
+
+  createHiddenDiv(divId, 'margin-top: 4px; font-size:'+prefs.getInt('fs')+'px;', tinyTemplate(template, [
+	msgId, Gadget.getMsg('tol_bkm'), resId, lnkId, Gadget.getMsg('tol_bkc'),
+	Gadget.getMsg('tol_src'), srcId, prefs.getInt('fs')]));
+
+  var pattern = new RegExp([
 	'//.*',
 	'/\\*(?:[^*]|\\*(?!/))+\\*/',
 	'(\'|")(?:[^\\\\\\1]|\\\\.)*?\\1',
 	'([^.)\\]$\\w\\s]\\s*)(/(?![/\\*])(?:[^\\\\/\\[]|\\\\.|\\[(?:[^\\\\\\]]|\\\\.)*\\])*?/)'
   ].join('|'), 'g');
-}
-ToolBookmarkletize.prototype = {
-  onExecute : function()
+
+  self.$getId    = function() { return divId; };
+  self.$getLabel = function() { return Gadget.getMsg('tol_bkl'); };
+
+  self.$execute = function()
   {
-	var text     = Gadget.getCurrentText();
-	var literals = [];
-	text = text.replace(/\r\n?/g, '\n');
-	text = text.replace(/\~/g, '~T');
-	text = text.replace(/\+\+/g, '~P');
-	text = text.replace(/\-\-/g, '~M');
-	text = text.replace(this.$pattern, function(m0, m1, m2, m3) {
-	  if(m1)
-	  {
+	var text = Gadget.getCurrentText(), literals = [];
+	text = text.replace(/\r\n?/g, '\n').replace(/\~/g, '~T');
+	text = text.replace(/\+\+/g, '~P').replace(/\-\-/g, '~M');
+	text = text.replace(pattern, function(m0, m1, m2, m3) {
+	  if(m1) {
 		literals[literals.length] = m0;
 		return '~S';
-	  }
-	  else if(m2 && m3)
-	  {
+	  } else if(m2 && m3) {
 		literals[literals.length] = m3;
 		return m2 + '~S';
-	  }
-	  else
-	  {
+	  } else {
 		return '';
 	  }
 	});
-	text = text.replace(/\s+/g, ' ');
-	text = text.replace(/^ +| +$/g, '');
+	text = text.replace(/\s+/g, ' ').replace(/^ +| +$/g, '');
 	text = text.replace(/\~S/g, function(){
 	  return literals.shift();
 	});
 	text = text.replace(/\~P/g, '++').replace(/\~M/g, '--').replace(/\~T/g, '~');
 
-	this.$doms.link.href    = 'javascript:' + '(function(){' + text + '})()';
-	this.$doms.source.value = text;
+	gel(lnkId).href  = 'javascript:' + '(function(){' + text + '})()';
+	gel(srcId).value = text;
 
-	this.$doms.msg.style.display    = 'none';
-	this.$doms.result.style.display = 'block';
+	gel(msgId).style.display    = 'none';
+	gel(resId).style.display = 'block';
 
 	Gadget.adjustHeight();
-  }
-};
+  };
+
+  self = null;
+}
 
 function ToolsView()
 {
-  this.$doms    = null;
-  this.$entries = [];
+  var self     = this,
+	  divId    = generateUniqueId(),
+	  selId    = generateUniqueId(),
+	  btnId    = generateUniqueId(),
+	  ctnId    = generateUniqueId(),
+	  panels   = [],
+	  options  = [],
+	  template = ('<div>' +
+				  '<select id="$0">$1</select>' +
+				  '<input id="$2" type="button" value="$3" style="margin-left:8px" />' +
+				  '</div>' +
+				  '<div id="$4"></div>');
 
-  var options = [];
-  for(var i = 0 ; i < ToolsView.$template.length ; ++i)
-  {
-	var template = ToolsView.$template[i];
-	options[i] = {tag:'OPTION', value:i, html:Gadget.getMsg(template.label)};
-	var entry = {};
-	if(isFunction(template.cls))
-	{
-	  var div = nel('DIV');
-	  div.style.display   = 'none';
-	  div.style.fontSize  = Gadget.getPrefValue('fontSize') + 'px';
-	  div.style.marginTop = '4px';
-	  entry.scope = new template.cls(div);
-	  entry.func  = entry.scope.onExecute;
-	  entry.frame = div;
-	}
-	else if(isFunction(template.func))
-	{
-	  entry.scope = window;
-	  entry.func  = template.func;
-	}
-	this.$entries[i] = entry;
-  }
+  panels[0] = new HtmlEscapePanel();
+  panels[1] = new HtmlUnescapePanel();
+  panels[2] = new UrlEscapePanel();
+  panels[3] = new UrlUnescapePanel();
+  panels[4] = new BookmarkletizePanel();
 
-  var builder = new DomBuilder();
-  builder.build({
-	tag:'DIV', index:'frame', id:Gadget.generateId(), cls:Gadget.getPrefix('extraframe'), cn:[
-	  { tag:'DIV', cn:[
-		{ tag:'SELECT', index:'select', cn:options},
-		{ tag:'INPUT', index:'execute', type:'button', value:Gadget.getMsg('tol_exe'), style:{marginLeft:'8px'} }
-	  ]},
-	  { tag:'DIV', index:'content' }
-	]
+  forEach(panels, function(panel, i) {
+	options[i] = '<option value="' + i + '">' + panel.$getLabel() + '</option>';
   });
-  this.$doms = builder.getElements();
-  this.$doms.execute.onclick = generateHandler(this, '$onExecute');
-  this.$doms.select.onchange = generateHandler(this, '$onChange');
-  _document.body.appendChild(this.$doms.frame);
 
-  for(var i = 0 ; i < this.$entries.length ; ++i)
+  createHiddenDiv(divId, tabBorderStyle, tinyTemplate(template, [
+	selId, options.join(''), btnId, Gadget.getMsg('tol_exe'), ctnId]));
+  forEach(panels, function(panel, i) { gel(ctnId).appendChild(gel(panel.$getId())); });
+
+  self.$onExecute = function()
   {
-	if(this.$entries[i].frame)
-	  this.$doms.content.appendChild(this.$entries[i].frame);
-  }
-}
+	var panel = panels[toInteger(gel(selId).value, 0)];
+	if(panel) { panel.$execute(); }
+  };
 
-ToolsView.$template = [
-  { label:'tol_hes', func:toolHtmlEscape },
-  { label:'tol_hue', func:toolHtmlUnescape },
-  { label:'tol_ues', func:toolUrlEscape },
-  { label:'tol_uue', func:toolUrlUnescape },
-  { label:'tol_bkl', cls: ToolBookmarkletize }
-];
-
-ToolsView.prototype = {
-
-  $onExecute : function()
+  self.$onChange = function()
   {
-	var value = parseInt(this.$doms.select.value, 10);
-	if(0 <= value && value < this.$entries.length)
-	{
-	  var entry = this.$entries[value];
-	  if(typeof entry.func === 'function')
-		entry.func.call(entry.scope);
-	}
-  },
-
-  $onChange : function()
-  {
-	var selected = parseInt(this.$doms.select.value, 10);
-	for(var i = 0 ; i < this.$entries.length ; ++i)
-	{
-	  if(this.$entries[i].frame)
-		this.$entries[i].frame.style.display = (i == selected ? 'block' : 'none');
-	}
+	var selected = toInteger(gel(selId).value, 0);
+	forEach(panels, function(panel, i) {
+	  gel(panel.$getId()).style.display = (i == selected ? 'block' : 'none');
+	});
 	Gadget.adjustHeight();
-  },
+  };
 
-  $getId : function()
+  self.$getId = function()
   {
-	return this.$doms.frame.id;
-  },
+	return divId;
+  };
 
-  $getLabel : function()
+  self.$getLabel = function()
   {
 	return Gadget.getMsg('tab_tol');
-  }
+  };
 
-};
+  gel(btnId).onclick  = generateHandler(self, '$onExecute');
+  gel(selId).onchange = generateHandler(self, '$onChange');
+  self.$onChange();
+
+  self = null;
+}
 
 
 //--------------------------------------------------------------------
@@ -1124,9 +1099,9 @@ var Gadget = {
   $invokeEvent : function(event) {
 	var handlers = this.$events[event] || [],
 	    args     = Array.prototype.slice.call(arguments, 1);
-	for(var i = 0, l = handlers.length ; i < l ; ++i) {
-	  handlers[i].apply(window, args);
-	}
+	forEach(handlers, function(handler) {
+	  handler.apply(window, args);
+	});
   },
 
   init : function()
@@ -1195,27 +1170,25 @@ var Gadget = {
 
   $initExtraViews : function()
   {
-	var panels = this.$extraPanels;
+	var self = this, panels = this.$extraPanels;
 
-	this.$extraTabs  = new _IG_Tabs(moduleId, 0, gel(this.$prefix + 'extraview'));
+	self.$extraTabs  = new _IG_Tabs(moduleId, 0, gel(self.$prefix + 'extraview'));
 	panels.push(new OutputView());
 	panels.push(new LogView());
 	panels.push(new HtmlView());
 	panels.push(new GadgetView());
 	panels.push(new ToolsView());
 
-	this.$extraTabs.alignTabs('left');
+	self.$extraTabs.alignTabs('left');
 
-	for(var i = 0 ; i < panels.length ; ++i)
-	{
-	  var panel    = panels[i],
-		  label    = panel.$getLabel(),
+	forEach(panels, function(panel) {
+	  var label    = panel.$getLabel(),
 		  content  = gel(panel.$getId()),
-		  callback = generateHandler(this, '$onChangeTab');
-	  this.$extraTabs.addTab(label, {
+		  callback = generateHandler(self, '$onChangeTab');
+	  self.$extraTabs.addTab(label, {
 		contentContainer : content,
 		callback         : callback});
-	}
+	});
   },
 
   $onRunAsScript : function()
@@ -1394,7 +1367,7 @@ if(window.Components) {
 
 return Gadget;
 
-})();
+})(moduleId);
 
 // If eval is directly called in the above namespace, YUI Compressor cannot shorten symbols.
 Gadget.$eval = function(text) {

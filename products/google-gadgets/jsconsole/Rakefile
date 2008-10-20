@@ -23,12 +23,25 @@ def execCmd(cmd, stdin)
 end
 
 def jspack(fname)
-  source = IO.read(fname)
-  unless ENV.has_key?('DEBUG')
+  if ENV.has_key?('DEBUG')
+    <<EOS
+<script type="text/javascript">
+  document.open();
+  document.write('<scr'+'ipt src=\x22#{File.join($root, fname)}?' + Math.random() + '\x22></scr' + 'ipt>');
+  document.close();
+</script>
+EOS
+  else
+    source = IO.read(fname)
     source = execCmd('yuicompressor --type js --charset UTF-8', source)
     source = execCmd('jsjuicer -sm', source)
+	<<EOS
+<script type="text/javascript">
+  // You can get an unpacked version of the following script at #{File.join($root, fname)}
+  #{source}
+</script>
+EOS
   end
-  source
 end
 
 TARGETS.each do |fname|
