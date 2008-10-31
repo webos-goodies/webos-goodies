@@ -33,7 +33,7 @@
 
   #tablediv table {
     border:2px solid black;
-    border-collapse: collapse; 
+    border-collapse: collapse;
   }
 
   #tablediv td {
@@ -71,7 +71,7 @@
       <table>
         <tr>
           <th><label for="data_source">Data Source</label></td>
-          <td colspan="2"><input id="data_source" type="text" value="__UP__table_query_url__" /></td>
+          <td colspan="2"><input id="data_source" type="text" value="" /></td>
         </tr>
         <tr>
           <th><label for="query">Query</label></td>
@@ -86,6 +86,9 @@
 
   <script>
     google.load("visualization", "1");
+
+	var prefs = new _IG_Prefs(__MODULE_ID__);
+	_gel('data_source').value = prefs.getString('_table_query_url');
 
     function sendQuery() {
       _gel('tablediv').innerHTML = escapeHtml('Loading...');
