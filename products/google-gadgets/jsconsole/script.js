@@ -1274,7 +1274,11 @@ var Gadget = {
 
   getMsg : function(id)
   {
-	return this.$prefs.getMsg(id);
+	try {
+	  return this.$prefs.getMsg(id);
+	} catch(e) {
+	  return id;
+	}
   },
 
   getText : function(index)
