@@ -55,4 +55,6 @@
 
   <msg name="notification000"><![CDATA[「テキストを保存」機能は削除される予定です。もし使用している場合は、テキストをバックアップして設定をオフにしておいてください。その後、<a href="http://www.macromedia.com/support/documentation/jp/flashplayer/help/settings_manager07.html" target="_blank">このページ</a>で __MODULE_ID__.gmodules.com を削除することをお勧めします。]]></msg>
 
+  <msg name="warning">iGoogle のバグにより、各ラベルが化けています。ご不便をおかけして申し訳ありません。</msg>
+
 </messagebundle>
