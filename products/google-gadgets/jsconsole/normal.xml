@@ -64,8 +64,6 @@
 <div id="mod__MODULE_ID__buttons"></div>
 <div id="mod__MODULE_ID__extraview"></div>
 
-<div style="font-size:10px;color:red;">__MSG_warning__</div>
-
 <div style="font-size:10px;float:right;margin-top:4px;">
   <a target="_blank" href="http://webos-goodies.jp/">__MSG_blog__</a> |
   <a target="_blank" href="http://groups.google.com/group/webos-goodies">__MSG_support__</a>

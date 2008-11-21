@@ -56,6 +56,4 @@
 
   <msg name="notification000"><![CDATA[The Save Texts feature will be deprecated in the near future. Please backup your texts and turn off the Save Texts setting. Afterwards, I recommend you to erase __MODULE_ID__.gmodules.com at <a href="http://www.macromedia.com/support/documentation/en/flashplayer/help/settings_manager07.html" target="_blank">this page</a>]]></msg>
 
-  <msg name="warning">All labels are broken because of an iGoogle's bug. Sorry for inconvinience.</msg>
-
 </messagebundle>
