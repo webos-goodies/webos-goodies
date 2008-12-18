@@ -1,0 +1,17 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  parser: MyString
+  title: MyString
+  meta: MyString
+  body1: MyText
+  body2: MyText
+  published: false
+
+two:
+  parser: MyString
+  title: MyString
+  meta: MyString
+  body1: MyText
+  body2: MyText
+  published: false
