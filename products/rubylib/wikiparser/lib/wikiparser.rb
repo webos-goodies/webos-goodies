@@ -167,21 +167,21 @@ module WikiParser
       doc
     end
 
-    def self.add_tag_syntax(syntax, &block)
+    def self.tag_syntax(syntax, &block)
       syntax[:proc] = block if block
       raise SyntaxDefinitionError.new(syntax) unless Regexp === syntax[:pattern]
       raise SyntaxDefinitionError.new(syntax) unless syntax[:proc]
       push_to_inheritable(:tag_syntaxes) << syntax
     end
 
-    def self.add_block_syntax(syntax, &block)
+    def self.block_syntax(syntax, &block)
       syntax[:proc] = block if block
       raise SyntaxDefinitionError.new(syntax) unless Regexp === syntax[:pattern]
       raise SyntaxDefinitionError.new(syntax) unless syntax[:proc]
       push_to_inheritable(:block_syntaxes) << syntax
     end
 
-    def self.add_inline_syntax(syntax, &block)
+    def self.inline_syntax(syntax, &block)
       syntax[:proc] = block if block
       raise SyntaxDefinitionError.new(syntax) unless Regexp === syntax[:pattern]
       raise SyntaxDefinitionError.new(syntax) unless syntax[:proc]
