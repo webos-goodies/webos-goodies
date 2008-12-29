@@ -1,18 +1,25 @@
 <div><%= link_to('編集', edit_article_url(@article.id)) %></div>
+<div><%= link_to('プレビュー', preview_article_url(@article.id)) %></div>
 
 <dl>
   <dt>Page name</dt>
   <dd><%= h(@article.page_name) %></dd>
+
   <dt>Parser</dt>
-  <dd><%= h(@article.parser) %></dd>
+  <dd><%= h(@article.parser.constantize::Label) %></dd>
+
   <dt>Title</dt>
   <dd><%= h(@article.title) %></dd>
+
   <dt>Meta</dt>
   <dd><%= h(@article.meta) %></dd>
+
   <dt>Body1</dt>
   <dd><%= h(@article.body1) %></dd>
+
   <dt>Body2</dt>
   <dd><%= h(@article.body2) %></dd>
+
   <dt>Status</dt>
   <dd><%= @article.published ? 'published' : 'draft' %></dd>
 </dl>

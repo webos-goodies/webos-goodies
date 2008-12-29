@@ -33,4 +33,15 @@ class ArticlesController < ApplicationController
     render :action => 'edit'
   end
 
+  def preview
+    article = Article.find(params[:id])
+    parser  = Parser::Base.find(article.parser).new
+    @page_name     = article.page_name
+    @title         = article.title
+    @meta          = article.meta
+    @publish_date  = article.publish_date || DateTime.now
+    @body1, @body2 = parser.parse(article.body1, article.body2)
+    render :layout => false
+  end
+
 end

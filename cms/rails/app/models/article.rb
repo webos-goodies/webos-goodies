@@ -1,5 +1,5 @@
 class Article < ActiveRecord::Base
-  AVAILABLE_PARSERS = ['raw', 'livedoor']
+  AVAILABLE_PARSERS = Parser::Base.all_parsers.map{|k| k.name }
 
   validates_uniqueness_of :page_name
   validates_presence_of   :page_name
