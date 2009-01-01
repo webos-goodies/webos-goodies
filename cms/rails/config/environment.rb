@@ -75,3 +75,11 @@ Rails::Initializer.run do |config|
   # Please note that observers generated using script/generate observer need to have an _observer suffix
   # config.active_record.observers = :cacher, :garbage_collector, :forum_observer
 end
+
+class String
+  def to_xs
+    ERB::Util.h(unpack('U*').pack('U*')).gsub("'", '&apos;') # ASCII, UTF-8
+  rescue
+    unpack('C*').map {|n| n.xchr}.join # ISO-8859-1, WIN-1252
+  end
+end
