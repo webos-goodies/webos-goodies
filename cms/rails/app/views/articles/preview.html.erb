@@ -151,13 +151,13 @@ WebOS はインターネットの未来形。あらゆる Web サイトが繋が
 
 <!-- **** 関連記事 **** -->
 
-<IfArticleCategory1>
+<% unless @article_meta.strip.split(',').empty? -%>
 <fieldset id="tpl_relatedframe">
 <legend>関連記事</legend>
 <div id="tpl_related">
 </div>
 </fieldset>
-</IfArticleCategory1>
+<% end -%>
 
 <!-- **** 各種リンク **** -->
 
@@ -330,10 +330,9 @@ function tplRegistCategory(json)
 }
 </script>
 
-<% @article_meta.strip.split(/¥s+/).each do |tag| -%>
-<script type="text/javascript" charset="UTF-8" src="<%= h(@site_url) %>categories/jsonp/<%= tag %>.js"></script>
+<% @article_meta.strip.split(',').each do |tag| -%>
+<script type="text/javascript" charset="UTF-8" src="<%= h(@site_url) %>categories/jsonp/<%= tag.strip %>.js"></script>
 <% end -%>
-</IfArticleCategory2>
 
 <!-- Google Analytics -->
 <script src="http://www.google-analytics.com/urchin.js" type="text/javascript">

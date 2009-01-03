@@ -2,7 +2,7 @@ require 'net/ftp'
 require 'stringio.so'
 
 class Net::FTP
-  LS_RE = /^ +(\S+) +(\d+) +(\S+) +(\S+) +(\d+) +(\S+) +(\d+) +(\S+) +(.+)$/
+  LS_RE = /^ *(\S+) +(\d+) +(\S+) +(\S+) +(\d+) +(\S+) +(\d+) +(\S+) +(.+)$/
 
   class Stat
 	attr_reader :name, :size, :user, :gid

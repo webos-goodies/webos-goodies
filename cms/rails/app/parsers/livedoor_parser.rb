@@ -52,10 +52,16 @@ class LivedoorParser < Parser::Base
       { :section => WikiParser::BlockTagSection.new('', 'dl'), :children => children }
     end
 
-    # フォーマット済みテキスト（歴史的理由により、 pre 扱い ＾＾；）
-    block_syntax(/(?:^[ >^].*#{EOL})+/u) do |match, parser|
-      text = match[0].gsub(/^[ >^]/u, '')
-      WikiParser::BlockTagSection.new(text, 'pre', :filter => false)
+    # フォーマット済みテキスト
+    block_syntax(/(?:^[ ^].*#{EOL})+/u) do |match, parser|
+      text = match[0].gsub(/^[ ^]/u, '')
+      WikiParser::BlockTagSection.new(text, 'pre', :filter => false, :syntax => nil)
+    end
+
+    # 引用（歴史的理由により、 pre 扱い ＾＾；）
+    block_syntax(/(?:^>.*#{EOL})+/u) do |match, parser|
+      text = match[0].gsub(/^>/u, '')
+      WikiParser::BlockTagSection.new(text, 'pre')
     end
 
     # テーブル
