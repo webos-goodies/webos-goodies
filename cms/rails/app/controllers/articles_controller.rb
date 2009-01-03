@@ -101,7 +101,10 @@ class ArticlesController < ApplicationController
   end
 
   def fetch_feed_items()
-    @articles = Article.find(:all, :order => 'publish_date DESC', :conditions => { :published => true })
+    @articles = Article.find(:all,
+                             :order      => 'publish_date DESC',
+                             :conditions => { :published => true },
+                             :limit      => 10)
   end
 
 end
