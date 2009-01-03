@@ -14,8 +14,11 @@ module WikiParser
   class SyntaxDefinitionError < WikiParserError; end
 
   module InheritableList
-    def self.included(mod)
-      def mod.each_inheritable(key, &block)
+    def self.included(mod) mod.extend(ClassMethods) end
+    def self.extended(mod) mod.extend(ClassMethods) end
+
+    module ClassMethods
+      def each_inheritable(key, &block)
         @inheritable_lists ||= {}
         if superclass.respond_to?(:each_inheritable, true)
           superclass.__send__(:each_inheritable, key, &block)
@@ -25,7 +28,8 @@ module WikiParser
         end
         nil
       end
-      def mod.push_to_inheritable(key, *values)
+
+      def push_to_inheritable(key, *values)
         @inheritable_lists      ||= {}
         @inheritable_lists[key] ||= []
         @inheritable_lists[key].push(*values)
