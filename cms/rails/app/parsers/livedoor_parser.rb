@@ -7,7 +7,7 @@ class LivedoorParser < Parser::Base
     include ActionView::Helpers::TextHelper
 
     URI_LETTERS    = '\w#%&()=\-+~|@\[\]{}:;?.,'
-    IMAGE_SUFFIXES = %w".jpg .jpeg .png .gif"
+    IMAGE_SUFFIXES = /\A(?:\.jpg|\.jpeg|\.png|\.gif)\z/ui
     SCHEMA         = '(?:https?|ftp):\/\/'
     SCHEMA_REGEXP  = /^#{SCHEMA}/u
     EOL            = "(?:\n|\z)"
@@ -105,7 +105,7 @@ class LivedoorParser < Parser::Base
     inline_syntax(/\[\[([^>\[\]\r\n]+)(?:>([^\[\]\r\n]+))?\]\]/u) do |match, parser|
       text = match[1]
       url  = match[2] || match[1]
-      if SCHEMA_REGEXP === text && IMAGE_SUFFIXES.include?(File.extname(text))
+      if SCHEMA_REGEXP === text && IMAGE_SUFFIXES === File.extname(text)
         text = parser.image(text)
       end
       if SCHEMA_REGEXP === url
@@ -123,7 +123,7 @@ class LivedoorParser < Parser::Base
     # URL
     inline_syntax(/#{SCHEMA}[#{URI_LETTERS}\/]+/u) do |match, parser|
       url = match[0]
-      if IMAGE_SUFFIXES.include?(File.extname(url))
+      if IMAGE_SUFFIXES === File.extname(url)
         parser.image(url)
       else
         parser.link(url, parser.truncate(url, :length => 53))
@@ -179,7 +179,7 @@ class LivedoorParser < Parser::Base
 
   def parse(*documents)
     LivedoorWikiParser.new.parse(documents).elements.to_a('/root/wiki').map do |element|
-      '<div class="dokuwiki">' + 
+      '<div class="dokuwiki">' +
         element.elements.to_a.map{|child| child.to_s }.join('') +
         '</div>'
     end

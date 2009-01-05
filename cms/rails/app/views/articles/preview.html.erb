@@ -13,7 +13,7 @@
 <link rel="alternate" type="application/atom+xml" title="Atom" href="<%= h(@atom_url) %>" />
 <link rel="alternate" type="application/rss+xml" title="RSS" href="<%= h(@rss_url) %>" />
 <link rel="shortcut icon" href="<%= h(@site_url) %>favicon.ico" type="image/x-icon" />
-<script type="text/javascript" src="<%= h(@site_url) %>template/common.js?31"></script>
+<script type="text/javascript" src="<%= h(@site_url) %>template/common.js?32"></script>
 
 <!-- **** Fetch comments via Google Visualization API **** -->
 <script type="text/javascript" src="http://www.google.com/jsapi"></script>
@@ -251,8 +251,26 @@ WebOS はインターネットの未来形。あらゆる Web サイトが繋が
 
 <div id="rightside">
 
-<$PluginList_A$>
-<$PluginList_B$>
+<div class="sidetitlebody">
+  <div class="sidetitle">Categories</div>
+</div>
+<div class="sidetop"></div>
+<div class="side">
+  <div class="sidebody"><a href="<%= h(@site_url) %>categories/web-apps.html">一歩進んだ Web アプリケーション活用術</a></div>
+  <div class="sidebody"><a href="<%= h(@site_url) %>categories/opera-firefox.html">Opera &amp; Firefox をディープに使いこなす</a></div>
+  <div class="sidebody"><a href="<%= h(@site_url) %>categories/development.html">WebOS 時代のプログラミング・ノウハウ</a></div>
+  <div class="sidebody"><a href="<%= h(@site_url) %>categories/server.html">Gentoo Linux と VMware による個人サーバー構築記</a></div>
+  <div class="sidebody"><a href="<%= h(@site_url) %>categories/opensource-apps.html">オープンソース・アプリケーションで快適 Web ライフ</a></div>
+  <div class="sidebody"><a href="<%= h(@site_url) %>categories/others.html">その他の記事</a></div>
+</div>
+<div class="sidebottom"></div>
+
+<div class="sidetitlebody">
+  <div class="sidetitle">Recent Articles</div>
+</div>
+<div class="sidetop"></div>
+<div class="side" id="tpl_recent_articles"></div>
+<div class="sidebottom"></div>
 
 <table style="background-color: #fff; padding: 5px; margin: 12px 0px;" cellspacing=0>
   <tr><td>
@@ -304,6 +322,8 @@ function tplRegistCategory(json)
 _uacct = "UA-282350-2";
 urchinTracker();
 </script>
+
+<script src="http://ajax.googleapis.com/ajax/services/feed/load?q=http%3A%2F%2Fwebos-goodies.jp%2Fatom.xml&v=1.0&output=json&callback=template.renderRecentArticles&context=0&num=8&key=ABQIAAAADFolcpMzeDEXDBR65zomPRSdobuQ8nl73Zh0G-Y7QnxRnfXdORRvX5O5---NvrXXjsKrVcjvSimLkw" type="text/javascript"></script>
 
 </body>
 
