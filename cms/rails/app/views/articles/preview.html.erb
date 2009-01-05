@@ -173,7 +173,7 @@ WebOS はインターネットの未来形。あらゆる Web サイトが繋が
 
 <div class="article_footer">
 
-<%= @article_date %>
+<%= @article_date.to_time.strftime('%Y年%m月%d日 %H:%M') %>
 | <a href="#comments">Comments(<span id="tpl_num_comments"></span>)</a>
 | <a href="#trackback">TrackBack(<span id="tpl_num_trackbacks"></span>)</a>
 |
