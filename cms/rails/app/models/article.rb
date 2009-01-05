@@ -7,6 +7,14 @@ class Article < ActiveRecord::Base
   validates_presence_of   :title
   validates_presence_of   :body1
 
+  def body1=(value)
+    self[:body1] = value.to_s.gsub(/\r\n|\n|\r/u, "\n")
+  end
+
+  def body2=(value)
+    self[:body2] = value.to_s.gsub(/\r\n|\n|\r/u, "\n")
+  end
+
   def formatted_body1
     parse() unless @formatted_body1
     @formatted_body1

@@ -53,14 +53,14 @@ class LivedoorParser < Parser::Base
     end
 
     # フォーマット済みテキスト
-    block_syntax(/(?:^[ ^].*#{EOL})+/u) do |match, parser|
-      text = match[0].gsub(/^[ ^]/u, '')
+    block_syntax(/(?:^\^.*#{EOL})+/u) do |match, parser|
+      text = match[0].gsub(/^\^/u, '')
       WikiParser::BlockTagSection.new(text, 'pre', :filter => false, :syntax => nil)
     end
 
     # 引用（歴史的理由により、 pre 扱い ＾＾；）
-    block_syntax(/(?:^>.*#{EOL})+/u) do |match, parser|
-      text = match[0].gsub(/^>/u, '')
+    block_syntax(/(?:^[ >].*#{EOL})+/u) do |match, parser|
+      text = match[0].gsub(/^[ >]/u, '')
       WikiParser::BlockTagSection.new(text, 'pre')
     end
 
@@ -89,6 +89,16 @@ class LivedoorParser < Parser::Base
     # 取り消し線
     inline_syntax(/%%([^\n']+)%%/u) do |match, parser|
       WikiParser::InlineTagSection.new(match[1], 'del')
+    end
+
+    # 色指定
+    inline_syntax(/\&color\(\s*([\w#]+)\s*\)\{(.*)\}/u) do |match, parser|
+      WikiParser::InlineTagSection.new(match[2], 'span', :attributes => { 'style' => "color:#{match[1]};" })
+    end
+
+    # 文字サイズ指定
+    inline_syntax(/\&size\(\s*(\d+)\s*\)\{(.*)\}/u) do |match, parser|
+      WikiParser::InlineTagSection.new(match[2], 'span', :attributes => { 'style' => "font-size:#{match[1]}px;" })
     end
 
     # リンク
