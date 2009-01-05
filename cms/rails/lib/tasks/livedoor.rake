@@ -187,6 +187,7 @@ namespace :livedoor do
 
     article_ids = []
     Net::FTP.open('ftp.blog.livedoor.com', Credentials::LIVEDOOR_USER, Credentials::LIVEDOOR_PASS) do |ftp|
+      ftp.passive = true
       ftp.foreach('/archives') do |stat|
         if /^(\d+)\.html\.gz/ === stat.to_s
           article_ids << $1

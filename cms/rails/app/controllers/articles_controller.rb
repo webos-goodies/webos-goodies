@@ -75,6 +75,7 @@ class ArticlesController < ApplicationController
     rss  = render_to_string :file => File.join(template_path, 'index.rss.builder'),  :layout => false
     atom = render_to_string :file => File.join(template_path, 'index.atom.builder'), :layout => false
     Net::FTP.open(FTP_HOST, FTP_USER, FTP_PASS) do |ftp|
+      ftp.passive = true
       ftp.putbinarystring(html, File.join(FTP_SITE_PATH, ARTICLE_PATH, article.page_name + '.html'))
       ftp.putbinarystring(rss,  File.join(FTP_SITE_PATH, RSS_PATH))
       ftp.putbinarystring(atom, File.join(FTP_SITE_PATH, ATOM_PATH))

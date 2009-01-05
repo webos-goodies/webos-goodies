@@ -16,6 +16,7 @@ namespace :upload do
       { :id => article.id, :page_name => article.page_name }
     end
     Net::FTP.open(Credentials::FTP_HOST, Credentials::FTP_USER, Credentials::FTP_PASS) do |ftp|
+      ftp.passive = true
       articles.each do |article|
         $stdout << "uploading article #{article[:id]}...\n"
         status = session.get("/articles/#{article[:id]}/preview")
@@ -29,6 +30,7 @@ namespace :upload do
   task :feeds => :setup do
     session = ActionController::Integration::Session.new
     Net::FTP.open(Credentials::FTP_HOST, Credentials::FTP_USER, Credentials::FTP_PASS) do |ftp|
+      ftp.passive = true
       status = session.get("/articles.rss/")
       raise "request failed for rss feed:\n#{session.response.body}" unless status == 200
       ftp.putbinarystring(session.response.body,
