@@ -83,5 +83,3 @@ class String
     unpack('C*').map {|n| n.xchr}.join # ISO-8859-1, WIN-1252
   end
 end
-
-require 'ftp_ex'

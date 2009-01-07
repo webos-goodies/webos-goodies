@@ -1,5 +1,5 @@
 <div><%= link_to('編集', edit_article_url(@article.id)) %></div>
-<div><%= link_to('プレビュー', preview_article_url(@article.id)) %></div>
+<div><%= link_to('プレビュー', :controller => :preview, :action => :article, :id => @article.id) %></div>
 
 <dl>
   <dt>Page name</dt>
@@ -15,10 +15,10 @@
   <dd><%= h(@article.meta) %></dd>
 
   <dt>Body1</dt>
-  <dd><%= h(@article.body1) %></dd>
+  <dd><%= h(@article.body1).gsub(/\r\n|\n|\r/u, '<br />') %></dd>
 
   <dt>Body2</dt>
-  <dd><%= h(@article.body2) %></dd>
+  <dd><%= h(@article.body2).gsub(/\r\n|\n|\r/u, '<br />') %></dd>
 
   <dt>Publish date</dt>
   <dd><%= @article.publish_date %></dd>

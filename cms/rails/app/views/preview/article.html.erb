@@ -1,0 +1,136 @@
+<% content_for :title, "#{@article_title} - " -%>
+
+<% content_for :head do -%>
+<link rel="stylesheet" href="<%= h(@site_url) %>template/articles.css" type="text/css" />
+<script type="text/javascript" src="http://www.google.com/jsapi"></script>
+<script type="text/javascript">
+  google.load("visualization", "1");
+  google.setOnLoadCallback(function() {
+    template.renderComments('<%= @article_id %>');
+    template.renderTrackbacks('<%= @article_id %>');
+  });
+</script>
+<% end -%>
+
+<% content_for :bottom do -%>
+<script type="text/javascript">
+function tplRegistCategory(json)
+{
+  var f = template.generateRelatedLinks(json, '<%= @site_url %>');
+  document.getElementById('tpl_related').appendChild(f);
+}
+</script>
+<% @article_meta.strip.split(',').each do |tag| -%>
+<script type="text/javascript" charset="UTF-8" src="<%= h(@site_url) %>categories/jsonp/<%= tag.strip %>.js"></script>
+<% end -%>
+<% end -%>
+
+<div class="article">
+
+<!-- **** 記事タイトル **** -->
+
+<div class="article_head">
+<h1 class="title"><%= h(@article_title) %></h1>
+</div>
+
+<!-- **** 記事本文 **** -->
+
+<div class="article_body">
+<%= @article_body1 %>
+</div><!-- article_body -->
+
+<a name="more"></a>
+
+<% unless @article_body2.empty? -%>
+<div class="article_body">
+<%= @article_body2 %>
+</div><!-- article_body -->
+<% end -%>
+
+</div><!-- article -->
+
+<!-- **** 関連記事 **** -->
+
+<% unless @article_meta.strip.split(',').empty? -%>
+<fieldset id="tpl_relatedframe">
+<legend>関連記事</legend>
+<div id="tpl_related">
+</div>
+</fieldset>
+<% end -%>
+
+<!-- **** 各種リンク **** -->
+
+<div class="article_footer">
+
+<%= @article_date.to_time.strftime('%Y年%m月%d日 %H:%M') %>
+| <a href="#comments">Comments(<span id="tpl_num_comments"></span>)</a>
+| <a href="#trackback">TrackBack(<span id="tpl_num_trackbacks"></span>)</a>
+|
+
+<!-- livedoor clip -->
+<a href="http://clip.livedoor.com/redirect?link=<%= u(@article_url) %>&title=<%= u(@article_title) %>%20-%20<%= u(@site_title) %>&ie=utf8" class="ldclip-redirect" title="livedoor clip! でブックマーク"><img src="<%= h(@site_url) %>template/imgs/bookmark/livedoorclip.gif" width="16" height="16" alt="[livedoor clip!]" style="border: none;vertical-align: middle;" /></a>
+
+<!-- はてなブックマーク -->
+<a href="http://b.hatena.ne.jp/entry/<%= h(@article_url) %>" title="はてなブックマークでブックマーク"><img src="<%= h(@site_url) %>template/imgs/bookmark/hatena.gif" width="16" height="12" style="border: none; vertical-align:middle;" alt="[はてなブックマーク]" /></a>
+
+<!-- del.icio.us -->
+<a href="http://del.icio.us/post" onclick="window.open('http://del.icio.us/post?v=4&noui&jump=close&url='+encodeURIComponent('<%= @article_url %>')+'&title='+encodeURIComponent('<%= @article_title %> - <%= @site_title %>'), 'delicious','toolbar=no,width=700,height=400'); return false;" title="del.icio.us でブックマーク"><img src="<%= h(@site_url) %>template/imgs/bookmark/delicious.gif" width="10" height="10" style="border: none; vertical-align:middle;" alt="[del.icio.us]" /></a>
+
+</div> <!-- article_footer -->
+
+<!-- **** トラックバック **** -->
+
+<div class="trackback">
+
+<h1>トラックバックURL</h1>
+
+<div class="trackback_form">
+<!-- <input type="text" value="$ArticleTrackBackUrl$" /> -->
+<div class="notice">※現在、トラックバックの受け付けは中止しております。ご了承ください。</div>
+</div>
+
+<a name="trackback"></a>
+<div id="tpl_trackbacks"></div>
+
+</div><!-- trackback -->
+
+<!-- **** コメント **** -->
+
+<div class="comment">
+
+<a name="comments"></a>
+<div id="tpl_comments"></div>
+
+<h1>この記事にコメントする</h1>
+
+<div id="comment_form">
+
+<form action="http://spreadsheets.google.com/a/webos-goodies.jp/formResponse?key=pMIBrnJ4PHK_Tnb_IAz3cTQ" method="POST" name="comment_form" target="_blank">
+
+<input type="hidden" name="entry.0.single" value="<%= h(@article_id) %>" />
+<input type="hidden" name="entry.1.single" value="<%= h(@article_title) %>" />
+
+<div class="with_label">
+<label for="author">名前</label><input id="author" name="entry.2.single" />
+</div>
+
+<div class="with_label">
+<label for="url">URL</label><input id="url" name="entry.3.single" />
+</div>
+
+<div class="no_label">
+
+<div>
+<textarea id="text" name="entry.4.single" rows="10" cols="50"></textarea>
+</div>
+
+<div class="submit">
+<input type="submit" value=" 投稿する " class="button" />
+</div>
+
+</div> <!-- no_label -->
+
+</div> <!-- comment_form -->
+
+</div> <!-- comment -->

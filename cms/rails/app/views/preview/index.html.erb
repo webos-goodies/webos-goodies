@@ -1,0 +1,112 @@
+<% content_for :head do -%>
+<link rel="stylesheet" href="<%= h(@site_url) %>template/articles.css" type="text/css" />
+<link rel="stylesheet" href="<%= h(@site_url) %>template/categories.css" type="text/css" />
+<% end -%>
+
+<div class="article"><div class="tpl_categories_body">
+<h1 style="margin-top:0px;padding-top:0px;">最新記事</h1>
+</div></div>
+
+<!-- **** 最新記事 **** -->
+
+<% @articles.each do |article| -%>
+<div class="article_head">
+<h1 class="title"><a href="<%= h(@article_base_url + article.page_name + '.html') %>"><%= h(article.title) %></a></h1>
+</div>
+<% end -%>
+
+<div class="article">
+<div class="tpl_categories_body">
+
+<h1><a href="categories/web-apps.html">一歩進んだ Web アプリケーション活用術</a></h1>
+
+<p>
+ほんの数年前まではお世辞にも使いやすいとは言えなかった Web アプリケーションですが、現在ではブロードバンド回線の普及や Ajax 技術の確立などで、デスクトップアプリケーションに勝るユーザビリティーを獲得しつつあります。このような Web アプリケーションの発展は、 WebOS 実現への重要な一歩と言えます。同時に、これらの Web アプリケーションの有効活用は WebOS 時代の必須事項となることでしょう。このカテゴリでは「一歩進んだ Web サービス活用術」と題して、有用な Web アプリケーションをご紹介し、その活用方法を模索していきます。
+</p>
+
+<ul>
+<li><a href="categories/web-apps-review.html">最新 Web アプリケーション速攻レビュー</a></li>
+<li><a href="categories/google-universal-gadget.html">Google Personalized Homepage を使い倒そう！</a></li>
+<li><a href="categories/google-apps-for-your-domain.html">Google Apps for Your Domain による独自ドメインの活用</a></li>
+<li><a href="categories/value-domain.html">VALUE DOMAIN で独自ドメインを取得しよう！</a></li>
+<li><a href="categories/web-apps-tips.html">Web アプリケーション Tips</a></li>
+<li><a href="categories/web-apps-news.html">Web アプリケーション最新情報</a></li>
+</ul>
+
+<h1><a href="categories/opera-firefox.html">Opera &amp; Firefox をディープに使いこなす</a></h1>
+
+<p>
+WebOS にとって、 Web ブラウザはその可能性を決定付ける極めて重要なアプリケーションです。 Web 標準を正しくサポートすることはもちろん、堅牢なセキュリティー、高いパフォーマンス、柔軟な拡張性、幅広いプラットフォームのサポートなど、 WebOS 時代の Web ブラウザに対する要件は非常に高度なものとなるでしょう。そのような要件を満たせるブラウザとして、 WebOS Goodies は <strong>Opera</strong> と <strong>Firefox</strong> の 2 つを推奨しています。その一環として、このカテゴリでは <strong>Opera</strong> と <strong>Firefox</strong> を活用するためのさまざまな情報をご紹介し、微力ながらこれらのブラウザの普及を後押ししていきたいと考えています。
+</p>
+
+<ul>
+<li><a href="categories/firefox-search.html">Firefox 検索プラグインの作り方</a></li>
+<li><a href="categories/opera-widgets.html">Opera Widgets の作り方</a></li>
+<li><a href="categories/browser-extensions.html">拡張機能レビュー</a></li>
+<li><a href="categories/browser-tips.html">Opera &amp; Firefox Tips</a></li>
+<li><a href="categories/browser-news.html">Opera &amp; Firefox 最新情報</a></li>
+</ul>
+
+<h1><a href="categories/development.html">WebOS 時代のプログラミング・ノウハウ</a></h1>
+
+<p>
+来たるべき WebOS 時代には、アプリケーションプログラミングの形も今とは様変わりしていることでしょう。従来のデスクトップ向けの技術に変わって HTML / XML や JavaScript などが基礎技術として使われるようになり、そこにデスクトップアプリケーション構築のノウハウが融合されていくと思われます。また、ネットワークへの依存が高まるにつれ、サーバーサイドの重要性もより増していくでしょう。このカテゴリーでは、そうした WebOS 時代の開発技術を模索し、ご紹介していきます。
+</p>
+
+<ul>
+<li><a href="categories/web-development.html">Web プログラミング Tips</a></li>
+<li><a href="categories/javascript.html">JavaScript Tips</a></li>
+<li><a href="categories/ruby.html">Ruby Tips</a></li>
+<li><a href="categories/canvas.html">canvas で実現する高度なグラフィック表現</a></li>
+<li><a href="categories/rails.html">Ruby on Rails でお手軽データベースアプリ</a></li>
+<li><a href="categories/subversion.html">Subversion 活用法</a></li>
+</ul>
+
+<h1><a href="categories/server.html">Gentoo Linux と VMware による個人サーバー構築記</a></h1>
+
+<p>
+WebOS が現実のものとなれば、サーバーは企業が運用し、個人はシン・クライアントでそのサービスを利用することに終始するようになるのでしょうか？ WebOS Goodies は、むしろその逆だと考えています。各種サービスが Web <acronym title="Application Programming Interface">API</acronym> によって連携する時代だからこそ、個人がサーバーを運用する意味は今以上に高まるでしょう。また、そのサーバー上でオープンソースの Web アプリケーションを稼動させることで、 Web の可能性をより広げることもできます。そこで、このカテゴリでは Gentoo Linux をベースとして個人サーバーを構築する方法をご紹介し、そうした時代への布石としたいと思います。
+</p>
+
+<ul>
+<li><a href="categories/gentoo.html">VMware に Gentoo Linux をインストールする</a></li>
+<li><a href="categories/gentoo-tips.html">Gentoo Linux Tips</a></li>
+<li><a href="categories/portage-tips.html">Portage Tips</a></li>
+<li><a href="categories/vmware.html">VMware Tips</a></li>
+<li><a href="categories/bind.html">BIND による DNS サーバーの構築</a></li>
+<li><a href="categories/apache.html">Apache による Web サーバーの構築</a></li>
+<li><a href="categories/mysql.html">MySQL によるデータベースの構築</a></li>
+<li><a href="categories/ssh.html">SSH 活用法</a></li>
+<li><a href="categories/courier.html">Courier によるメールサーバーの構築</a></li>
+</ul>
+
+<h1><a href="categories/opensource-apps.html">オープンソース・アプリケーションで快適 Web ライフ</a></h1>
+
+<p>
+現在の Web の隆盛と切り離せないのがオープンソース・ソフトウェアの発展です。高額な商用ソフトウェアにも見劣りしない機能を持ったオープンソースの各種ソフトウェアが普及し、現在の安価で安定した Web 環境を支えています。そして、最近では個人が利用するようなアプリケーション・ソフトウェアにまでその波が押し寄せ、さまざまな種類のアプリケーションがオープンソースで開発されています。このカテゴリでは、それらのアプリケーションを活用して我々の Web ライフをより豊かなものにする方法をご紹介していきます。
+</p>
+
+<ul>
+<li><a href="categories/dokuwiki.html">DokuWiki : シンプルで拡張性の高いドキュメンテーション向け Wiki</a></li>
+<li><a href="categories/sitebar.html">Sitebar : サイドバーで使うオンラインブックマーク</a></li>
+<li><a href="categories/twiki.html">TWiki : 簡易データベース機能も搭載した強力な Wiki</a></li>
+<li><a href="categories/net2ftp.html">net2ftp : Web ブラウザで動く FTP クライアント</a></li>
+<li><a href="categories/desktop-apps.html">デスクトップアプリケーション・レビュー</a></li>
+</ul>
+
+<h1><a href="categories/others.html">その他の記事</a></h1>
+
+<p>
+他のカテゴリに当てはまらないコーナーはこちらにまとめています。
+</p>
+
+<ul>
+<li><a href="categories/products.html">WebOS Goodies オリジナルプロダクト</a></li>
+<li><a href="categories/announcement.html">アナウンス</a></li>
+<li><a href="categories/weekly-news.html">今週の話題</a></li>
+<li><a href="categories/gadget.html">注目のガジェット</a></li>
+<li><a href="categories/misc.html">雑多な話題</a></li>
+</ul>
+
+</div><!-- tpl_categories_body -->
+</div><!-- article -->
