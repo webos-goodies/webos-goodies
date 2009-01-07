@@ -6,11 +6,14 @@
 
 <meta http-equiv="Content-Type" content="text/html; charset=<%= @charset %>" />
 
+<title><%= @title %> - WebOS Goodies</title>
+
 <link rel="stylesheet" href="http://webos-goodies.jp/template/site.css" type="text/css" />
 <link rel="stylesheet" href="http://webos-goodies.jp/template/categories.css" type="text/css" />
 <link rel="alternate" type="application/rss+xml" title="RSS" href="http://webos-goodies.jp/index.rdf" />
 <link rel="alternate" type="application/atom+xml" title="Atom" href="http://webos-goodies.jp/atom.xml" />
 <link rel="shortcut icon" href="http://webos-goodies.jp/favicon.ico" type="image/x-icon" />
+<script type="text/javascript" src="http://webos-goodies.jp/template/common.js"></script>
 
 <link rel="alternate"
       type="application/x-opera-widgets"
@@ -21,10 +24,6 @@
       type="application/opensearchdescription+xml"
       title="WebOS Goodies"
       href="http://webos-goodies.googlecode.com/svn/trunk/products/firefox-search/webos-goodies-jp/webos-goodies-jp.xml"/>
-
-<script type="text/javascript" src="http://webos-goodies.jp/template/common.js"></script>
-
-<title><%= @title %> - WebOS Goodies</title>
 
 </head>
 
@@ -47,7 +46,7 @@
 </p>
 <input type="hidden" name="cx" value="011600946954025377643:3gub1bav68w" />
 <input type="hidden" name="cof" value="FORID:0" />
-<input type="hidden" name="ie" value="EUC-JP" />
+<input type="hidden" name="ie" value="UTF-8" />
 </form>
 </div><!-- search -->
 
@@ -134,7 +133,26 @@ WebOS はインターネットの未来形。あらゆる Web サイトが繋が
 
 <div id="rightside">
 
-<%= @pluginA %>
+<div class="sidetitlebody">
+  <div class="sidetitle">Categories</div>
+</div>
+<div class="sidetop"></div>
+<div class="side">
+  <div class="sidebody"><a href="http://webos-goodies.jp/categories/web-apps.html">一歩進んだ Web アプリケーション活用術</a></div>
+  <div class="sidebody"><a href="http://webos-goodies.jp/categories/opera-firefox.html">Opera &amp; Firefox をディープに使いこなす</a></div>
+  <div class="sidebody"><a href="http://webos-goodies.jp/categories/development.html">WebOS 時代のプログラミング・ノウハウ</a></div>
+  <div class="sidebody"><a href="http://webos-goodies.jp/categories/server.html">Gentoo Linux と VMware による個人サーバー構築記</a></div>
+  <div class="sidebody"><a href="http://webos-goodies.jp/categories/opensource-apps.html">オープンソース・アプリケーションで快適 Web ライフ</a></div>
+  <div class="sidebody"><a href="http://webos-goodies.jp/categories/others.html">その他の記事</a></div>
+</div>
+<div class="sidebottom"></div>
+
+<div class="sidetitlebody">
+  <div class="sidetitle">Recent Articles</div>
+</div>
+<div class="sidetop"></div>
+<div class="side" id="tpl_recent_articles"></div>
+<div class="sidebottom"></div>
 
 <table style="background-color: #fff; padding: 5px; margin: 12px 0px;" cellspacing=0>
   <tr><td>
@@ -166,6 +184,8 @@ Design: <a href="http://www.free-css-templates.com/" title="Design by David Herr
 </div><!-- footer -->
 
 </div><!-- wrap -->
+
+<script src="http://ajax.googleapis.com/ajax/services/feed/load?q=http%3A%2F%2Fwebos-goodies.jp%2Fatom.xml&v=1.0&output=json&callback=template.renderRecentArticles&context=0&num=8&key=ABQIAAAADFolcpMzeDEXDBR65zomPRSdobuQ8nl73Zh0G-Y7QnxRnfXdORRvX5O5---NvrXXjsKrVcjvSimLkw" type="text/javascript"></script>
 
 <!-- Google Analytics -->
 <script src="http://www.google-analytics.com/urchin.js" type="text/javascript">

@@ -16,10 +16,6 @@ class Update
 
   class TemplateEngine
 
-    EntityRefMap = {
-      '>' => '&lt;',  '<' => '&gt;', '&' => '&amp;', '"' => '&quot;'
-    }
-
     def initialize(template_dir)
       @templates = {}
       Dir.chdir(template_dir) do
@@ -27,15 +23,12 @@ class Update
           @templates[fname] = IO.read(fname)
         end
       end
-      pluginA = open('http://webos-goodies.jp/archives/plugin_A.inc') do |file|
-        file.read
-      end
-      @pluginA = Kconv.kconv(pluginA, Kconv::UTF8, Kconv::EUC)
+      @pluginA = ''
     end
 
     def apply(fname, articles, bundles, captions)
       @basename = File.basename(fname, '.*')
-	  @charset  = 'EUC-JP'
+	  @charset  = 'UTF-8'
       @articles = articles
       @bundles  = bundles
       @captions = captions
@@ -45,7 +38,7 @@ class Update
       if @template
         @content = ERB.new(@templates[@template]).result(binding)
       end
-      Kconv.kconv(@content, Kconv::EUC, Kconv::UTF8)
+      @content
     end
 
     def list_articles(tag, max = nil, reverse = true)
@@ -63,9 +56,7 @@ class Update
     end
 
     def escapeHTML(str)
-      str.gsub('<>&"') do |s|
-        EntityRefMap[s]
-      end
+      ERB::Util.html_escape(str)
     end
 
   end
@@ -185,4 +176,4 @@ class Update
 
 end
 
-Update.new(LIVEDOOR, 'current', 'old', '/categories', 'templates').do()
+Update.new(XREA, 'current', 'old', '/public_html/webos-goodies.jp/categories', 'templates').do()
