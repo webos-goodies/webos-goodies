@@ -43,9 +43,6 @@ namespace :upload do
     end
   end
 
-  task :feeds => :setup do
-  end
-
   task :articles => :setup do
     articles = Article.find(:all, :conditions => { :published => true }).map do |article|
       { :id => article.id, :page_name => article.page_name }
