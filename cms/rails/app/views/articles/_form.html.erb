@@ -11,10 +11,10 @@
 <%= form[:f].text_field :meta %><br />
 
 <%= form[:f].label :body1 %><br />
-<%= form[:f].text_area :body1 %><br />
+<%= form[:f].text_area :body1, :style => 'width: 99%;' %><br />
 
 <%= form[:f].label :body2 %><br />
-<%= form[:f].text_area :body2 %><br />
+<%= form[:f].text_area :body2, :style => 'width: 99%;' %><br />
 
 <%= form[:f].label :publish_date %><br />
 <%= form[:f].datetime_select :publish_date, :use_month_numbers => true, :include_blank => true %><br />
