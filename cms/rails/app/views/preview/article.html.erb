@@ -111,25 +111,16 @@ function tplRegistCategory(json)
 <input type="hidden" name="entry.0.single" value="<%= h(@article_id) %>" />
 <input type="hidden" name="entry.1.single" value="<%= h(@article_title) %>" />
 
-<div class="with_label">
-<label for="author">名前</label><input id="author" name="entry.2.single" />
-</div>
-
-<div class="with_label">
-<label for="url">URL</label><input id="url" name="entry.3.single" />
-</div>
+<div class="with_label"><label for="author">名前</label><input id="author" name="entry.2.single" /></div>
+<div class="with_label"><label for="url">URL</label><input id="url" name="entry.3.single" /></div>
 
 <div class="no_label">
-
-<div>
-<textarea id="text" name="entry.4.single" rows="10" cols="50"></textarea>
+  <div>
+	<textarea style="display:none;" name="comment" rows="10" cols="50"></textarea>
+	<textarea id="text" name="entry.4.single" rows="10" cols="50"></textarea>
+  </div>
+  <div class="submit"><input type="submit" value=" 投稿する " class="button" /></div>
 </div>
-
-<div class="submit">
-<input type="submit" value=" 投稿する " class="button" />
-</div>
-
-</div> <!-- no_label -->
 
 </div> <!-- comment_form -->
 
