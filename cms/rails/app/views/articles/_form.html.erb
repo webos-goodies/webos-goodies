@@ -1,24 +1,36 @@
-<%= form[:f].label :page_name %><br />
-<%= form[:f].text_field :page_name %><br />
+<% content_for :head do -%>
+  <%= stylesheet_link_tag 'article-form' %>
+  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.2.6/jquery.min.js"></script>
+  <%= javascript_include_tag 'article-form' %>
+<% end -%>
 
-<%= form[:f].label :parser %><br />
-<%= form[:f].select :parser, Parser::Base.all_parsers.map{ |k| [k::Label, k.name] } %><br />
+<div id="content-info" class="tab-content">
 
-<%= form[:f].label :title %><br />
-<%= form[:f].text_field :title %><br />
+  <%= error_messages_for :article %>
 
-<%= form[:f].label :meta %><br />
-<%= form[:f].text_field :meta %><br />
+  <%= form[:f].label :page_name %><br />
+  <%= form[:f].text_field :page_name %><br />
 
-<%= form[:f].label :body1 %><br />
-<%= form[:f].text_area :body1, :style => 'width: 99%;' %><br />
+  <%= form[:f].label :parser %><br />
+  <%= form[:f].select :parser, Parser::Base.all_parsers.map{ |k| [k::Label, k.name] } %><br />
 
-<%= form[:f].label :body2 %><br />
-<%= form[:f].text_area :body2, :style => 'width: 99%;' %><br />
+  <%= form[:f].label :title %><br />
+  <%= form[:f].text_field :title %><br />
 
-<%= form[:f].label :publish_date %><br />
-<%= form[:f].datetime_select :publish_date, :use_month_numbers => true, :include_blank => true %><br />
+  <%= form[:f].label :meta %><br />
+  <%= form[:f].text_field :meta %><br />
 
-<%= form[:f].check_box :published %><%= form[:f].label :published %><br/>
+  <%= form[:f].label :publish_date %><br />
+  <%= form[:f].datetime_select :publish_date, :use_month_numbers => true, :include_blank => true %><br />
 
-<%= submit_tag %>
+  <%= form[:f].check_box :published %><%= form[:f].label :published %><br/>
+
+</div>
+
+<div id="content-body1" style="display:none;" class="tab-content">
+  <div><%= form[:f].text_area :body1, :style => 'width: 99%;' %></div>
+</div>
+
+<div id="content-body2" style="display:none;" class="tab-content">
+  <div><%= form[:f].text_area :body2, :style => 'width: 99%;' %></div>
+</div>

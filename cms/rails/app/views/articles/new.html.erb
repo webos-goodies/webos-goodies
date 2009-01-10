@@ -1,4 +1,11 @@
-<%= error_messages_for :article %>
+<ul id="menu">
+<li><a id="tab-info" href="#" title="Infomation" class="current">Infomation</a></li>
+<li><a id="tab-body1" href="#" title="Body1">Body1</a></li>
+<li><a id="tab-body2" href="#" title="Body2">Body2</a></li>
+<li><a id="tab-preview" href="#" title="Preview">Preview</a></li>
+<li style="float:right;"><a id="btn-submit" href="#" title="Submit">Submit</a></li>
+</ul>
+<div style="clear:both;"></div>
 
 <% form_for(@article) do |f| %>
   <%= render :partial => 'form', :object => { :f => f } %>
