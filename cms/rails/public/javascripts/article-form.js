@@ -29,11 +29,29 @@ function SimpleTab(tabsId, opts) {
 
 }
 
-jQuery(function(){
-  SimpleTab('menu');
+function Startup(preview_url){
+  SimpleTab('menu', {
+	callback : function() {
+	  if(this.id == 'tab-preview') {
+		var form   = $('#article-form').get(0);
+		var action = form.action;
+		var target = form.target;
+		try {
+		  form.action = preview_url
+		  form.target = 'preview';
+		  form.submit();
+		} finally {
+		  form.action = action;
+		  form.target = target;
+		}
+		form.action = action;
+		form.target = target;
+	  }
+	}
+  });
   $('#btn-submit').click(function(event) {
 	$('#article-form').get(0).submit();
 	event.preventDefault();
 	event.stopPropagation();
   });
-})
+}

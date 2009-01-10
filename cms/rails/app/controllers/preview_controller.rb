@@ -15,8 +15,18 @@ class PreviewController < ApplicationController
   end
 
   def article
-    article = Article.find(params[:id])
+    if request.method != :post && request.method != :put
+      article = Article.find(params[:id])
+    else
+      article = Article.new(params[:article])
+      article.page_name      = '__preview__'
+      article.publish_date ||= Time.now
+    end
     set_template_parameters(article)
+    raise ActiveRecord::RecordInvalid.new(article) unless article.valid?
+  rescue ActiveRecord::RecordInvalid => e
+    @article = e.record
+    render :action => 'error', :layout => false
   end
 
 end
