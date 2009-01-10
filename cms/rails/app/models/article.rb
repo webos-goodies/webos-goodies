@@ -1,6 +1,8 @@
 class Article < ActiveRecord::Base
   AVAILABLE_PARSERS = Parser::Base.all_parsers.map{|k| k.name }
 
+  attr_protected :id, :published
+
   validates_uniqueness_of :page_name
   validates_presence_of   :page_name
   validates_inclusion_of  :parser, :in => AVAILABLE_PARSERS

@@ -26,3 +26,7 @@
   <dt>Status</dt>
   <dd><%= @article.published ? 'published' : 'draft' %></dd>
 </dl>
+
+<% form_tag(publish_article_url(@article.id), :method => :put) do -%>
+  <%= submit_tag '公開' %>
+<% end -%>

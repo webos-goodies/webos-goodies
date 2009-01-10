@@ -22,11 +22,7 @@ class ArticlesController < ApplicationController
 
   def create
     @article = Article.new(params[:article])
-    if @article.published
-      publish(@article)
-    else
-      @article.save!
-    end
+    @article.save!
     redirect_to article_path(@article.id)
   rescue ActiveRecord::RecordInvalid
     render :action => 'new'
@@ -35,26 +31,25 @@ class ArticlesController < ApplicationController
   def update
     @article = Article.find(params[:id])
     @article.attributes = params[:article]
-    if @article.published
-      publish(@article)
-    else
-      @article.save!
-    end
+    @article.save!
     redirect_to article_path(@article.id)
   rescue ActiveRecord::RecordInvalid
     render :action => 'edit'
   end
 
-  private
-
-  def publish(article)
-    article.publish_date ||= Time.now
-    article.save!
+  def publish
+    @article = Article.find(params[:id])
+    @article.published      = true
+    @article.publish_date ||= Time.now
+    @article.save(false)
     Dir.chdir(RAILS_ROOT) do
-      external_command("rake upload:single_article ARTICLE=#{article.id}")
+      external_command("rake upload:single_article ARTICLE=#{@article.id}")
       external_command("rake upload:indices")
     end
+    redirect_to article_path(@article.id)
   end
+
+  private
 
   def external_command(cmd)
     raise "External command failed : #{cmd}" unless system(cmd)
