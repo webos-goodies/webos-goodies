@@ -45,7 +45,7 @@ Rails::Initializer.run do |config|
   # Make Time.zone default to the specified zone, and make Active Record store time values
   # in the database in UTC, and return them converted to the specified local zone.
   # Run "rake -D time" for a list of tasks for finding time zone names. Comment line to use default local time.
-  config.time_zone = 'UTC'
+  config.time_zone = 'Tokyo'
 
   # The internationalization framework can be changed to have another default locale (standard is :en) or more load paths.
   # All files from config/locales/*.rb,yml are added automatically.
@@ -57,7 +57,7 @@ Rails::Initializer.run do |config|
   # Make sure the secret is at least 30 characters and all random, 
   # no regular words or you'll be exposed to dictionary attacks.
   config.action_controller.session = {
-    :session_key => '_rails_session',
+    :session_key => 'webos_goodies_cms_session',
     :secret      => '76a1256fc6ed5465e09faaaea5f3b87959a5b6f02576cce7979650acea3c59bab6a11fe2c516dba3ffea865e9b1aa4ea18364607c617e07a0f87203047a009c9'
   }
 
