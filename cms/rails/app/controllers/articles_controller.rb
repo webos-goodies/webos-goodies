@@ -1,4 +1,5 @@
 require 'credentials.rb'
+require 'xmlrpc/client'
 
 class ArticlesController < ApplicationController
   include Credentials
@@ -39,12 +40,19 @@ class ArticlesController < ApplicationController
 
   def publish
     @article = Article.find(params[:id])
+    first    = !@article.published
     @article.published      = true
     @article.publish_date ||= Time.now
     @article.save(false)
     Dir.chdir(RAILS_ROOT) do
       external_command("rake upload:single_article ARTICLE=#{@article.id}")
       external_command("rake upload:indices")
+    end
+    if first
+      set_template_parameters(@article)
+      PING_SERVERS.each do |server|
+        send_ping(server, @article_title, @article_url)
+      end
     end
     redirect_to article_path(@article.id)
   end
@@ -53,6 +61,14 @@ class ArticlesController < ApplicationController
 
   def external_command(cmd)
     raise "External command failed : #{cmd}" unless system(cmd)
+  end
+
+  def send_ping(server, title, url)
+    logger.info('sending ping to ' + server)
+    client   = XMLRPC::Client.new2(server)
+    response = client.call("weblogUpdates.ping", title, url)
+    logger.info(response.inspect)
+    response
   end
 
 end
