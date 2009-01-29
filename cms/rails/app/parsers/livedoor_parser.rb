@@ -178,10 +178,9 @@ class LivedoorParser < Parser::Base
   Label = "Livedoor"
 
   def parse(*documents)
-    LivedoorWikiParser.new.parse(documents).elements.to_a('/root/wiki').map do |element|
-      '<div class="dokuwiki">' +
-        element.elements.to_a.map{|child| child.to_s }.join('') +
-        '</div>'
+    doc = LivedoorWikiParser.new.parse(documents)
+    WikiParser::HtmlFormatter.new.format(doc).map do |html|
+      %(<div class="dokuwiki">\n#{html}\n</div>)
     end
   end
 
