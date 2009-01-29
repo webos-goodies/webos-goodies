@@ -5,6 +5,7 @@
 
 require 'rexml/document'
 require 'strscan'
+require 'stringio'
 
 module WikiParser
 
@@ -43,6 +44,9 @@ module WikiParser
     end
     def wiki_unescape(text)
       text.gsub('$d$', '$')
+    end
+    def hesc(str)
+      str.gsub(/&/u, '&amp;').gsub(/</u, '&lt;').gsub(/>/u, '&gt;').gsub(/"/u, '&quot;').gsub(/'/u, '&#39')
     end
   end
 
@@ -291,6 +295,60 @@ module WikiParser
               entities[$2] || match
             end
           end
+        end
+      end
+    end
+
+  end
+
+  class HtmlFormatter
+    include Utils
+
+    OPEN_TAGS = Hash[*['img', 'input', 'br', 'col', 'embed', 'hr',
+                       'link', 'meta', 'param', 'wbr'].map{|k| [k,true]}.flatten]
+    BLOCK_TAGS = Hash[*['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'br', 'hr',
+                        'div', 'p', 'ul', 'ol', 'li', 'dl', 'dt', 'dd',
+                        'table', 'tr', 'caption', 'tbody', 'thead', 'tfoo',
+                        'colgroup', 'pre', 'blockquote'].map{|k| [k,true]}.flatten]
+    GROUP_TAGS = Hash[*['table', 'tbody', 'thead', 'tfoot',
+                        'ul', 'ol', 'dl'].map{|k| [k,true]}.flatten]
+
+    def format(doc)
+      doc.elements.to_a('/root/wiki').map do |element|
+        @output = StringIO.new
+        element.each do |child|
+          case child
+          when REXML::Text:    @output << hesc(child.value)
+          when REXML::Element: render_element(child)
+          end
+        end
+        @output.string
+      end
+    end
+
+    def render_element(element)
+      node_name       = element.fully_expanded_name
+      node_name_lower = node_name.downcase
+      if node_name_lower != 'rawhtml'
+        @output << "<#{node_name}"
+        @output << element.attributes.map{|k,v| " #{hesc(k)}=\"#{hesc(v)}\"" }.join
+        @output << '>'
+        @output << "\n" if GROUP_TAGS[node_name_lower]
+        if element.size > 0
+          element.each do |child|
+            case child
+            when REXML::Text:    @output << hesc(child.value)
+            when REXML::Element: render_element(child)
+            end
+          end
+          @output << "</#{node_name}>"
+        elsif !OPEN_TAGS[node_name_lower]
+          @output << "</#{node_name}>"
+        end
+        @output << "\n" if BLOCK_TAGS[node_name_lower]
+      else
+        element.each do |child|
+          @output << child.value if REXML::Text === child
         end
       end
     end
