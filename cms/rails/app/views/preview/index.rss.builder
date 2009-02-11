@@ -9,16 +9,16 @@ xml.rss("version"    => "2.0",
     xml.link        @site_url
     xml.pubDate     Time.now.rfc822
     xml.description @site_description
-    xml.tag!        "atom:link", "href" => @rss_url, "rel" => "self", "type" => "application/rss+xml"
+    xml.atom :link, "href" => @rss_url, "rel" => "self", "type" => "application/rss+xml"
 
     @articles.each do |article|
       xml.item do
-        xml.title       article.title
-        xml.link        @article_base_url + article.page_name + '.html'
-        xml.description article.formatted_body1
-        xml.pubDate     article.publish_date.to_formatted_s(:rfc822)
-        xml.guid        @article_base_url + article.page_name + '.html'
-        xml.author      @author
+        xml.title        article.title
+        xml.link         @article_base_url + article.page_name + '.html'
+        xml.description  article.formatted_body1
+        xml.pubDate      article.publish_date.to_formatted_s(:rfc822)
+        xml.guid         @article_base_url + article.page_name + '.html'
+        xml.dc :creator, @author
       end
     end
 
