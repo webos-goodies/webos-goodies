@@ -5,25 +5,25 @@
 <head>
 
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title><%= h((yield(:title)||'') + @site_title) %></title>
-<link rel="stylesheet" href="<%= h(@site_url) %>template/site.css" type="text/css" />
-<link rel="alternate" type="application/atom+xml" title="Atom" href="<%= h(@atom_url) %>" />
-<link rel="alternate" type="application/rss+xml" title="RSS" href="<%= h(@rss_url) %>" />
-<link rel="shortcut icon" href="<%= h(@site_url) %>favicon.ico" type="image/x-icon" />
-<script type="text/javascript" src="<%= h(@site_url) %>template/common.js"></script>
+<title><%= h(yield(:title)||'') %></title>
+<link rel="stylesheet" href="<%= h(@site.full_url('/template/site.css')) %>" type="text/css" />
+<link rel="alternate" type="application/atom+xml" title="Atom" href="<%= h(@site.full_url(:atom_path)) %>" />
+<link rel="alternate" type="application/rss+xml" title="RSS" href="<%= h(@site.full_url(:rss_path)) %>" />
+<link rel="shortcut icon" href="<%= h(@site.full_url('/favicon.ico')) %>" type="image/x-icon" />
+<script type="text/javascript" src="<%= h(@site.full_url('/template/common.js')) %>"></script>
 
 <!-- **** Opera Widgets auto detection **** -->
 
 <link rel="alternate"
       type="application/x-opera-widgets"
-      title="<%= h(@site_title) %>"
+      title="<%= h(@site.title) %>"
       href="http://widgets.opera.com/widgetize/Feed%20Reader/Advanced/?serve&amp;skin=skin2&amp;widgetname=WebOS%20Goodies&amp;url=http%3A%2F%2Fwebos-goodies.jp%2Fatom.xml&amp;rel=myopera&amp;ref="/>
 
 <!-- **** Firefox search plugin auto detection **** -->
 
 <link rel="search"
       type="application/opensearchdescription+xml"
-      title="<%= h(@site_title) %>"
+      title="<%= h(@site.title) %>"
       href="http://webos-goodies.googlecode.com/svn/trunk/products/firefox-search/webos-goodies-jp/webos-goodies-jp.xml"/>
 
 <%= yield :head %>
@@ -81,8 +81,8 @@ GSearch.setOnLoadCallback(OnLoad);
 <!-- Google CSE Code ends -->
 
 <div class="lefts">
-<h1><%= h(@site_title) %></h1>
-<h2><%= h(@site_description) %></h2>
+<h1><%= h(@site.title) %></h1>
+<h2><%= h(@site.description) %></h2>
 </div><!-- lefts -->
 </div><!-- top -->
 
@@ -91,7 +91,7 @@ GSearch.setOnLoadCallback(OnLoad);
 <div id="topmenu">
 <div class="rights"></div>
 <div class="lefts"><ul>
-<li><a class="current" href="<%= h(@site_url) %>" title="ホームページへ移動">Home</a></li>
+<li><a class="current" href="<%= h(@site.url) %>" title="ホームページへ移動">Home</a></li>
 <li><a href="http://wiki.livedoor.jp/sourcewalker/d/" title="Wiki へ移動">Wiki</a></li>
 </ul></div><!-- lefts -->
 </div><!-- topmenu -->
@@ -111,11 +111,11 @@ WebOS はインターネットの未来形。あらゆる Web サイトが繋が
 <!-- **** 購読リンク **** -->
 
 <div id="subscribe">Subscribe&nbsp;
-<a href="<%= h(@atom_url) %>" title="Atom feed"><img alt="[Atom feed]" width="14" height="14" src="<%= h(@site_url) %>template/imgs/feed/feed.png"/></a>&nbsp;
-<a href="http://fusion.google.com/add?feedurl=<%= u(@atom_url) %>" title="Google Gadget/Google Readerで購読"><img alt="[Google]" width="68" height="17" src="<%= h(@site_url) %>template/imgs/feed/google.gif" />&nbsp;
-<a href="http://www.bloglines.com/sub/<%= h(@site_url) %>" title="Bloglinesで購読"><img src="<%= h(@site_url) %>template/imgs/feed/bloglines.gif" alt="[Bloglines]" width="76" height="17"/></a>&nbsp;
-<a href="http://reader.livedoor.com/subscribe/<%= h(@site_url) %>" title="livedoor Readerで購読"><img width="91" height="17" src="<%= h(@site_url) %>template/imgs/feed/livedoorreader.gif" alt="[livedoor Reader]" /></a>&nbsp;
-<a href="http://r.hatena.ne.jp/append/<%= u(@site_url) %>" title="はてなRSSで購読"><img src="<%= h(@site_url) %>template/imgs/feed/hatenarss.gif" alt="[はてなRSS]" width="80" height="15"/></a>&nbsp;
+<a href="<%= h(@site.full_url(:atom_path)) %>" title="Atom feed"><img alt="[Atom feed]" width="14" height="14" src="<%= h(@site.full_url('/template/imgs/feed/feed.png')) %>"/></a>&nbsp;
+<a href="http://fusion.google.com/add?feedurl=<%= h(u(@site.full_url(:atom_path))) %>" title="Google Gadget/Google Readerで購読"><img alt="[Google]" width="68" height="17" src="<%= h(@site.full_url('/template/imgs/feed/google.gif')) %>" />&nbsp;
+<a href="http://www.bloglines.com/sub/<%= h(@site.url) %>" title="Bloglinesで購読"><img src="<%= h(@site.full_url('/template/imgs/feed/bloglines.gif')) %>" alt="[Bloglines]" width="76" height="17"/></a>&nbsp;
+<a href="http://reader.livedoor.com/subscribe/<%= h(@site.url) %>" title="livedoor Readerで購読"><img width="91" height="17" src="<%= h(@site.full_url('/template/imgs/feed/livedoorreader.gif')) %>" alt="[livedoor Reader]" /></a>&nbsp;
+<a href="http://r.hatena.ne.jp/append/<%= h(u(@site.url)) %>" title="はてなRSSで購読"><img src="<%= h(@site.full_url('/template/imgs/feed/hatenarss.gif')) %>" alt="[はてなRSS]" width="80" height="15"/></a>&nbsp;
 <a href="http://widgets.opera.com/widgetize/Feed%20Reader/Advanced/?serve&skin=skin2&widgetname=WebOS%20Goodies&url=http%3A%2F%2Fwebos-goodies.jp%2Fatom.xml&rel=myopera&ref=" title="Opera Widgetで購読"><img src="http://webos-goodies.jp/template/imgs/feed/operawidget.png" alt="[Opera Widgetize]" width="80" height="15"></a>
 </div>
 
@@ -138,12 +138,12 @@ WebOS はインターネットの未来形。あらゆる Web サイトが繋が
 </div>
 <div class="sidetop"></div>
 <div class="side">
-  <div class="sidebody"><a href="<%= h(@site_url) %>categories/web-apps.html">一歩進んだ Web アプリケーション活用術</a></div>
-  <div class="sidebody"><a href="<%= h(@site_url) %>categories/opera-firefox.html">Opera &amp; Firefox をディープに使いこなす</a></div>
-  <div class="sidebody"><a href="<%= h(@site_url) %>categories/development.html">WebOS 時代のプログラミング・ノウハウ</a></div>
-  <div class="sidebody"><a href="<%= h(@site_url) %>categories/server.html">Gentoo Linux と VMware による個人サーバー構築記</a></div>
-  <div class="sidebody"><a href="<%= h(@site_url) %>categories/opensource-apps.html">オープンソース・アプリケーションで快適 Web ライフ</a></div>
-  <div class="sidebody"><a href="<%= h(@site_url) %>categories/others.html">その他の記事</a></div>
+  <div class="sidebody"><a href="<%= h(@site.full_url('categories/web-apps.html')) %>">一歩進んだ Web アプリケーション活用術</a></div>
+  <div class="sidebody"><a href="<%= h(@site.full_url('categories/opera-firefox.html')) %>">Opera &amp; Firefox をディープに使いこなす</a></div>
+  <div class="sidebody"><a href="<%= h(@site.full_url('categories/development.html')) %>">WebOS 時代のプログラミング・ノウハウ</a></div>
+  <div class="sidebody"><a href="<%= h(@site.full_url('categories/server.html')) %>">Gentoo Linux と VMware による個人サーバー構築記</a></div>
+  <div class="sidebody"><a href="<%= h(@site.full_url('categories/opensource-apps.html')) %>">オープンソース・アプリケーションで快適 Web ライフ</a></div>
+  <div class="sidebody"><a href="<%= h(@site.full_url('categories/others.html')) %>">その他の記事</a></div>
 </div>
 <div class="sidebottom"></div>
 
@@ -174,7 +174,7 @@ WebOS はインターネットの未来形。あらゆる Web サイトが繋が
 
 <div id="footer">
 
-<div class="rside">&copy; Copyright 2005-2009, <a href="<%= @site_url %>">Chihiro Ito</a> - <a href="<%= @atom_url %>">RSS Feed</a><br />
+<div class="rside">&copy; Copyright 2005-2009, <a href="<%= @site.url %>">Chihiro Ito</a> - <a href="<%= @site.full_url(:atom_path) %>">RSS Feed</a><br />
 Design: <a href="http://www.free-css-templates.com/" title="Design by David Herreman">David Herreman</a>
 </div><!-- rside -->
 

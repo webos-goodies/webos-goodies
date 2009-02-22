@@ -4,7 +4,7 @@
   <%= javascript_include_tag 'article-form' %>
   <script type="text/javascript">
 	jQuery(function() {
-	  Startup('<%= url_for(:controller => :preview, :action => :article) %>');
+	  Startup('<%= url_for(:controller => :preview, :action => :article, :site_id => @site.id) %>');
 	});
   </script>
 <% end -%>

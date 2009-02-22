@@ -2,17 +2,15 @@ require 'credentials.rb'
 require 'xmlrpc/client'
 
 class ArticlesController < ApplicationController
-  include Credentials
 
   def index
     @site     = Site.find(params[:site_id])
     @articles = @site.articles.find(:all, :order => 'created_at DESC')
-    set_template_parameters
   end
 
   def show
-    @site    = Site.find(params[:site_id])
-    @article = @site.articles.find(params[:id])
+    @article = load_article(params[:site_id], params[:id]) || return
+    @site    = @article.site
   end
 
   def new
@@ -21,8 +19,8 @@ class ArticlesController < ApplicationController
   end
 
   def edit
-    @site    = Site.find(params[:site_id])
-    @article = Article.find(params[:id])
+    @article = load_article(params[:site_id], params[:id]) || return
+    @site    = @article.site
   end
 
   def create
@@ -36,8 +34,8 @@ class ArticlesController < ApplicationController
   end
 
   def update
-    @site    = Site.find(params[:site_id])
-    @article = @site.articles.find(params[:id])
+    @article = load_article(params[:site_id], params[:id]) || return
+    @site    = @article.site
     @article.attributes = params[:article]
     @article.save!
     redirect_to(site_article_path(@site.id, @article.id))
@@ -46,26 +44,36 @@ class ArticlesController < ApplicationController
   end
 
   def publish
-    @site    = Site.find(params[:site_id])
-    @article = @site.articles.find(params[:id])
+    @article = load_article(params[:site_id], params[:id]) || return
+    @site    = @article.site
     first    = !@article.published
     @article.published      = true
-    @article.publish_date ||= Time.now
+    @article.publish_date ||= DateTime.now
     @article.save(false)
     Dir.chdir(RAILS_ROOT) do
       external_command("rake upload:single_article ARTICLE=#{@article.id}")
-      external_command("rake upload:indices")
+      external_command("rake upload:indices SITE=#{@site.id}")
     end
     if first
-      set_template_parameters(@article)
-      PING_SERVERS.each do |server|
-        send_ping(server, @article_title, @article_url)
+      @site.ping_servers.each_line do |server|
+        server = server.strip
+        send_ping(server, @article.full_title, @article.url) unless server.blank?
       end
     end
     redirect_to(site_article_path(@site.id, @article.id))
   end
 
   private
+
+  def load_article(site_id, article_id)
+    article = Article.find_by_id(article_id, :include => :site)
+    if article && article.site.id.to_i == site_id.to_i
+      article
+    else
+      render :file => "#{RAILS_ROOT}/public/404.html", :status => 404
+      nil
+    end
+  end
 
   def external_command(cmd)
     raise "External command failed : #{cmd}" unless system(cmd)

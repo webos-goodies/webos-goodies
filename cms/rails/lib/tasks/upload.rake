@@ -1,5 +1,4 @@
 require 'ftp_ex'
-require 'credentials'
 
 namespace :upload do
 
@@ -11,51 +10,57 @@ namespace :upload do
   end
 
   task :indices => :setup do
+    raise 'Please set ENV["SITE"].' if (ENV['SITE']||'').strip.blank?
+    site = Site.find(ENV['SITE'].strip.to_i)
+    raise "site #{id} was not found." unless site
     session = ActionController::Integration::Session.new
-    Net::FTP.open(Credentials::FTP_HOST, Credentials::FTP_USER, Credentials::FTP_PASS) do |ftp|
+    Net::FTP.open(site.ftp_host, site.ftp_user, site.ftp_password) do |ftp|
+      site_id     = site.id
+      ftp_path    = site.ftp_path
       ftp.passive = true
-      status = session.get("/preview")
-      raise "request failed for the top page:\n#{session.response.body}" unless status == 200
-      ftp.putbinarystring(session.response.body,
-                          File.join(Credentials::FTP_SITE_PATH, 'index.html'))
-      status = session.get("/preview.rss")
-      raise "request failed for rss feed:\n#{session.response.body}" unless status == 200
-      ftp.putbinarystring(session.response.body,
-                          File.join(Credentials::FTP_SITE_PATH, 'index.rdf'))
-      status = session.get("/preview.atom")
-      raise "request failed for atom feed:\n#{session.response.body}" unless status == 200
-      ftp.putbinarystring(session.response.body,
-                          File.join(Credentials::FTP_SITE_PATH, 'atom.xml'))
+      [['/preview',      'index.html'],
+       ['/preview.rss',  site.rss_path],
+       ['/preview.atom', site.atom_path]].each do |get_path, upload_path|
+        status = session.get(get_path + "?site_id=#{site_id}")
+        raise "request failed for the top page:\n#{session.response.body}" unless status == 200
+        ftp.putbinarystring(session.response.body, File.join(ftp_path, upload_path))
+      end
     end
   end
 
   task :single_article => :setup do
-    id      = ENV['ARTICLE'].to_i
-    article = Article.find(:first, :conditions => { :id => id })
-    raise "article #{id} was not found." unless article
+    raise 'Please set ENV["ARTICLE"].' if (ENV['ARTICLE']||'').strip.blank?
+    id      = ENV['ARTICLE'].strip.to_i
     session = ActionController::Integration::Session.new
     status  = session.get("/preview/article/#{id}")
     raise "request failed :\n#{session.response.body}" unless status == 200
-    Net::FTP.open(Credentials::FTP_HOST, Credentials::FTP_USER, Credentials::FTP_PASS) do |ftp|
+    article = Article.find_by_id(id)
+    raise "article #{id} was not found." unless article
+    site = article.site
+    Net::FTP.open(site.ftp_host, site.ftp_user, site.ftp_password) do |ftp|
       ftp.passive = true
       ftp.putbinarystring(session.response.body,
-                          File.join(Credentials::FTP_SITE_PATH, 'archives', article[:page_name] + '.html'))
+                          File.join(site.ftp_path, site.article_path, article[:page_name] + '.html'))
     end
   end
 
   task :articles => :setup do
-    articles = Article.find(:all, :conditions => { :published => true }).map do |article|
+    raise 'Please set ENV["SITE"].' if (ENV['SITE']||'').strip.blank?
+    site         = Site.find(ENV['SITE'].strip.to_i)
+    ftp_path     = site.ftp_path
+    article_path = site.article_path
+    articles = site.articles.find(:all, :conditions => { :published => true }).map do |article|
       { :id => article.id, :page_name => article.page_name }
     end
     session = ActionController::Integration::Session.new
-    Net::FTP.open(Credentials::FTP_HOST, Credentials::FTP_USER, Credentials::FTP_PASS) do |ftp|
+    Net::FTP.open(site.ftp_host, site.ftp_user, site.ftp_password) do |ftp|
       ftp.passive = true
       articles.each do |article|
         $stdout << "uploading article #{article[:id]}...\n"
         status = session.get("/preview/article/#{article[:id]}")
         raise "request failed :\n#{session.response.body}" unless status == 200
         ftp.putbinarystring(session.response.body,
-                            File.join(Credentials::FTP_SITE_PATH, 'archives', article[:page_name] + '.html'))
+                            File.join(ftp_path, article_path, article[:page_name] + '.html'))
       end
     end
   end

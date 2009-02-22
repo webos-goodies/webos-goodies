@@ -13,7 +13,7 @@ class SitesController < ApplicationController
   # GET /sites/1
   # GET /sites/1.xml
   def show
-    @site = Site.find(params[:id])
+    @site = Site.find(params[:id], :include => :preference)
     respond_to do |format|
       format.html # show.html.erb
       format.xml  { render :xml => @site }
@@ -32,49 +32,64 @@ class SitesController < ApplicationController
 
   # GET /sites/1/edit
   def edit
-    @site = Site.find(params[:id])
+    @site       = Site.find(params[:id], :include => :preference)
+    @preference = @site.preference
   end
 
   # POST /sites
   # POST /sites.xml
   def create
-    @site = Site.new(params[:site])
-    respond_to do |format|
-      if @site.save
+    Site.transaction do
+      @site = Site.new(params[:site])
+      @site.preference = SitePreference.new(params[:preference])
+      @site.save!
+      @site.preference.save!
+      respond_to do |format|
         flash[:notice] = 'Site was successfully created.'
         format.html { redirect_to(@site) }
         format.xml  { render :xml => @site, :status => :created, :location => @site }
-      else
-        format.html { render :action => "new" }
-        format.xml  { render :xml => @site.errors, :status => :unprocessable_entity }
       end
+    end
+  rescue ActiveRecord::RecordInvalid
+    respond_to do |format|
+      format.html { render :action => "new" }
+      format.xml  { render :xml => @site.errors, :status => :unprocessable_entity }
     end
   end
 
   # PUT /sites/1
   # PUT /sites/1.xml
   def update
-    @site = Site.find(params[:id])
-    respond_to do |format|
-      if @site.update_attributes(params[:site])
+    Site.transaction do
+      @site = Site.find(params[:id], :include => :preference)
+      @site.attributes = params[:site]
+      @preference = (@site.preference ||= SitePreference.new)
+      @preference.attributes = params[:preference]
+      @site.save!
+      @preference.save!
+      respond_to do |format|
         flash[:notice] = 'Site was successfully updated.'
         format.html { redirect_to(@site) }
         format.xml  { head :ok }
-      else
-        format.html { render :action => "edit" }
-        format.xml  { render :xml => @site.errors, :status => :unprocessable_entity }
       end
+    end
+  rescue ActiveRecord::RecordInvalid
+    respond_to do |format|
+      format.html { render :action => "edit" }
+      format.xml  { render :xml => @site.errors, :status => :unprocessable_entity }
     end
   end
 
   # DELETE /sites/1
   # DELETE /sites/1.xml
   def destroy
-    @site = Site.find(params[:id])
-    @site.destroy
-    respond_to do |format|
-      format.html { redirect_to(sites_url) }
-      format.xml  { head :ok }
+    Site.transaction do
+      @site = Site.find(params[:id], :include => :preference)
+      @site.destroy
+      respond_to do |format|
+        format.html { redirect_to(sites_url) }
+        format.xml  { head :ok }
+      end
     end
   end
 end

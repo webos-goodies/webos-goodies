@@ -1,19 +1,9 @@
 <h1>New site</h1>
 
-<% form_for(@site) do |f| %>
-  <%= f.error_messages %>
-
-  <p>
-    <%= f.label :title %><br />
-    <%= f.text_field :title %>
-  </p>
-  <p>
-    <%= f.label :url %><br />
-    <%= f.text_field :url %>
-  </p>
-  <p>
-    <%= f.submit "Create" %>
-  </p>
-<% end %>
+<% form_tag sites_path(), :method => :post do -%>
+  <%= error_messages_for(:site) %>
+  <%= render :partial => 'form' %>
+  <p><%= submit_tag "Create" %></p>
+<% end -%>
 
 <%= link_to 'Back', sites_path %>
