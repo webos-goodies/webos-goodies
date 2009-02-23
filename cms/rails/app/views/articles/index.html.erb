@@ -3,13 +3,19 @@
 <table>
 
 <tr>
+  <th>ID</th>
+  <th>ページ名</th>
   <th>タイトル</th>
+  <th>公開日時</th>
 </tr>
 
 <% @articles.each do |article| -%>
 
 <tr>
-  <td><%= link_to(h(article.title), site_article_url(@site.id, article.id)) %></td>
+  <td><%= h(article.id) %></td>
+  <td><%= link_to(h(truncate(article.page_name, :length => 16)), site_article_url(@site.id, article.id)) %></td>
+  <td><%= h(truncate(article.title, :length => 40)) %></td>
+  <td><%= h(article.publish_date ? article.publish_date.strftime('%Y/%m/%d %H:%M') : '') %></td>
 </tr>
 
 <% end -%>
