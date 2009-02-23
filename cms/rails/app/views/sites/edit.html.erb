@@ -1,0 +1,10 @@
+<h1>Editing site</h1>
+
+<% form_tag site_path(@site.id), :method => :put do -%>
+  <%= error_messages_for(:site) %>
+  <%= render :partial => 'form' %>
+  <p><%= submit_tag "Update" %></p>
+<% end -%>
+
+<%= link_to 'Show', @site %> |
+<%= link_to 'Back', sites_path %>

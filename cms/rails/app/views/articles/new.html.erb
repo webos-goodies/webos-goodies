@@ -7,6 +7,6 @@
 </ul>
 <div style="clear:both;"></div>
 
-<% form_for(@article, :html => { :id => 'article-form' }) do |f| %>
+<% form_for(@article, :url => site_articles_url(@site.id), :html => { :id => 'article-form' }) do |f| %>
   <%= render :partial => 'form', :object => { :f => f } %>
 <% end %>

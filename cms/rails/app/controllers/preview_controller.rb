@@ -1,12 +1,12 @@
 class PreviewController < ApplicationController
-  include Credentials
 
   def index
-    @articles = Article.find(:all,
-                             :order      => 'publish_date DESC',
-                             :conditions => { :published => true },
-                             :limit      => 10)
-    set_template_parameters
+    @site     = Site.find(params[:site_id], :include => :preference)
+    @articles = @site.articles.find(:all,
+                                    :order      => 'publish_date DESC',
+                                    :conditions => { :published => true },
+                                    :limit      => 10,
+                                    :include    => :site)
     respond_to do |type|
       type.html
       type.rss
@@ -16,16 +16,19 @@ class PreviewController < ApplicationController
 
   def article
     if request.method != :post && request.method != :put
-      article = Article.find(params[:id])
+      @article = Article.find(params[:id])
+      @site    = @article.site
+      @article.publish_date ||= DateTime.now
+      raise ActiveRecord::RecordInvalid.new(article) unless @article.valid?
     else
-      article = Article.new(params[:article])
-      article.page_name      = '__preview__'
-      article.publish_date ||= Time.now
+      @article = Article.new(params[:article])
+      @article.page_name      = '__preview__'
+      @article.publish_date ||= DateTime.now
+      #raise ActiveRecord::RecordInvalid.new(article) unless @article.valid?
+      @article.site_id = params[:site_id]
+      @site            = @article.site
     end
-    set_template_parameters(article)
-    raise ActiveRecord::RecordInvalid.new(article) unless article.valid?
   rescue ActiveRecord::RecordInvalid => e
-    @article = e.record
     render :action => 'error', :layout => false
   end
 

@@ -1,20 +1,29 @@
 class Article < ActiveRecord::Base
+  belongs_to     :site
+  attr_protected :id, :created_at, :updated_at, :site_id, :site, :published
+
   AVAILABLE_PARSERS = Parser::Base.all_parsers.map{|k| k.name }
 
-  attr_protected :id, :published
-
-  validates_uniqueness_of :page_name
   validates_presence_of   :page_name
+  validates_uniqueness_of :page_name
   validates_inclusion_of  :parser, :in => AVAILABLE_PARSERS
   validates_presence_of   :title
   validates_presence_of   :body1
 
+  def url()             self.site.full_url(self.site.article_path, self.page_name + '.html') end
+  def full_title()      self.site.format_title(self.title) end
+
+  def page_name=(value) self[:page_name] = value.strip end
+  def title=(value)     self[:title]     = value.strip end
+
   def body1=(value)
-    self[:body1] = value.to_s.gsub(/\r\n|\n|\r/u, "\n")
+    self[:body1]     = value.to_s.gsub(/\r\n|\n|\r/u, "\n")
+    @formatted_body1 = nil
   end
 
   def body2=(value)
     self[:body2] = value.to_s.gsub(/\r\n|\n|\r/u, "\n")
+    @formatted_body2 = nil
   end
 
   def formatted_body1

@@ -1,0 +1,9 @@
+<h1>New site</h1>
+
+<% form_tag sites_path(), :method => :post do -%>
+  <%= error_messages_for(:site) %>
+  <%= render :partial => 'form' %>
+  <p><%= submit_tag "Create" %></p>
+<% end -%>
+
+<%= link_to 'Back', sites_path %>

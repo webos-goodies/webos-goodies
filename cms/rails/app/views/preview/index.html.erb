@@ -1,6 +1,8 @@
+<% content_for :title, @site.title -%>
+
 <% content_for :head do -%>
-<link rel="stylesheet" href="<%= h(@site_url) %>template/articles.css" type="text/css" />
-<link rel="stylesheet" href="<%= h(@site_url) %>template/categories.css" type="text/css" />
+<link rel="stylesheet" href="<%= h(@site.url) %>template/articles.css" type="text/css" />
+<link rel="stylesheet" href="<%= h(@site.url) %>template/categories.css" type="text/css" />
 <% end -%>
 
 <div class="article"><div class="tpl_categories_body">
@@ -11,7 +13,7 @@
 
 <% @articles.each do |article| -%>
 <div class="article_head">
-<h1 class="title"><a href="<%= h(@article_base_url + article.page_name + '.html') %>"><%= h(article.title) %></a></h1>
+<h1 class="title"><a href="<%= h(article.url) %>"><%= h(article.title) %></a></h1>
 </div>
 <% end -%>
 

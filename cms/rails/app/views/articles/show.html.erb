@@ -1,4 +1,4 @@
-<div><%= link_to('編集', edit_article_url(@article.id)) %></div>
+<div><%= link_to('編集', edit_site_article_url(@site.id, @article.id)) %></div>
 <div><%= link_to('プレビュー', :controller => :preview, :action => :article, :id => @article.id) %></div>
 
 <dl>
@@ -27,6 +27,6 @@
   <dd><%= @article.published ? 'published' : 'draft' %></dd>
 </dl>
 
-<% form_tag(publish_article_url(@article.id), :method => :put) do -%>
+<% form_tag(publish_site_article_url(@site.id, @article.id), :method => :put) do -%>
   <%= submit_tag '公開' %>
 <% end -%>

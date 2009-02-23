@@ -1,17 +1,15 @@
-<div><%= link_to('新規投稿', new_article_url()) %></div>
+<div><%= link_to('新規投稿', new_site_article_url(@site.id)) %></div>
 
 <table>
 
 <tr>
-  <th>ID</th>
-  <th>title</th>
+  <th>タイトル</th>
 </tr>
 
 <% @articles.each do |article| -%>
 
 <tr>
-  <td><%= link_to(h(article.id), article_url(article.id)) %></td>
-  <td><%= h(article.title) %></td>
+  <td><%= link_to(h(article.title), site_article_url(@site.id, article.id)) %></td>
 </tr>
 
 <% end -%>
