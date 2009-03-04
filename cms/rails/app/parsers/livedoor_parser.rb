@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 require 'wikiparser/wikiparser.rb'
 require 'nkf'
 
@@ -128,6 +129,11 @@ class LivedoorParser < Parser::Base
       else
         parser.link(url, parser.truncate(url, :length => 53))
       end
+    end
+
+    # HTML
+    tag_syntax(/^<html>(.*)^<\/html>\s*$/mu) do |match, parser|
+      WikiParser::BlockTagSection.new(match[1], 'rawhtml', :filter => false, :syntax => [])
     end
 
     # ---- 下位ルーチン ----------------------------------------------
