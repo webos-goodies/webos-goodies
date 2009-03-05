@@ -1,8 +1,0 @@
-<% @title = escapeHTML(@captions[@basename]) %>
-<h1><%= @title %></h1>
-
-<p>
-過去に掲載した blog 関連のお知らせ記事などを集めています。当 blog の変遷がわかってしまって、ちょっと小恥ずかしい気がしますね。
-</p>
-
-<ol><%= list_articles(@basename, nil, false) %></ol>

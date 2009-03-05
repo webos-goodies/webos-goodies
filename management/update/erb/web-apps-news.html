@@ -1,8 +1,0 @@
-<% @title = escapeHTML(@captions[@basename]) %>
-<h1><%= @title %></h1>
-
-<p>
-基本的に最新情報の類は<a href="weekly-news.html">今週の話題</a>でお伝えしていますが、とくに気になる情報の場合はこちらのコーナーでご紹介しています。
-</p>
-
-<ol><%= list_articles(@basename, nil, false) %></ol>
