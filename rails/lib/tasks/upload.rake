@@ -65,4 +65,17 @@ namespace :upload do
     end
   end
 
+  task :article_list => :setup do
+    raise 'Please set ENV["SITE"].' if (ENV['SITE']||'').strip.blank?
+    site  = Site.find(ENV['SITE'].strip.to_i)
+    cache = {}
+    site.articles.each do |article|
+      $stdout << "uploading article #{article[:id]}...\n"
+      cache = article.upload_googledocs(cache)
+      unless cache[:article_list][:rows]
+        cache[:article_list][:rows] = cache[:article_list][:list_class].find(:all)
+      end
+    end
+  end
+
 end
