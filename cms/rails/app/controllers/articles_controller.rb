@@ -59,6 +59,7 @@ class ArticlesController < ApplicationController
         send_ping(server, @article.full_title, @article.url) unless server.blank?
       end
     end
+    @article.upload_googledocs
     redirect_to(site_article_path(@site.id, @article.id))
   end
 
