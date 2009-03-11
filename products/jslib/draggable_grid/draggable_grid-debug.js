@@ -223,7 +223,7 @@ function CLASS(gridId, opts)
 	    draggingStyle = draggingEl.style,
 	    draggingPos   = getElementPosition(draggingEl),
 	    scrollPos     = getScroll(),
-	    i, j;
+	    i, j, k, l;
 
 	prevPosition   = draggingEl.nextSibling;
 	draggingPos.x += optOffset;
@@ -231,13 +231,17 @@ function CLASS(gridId, opts)
 
 	i = getStyle(draggingEl, 'display');
 	j = getStyle(draggingEl, 'float') || getStyle(draggingEl, 'styleFloat');
+    k = getStyle(draggingEl, 'vertical-align');
+    l = getStyle(draggingEl, 'zoom');
 	_proxyEl.className = optProxyClass;
 	_proxyEl.innerHTML = optProxyHtml;
 	_proxyEl.style.cssText = [
 	  'width:'   + getStyle(draggingEl, 'width'),
 	  'height:'  + getStyle(draggingEl, 'height'),
 	  'display:' + i,
-	  i != 'inline-block' && j ? 'float:' + j : '',
+	  i != 'inline-block' && i != 'inline' && j ? 'float:' + j : '',
+      k ? 'vertical-align:' + k : '',
+      l ? 'zoom:' + l : '',
 	  optProxyStyle].join(';');
 
 	oldStyle               = draggingStyle.cssText;
