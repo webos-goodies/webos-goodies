@@ -85,6 +85,8 @@ class ArticlesController < ApplicationController
     response = client.call("weblogUpdates.ping", title, url)
     logger.info(response.inspect)
     response
+  rescue
+    logger.error('sending ping to ' + server + ' failed.')
   end
 
 end
