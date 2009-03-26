@@ -46,7 +46,11 @@
 
   <UserPref name="n000" datatype="hidden" default_value="1" />
 
+<% if target != 'goo' %>
   <Content type="html">
+<% else %>
+  <Content type="html" view="profile,home,canvas,default">
+<% end %>
 	<![CDATA[
 
 <style type="text/css">
