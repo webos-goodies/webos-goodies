@@ -49,7 +49,7 @@
 <% if target != 'goo' %>
   <Content type="html">
 <% else %>
-  <Content type="html" view="home">
+  <Content type="html" view="profile,home,canvas">
 <% end %>
 	<![CDATA[
 
