@@ -18,8 +18,6 @@
 	<Require feature="settitle" />
 	<Require feature="dynamic-height" />
 	<Require feature="tabs" />
-	<Require feature="drag" />
-	<Require feature="grid" />
 	<Require feature="minimessage" />
 	<Require feature="analytics" />
 	<Require feature="flash" />
