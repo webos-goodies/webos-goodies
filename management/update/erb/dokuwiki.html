@@ -1,8 +1,0 @@
-<% @title = escapeHTML(@captions[@basename]) %>
-<h1><%= @title %></h1>
-
-<p>
-<strong>DokuWiki</strong> はシンプルながらプラグインによる柔軟な拡張機能をサポートした便利な Wiki システムです。各種プログラミング言語の色分け表示を標準でサポートしていることが最大の特徴で、実際にこの blog の多くの記事は <strong>DokuWiki</strong> が生成した HTML をコピー＆ペーストしたものです。個人用のメモ書きツールから多人数によるコラボレーションまでさまざまに活用できる優れたツールですので、ぜひ触ってみてください。
-</p>
-
-<ol><%= list_articles(@basename, nil, false) %></ol>
