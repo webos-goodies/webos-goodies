@@ -87,12 +87,7 @@
   <a href="#" onclick="if(mod0app) mod0app.onClickWest(); event.returnValue = false; return false;">__MSG_btn_west__</a>
 </div>
 
-<div id="mod0wrap"
-     onmousedown="if(mod0app) mod0app.onMouseDown(event); return false;"
-     onmouseup="if(mod0app) mod0app.onMouseUp(event); return false;"
-     onmousemove="if(mod0app) mod0app.onMouseMove(event); return false;"
-     onmouseout="if(mod0app) mod0app.onMouseUp(event); return false;">
-</div>
+<div id="mod0wrap"></div>
 
 <script type="text/javascript">
 
@@ -152,10 +147,14 @@ function mod0Application()
     root.appendChild(this.images[i]);
   }
   root = null;
+  addEvent(root,     'mousedown', self, self.onMouseDown);
+  addEvent(document, 'mouseup',   self, self.onMouseUp);
+  addEvent(document, 'mousemove', self, self.onMouseMove);
 
   _IG_FetchContent('http://tokyo-ame.jwa.or.jp/scripts/mesh_index.js', function(content) {
     self.initRainImage(content);
   }, {refreshInterval: 60*5 });
+
 }
 
 mod0Application.prototype = {
