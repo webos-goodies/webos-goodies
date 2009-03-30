@@ -276,7 +276,7 @@ mod0Application.prototype = {
     if(info) {
 	  if(_isIE) {
 	    if(!(event.button & 1)) {
-		  this.mouseUp(event);
+		  this.onMouseUp(event);
 		  return;
 	    }
       }
