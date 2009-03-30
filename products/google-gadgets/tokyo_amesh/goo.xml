@@ -91,7 +91,7 @@
 
 <script type="text/javascript">
 
-var _window = window, _document = document;
+var _window = window, _document = document, _isIE = !!_window.ActiveXObject;
 
 function normalizeCallback(callback) {
   var scope = _window, method = callback;
@@ -272,10 +272,15 @@ mod0Application.prototype = {
   onMouseMove : function(event)
   {
     event = event || window.event;
-    stopEvent(event);
     var info = this.dragInfo;
-    if(info)
-    {
+    if(info) {
+	  if(_isIE) {
+	    if(!(event.button & 1)) {
+		  this.mouseUp(event);
+		  return;
+	    }
+      }
+	  stopEvent(event);
       this.scroll(info.baseX - (event.clientX - info.startX),
                   info.baseY - (event.clientY - info.startY));
     }
