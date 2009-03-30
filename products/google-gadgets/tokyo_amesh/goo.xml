@@ -91,6 +91,8 @@
 
 <script type="text/javascript">
 
+var _window = window, _document = document;
+
 function normalizeCallback(callback) {
   var scope = _window, method = callback;
   if(arguments.length >= 2)
@@ -163,9 +165,9 @@ function mod0Application()
     root.appendChild(this.images[i]);
   }
   root = null;
-  addEvent(root,     'mousedown', self, self.onMouseDown);
-  addEvent(document, 'mouseup',   self, self.onMouseUp);
-  addEvent(document, 'mousemove', self, self.onMouseMove);
+  addEvent(root,      'mousedown', self, self.onMouseDown);
+  addEvent(_document, 'mouseup',   self, self.onMouseUp);
+  addEvent(_document, 'mousemove', self, self.onMouseMove);
 
   _IG_FetchContent('http://tokyo-ame.jwa.or.jp/scripts/mesh_index.js', function(content) {
     self.initRainImage(content);
