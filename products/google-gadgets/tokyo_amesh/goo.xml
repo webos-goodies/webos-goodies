@@ -91,6 +91,22 @@
 
 <script type="text/javascript">
 
+function normalizeCallback(callback) {
+  var scope = _window, method = callback;
+  if(arguments.length >= 2)
+	callback = arguments;
+  if(typeof callback != 'function') {
+	if(!(method = callback[1] || callback['method'])) {
+	  method = callback[0];
+	} else {
+	  scope = callback[0] || callback['scope'];
+	  if(typeof method != 'function')
+		method = scope[method];
+	}
+  }
+  return [scope, method];
+}
+
 function delegate() {
   var callback = normalizeCallback.apply(this, arguments);
   return function() { callback[1].apply(callback[0], arguments); }
