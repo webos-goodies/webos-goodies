@@ -88,13 +88,33 @@
 </div>
 
 <div id="mod0wrap"
-     onmousedown="if(mod0app) mod0app.onMouseDown(event); event.returnValue = false; return false;"
-     onmouseup="if(mod0app) mod0app.onMouseUp(event); event.returnValue = false; return false;"
-     onmousemove="if(mod0app) mod0app.onMouseMove(event); event.returnValue = false; return false;"
-     onmouseout="if(mod0app) mod0app.onMouseUp(event); event.returnValue = false; return false;">
+     onmousedown="if(mod0app) mod0app.onMouseDown(event); return false;"
+     onmouseup="if(mod0app) mod0app.onMouseUp(event); return false;"
+     onmousemove="if(mod0app) mod0app.onMouseMove(event); return false;"
+     onmouseout="if(mod0app) mod0app.onMouseUp(event); return false;">
 </div>
 
 <script type="text/javascript">
+
+function delegate() {
+  var callback = normalizeCallback.apply(this, arguments);
+  return function() { callback[1].apply(callback[0], arguments); }
+}
+
+function addEvent(element, type) {
+  var listener = delegate(Array.prototype.slice.call(arguments, 2));
+  element['addEventListener'] ?
+    element.addEventListener(type, listener, false) :
+    element.attachEvent('on' + type, listener);
+}
+
+function stopEvent(event) {
+  event = event || window.event;
+  event.stopPropagation && event.stopPropagation();
+  event.preventDefault  && event.preventDefault();
+  event.cancelBubble = true;
+  event.returnValue  = false;
+}
 
 function mod0Application()
 {
@@ -151,14 +171,6 @@ mod0Application.prototype = {
       this.rainImages = eval(match[0]);
       this.images[1].src = _IG_GetImageUrl('http://tokyo-ame.jwa.or.jp/mesh/000/' + this.rainImages[0] + '.gif');
     }
-  },
-
-  stopEvent : function(event)
-  {
-    if(event.stopPropagation)
-      event.stopPropagation();
-    if(event.preventDefault)
-      event.preventDefault();
   },
 
   scroll : function(x, y)
@@ -222,7 +234,8 @@ mod0Application.prototype = {
 
   onMouseDown : function(event)
   {
-    this.stopEvent(event);
+    event = event || window.event;
+    stopEvent(event);
     var wrap = _gel('mod0wrap');
     this.dragInfo = {
       startX: event.clientX,
@@ -234,13 +247,15 @@ mod0Application.prototype = {
 
   onMouseUp : function(event)
   {
-    this.stopEvent(event);
+    event = event || window.event;
+    stopEvent(event);
     this.dragInfo = null;
   },
 
   onMouseMove : function(event)
   {
-    this.stopEvent(event);
+    event = event || window.event;
+    stopEvent(event);
     var info = this.dragInfo;
     if(info)
     {
