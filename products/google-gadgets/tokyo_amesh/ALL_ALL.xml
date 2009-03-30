@@ -1,0 +1,14 @@
+<messagebundle>
+  <msg name="title">Tokyo Amesh</msg>
+  <msg name="url">http://tokyo-ame.jwa.or.jp/en/</msg>
+  <msg name="description">View the amount of rainfall in tokyo on your page.</msg>
+  <msg name="area_selection">Area Selection</msg>
+  <msg name="area_west">West Area</msg>
+  <msg name="area_east">East Area</msg>
+  <msg name="area_whole">Whole Area</msg>
+  <msg name="btn_west">West</msg>
+  <msg name="btn_east">East</msg>
+  <msg name="btn_whole">Whole Area</msg>
+  <msg name="screenshot">screenshot_en</msg>
+  <msg name="thumbnail">thumbnail</msg>
+</messagebundle>
