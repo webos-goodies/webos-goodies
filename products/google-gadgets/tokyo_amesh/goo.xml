@@ -13,6 +13,7 @@
                author_affiliation="WebOS Goodies"
                author_location="Tokyo, Japan"
                author_link="http://webos-goodies.jp/">
+	<Icon>http://webos-goodies.jp/favicon.ico</Icon>
     <Locale messages="http://webos-goodies.googlecode.com/svn/trunk/products/google-gadgets/tokyo_amesh/ALL_ALL.xml"/>
     <Locale lang="ja" messages="http://webos-goodies.googlecode.com/svn/trunk/products/google-gadgets/tokyo_amesh/ja_ALL.xml"/>
   </ModulePrefs>
