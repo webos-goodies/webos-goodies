@@ -363,7 +363,7 @@ SocialGoodies = (function() {
 		  var error = new DataRequest.Error('', response.getErrorMessage(), true);
 		  for(var i = 0, l = records.length ; i < l ; ++i) {
 			var record = records[i];
-			if(typeof response.callback == 'function') {
+			if(typeof record.callback == 'function') {
 			  record.callback.call(record.scope, null, error);
 			}
 		  }
