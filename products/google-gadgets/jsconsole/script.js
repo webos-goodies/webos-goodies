@@ -12,6 +12,34 @@ var tabBorderStyle = 'border: 1px solid #676767; border-top-style: none; padding
 
 
 //--------------------------------------------------------------------
+// mixi hack
+
+if(platform == 'mixi') {
+  prefs.set = function() {};
+  prefs.getString = function(name) {
+	var values = {
+	  "pr": "1",
+	  "sm": "1",
+	  "sv": "0",
+	  "fs": "12",
+	  "tr": "15",
+	  "or": "8",
+	  "lr": "8",
+	  "gh": "200",
+	  "u1": null,
+	  "u2": null,
+	  "u3": null,
+	  "u4": null,
+	  "n000": "1"
+	};
+	return values[name];
+  }
+  prefs.getInt  = function(name) { return parseInt(this.getString(name), 10); }
+  prefs.getBool = function(name) { return parseInt(this.getString(name), 10) ? true : false; }
+}
+
+
+//--------------------------------------------------------------------
 // type detection
 
 function isNull(obj)     { return obj === null; };

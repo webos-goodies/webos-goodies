@@ -3,7 +3,7 @@ require 'erb'
 
 $KCODE = 'U'
 
-TARGETS = ['normal.xml', 'goo.xml']
+TARGETS = ['normal.xml', 'goo.xml', 'mixi.xml']
 HOSTS = {
   'googlecode' => 'http://webos-goodies.googlecode.com/svn/trunk/products/google-gadgets/jsconsole',
   'lab'        => 'http://lab.webos-goodies.jp/jsconsole'
@@ -52,8 +52,9 @@ TARGETS.each do |fname|
     $root = HOSTS['googlecode']
   end
   file fname => ['jsconsole.xml', 'script.js'] do |t|
-    target = File.basename(t.name, '.xml')
-    result = ERB.new(IO.read(t.prerequisites[0]), nil, '>').result(binding)
+    target   = File.basename(t.name, '.xml')
+	platform = target == 'normal' ? 'igoogle' : target
+    result   = ERB.new(IO.read(t.prerequisites[0]), nil, '>').result(binding)
     File.open(t.name, 'w') do |file|
       file.write(result)
     end

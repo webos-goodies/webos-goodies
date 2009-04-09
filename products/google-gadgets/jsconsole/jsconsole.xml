@@ -78,7 +78,10 @@
   <a target="_blank" href="http://groups.google.com/group/webos-goodies">__MSG_support__</a>
 </div>
 
-<script type="text/javascript">var moduleId = 0;</script>
+<script type="text/javascript">
+  var moduleId = 0;
+  var platform = '<%= platform %>';
+</script>
 
 <%= jspack('script.js') %>
 
