@@ -14,14 +14,14 @@
 	 author_affiliation="WebOS Goodies"
 	 author_location="Tokyo, Japan"
 	 author_link="http://webos-goodies.jp/">
-<% if target == 'goo' %>
+<% if platform == 'goo' %>
 	<Icon>http://webos-goodies.jp/favicon.ico</Icon>
 <% end %>
 	<Require feature="setprefs" />
 	<Require feature="settitle" />
 	<Require feature="dynamic-height" />
 	<Require feature="tabs" />
-<% if target != 'goo' %>
+<% if platform == 'igoogle' %>
 	<Require feature="drag" />
 	<Require feature="grid" />
 <% end %>
@@ -49,7 +49,7 @@
 
   <UserPref name="n000" datatype="hidden" default_value="1" />
 
-<% if target != 'goo' %>
+<% if platform == 'igoogle' %>
   <Content type="html">
 <% else %>
   <Content type="html" view="home,profile,canvas">

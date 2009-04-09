@@ -18,8 +18,6 @@
 	<Require feature="settitle" />
 	<Require feature="dynamic-height" />
 	<Require feature="tabs" />
-	<Require feature="drag" />
-	<Require feature="grid" />
 	<Require feature="minimessage" />
 	<Require feature="analytics" />
 	<Require feature="flash" />
@@ -44,7 +42,7 @@
 
   <UserPref name="n000" datatype="hidden" default_value="1" />
 
-  <Content type="html">
+  <Content type="html" view="home,profile,canvas">
 	<![CDATA[
 
 <style type="text/css">
