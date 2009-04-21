@@ -8,7 +8,7 @@
     <gadget whole-dropdown="true" width="450" height="400">
       http://webos-goodies.googlecode.com/svn/trunk/products/google-gadgets/jsconsole/normal.xml
     </gadget>
-	<update>http://lab.webos-goodies.jp/jsconsole/button.xml</update>
+	<update>http://webos-goodies.googlecode.com/svn/trunk/products/google-gadgets/jsconsole/button.xml</update>
 	<icon mode="base64" type="image/x-icon">
 	  AAABAAEAEBAAAAAAAABoBQAAFgAAACgAAAAQAAAAIAAAAAEACAAAAAAAAAEAAAAAAAAAAAAAAAEA
 	  AAAAAACrq6sAcygXAND39wD///8A9Vk2AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
