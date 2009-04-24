@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Module>
+  <ModulePrefs
+	 title="実験用ガジェット1"
+	 directory_title="実験用ガジェット1"
+	 title_url="http://webos-goodies.jp/"
+	 description="個人的な開発用のガジェットです。たぶんあまり面白いものじゃないです ＾＾；"
+	 height="300"
+	 scrolling="false"
+	 author="WebOS Goodies"
+	 author_email="support@webos-goodies.jp"
+	 author_affiliation="WebOS Goodies"
+	 author_location="Tokyo, Japan"
+	 author_link="http://webos-goodies.jp/">
+	<Require feature="views" />
+  </ModulePrefs>
+  <Content type="html" view="home,canvas">
+	<![CDATA[
+
+<div id="o3d" style="width:100%; height:300px;"></div>
+<div style="display:none">
+<textarea id="checkerShader" name="checkerShader" cols="80" rows="20">
+  // The 4x4 world view projection matrix.
+  float4x4 worldViewProjection : WORLDVIEWPROJECTION;
+  uniform float clock;
+
+  // input parameters for our vertex shader
+  struct a2v {
+    float4 position : POSITION;
+    float3 normal : NORMAL;
+    float2 texcoord : TEXCOORD0;
+  };
+
+  // input parameters for our pixel shader
+  struct v2f {
+    float4 position : POSITION;
+    float4 col : COLOR;
+    float2 texcoord : TEXCOORD0;
+  };
+
+  // function for getting the checker pattern
+  float4 checker(float2 uv) {
+    float checkSize = 4;
+    float fmodResult = fmod(floor(checkSize * uv.x + clock) + floor(checkSize * uv.y + sin(clock*2) * 0.5),
+                            2.0);
+    if (fmodResult < 1) {
+      return float4(0, 1, 1, 1);
+    } else {
+      return float4(1, 0, 1, 1);
+    }
+  }
+
+  /**
+   * Our vertex shader. In the vertex shader, we calculate the lighting.
+   * Then we'll combine it with our checker pattern in the pixel shader.
+   */
+  v2f vertexShaderFunction(a2v input) {
+    v2f output;
+    output.position = mul(input.position, worldViewProjection);
+    /**
+     * lightVector - light vector
+     * normal - normal vector
+     * We put the light such that it illuminates our model.
+     */
+
+    float4 diffuseColor = float4(1, 1, 1, 1);
+    float3 lightPos = float3(1000, -1000, 1000);
+
+    float3 lightVector = normalize(lightPos - input.position.xyz);
+    float3 normal = normalize(input.normal);
+    float4 diffuse = dot(normal, lightVector) * diffuseColor;
+
+    output.col = diffuse;
+    output.texcoord = input.texcoord;
+    return output;
+  }
+
+  /**
+   * Our pixel shader. We take the lighting color we got from the vertex sahder
+   * and combine it with our checker pattern.
+   */
+  float4 pixelShaderFunction(v2f input): COLOR {
+    float4 check = checker(input.texcoord);
+    float4 color = input.col * check;
+    return color;
+  }
+
+  // Here we tell our effect file *which* functions are
+  // our vertex and pixel shaders.
+
+  // #o3d VertexShaderEntryPoint vertexShaderFunction
+  // #o3d PixelShaderEntryPoint pixelShaderFunction
+  // #o3d MatrixLoadOrder RowMajor
+</textarea>
+</div>
+
+<script type="text/javascript" src="http://lab.webos-goodies.jp/goo_home/o3djs/base.js"></script>
+<script type="text/javascript">
+  document.open();
+  document.write('<scr'+'ipt src="http://lab.webos-goodies.jp/goo_home/test1.js?' + Math.random() + '"></scr' + 'ipt>');
+  document.close();
+</script>
+
+    ]]>
+  </Content>
+</Module>
