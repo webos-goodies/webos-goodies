@@ -94,10 +94,10 @@
 </textarea>
 </div>
 
-<script type="text/javascript" src="http://lab.webos-goodies.jp/goo_home/o3djs/base.js"></script>
+<script type="text/javascript" src="http://webos-goodies.googlecode.com/svn/trunk/products/hackathon/20090424/o3djs/base.js"></script>
 <script type="text/javascript">
   document.open();
-  document.write('<scr'+'ipt src="http://lab.webos-goodies.jp/goo_home/test1.js?' + Math.random() + '"></scr' + 'ipt>');
+  document.write('<scr'+'ipt src="http://webos-goodies.googlecode.com/svn/trunk/products/hackathon/20090424/o3d_in_gadget.js?' + Math.random() + '"></scr' + 'ipt>');
   document.close();
 </script>
 

@@ -1,4 +1,4 @@
-o3djs.basePath = "http://lab.webos-goodies.jp/goo_home/";
+o3djs.basePath = "http://webos-goodies.googlecode.com/svn/trunk/products/hackathon/20090424/";
 o3djs.require('o3djs.util');
 o3djs.require('o3djs.rendergraph');
 o3djs.require('o3djs.pack');
@@ -61,7 +61,7 @@ function loadScene(pack, fileName, parent) {
 	O3DApp.client,
 	O3DApp.pack,
 	parent,
-	'http://lab.webos-goodies.jp/goo_home/assets/teapot.tgz',
+	'http://webos-goodies.googlecode.com/svn/trunk/products/hackathon/20090424/assets/teapot.tgz',
 	callback);
 
   function callback(pack, parent, exception) {
