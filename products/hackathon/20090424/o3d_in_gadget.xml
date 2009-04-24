@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <Module>
   <ModulePrefs
-	 title="実験用ガジェット1"
-	 directory_title="実験用ガジェット1"
+	 title="O3D Sample Gadget"
 	 title_url="http://webos-goodies.jp/"
-	 description="個人的な開発用のガジェットです。たぶんあまり面白いものじゃないです ＾＾；"
+	 description="O3D のサンプルをGoogle Gadget化してみました。ついでにUVスクロールやドラッグによる回転も実装。"
 	 height="300"
 	 scrolling="false"
 	 author="WebOS Goodies"
