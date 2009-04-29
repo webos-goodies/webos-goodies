@@ -31,7 +31,7 @@
 <!--[if IE]>
 <style type="text/css">
   #ie-sucks { height: expression(document.body.clientHeight + 'px'); }
-  #content { position:absolute; left:0px; top:20px; width:300px; height:280px; }
+  #content { position:absolute; left:0px; top:20px; width:100%; height:expression(document.body.clientHeight - 20 + 'px'); }
 </style>
 <![endif]-->
 
