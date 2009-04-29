@@ -3,7 +3,7 @@
   <ModulePrefs
 	 title="ConvoTrack"
 	 title_url="http://convotrack.com/"
-	 description="Show comments related to the current page from Twitter, FriendFeed, Digg, Reddit, HackerNews. PowerdBy ConvoTrack (http://convotrack.com/)."
+	 description="Show comments related to a page or a domain from Twitter, FriendFeed, Digg, Reddit, HackerNews. PowerdBy ConvoTrack (http://convotrack.com/)."
 	 width="430"
 	 height="300"
 	 scrolling="false"
