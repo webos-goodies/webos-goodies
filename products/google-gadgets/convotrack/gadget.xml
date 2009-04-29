@@ -30,8 +30,7 @@
 
 <!--[if IE]>
 <style type="text/css">
-  html { overflow:visible; }
-  body { overflow:visible; }
+  body { height: expression(document.body.clientHeight + 'px'); }
   #content { position:absolute; left:0px; top:20px; width:300px; height:280px; }
 </style>
 <![endif]-->
