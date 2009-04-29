@@ -30,12 +30,12 @@
 
 <!--[if IE]>
 <style type="text/css">
-  #content { position:absolute; left:0px; top:20px; width:expression(document.body.clientWidth + 'px'); height:expression((document.body.clientHeight - 20) + 'px'); }
+  #content { position:absolute; left:0px; top:20px; width:expression(document.body.clientWidth + 'px'); height:expression(300 + 'px'); }
 </style>
 <![endif]-->
 
 <script type="text/javascript">
-alert(document.body.clientHeight);
+
 var prefs = new _IG_Prefs();
 
 function setUrl(url) {
