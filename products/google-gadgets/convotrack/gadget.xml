@@ -23,7 +23,7 @@
   #content { position:fixed; left:0px; top:20px; right:0px; bottom:0px; }
   #menu { display: block; font-size: 12px; background-color: black; margin: 0px; padding: 0px; width: 100%; height: 19px; border-bottom: solid 1px #888; }
   #menu li { display:block; float: left; margin: 0px; padding: 3px 0px 0px 8px; }
-  #menu a { color: #ccc; font-weight: bold; text-decoration: none; display:block; height: 100%; }
+  #menu a { color: #ccc; font-weight: bold; text-decoration: none; display:block; height: 100%; outline: none;}
   #menu a:hover { color: white; }
   #menu a.select { color: red; }
 </style>
