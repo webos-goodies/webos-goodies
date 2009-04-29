@@ -28,6 +28,12 @@
   #menu a.select { color: red; }
 </style>
 
+<!--[if IE]>
+<style type="text/css">
+  #content { position:absolute; left:0px; top:20px; width:expression(document.body.offsetWidth + 'px'); height:expression(document.body.offsetHeight - 20 + 'px'); }
+</style>
+<![endif]-->
+
 <script type="text/javascript">
 
 var prefs = new _IG_Prefs();
