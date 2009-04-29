@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Module>
+  <ModulePrefs
+	 title="ConvoTrack"
+	 title_url="http://convotrack.com/"
+	 description="Show comments related to the current page from Twitter, FriendFeed, Digg, Reddit, HackerNews. PowerdBy ConvoTrack (http://convotrack.com/)."
+	 height="300"
+	 scrolling="false"
+	 author="WebOS Goodies"
+	 author_email="support@webos-goodies.jp"
+	 author_affiliation="WebOS Goodies"
+	 author_location="Tokyo, Japan"
+	 author_link="http://webos-goodies.jp/">
+  </ModulePrefs>
+  <UserPref name="page_url" datatype="string" required="true" />
+  <Content type="html">
+	<![CDATA[
+
+<style type="text/css">
+  #content { position:fixed; left:0px; top:20px; right:0px; bottom:0px; }
+  #menu { display: block; font-size: 12px; background-color: black; margin: 0px; padding: 0px; width: 100%; height: 19px; border-bottom: solid 1px #888; }
+  #menu li { display:block; float: left; margin: 0px; padding: 3px 0px 0px 8px; }
+  #menu a { color: #ccc; font-weight: bold; text-decoration: none; display:block; height: 100%; }
+  #menu a:hover { color: white; }
+  #menu a.select { color: red; }
+</style>
+
+<script type="text/javascript">
+
+var prefs = new _IG_Prefs();
+
+function setUrl(url) {
+  var url = 'http://convotrack.com/show/sidebar/?frame=1&url=' + _esc(url);
+  _gel('frame').src = url;
+}
+
+function onClickPage() {
+  setUrl(prefs.getString('page_url'));
+  _gel('btn-page').className   = 'select';
+  _gel('btn-domain').className = '';
+}
+
+function onClickDomain() {
+  var match = /^https?:\/\/[^\/]+\/?/.exec(prefs.getString('page_url'));
+  if(match) {
+    setUrl(match[0]);
+  } else {
+    setUrl(prefs.getString('page_url'));
+  }
+  _gel('btn-page').className   = '';
+  _gel('btn-domain').className = 'select';
+}
+
+_IG_RegisterOnloadHandler(function() {
+  onClickPage();
+});
+
+</script>
+
+<ul id="menu">
+  <li><a href="#" id="btn-page"   onclick="onClickPage();">&raquo;Page</a></li>
+  <li><a href="#" id="btn-domain" onclick="onClickDomain();">&raquo;Domain</a></li>
+</ul>
+
+<div id="content">
+<iframe id="frame" frameborder="0" width="100%" height="100%"></iframe>
+</div>
+
+    ]]>
+  </Content>
+</Module>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<custombuttons xmlns="http://toolbar.google.com/custombuttons/">
+  <button>
+    <title>ConvoTrack</title>
+    <description>Show comments related to the current page from Twitter, FriendFeed, Digg, Reddit, HackerNews. PowerdBy ConvoTrack (http://convotrack.com/).</description>
+    <description locale="ja">現在表示中のページに関連する Twitter, FriendFeed, Digg, Reddit, HackerNews コメントを表示します。 ConvoTrack (http://convotrack.com/) の機能を利用しています。</description>
+    <site>http://convotrack.com/</site>
+	<search>http://convotrack.com/{query}</site>
+    <gadget width="412" height="300" url="page_url">
+      http://webos-goodies.googlecode.com/svn/trunk/products/google-gadgets/convotrack/gadget.xml
+    </gadget>
+  </button>
+</custombuttons>
