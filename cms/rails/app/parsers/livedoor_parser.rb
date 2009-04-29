@@ -132,7 +132,7 @@ class LivedoorParser < Parser::Base
     end
 
     # HTML
-    tag_syntax(/^<html>(.*)^<\/html>\s*$/mu) do |match, parser|
+    tag_syntax(/^<html>(.*?)^<\/html>\s*$/mu) do |match, parser|
       WikiParser::BlockTagSection.new(match[1], 'rawhtml', :filter => false, :syntax => [])
     end
 
