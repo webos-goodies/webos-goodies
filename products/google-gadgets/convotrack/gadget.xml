@@ -7,6 +7,8 @@
 	 width="430"
 	 height="300"
 	 scrolling="false"
+	 screenshot="http://webos-goodies.googlecode.com/svn/trunk/products/google-gadgets/convotrack/screenshot.png"
+	 thumbnail="http://webos-goodies.googlecode.com/svn/trunk/products/google-gadgets/convotrack/thumbnail.png"
 	 author="WebOS Goodies"
 	 author_email="support@webos-goodies.jp"
 	 author_affiliation="WebOS Goodies"
