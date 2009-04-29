@@ -30,6 +30,7 @@
 
 <!--[if IE]>
 <style type="text/css">
+  body { overflow:visible; }
   #content { position:absolute; left:0px; top:20px; width:300px; height:280px; }
 </style>
 <![endif]-->
