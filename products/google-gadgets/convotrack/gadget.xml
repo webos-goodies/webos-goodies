@@ -30,7 +30,7 @@
 
 <!--[if IE]>
 <style type="text/css">
-  #content { position:absolute; left:0px; top:20px; width:expression(document.body.offsetWidth + 'px'); height:expression((document.body.offsetHeight - 20) + 'px'); }
+  #content { position:absolute; left:0px; top:20px; width:expression(document.body.offsetWidth + 'px'); height:expression((document.documentElement.clientHeight - 20) + 'px'); }
 </style>
 <![endif]-->
 
