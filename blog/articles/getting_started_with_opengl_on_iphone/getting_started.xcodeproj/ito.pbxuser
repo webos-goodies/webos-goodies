@@ -1,0 +1,101 @@
+// !$*UTF8*$!
+{
+	1D6058900D05DD3D006BFB54 /* getting_started */ = {
+		activeExec = 0;
+		executables = (
+			523FA1AE0FCED07F00CF4302 /* getting_started */,
+		);
+	};
+	28FD14FC0DC6FC130079059D /* EAGLView.h */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {781, 754}}";
+			sepNavSelRange = "{1018, 0}";
+			sepNavVisRange = "{0, 1176}";
+			sepNavWindowFrame = "{{38, 270}, {840, 882}}";
+		};
+	};
+	28FD14FD0DC6FC130079059D /* EAGLView.m */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {588, 4002}}";
+			sepNavSelRange = "{7625, 0}";
+			sepNavVisRange = "{1357, 410}";
+			sepNavWindowFrame = "{{15, 291}, {840, 882}}";
+		};
+	};
+	29B97313FDCFA39411CA2CEA /* Project object */ = {
+		activeBuildConfigurationName = Debug;
+		activeExecutable = 523FA1AE0FCED07F00CF4302 /* getting_started */;
+		activeTarget = 1D6058900D05DD3D006BFB54 /* getting_started */;
+		addToTargets = (
+			1D6058900D05DD3D006BFB54 /* getting_started */,
+		);
+		codeSenseManager = 523FA1BD0FCED08400CF4302 /* Code sense */;
+		executables = (
+			523FA1AE0FCED07F00CF4302 /* getting_started */,
+		);
+		perUserDictionary = {
+			PBXConfiguration.PBXFileTableDataSource3.PBXFileTableDataSource = {
+				PBXFileTableDataSourceColumnSortingDirectionKey = "-1";
+				PBXFileTableDataSourceColumnSortingKey = PBXFileDataSource_Filename_ColumnID;
+				PBXFileTableDataSourceColumnWidthsKey = (
+					20,
+					341,
+					20,
+					48,
+					43,
+					43,
+					20,
+				);
+				PBXFileTableDataSourceColumnsKey = (
+					PBXFileDataSource_FiletypeID,
+					PBXFileDataSource_Filename_ColumnID,
+					PBXFileDataSource_Built_ColumnID,
+					PBXFileDataSource_ObjectSize_ColumnID,
+					PBXFileDataSource_Errors_ColumnID,
+					PBXFileDataSource_Warnings_ColumnID,
+					PBXFileDataSource_Target_ColumnID,
+				);
+			};
+			PBXPerProjectTemplateStateSaveDate = 265379760;
+			PBXWorkspaceStateSaveDate = 265379760;
+		};
+		sourceControlManager = 523FA1BC0FCED08400CF4302 /* Source Control */;
+		userBuildSettings = {
+		};
+	};
+	523FA1AE0FCED07F00CF4302 /* getting_started */ = {
+		isa = PBXExecutable;
+		activeArgIndices = (
+		);
+		argumentStrings = (
+		);
+		autoAttachOnCrash = 1;
+		breakpointsEnabled = 0;
+		configStateDict = {
+		};
+		customDataFormattersEnabled = 1;
+		debuggerPlugin = GDBDebugging;
+		disassemblyDisplayState = 0;
+		dylibVariantSuffix = "";
+		enableDebugStr = 1;
+		environmentEntries = (
+		);
+		executableSystemSymbolLevel = 0;
+		executableUserSymbolLevel = 0;
+		libgmallocEnabled = 0;
+		name = getting_started;
+		sourceDirectories = (
+		);
+	};
+	523FA1BC0FCED08400CF4302 /* Source Control */ = {
+		isa = PBXSourceControlManager;
+		fallbackIsa = XCSourceControlManager;
+		isSCMEnabled = 0;
+		scmConfiguration = {
+		};
+	};
+	523FA1BD0FCED08400CF4302 /* Code sense */ = {
+		isa = PBXCodeSenseManager;
+		indexTemplatePath = "";
+	};
+}
