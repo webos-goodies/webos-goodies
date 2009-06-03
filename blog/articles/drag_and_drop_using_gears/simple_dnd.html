@@ -1,0 +1,115 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Drag and Drop のサンプル</title>
+</head>
+
+<body>
+
+<h1>Drag and Drop のサンプル</h1>
+
+<div id="drop-target" style="width: 300px; height: 300px; background-color: #ccc; padding: 4px;">
+この矩形内にファイルをドラッグ・アンド・ドロップしてください。
+</div>
+
+<div id="results"></div>
+
+<script type="text/javascript" src="gears_init.js"></script>
+<script type="text/javascript">
+var desktop = null;
+var action  = ['install', 'インストール'];
+try {
+  if(!window.google || !window.google.gears)
+    throw null;
+  action = ['upgrade', '更新'];
+  desktop = google.gears.factory.create('beta.desktop');
+} catch(e) {
+  var message = 'Gears を' + action[1] + 'してください。'
+  window.location.href =
+    'http://gears.google.com/?action=' + action[0] +
+    '&message=' + encodeURIComponent(message) +
+    '&return=' + encodeURIComponent(window.location.href);
+}
+
+var platform  = null;
+var buildInfo = google.gears.factory.getBuildInfo();
+platform = buildInfo.indexOf(';ie')      > -1 ? 'IE'      : platform;
+platform = buildInfo.indexOf(';firefox') > -1 ? 'Firefox' : platform;
+platform = buildInfo.indexOf(';safari')  > -1 ? 'Safari'  : platform;
+platform = buildInfo.indexOf(';npapi')   > -1 ? 'Npapi'   : platform;
+
+var eventMap = {
+  'dragenter' : 'dragenter',
+  'dragover'  : 'dragover',
+  'dragleave' : 'dragexit',
+  'drop'      : 'dragdrop'
+};
+
+function addEvent(element, name, handler) {
+  if(platform != 'IE') {
+    element.addEventListener(platform != 'Firefox' ? name : eventMap[name], handler, false);
+  } else {
+    element.attachEvent('on' + name, handler);
+  }
+}
+
+function escapeHtml(s) {
+  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+function handleEnterOver(event) {
+  event.returnValue = false;
+  desktop.setDragCursor(event, 'copy');
+}
+
+function handleLeave(event) {
+  event.returnValue = false;
+  desktop.setDragCursor(event, 'none');
+}
+
+function handleDrop(event) {
+  event.stopPropagation && event.stopPropagation();
+  var data    = desktop.getDragData(event, 'application/x-gears-files');
+  var files   = data && data.files;
+  var results = [
+    'count : ' + data.count,
+    'totalBytes : ' + data.totalBytes,
+    'extensions : ' + data.extensions.join(', '),
+    'mimeTypes : ' + data.mimeTypes.join(', '),
+    '-----------------------------------'];
+  if(files) {
+    for(var i = 0 ; i < files.length ; ++i) {
+      var file = files[i];
+      var blob = file.blob;
+      var meta = desktop.extractMetaData(blob);
+      var info = [
+        'file' + i,
+        '&nbsp;name : ' + escapeHtml(file.name),
+        '&nbsp;length : ' + blob.length,
+        '&nbsp;mime-type : ' + escapeHtml(meta.mimeType)];
+      if(meta.imageWidth && meta.imageHeight) {
+        info.push('&nbsp;width : ' + meta.imageWidth);
+        info.push('&nbsp;height : ' + meta.imageHeight);
+      }
+      var bytes = blob.getBytes(0, blob.length < 10 ? blob.length : 10);
+      info.push('&nbsp;content : [' + bytes.join(', ') + ' ... ]');
+      results.push(info.join('<br>'));
+    }
+  }
+  document.getElementById('results').innerHTML = results.join('<br>');
+}
+
+window.onload = function() {
+  var targetEl = document.getElementById('drop-target');
+  addEvent(targetEl, 'dragenter', handleEnterOver);
+  addEvent(targetEl, 'dragover',  handleEnterOver);
+  addEvent(targetEl, 'dragleave', handleLeave);
+  addEvent(targetEl, 'drop',      handleDrop);
+};
+</script>
+
+</body>
+
+</html>
