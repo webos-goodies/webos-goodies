@@ -1,0 +1,66 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>JavaScript Console for Friend Connect</title>
+</head>
+
+<body>
+
+<script type="text/javascript" src="http://www.google.com/friendconnect/script/friendconnect.js"></script>
+<div style="width:30%;float:left;">
+  <div id="div-members" style="width:auto;border:1px solid #cccccc;"></div>
+  <div style="font-size:12px;margin:1em 0 0 0;">
+	以下のコードだけでviewerとownerのデータがログに表示されます。ログはコンソールの「Log」タブで見れます。
+  </div>
+  <pre style="width:100%;font-size:12px;">
+osapi.newBatch().
+  add('viewer', osapi.people.getViewer()).
+  add('owner', osapi.people.getOwner()).
+  execute(function(result) {
+    jsconsole.log('Viewer name : ' +
+      result.viewer.displayName + '\n');
+    jsconsole.log('Owner name  : ' +
+      result.owner.displayName) + '\n';
+  });
+  </pre>
+</div>
+<div style="width:69%;float:right">
+  <div id="div-console" style="width:auto;border:1px solid #cccccc;"></div>
+</div>
+
+<script type="text/javascript">
+var skin = {};
+skin['BORDER_COLOR'] = '#cccccc';
+skin['ENDCAP_BG_COLOR'] = '#e0ecff';
+skin['ENDCAP_TEXT_COLOR'] = '#333333';
+skin['ENDCAP_LINK_COLOR'] = '#0000cc';
+skin['ALTERNATE_BG_COLOR'] = '#ffffff';
+skin['CONTENT_BG_COLOR'] = '#ffffff';
+skin['CONTENT_LINK_COLOR'] = '#0000cc';
+skin['CONTENT_TEXT_COLOR'] = '#333333';
+skin['CONTENT_SECONDARY_LINK_COLOR'] = '#7777cc';
+skin['CONTENT_SECONDARY_TEXT_COLOR'] = '#666666';
+skin['CONTENT_HEADLINE_COLOR'] = '#333333';
+skin['NUMBER_ROWS'] = '4';
+google.friendconnect.container.setParentUrl('/svn/trunk/');
+
+google.friendconnect.container.renderMembersGadget(
+ { id: 'div-members',
+   site: '06419119122874256940' },
+  skin);
+
+google.friendconnect.container.renderOpenSocialGadget(
+ { id: 'div-console',
+   url:'http://webos-goodies.googlecode.com/svn/trunk/products/google-gadgets/jsconsole/friendconnect.xml',
+   site: '06419119122874256940',
+   'prefs':{"sm":"1","u2":"","tr":"30","lr":"8","u1":"","or":"8","u4":"","u3":"","gh":"400","fs":"12","n000":"1","sv":"0","pr":"1"}
+ },
+  skin);
+</script>
+
+</body>
+
+</html>
