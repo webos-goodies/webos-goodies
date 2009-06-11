@@ -3,7 +3,7 @@ require 'erb'
 
 $KCODE = 'U'
 
-TARGETS = ['normal.xml', 'goo.xml', 'mixi.xml']
+TARGETS = ['normal.xml', 'goo.xml', 'mixi.xml', 'friendconnect.xml']
 HOSTS = {
   'googlecode' => 'http://webos-goodies.googlecode.com/svn/trunk/products/google-gadgets/jsconsole',
   'lab'        => 'http://lab.webos-goodies.jp/jsconsole'
