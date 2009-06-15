@@ -511,6 +511,9 @@
 	<integer>5</integer>
 	<key>WindowOrderList</key>
 	<array>
+		<string>1C78EAAD065D492600B07095</string>
+		<string>1CD10A99069EF8BA00B06720</string>
+		<string>523FA1C60FCEEEBE00CF4302</string>
 		<string>/Users/ito/projects/webos-goodies/blog/articles/getting_started_with_opengl_on_iphone/getting_started.xcodeproj</string>
 	</array>
 	<key>WindowString</key>
@@ -552,8 +555,6 @@
 							<string>0pt</string>
 						</dict>
 						<dict>
-							<key>BecomeActive</key>
-							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXProjectModuleGUID</key>
@@ -593,7 +594,7 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>523FA1C60FCEEEBE00CF4302</string>
-				<string>526C3DF60FD15A9C0004CB46</string>
+				<string>5238994C0FD1674B0096FA25</string>
 				<string>1CD0528F0623707200166675</string>
 				<string>XCMainBuildResultsModuleGUID</string>
 			</array>
@@ -635,8 +636,8 @@
 										<string>yes</string>
 										<key>sizes</key>
 										<array>
-											<string>{{0, 0}, {316, 198}}</string>
-											<string>{{316, 0}, {378, 198}}</string>
+											<string>{{0, 0}, {316, 201}}</string>
+											<string>{{316, 0}, {378, 201}}</string>
 										</array>
 									</dict>
 									<key>VerticalSplitView</key>
@@ -651,8 +652,8 @@
 										<string>yes</string>
 										<key>sizes</key>
 										<array>
-											<string>{{0, 0}, {694, 198}}</string>
-											<string>{{0, 198}, {694, 183}}</string>
+											<string>{{0, 0}, {694, 201}}</string>
+											<string>{{0, 201}, {694, 180}}</string>
 										</array>
 									</dict>
 								</dict>
@@ -685,7 +686,7 @@
 										<real>148</real>
 									</array>
 									<key>Frame</key>
-									<string>{{316, 0}, {378, 198}}</string>
+									<string>{{316, 0}, {378, 201}}</string>
 									<key>RubberWindowFrame</key>
 									<string>1019 733 694 422 0 0 1920 1178 </string>
 								</dict>
@@ -713,13 +714,13 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>1CD10A99069EF8BA00B06720</string>
-				<string>526C3DF70FD15A9C0004CB46</string>
+				<string>5238994D0FD1674B0096FA25</string>
 				<string>1C162984064C10D400B95A72</string>
-				<string>526C3DF80FD15A9C0004CB46</string>
-				<string>526C3DF90FD15A9C0004CB46</string>
-				<string>526C3DFA0FD15A9C0004CB46</string>
-				<string>526C3DFB0FD15A9C0004CB46</string>
-				<string>526C3DFC0FD15A9C0004CB46</string>
+				<string>5238994E0FD1674B0096FA25</string>
+				<string>5238994F0FD1674B0096FA25</string>
+				<string>523899500FD1674B0096FA25</string>
+				<string>523899510FD1674B0096FA25</string>
+				<string>523899520FD1674B0096FA25</string>
 			</array>
 			<key>ToolbarConfiguration</key>
 			<string>xcode.toolbar.config.debugV3</string>
@@ -881,7 +882,7 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>1C78EAAD065D492600B07095</string>
-				<string>526C3DFD0FD15A9C0004CB46</string>
+				<string>523899530FD1674B0096FA25</string>
 				<string>1C78EAAC065D492600B07095</string>
 			</array>
 			<key>ToolbarConfiguration</key>
