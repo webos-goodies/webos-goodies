@@ -1,0 +1,36 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <script type="text/javascript">
+
+// リクエストハンドラの登録
+// 後々のため、handlers 配列に追加するだけでハンドラを増やせるようにしている。
+var handlers = [];
+window.onload = function () {
+  for(var i = 0 ; i < handlers.length ; ++i) {
+    var h = handlers[i];
+    opera.io.webserver.addEventListener(h[0], h[1], false);
+  }
+}
+
+function helloHandler(event) {
+  var response = event.connection.response;
+  response.write([
+    '<!DOCTYPE HTML>',
+    '<html><head><title>hello</title></head>',
+    '<body>Hello World!</body></html>'].join('\n'));
+  response.close();
+}
+
+handlers.push(['_index', helloHandler]); // サービスのトップページのハンドラ
+handlers.push(['hello',  helloHandler]);
+
+  </script>
+  <script type="text/javascript" src="template.js"></script>
+  <script type="text/javascript" src="script.js"></script>
+</head>
+<body>
+<div id="test">test</div>
+</body>
+</html>

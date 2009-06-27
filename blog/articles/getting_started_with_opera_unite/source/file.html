@@ -1,0 +1,22 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>ファイル共有</title>
+</head>
+
+<body>
+<h1>ファイル共有</h1>
+<ul>
+  <li data-list="files">
+	<a href="/test/file/{{files[].name}}">{{files[].displayName}}</a>
+  </li>
+</ul>
+<form action="/test/file" method="post" enctype="multipart/form-data">
+  <input type="file" name="file">
+  <input type="submit" value="送信">
+</form>
+</body>
+
+</html>

@@ -1,0 +1,37 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>リクエスト情報の確認</title>
+</head>
+
+<body>
+  <h1>リクエスト情報の確認</h1>
+
+  <h2>コネクション情報</h2>
+  <table border="1">
+    <tbody>
+      <tr data-list="connection">
+        <th>{{connection[].key}}</th>
+        <td>{{connection[].value}}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>リクエスト情報</h2>
+  <table border="1">
+    <tbody>
+      <tr data-list="connection.request">
+        <th>{{connection.request[].key}}</th>
+        <td>
+          <span data-keep-if="connection.request[].value">
+            {{connection.request[].value}}
+          </span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</body>
+
+</html>
