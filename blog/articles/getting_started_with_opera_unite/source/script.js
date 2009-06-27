@@ -1,3 +1,11 @@
+function toppageHandler(event) {
+  var connection = event.connection;
+  var template   = new Markuper('top.html', {});
+  connection.response.write(template.parse().html());
+  connection.response.close();
+}
+handlers.push(['_index', toppageHandler]);
+
 function requestInfoHandler(event) {
   var connection = event.connection;
   var template   = new Markuper('request-info.html', { connection : connection });
