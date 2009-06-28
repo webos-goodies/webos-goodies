@@ -1,0 +1,92 @@
+// !$*UTF8*$!
+{
+	1D6058900D05DD3D006BFB54 /* iphone_gl */ = {
+		activeExec = 0;
+		executables = (
+			52C037AE0FF799A10046A474 /* iphone_gl */,
+		);
+	};
+	28FD14FD0DC6FC130079059D /* EAGLView.m */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {918, 4850}}";
+			sepNavSelRange = "{2713, 0}";
+			sepNavVisRange = "{2452, 747}";
+		};
+	};
+	29B97313FDCFA39411CA2CEA /* Project object */ = {
+		activeBuildConfigurationName = Debug;
+		activeExecutable = 52C037AE0FF799A10046A474 /* iphone_gl */;
+		activeTarget = 1D6058900D05DD3D006BFB54 /* iphone_gl */;
+		addToTargets = (
+			1D6058900D05DD3D006BFB54 /* iphone_gl */,
+		);
+		codeSenseManager = 52C037C50FF799A60046A474 /* Code sense */;
+		executables = (
+			52C037AE0FF799A10046A474 /* iphone_gl */,
+		);
+		perUserDictionary = {
+			PBXConfiguration.PBXFileTableDataSource3.PBXFileTableDataSource = {
+				PBXFileTableDataSourceColumnSortingDirectionKey = "-1";
+				PBXFileTableDataSourceColumnSortingKey = PBXFileDataSource_Filename_ColumnID;
+				PBXFileTableDataSourceColumnWidthsKey = (
+					20,
+					341,
+					20,
+					48,
+					43,
+					43,
+					20,
+				);
+				PBXFileTableDataSourceColumnsKey = (
+					PBXFileDataSource_FiletypeID,
+					PBXFileDataSource_Filename_ColumnID,
+					PBXFileDataSource_Built_ColumnID,
+					PBXFileDataSource_ObjectSize_ColumnID,
+					PBXFileDataSource_Errors_ColumnID,
+					PBXFileDataSource_Warnings_ColumnID,
+					PBXFileDataSource_Target_ColumnID,
+				);
+			};
+			PBXPerProjectTemplateStateSaveDate = 267886001;
+			PBXWorkspaceStateSaveDate = 267886001;
+		};
+		sourceControlManager = 52C037C40FF799A60046A474 /* Source Control */;
+		userBuildSettings = {
+		};
+	};
+	52C037AE0FF799A10046A474 /* iphone_gl */ = {
+		isa = PBXExecutable;
+		activeArgIndices = (
+		);
+		argumentStrings = (
+		);
+		autoAttachOnCrash = 1;
+		breakpointsEnabled = 0;
+		configStateDict = {
+		};
+		customDataFormattersEnabled = 1;
+		debuggerPlugin = GDBDebugging;
+		disassemblyDisplayState = 0;
+		dylibVariantSuffix = "";
+		enableDebugStr = 1;
+		environmentEntries = (
+		);
+		executableSystemSymbolLevel = 0;
+		executableUserSymbolLevel = 0;
+		libgmallocEnabled = 0;
+		name = iphone_gl;
+		sourceDirectories = (
+		);
+	};
+	52C037C40FF799A60046A474 /* Source Control */ = {
+		isa = PBXSourceControlManager;
+		fallbackIsa = XCSourceControlManager;
+		isSCMEnabled = 0;
+		scmConfiguration = {
+		};
+	};
+	52C037C50FF799A60046A474 /* Code sense */ = {
+		isa = PBXCodeSenseManager;
+		indexTemplatePath = "";
+	};
+}
