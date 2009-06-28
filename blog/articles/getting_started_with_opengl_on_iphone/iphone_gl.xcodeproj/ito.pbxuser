@@ -6,6 +6,14 @@
 			52C037AE0FF799A10046A474 /* iphone_gl */,
 		);
 	};
+	28FD14FC0DC6FC130079059D /* EAGLView.h */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {781, 754}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRange = "{0, 1170}";
+			sepNavWindowFrame = "{{15, 291}, {840, 882}}";
+		};
+	};
 	28FD14FD0DC6FC130079059D /* EAGLView.m */ = {
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {918, 4850}}";
@@ -47,8 +55,8 @@
 					PBXFileDataSource_Target_ColumnID,
 				);
 			};
-			PBXPerProjectTemplateStateSaveDate = 267886001;
-			PBXWorkspaceStateSaveDate = 267886001;
+			PBXPerProjectTemplateStateSaveDate = 267887974;
+			PBXWorkspaceStateSaveDate = 267887974;
 		};
 		sourceControlManager = 52C037C40FF799A60046A474 /* Source Control */;
 		userBuildSettings = {

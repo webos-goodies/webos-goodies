@@ -269,7 +269,7 @@
 							<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 							<array>
 								<array>
-									<integer>3</integer>
+									<integer>1</integer>
 									<integer>0</integer>
 								</array>
 							</array>
@@ -309,13 +309,15 @@
 								<key>PBXProjectModuleGUID</key>
 								<string>1CE0B20306471E060097A5F4</string>
 								<key>PBXProjectModuleLabel</key>
-								<string>&lt;エディタがありません&gt;</string>
+								<string></string>
 								<key>PBXSplitModuleInNavigatorKey</key>
 								<dict>
 									<key>Split0</key>
 									<dict>
 										<key>PBXProjectModuleGUID</key>
 										<string>1CE0B20406471E060097A5F4</string>
+										<key>PBXProjectModuleLabel</key>
+										<string></string>
 									</dict>
 									<key>SplitCount</key>
 									<string>1</string>
@@ -374,9 +376,9 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>52C037E70FF79DBF0046A474</string>
+				<string>52E8B8540FF7A56B00BF264C</string>
 				<string>1CE0B1FE06471DED0097A5F4</string>
-				<string>52C037E80FF79DBF0046A474</string>
+				<string>52E8B8550FF7A56B00BF264C</string>
 				<string>1CE0B20306471E060097A5F4</string>
 				<string>1CE0B20506471E060097A5F4</string>
 			</array>
@@ -511,9 +513,9 @@
 	<key>WindowOrderList</key>
 	<array>
 		<string>1C78EAAD065D492600B07095</string>
-		<string>52C037D30FF79D9C0046A474</string>
 		<string>1CD10A99069EF8BA00B06720</string>
-		<string>/Users/ito/Desktop/iphone_gl/iphone_gl.xcodeproj</string>
+		<string>52C037D30FF79D9C0046A474</string>
+		<string>/Users/ito/projects/webos-goodies/blog/articles/getting_started_with_opengl_on_iphone/iphone_gl.xcodeproj</string>
 	</array>
 	<key>WindowString</key>
 	<string>950 674 788 504 0 0 1920 1178 </string>
@@ -593,7 +595,7 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>52C037D30FF79D9C0046A474</string>
-				<string>52C037E90FF79DBF0046A474</string>
+				<string>52E8B8580FF7A58D00BF264C</string>
 				<string>1CD0528F0623707200166675</string>
 				<string>XCMainBuildResultsModuleGUID</string>
 			</array>
@@ -635,8 +637,8 @@
 										<string>yes</string>
 										<key>sizes</key>
 										<array>
-											<string>{{0, 0}, {316, 194}}</string>
-											<string>{{316, 0}, {378, 194}}</string>
+											<string>{{0, 0}, {316, 201}}</string>
+											<string>{{316, 0}, {378, 201}}</string>
 										</array>
 									</dict>
 									<key>VerticalSplitView</key>
@@ -651,8 +653,8 @@
 										<string>yes</string>
 										<key>sizes</key>
 										<array>
-											<string>{{0, 0}, {694, 194}}</string>
-											<string>{{0, 194}, {694, 187}}</string>
+											<string>{{0, 0}, {694, 201}}</string>
+											<string>{{0, 201}, {694, 180}}</string>
 										</array>
 									</dict>
 								</dict>
@@ -685,7 +687,7 @@
 										<real>148</real>
 									</array>
 									<key>Frame</key>
-									<string>{{316, 0}, {378, 194}}</string>
+									<string>{{316, 0}, {378, 201}}</string>
 									<key>RubberWindowFrame</key>
 									<string>988 733 694 422 0 0 1920 1178 </string>
 								</dict>
@@ -713,13 +715,13 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>1CD10A99069EF8BA00B06720</string>
-				<string>52C037EA0FF79DBF0046A474</string>
+				<string>52E8B8590FF7A58D00BF264C</string>
 				<string>1C162984064C10D400B95A72</string>
-				<string>52C037EB0FF79DBF0046A474</string>
-				<string>52C037EC0FF79DBF0046A474</string>
-				<string>52C037ED0FF79DBF0046A474</string>
-				<string>52C037EE0FF79DBF0046A474</string>
-				<string>52C037EF0FF79DBF0046A474</string>
+				<string>52E8B85A0FF7A58D00BF264C</string>
+				<string>52E8B85B0FF7A58D00BF264C</string>
+				<string>52E8B85C0FF7A58D00BF264C</string>
+				<string>52E8B85D0FF7A58D00BF264C</string>
+				<string>52E8B85E0FF7A58D00BF264C</string>
 			</array>
 			<key>ToolbarConfiguration</key>
 			<string>xcode.toolbar.config.debugV3</string>
@@ -881,7 +883,7 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>1C78EAAD065D492600B07095</string>
-				<string>52C037F00FF79DBF0046A474</string>
+				<string>52E8B85F0FF7A58D00BF264C</string>
 				<string>1C78EAAC065D492600B07095</string>
 			</array>
 			<key>ToolbarConfiguration</key>
