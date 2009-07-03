@@ -19,10 +19,10 @@ function memoHandler(event) {
   var request    = connection.request;
   var response   = connection.response;
   if(request.method == 'POST' && connection.isOwner && request.bodyItems.data) {
-    widget.setPreferenceForKey(request.bodyItems.data[0], 'memoData');
+    widget.setPreferenceForKey(decodeURIComponent(request.bodyItems.data[0]), 'memoData');
   }
   var template = new Markuper('memo.html', {
-    data : decodeURIComponent(widget.preferenceForKey('memoData') || '')
+    data : widget.preferenceForKey('memoData') || ''
   });
   response.write(template.parse().html());
   response.close();
