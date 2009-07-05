@@ -12,6 +12,7 @@
 #import <OpenGLES/EAGLDrawable.h>
 
 #import "EAGLView.h"
+#import "PVRLoader.h"
 
 #define USE_DEPTH_BUFFER 1
 
@@ -80,22 +81,14 @@ static void createSphere() {
 static GLuint texture;
 
 static void loadTexture() {
-    // 画像を読み込み、 32bit RGBA フォーマットのデータを取得
-    CGImageRef image  = [UIImage imageNamed:@"earth.jpg"].CGImage;
-    NSInteger  width  = CGImageGetWidth(image);
-    NSInteger  height = CGImageGetHeight(image);
-    GLubyte*   bits   = (GLubyte*)malloc(width * height * 4);
-    CGContextRef textureContext =
-        CGBitmapContextCreate(bits, width, height, 8, width * 4,
-                              CGImageGetColorSpace(image), kCGImageAlphaPremultipliedLast);
-    CGContextDrawImage(textureContext, CGRectMake(0.0, 0.0, width, height), image);
-    CGContextRelease(textureContext);
-
-    // テクスチャを作成し、データを転送
+    // テクスチャを作成
     glGenTextures(1, &texture);
     glBindTexture(GL_TEXTURE_2D, texture);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, bits);
-    free(bits);
+
+    // 画像ファイルを読み込む
+    PVRLoader loader;
+    loader.LoadFromFile([[[NSBundle mainBundle] pathForResource:@"earth" ofType:@"pvr"] UTF8String]);
+    loader.Submit();
 
     // テクスチャを有効にして、双線形補完を有効にする
     glEnable(GL_TEXTURE_2D);

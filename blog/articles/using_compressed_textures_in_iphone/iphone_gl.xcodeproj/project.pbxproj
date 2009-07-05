@@ -14,6 +14,8 @@
 		28AD733F0D9D9553002E5188 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28AD733E0D9D9553002E5188 /* MainWindow.xib */; };
 		28FD15000DC6FC520079059D /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28FD14FF0DC6FC520079059D /* OpenGLES.framework */; };
 		28FD15080DC6FC5B0079059D /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28FD15070DC6FC5B0079059D /* QuartzCore.framework */; };
+		520AFFF1100107A0005090F0 /* EAGLView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 520AFFF0100107A0005090F0 /* EAGLView.mm */; };
+		520AFFF41001087F005090F0 /* earth.pvr in Resources */ = {isa = PBXBuildFile; fileRef = 520AFFF31001087F005090F0 /* earth.pvr */; };
 		52BEBEEB100106E100317451 /* PVRLoader.cc in Sources */ = {isa = PBXBuildFile; fileRef = 52BEBEE9100106E100317451 /* PVRLoader.cc */; };
 		52C037CB0FF79C380046A474 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 52C037CA0FF79C380046A474 /* CoreGraphics.framework */; };
 		52C037CF0FF79CCE0046A474 /* earth.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 52C037CE0FF79CCE0046A474 /* earth.jpg */; };
@@ -31,6 +33,8 @@
 		28FD15070DC6FC5B0079059D /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		32CA4F630368D1EE00C91783 /* iphone_gl_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iphone_gl_Prefix.pch; sourceTree = "<group>"; };
+		520AFFF0100107A0005090F0 /* EAGLView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = EAGLView.mm; sourceTree = "<group>"; };
+		520AFFF31001087F005090F0 /* earth.pvr */ = {isa = PBXFileReference; lastKnownFileType = file; path = earth.pvr; sourceTree = "<group>"; };
 		52BEBEE9100106E100317451 /* PVRLoader.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PVRLoader.cc; sourceTree = "<group>"; };
 		52BEBEEA100106E100317451 /* PVRLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PVRLoader.h; sourceTree = "<group>"; };
 		52C037CA0FF79C380046A474 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -57,6 +61,7 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				520AFFF0100107A0005090F0 /* EAGLView.mm */,
 				52BEBEE9100106E100317451 /* PVRLoader.cc */,
 				52BEBEEA100106E100317451 /* PVRLoader.h */,
 				28FD14FC0DC6FC130079059D /* EAGLView.h */,
@@ -98,6 +103,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				520AFFF31001087F005090F0 /* earth.pvr */,
 				52C037CE0FF79CCE0046A474 /* earth.jpg */,
 				28AD733E0D9D9553002E5188 /* MainWindow.xib */,
 				8D1107310486CEB800E47090 /* iphone_gl-Info.plist */,
@@ -161,6 +167,7 @@
 			files = (
 				28AD733F0D9D9553002E5188 /* MainWindow.xib in Resources */,
 				52C037CF0FF79CCE0046A474 /* earth.jpg in Resources */,
+				520AFFF41001087F005090F0 /* earth.pvr in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -174,6 +181,7 @@
 				1D60589B0D05DD56006BFB54 /* main.m in Sources */,
 				1D3623260D0F684500981E51 /* iphone_glAppDelegate.m in Sources */,
 				52BEBEEB100106E100317451 /* PVRLoader.cc in Sources */,
+				520AFFF1100107A0005090F0 /* EAGLView.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
