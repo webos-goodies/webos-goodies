@@ -376,9 +376,9 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>52E8B8540FF7A56B00BF264C</string>
+				<string>526DB73D100B96B5006F7859</string>
 				<string>1CE0B1FE06471DED0097A5F4</string>
-				<string>52E8B8550FF7A56B00BF264C</string>
+				<string>526DB73E100B96B5006F7859</string>
 				<string>1CE0B20306471E060097A5F4</string>
 				<string>1CE0B20506471E060097A5F4</string>
 			</array>
@@ -595,7 +595,7 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>52C037D30FF79D9C0046A474</string>
-				<string>52E8B8580FF7A58D00BF264C</string>
+				<string>526DB73F100B96B5006F7859</string>
 				<string>1CD0528F0623707200166675</string>
 				<string>XCMainBuildResultsModuleGUID</string>
 			</array>
@@ -637,8 +637,8 @@
 										<string>yes</string>
 										<key>sizes</key>
 										<array>
-											<string>{{0, 0}, {316, 201}}</string>
-											<string>{{316, 0}, {378, 201}}</string>
+											<string>{{0, 0}, {316, 202}}</string>
+											<string>{{316, 0}, {378, 202}}</string>
 										</array>
 									</dict>
 									<key>VerticalSplitView</key>
@@ -653,8 +653,8 @@
 										<string>yes</string>
 										<key>sizes</key>
 										<array>
-											<string>{{0, 0}, {694, 201}}</string>
-											<string>{{0, 201}, {694, 180}}</string>
+											<string>{{0, 0}, {694, 202}}</string>
+											<string>{{0, 202}, {694, 179}}</string>
 										</array>
 									</dict>
 								</dict>
@@ -687,7 +687,7 @@
 										<real>148</real>
 									</array>
 									<key>Frame</key>
-									<string>{{316, 0}, {378, 201}}</string>
+									<string>{{316, 0}, {378, 202}}</string>
 									<key>RubberWindowFrame</key>
 									<string>988 733 694 422 0 0 1920 1178 </string>
 								</dict>
@@ -715,13 +715,13 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>1CD10A99069EF8BA00B06720</string>
-				<string>52E8B8590FF7A58D00BF264C</string>
+				<string>526DB740100B96B5006F7859</string>
 				<string>1C162984064C10D400B95A72</string>
-				<string>52E8B85A0FF7A58D00BF264C</string>
-				<string>52E8B85B0FF7A58D00BF264C</string>
-				<string>52E8B85C0FF7A58D00BF264C</string>
-				<string>52E8B85D0FF7A58D00BF264C</string>
-				<string>52E8B85E0FF7A58D00BF264C</string>
+				<string>526DB741100B96B5006F7859</string>
+				<string>526DB742100B96B5006F7859</string>
+				<string>526DB743100B96B5006F7859</string>
+				<string>526DB744100B96B5006F7859</string>
+				<string>526DB745100B96B5006F7859</string>
 			</array>
 			<key>ToolbarConfiguration</key>
 			<string>xcode.toolbar.config.debugV3</string>
@@ -883,7 +883,7 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>1C78EAAD065D492600B07095</string>
-				<string>52E8B85F0FF7A58D00BF264C</string>
+				<string>526DB746100B96B5006F7859</string>
 				<string>1C78EAAC065D492600B07095</string>
 			</array>
 			<key>ToolbarConfiguration</key>
