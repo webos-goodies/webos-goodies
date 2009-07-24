@@ -36,6 +36,10 @@
 <% else %>
 	<Require feature="opensocial-0.8" />
 <% end %>
+<% if platform == 'google-calendar' %>
+	<Require feature="google.calendar-0.5" />
+	<Require feature="google.calendar-0.5.read" />
+<% end %>
 	<Locale messages="<%= $root %>/locale/ALL_ALL.xml" />
 	<Locale messages="<%= $root %>/locale/ja_ALL.xml" lang="ja" />
   </ModulePrefs>
