@@ -1204,7 +1204,7 @@ var Gadget = {
 	panels.push(new OutputView());
 	panels.push(new LogView());
 	panels.push(new HtmlView());
-	if(platform != 'google-gadget') {
+	if(platform != 'google-calendar') {
 	  panels.push(new GadgetView());
 	  panels.push(new ToolsView());
 	}
