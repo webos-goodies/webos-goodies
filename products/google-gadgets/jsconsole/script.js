@@ -1204,8 +1204,10 @@ var Gadget = {
 	panels.push(new OutputView());
 	panels.push(new LogView());
 	panels.push(new HtmlView());
-	panels.push(new GadgetView());
-	panels.push(new ToolsView());
+	if(platform != 'google-gadget') {
+	  panels.push(new GadgetView());
+	  panels.push(new ToolsView());
+	}
 
 	self.$extraTabs.alignTabs('left');
 
