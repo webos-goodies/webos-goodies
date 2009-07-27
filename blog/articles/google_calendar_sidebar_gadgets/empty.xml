@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Module>
+  <ModulePrefs
+     title="友達のイベント"
+     title_url="http://webos-goodies.jp/"
+     description="カレンダーで表示中の日付範囲に含まれる他のユーザーのイベントを表示します。"
+     author="WebOS Goodies"
+     scrolling="true"
+     height="200">
+    <Require feature="setprefs" />
+    <Require feature="opensocial-0.8" />
+    <Require feature="google.calendar-0.5" />
+    <Require feature="google.calendar-0.5.read" />
+  </ModulePrefs>
+  <UserPref name="email" datatype="hidden" default_value="" />
+
+  <Content type="html" view="home,profile,canvas">
+    <![CDATA[
+      <!-- ここにガジェットの HTML を記述する -->
+    ]]>
+  </Content>
+</Module>
