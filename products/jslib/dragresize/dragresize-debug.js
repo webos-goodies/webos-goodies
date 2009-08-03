@@ -118,7 +118,9 @@ var DragResize = (function() {
     var info = DragResize.$dragInfo;
     if(info)
     {
-      if(DragResize.$ie && !(event.button & 1))
+      if(DragResize.$ie &&
+		 !(document.documentMode && document.documentMode >= 8) &&
+		 !(event.button & 1))
       {
         DragResize.$finish();
         return;
