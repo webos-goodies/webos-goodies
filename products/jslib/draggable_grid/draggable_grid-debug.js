@@ -6,7 +6,7 @@ var _window     = window,
 var _rootEl     = _document.documentElement || {},
     _proxyEl    = _document.createElement('DIV'),
     _quirks     = /backcompat/i.test(_document.compatMode),
-    _isIE       = !!_window.ActiveXObject,
+    _isIE       = !!_window.ActiveXObject && !(document.documentMode && document.documentMode >= 8),
     _currentObj = null,
     _dummyRegex = { test: _nullFunc };
 
