@@ -45,7 +45,7 @@ module GoogleSpreadsheets
     def decode(xml)
       e = Hash.from_xml(xml)
       if e.has_key?('feed')
-        e = e['feed']['entry']
+        e = e['feed']['entry'] || []
         (e.is_a?(Array) ? e : [e]).each{|i| format_entry(i) }
       else
         format_entry(e['entry'])
