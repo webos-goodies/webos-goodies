@@ -35,7 +35,7 @@ class GoogleSpreadsheet < ActiveResource::Base
       root.add_namespace('http://www.w3.org/2005/Atom')
       root.add_namespace('gsx', 'http://schemas.google.com/spreadsheets/2006/extended')
       hash.each do |key, value|
-        if value || (key = key.dup).gsub!(/^gsx_/u, 'gsx:')
+        if value && (key = key.dup).gsub!(/^gsx_/u, 'gsx:')
           e = REXML::Element.new(key, root)
           e.text = value
         end
