@@ -106,7 +106,7 @@ function tplRegistCategory(json)
 
 <div id="comment_form">
 
-<form action="http://spreadsheets.google.com/formResponse?key=pMIBrnJ4PHK_Tnb_IAz3cT&#81;" method="POST" name="comment_form" target="_blank">
+<form action="https://spreadsheets.google.com/formResponse?key=pMIBrnJ4PHK_Tnb_IAz3cT&#81;" method="POST" name="comment_form" target="_blank">
 
 <input type="hidden" name="entry.0.single" value="<%= h(@article.page_name) %>" />
 <input type="hidden" name="entry.1.single" value="<%= h(@article.title) %>" />
@@ -115,11 +115,13 @@ function tplRegistCategory(json)
 <div class="with_label"><label for="url">URL</label><input id="url" name="entry.3.single" /></div>
 
 <div class="no_label">
-  <div>
-	<textarea id="text" name="entry.4.single" rows="10" cols="50"></textarea>
-  </div>
-  <div class="submit"><input type="submit" value=" 投稿する " class="button" /></div>
+  <div><textarea name="entry.4.single" rows="10" cols="50"></textarea></div>
+  <input type="hidden" name="pageNumber" value="0">
+  <input type="hidden" name="backupCache" value="">
+  <div class="submit"><input type="submit" name="submit" value=" 投稿する " class="button"></div>
 </div>
+
+</form>
 
 </div> <!-- comment_form -->
 
