@@ -1,0 +1,75 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>draggable_grid.js テストページ</title>
+</head>
+
+<body>
+
+<h1>draggable_grid.js テストページ</h1>
+
+<script type="text/javascript" src="draggable_grid-debug.js"></script>
+<script type="text/javascript">
+page = window.page || {}
+page.DraggableGrid = DraggableGrid;
+</script>
+
+<style type="text/css">
+#page_grid {
+  border: solid 2px #ccc;
+  width: 400px;
+}
+.page_draggable {
+  background-color: white;
+  display: inline-block;
+  *display: inline;
+  vertical-align: top;
+  width: 100px;
+  height: 100px;
+  color: #ccc;
+  font-size: 48px;
+  zoom: 1;
+  *display: inline;
+}
+.page_content {
+  width: 76px;
+  height: 76px;
+  margin: 5px;
+  padding: 5px;
+  border: solid 2px #ccc;
+  color: #ccc;
+  font-size: 48px;
+  line-height: normal;
+  text-align: center;
+}
+</style>
+
+<div id="page_grid"></div>
+
+<script type="text/javascript">
+(function() {
+
+function generateGrid(num) {
+  var html = [];
+  for(var i = 0 ; i < num ; ++i) {
+    html.push('<div class="page_draggable"><div class="page_content"><img src="http://webos-goodies.jp/template/imgs/logo/subheader.png" onmousedown="event.preventDefault();" /></div></div>');
+  }
+  document.getElementById('page_grid').innerHTML = html.join('');
+}
+
+generateGrid(20);
+new page.DraggableGrid('page_grid', {
+  draggableClass: 'page_draggable',
+  scroll:         true,
+  fence:          true
+});
+
+})();
+</script>
+
+</body>
+
+</html>
