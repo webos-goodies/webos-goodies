@@ -15,10 +15,9 @@ BACKUP_DIR=`dirname $1/a`
 KERNEL_DEV=/dev/mtd3
 KERNEL_IMG=$BACKUP_DIR/kernel.bin
 RSYNC_CMD=rsync
-RSYNC_OPTS=-aAX --delete --force --numeric-ids --progress
-RSYNC_EXCL=--exclude='/dev/***' --exclude='/proc/***'
+RSYNC_OPTS="-aAX --delete --force --numeric-ids --progress"
 
-$RSYNC_CMD $RSYNC_OPTS $RSYNC_EXCL $BACKUP_DIR/root/ $SRC_DIR
+$RSYNC_CMD $RSYNC_OPTS $BACKUP_DIR/root/ $SRC_DIR
 
 flash_eraseall $KERNEL_DEV
 nandwrite -p $KERNEL_DEV $KERNEL_IMG
