@@ -1,9 +1,15 @@
-<div><%= link_to('新規投稿', new_site_article_url(@site.id)) %></div>
+<div>
+  <%= link_to('新規投稿', new_site_article_url(@site.id)) %>
+
+  <% form_tag(site_articles_url(@site.id), :method => :get) do -%>
+	<%= text_field_tag(:q, @q) %>
+	<%= submit_tag('検索') %>
+  <% end -%>
+</div>
 
 <table>
 
 <tr>
-  <th>ID</th>
   <th>ページ名</th>
   <th>タイトル</th>
   <th>公開日時</th>
@@ -12,9 +18,8 @@
 <% @articles.each do |article| -%>
 
 <tr>
-  <td><%= h(article.id) %></td>
-  <td><%= link_to(h(truncate(article.page_name, :length => 16)), site_article_url(@site.id, article.id)) %></td>
-  <td><%= h(truncate(article.title, :length => 40)) %></td>
+  <td><%= link_to(h(truncate(article.page_name, :length => 32)), site_article_url(@site.id, article.id)) %></td>
+  <td><%= h(truncate(article.title, :length => 60)) %></td>
   <td><%= h(article.publish_date ? article.publish_date.strftime('%Y/%m/%d %H:%M') : '') %></td>
 </tr>
 

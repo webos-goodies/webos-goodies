@@ -16,3 +16,6 @@
 .fieldWithErrors * {
 	background-color: #ffcccc;
 }
+#layout_content {
+	font-size: 12px;
+}

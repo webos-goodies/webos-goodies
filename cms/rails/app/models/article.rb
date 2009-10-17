@@ -10,6 +10,11 @@ class Article < ActiveRecord::Base
   validates_presence_of   :title
   validates_presence_of   :body1
 
+  def initialize(*args)
+    @prettify = false
+    super
+  end
+
   def url()             self.site.full_url(self.site.article_path, self.page_name + '.html') end
   def full_title()      self.site.format_title(self.title) end
 
@@ -35,6 +40,8 @@ class Article < ActiveRecord::Base
     parse() unless @formatted_body2
     @formatted_body2
   end
+
+  def prettify?() @prettify end
 
   def upload_googledocs(cache = {})
     return nil if self.site.google_account.blank? || self.site.google_password.blank?
@@ -79,6 +86,7 @@ class Article < ActiveRecord::Base
   def parse()
     parser  = Parser::Base.find(self.parser).new
     @formatted_body1, @formatted_body2 = parser.parse(self.body1||'', self.body2||'')
+    @prettify = parser.get_meta('prettify')
   end
 
 end

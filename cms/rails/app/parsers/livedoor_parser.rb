@@ -136,6 +136,24 @@ class LivedoorParser < Parser::Base
       WikiParser::BlockTagSection.new(match[1], 'rawhtml', :filter => false, :syntax => [])
     end
 
+    # ソースコード
+    tag_syntax(/^<code(?:\s+(\w+))?\s*>(.*?)^<\/code>\s*$/mu) do |match, parser|
+      parser.set_prettify()
+      attrs   = { 'class' => ['prettyprint', match[1].blank? ? nil : "lang-#{match[1]}"].compact.join(' ') }
+      options = { :attributes => attrs, :filter => false, :syntax => nil }
+      WikiParser::BlockTagSection.new(match[2], 'pre', options)
+    end
+
+    # ---- メソッド --------------------------------------------------
+
+    def initialize()
+      @prettify = false
+      super
+    end
+
+    def set_prettify() @prettify = true end
+    def prettify?() @prettify end
+
     # ---- 下位ルーチン ----------------------------------------------
 
     def list(tag, regexp, level=1)
@@ -184,7 +202,9 @@ class LivedoorParser < Parser::Base
   Label = "Livedoor"
 
   def parse(*documents)
-    doc = LivedoorWikiParser.new.parse(documents.map{|s| (s||'').to_s.strip + "\n"})
+    parser = LivedoorWikiParser.new
+    doc    = parser.parse(documents.map{|s| (s||'').to_s.strip + "\n"})
+    self.set_meta('prettify', parser.prettify?)
     WikiParser::HtmlFormatter.new.format(doc).map do |html|
       %(<div class="dokuwiki">\n#{html}\n</div>)
     end

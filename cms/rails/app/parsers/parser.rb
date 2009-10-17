@@ -36,6 +36,12 @@ module Parser
       @@parsers
     end
 
+    def initialize
+      @meta = {}
+    end
+
+    def get_meta(name) @meta[name.to_s] end
+    def set_meta(name, value) @meta[name.to_s] = value end
     def parse(*documents) raise 'You have to override this method.' end
 
   end

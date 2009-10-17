@@ -4,7 +4,13 @@ class ArticlesController < ApplicationController
 
   def index
     @site     = Site.find(params[:site_id])
-    @articles = @site.articles.find(:all, :order => 'created_at DESC')
+    @q        = params[:q]
+    query = { :order => "coalesce(publish_date, date('now')) DESC, id DESC" }
+    unless @q.blank?
+      query[:conditions] =
+        [%w"page_name title body1 body2".map{|c| "#{c} LIKE :q" }.join(' OR '), { :q => "%#{@q}%" }]
+    end
+    @articles = @site.articles.find(:all, query)
   end
 
   def show

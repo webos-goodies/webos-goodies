@@ -126,3 +126,11 @@ function tplRegistCategory(json)
 </div> <!-- comment_form -->
 
 </div> <!-- comment -->
+
+<%- # Google Code Prettify -%>
+
+<% if @article.prettify? -%>
+  <style type="text/css">@import url("http://webos-goodies.jp/template/scripts/prettify.css");</style>
+  <script type="text/javascript" src="http://webos-goodies.jp/template/scripts/prettify.js"></script>
+  <script type="text/javascript">template.addWindowEvent('load', function() { prettyPrint(); });</script>
+<% end -%>
