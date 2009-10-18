@@ -136,17 +136,17 @@ class LivedoorParser < Parser::Base
       WikiParser::InlineTagSection.new('', 'br', :syntax => nil, :filter => false)
     end
 
-    # HTML
-    tag_syntax(/^<html>(.*?)^<\/html>\s*$/mu) do |match, parser|
-      WikiParser::BlockTagSection.new(match[1], 'rawhtml', :filter => false, :syntax => [])
-    end
-
-    # ソースコード
+    # ソースコード（HTML より先に解析しないと、ソース中に <html> タグがあったときにおかしくなる）
     tag_syntax(/^<code(?:\s+(\w+))?\s*>(.*?)^<\/code>\s*$/mu) do |match, parser|
       parser.set_prettify()
       attrs   = { 'class' => ['prettyprint', match[1].blank? ? nil : "lang-#{match[1]}"].compact.join(' ') }
       options = { :attributes => attrs, :filter => false, :syntax => nil }
       WikiParser::BlockTagSection.new(match[2], 'pre', options)
+    end
+
+    # HTML
+    tag_syntax(/^<html>(.*?)^<\/html>\s*$/mu) do |match, parser|
+      WikiParser::BlockTagSection.new(match[1], 'rawhtml', :filter => false, :syntax => [])
     end
 
     # ---- メソッド --------------------------------------------------
