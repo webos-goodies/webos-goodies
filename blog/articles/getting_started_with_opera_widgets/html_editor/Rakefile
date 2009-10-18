@@ -1,0 +1,8 @@
+SRCS   = FileList.new('**/*'){|f| f.exclude('**/Rakefile') }
+TARGET = '../html_editor.wgt'
+
+task :default => TARGET
+
+file TARGET => SRCS do |t|
+  sh("zip #{t.name} #{t.prerequisites.join(' ')}")
+end
