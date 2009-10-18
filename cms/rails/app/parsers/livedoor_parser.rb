@@ -131,6 +131,11 @@ class LivedoorParser < Parser::Base
       end
     end
 
+    # 改行
+    inline_syntax(/\[br\]$/u) do |match, parser|
+      WikiParser::InlineTagSection.new('', 'br', :syntax => nil, :filter => false)
+    end
+
     # HTML
     tag_syntax(/^<html>(.*?)^<\/html>\s*$/mu) do |match, parser|
       WikiParser::BlockTagSection.new(match[1], 'rawhtml', :filter => false, :syntax => [])
