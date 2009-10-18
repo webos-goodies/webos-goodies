@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<widget network="" defaultmode="widget">
+  <widgetname>HTML Editor</widgetname>
+  <width>500</width>
+  <height>400</height>
+  <feature name="http://xmlns.opera.com/fileio"></feature>
+</widget>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>HTML Editor</title>
+  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.1/jquery.min.js"></script>
+  <script type="text/javascript" src="scripts/chrome.js"></script>
+  <script type="text/javascript" src="application.js"></script>
+  <link href="basic.skin/skin.css" rel="stylesheet" type="text/css" media="screen" />
+  <style type="text/css">
+	.half_height { box-sizing: border-box; height: 50%; }
+	.upper_pain { padding: 4px 4px 2px; }
+	.lower_pain { padding: 2px 4px 4px; }
+	.border { box-sizing: border-box; width: 100%; height: 100%; border: solid 1px #ccc; }
+	#source_edit { border: none; padding: 0px; margin: 0px; width: 100%; height: 100%; white-space: nowrap; }
+	#preview { border: none; padding: 0px; margin: 0px; width: 100%; height: 100%; }
+	#config { padding: 4px; }
+	#files { width: 100%; }
+	.btn_dir_div { text-align: right; }
+  </style>
+</head>
+
+<body>
+
+  <div id="main" style="display: none;">
+	<div class="half_height upper_pain">
+	  <div class="border"><textarea id="source_edit"></textarea></div>
+	</div>
+	<div class="half_height lower_pain">
+	  <div class="border"><iframe id="preview" src="opera:blank"></iframe></div>
+	</div>
+  </div>
+
+  <div id="config" style="display: none;">
+	<select id="files" size="8"></select>
+	<div class="btn_dir_div"><input id="btn_dir" type="button" value="ディレクトリを選択" /></p>
+  </div>
+
+</body>
+
+</html>
