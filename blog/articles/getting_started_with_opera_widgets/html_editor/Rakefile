@@ -4,5 +4,6 @@ TARGET = '../html_editor.wgt'
 task :default => TARGET
 
 file TARGET => SRCS do |t|
+  rm_f(t.name)
   sh("zip #{t.name} #{t.prerequisites.join(' ')}")
 end

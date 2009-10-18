@@ -3,5 +3,4 @@
   <widgetname>Skeleton Widget</widgetname>
   <width>320</width>
   <height>240</height>
-  <feature name="http://xmlns.opera.com/fileio"></feature>
 </widget>
