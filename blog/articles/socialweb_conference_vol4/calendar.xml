@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Module>
+  <ModulePrefs
+     title="乗り換え検索"
+     title_url="http://webos-goodies.jp"
+     description="イベントの場所への乗り換え案内を表示します。"
+     author="WebOS Goodies"
+     scrolling="false"
+     height="200">
+    <Require feature="setprefs" />
+    <Require feature="opensocial-0.8" />
+    <Require feature="google.calendar-0.5" />
+    <Require feature="google.calendar-0.5.read" />
+  </ModulePrefs>
+  <UserPref name="saddr" datatype="hidden" default_value="東京駅" />
+
+  <Content type="html" view="home,profile">
+    <![CDATA[
+<style type="text/css">
+#cnf, #frm { display:none; width:100%; height:100%; border:none; }
+</style>
+
+<div style="font-size:12px; width:100%; height:200px; overflow:auto;">
+  <div id="cnf">
+	開始地点<br />
+	<input id="saddr" type="text" value="__UP_saddr__" style="width:90%" onblur="onBlurSaddr();" />
+  </div>
+  <iframe id="frm" src="about:blank"></iframe>
+</div>
+
+<script type="text/javascript">
+var prefs = new gadgets.Prefs();
+
+function gel(id) {
+  return document.getElementById(id);
+}
+
+function onSelectEvent(event) {
+  var saddr = gel("saddr").value;
+  var frm   = gel("frm");
+  var cnf   = gel("cnf");
+  if(saddr && event && event.location) {
+    var daddr  = encodeURIComponent(event.location);
+    var now    = new Date();
+    var hour   = "" + now.getHours();
+    var minute = "" + now.getMinutes();
+    if(!event.allDay) {
+      hour   = "" + event.startTime.hour;
+      minute = "" + event.startTime.minute;
+    }
+    hour   = hour.length == 2 ? hour : "0" + hour;
+    minute = minute.length == 2 ? minute : "0" + minute;
+    var time = hour + minute;
+    frm.src =
+      "http://www.google.co.jp/transit?saddr=" + encodeURIComponent(saddr) + "&daddr=" + daddr + "&time=" + time + "&ttype=arr&ie=UTF8&output=mobile&f=d&dirmode=transit";
+    frm.style.display = "inline";
+    cnf.style.display = "none";
+  } else {
+    frm.src = "about:blank";
+    frm.style.display = "none";
+    cnf.style.display = "block";
+  }
+  onBlurSaddr();
+}
+
+function onBlurSaddr() {
+  var saddr = gel("saddr").value;
+  if(saddr != prefs.getString("saddr"))
+    prefs.set("saddr", saddr);
+}
+
+gadgets.util.registerOnLoadHandler(function() {
+  onSelectEvent(null);
+  google.calendar.read.subscribeToEvents(onSelectEvent);
+});
+</script>
+    ]]>
+  </Content>
+
+  <Content type="html" view="canvas">
+    <![CDATA[
+    ]]>
+  </Content>
+</Module>

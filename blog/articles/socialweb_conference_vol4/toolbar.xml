@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<custombuttons xmlns="http://toolbar.google.com/custombuttons/">
+  <button>
+    <title>数式</title>
+    <site>http://webos-goodies.jp/</site>
+    <gadget
+	   whole-dropdown="true"
+	   width="300"
+	   height="100"
+	   query="eq1"
+	   selection="eq2">
+	  http://webos-goodies.googlecode.com/svn/trunk/blog/articles/socialweb_conference_vol4/equation.xml
+    </gadget>
+  </button>
+</custombuttons>

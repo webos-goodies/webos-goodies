@@ -1,0 +1,13 @@
+<Results>
+  <ResultSpec id="equation1">
+    <Query>equation [RE:(.*)]</Query>
+    <Response format="gadget">
+      <Output name="title">数式</Output>
+      <Output name="gadget_src">http://webos-goodies.googlecode.com/svn/trunk/blog/articles/socialweb_conference_vol4/equation.xml</Output>
+      <Output name="gadget_width">400</Output>
+      <Output name="gadget_height">100</Output>
+      <Output name="up_name1">eq1</Output>
+      <Output name="up_value1">[0.gr0]</Output>
+    </Response>
+  </ResultSpec>
+</Results>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Module>
+  <ModulePrefs
+     title="数式"
+     title_url="http://webos-goodies.jp"
+     description="数式を画像に変換"
+     author="WebOS Goodies"
+     scrolling="false"
+     height="60">
+	<Require feature="dynamic-height" />
+  </ModulePrefs>
+  <UserPref name="eq1" datatype="string" default_value="" />
+  <UserPref name="eq2" datatype="string" default_value="" />
+
+  <Content type="html" view="home,profile,canvas">
+    <![CDATA[
+<style type="text/css">input { font-size:12px; }</style>
+<div id="image"></div>
+<input id="equation" type="text" style="width:95%" />
+
+<script type="text/javascript">
+function ParseParams() {
+  var params = {}, items = location.search.split('&');
+  for(var i = 0 ; i < items.length ; ++i) {
+    var match = /\??up_([^=]+)=(.*)/.exec(items[i]);
+    if(match)
+      params[match[1]] = match[2].replace(/\+/g, "%2B");
+  }
+  return params;
+}
+
+_IG_RegisterOnloadHandler(function() {
+  var params = ParseParams();
+  var eq     = params["eq1"] || params["eq2"];
+  if(eq) {
+    var url = "http://chart.apis.google.com/chart?cht=tx&chf=bg,s,FFFFFF00&chco=000000&chl=" + eq;
+    var el  = document.createElement("IMG");
+    el.src  = url;
+    document.getElementById("image").appendChild(el);
+    document.getElementById("equation").value = url;
+    _IG_AdjustIFrameHeight();
+  }
+});
+</script>
+    ]]>
+  </Content>
+</Module>
