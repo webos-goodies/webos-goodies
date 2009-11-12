@@ -132,7 +132,7 @@ class LivedoorParser < Parser::Base
     end
 
     # 改行
-    inline_syntax(/\[br\]$/u) do |match, parser|
+    inline_syntax(/&br;/u) do |match, parser|
       WikiParser::InlineTagSection.new('', 'br', :syntax => nil, :filter => false)
     end
 

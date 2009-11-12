@@ -149,15 +149,37 @@ WebOS はインターネットの未来形。あらゆる Web サイトが繋が
 
 <div class="sidetop"></div>
 <div class="side" style="padding: 0px;">
-<object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=9,0,124,0" width="100%" height="350" id="TwitterWidget" align="middle">
-	<param name="allowScriptAccess" value="always" />
-	<param name="allowFullScreen" value="false" />
-	<param name="movie" value="http://static.twitter.com/flash/widgets/profile/TwitterWidget.swf" />
-	<param name="quality" value="high" />
-	<param name="bgcolor" value="#ffffff" />
-	<param name="FlashVars" value="userID=24371070&styleURL=http://static.twitter.com/flash/widgets/profile/velvetica.xml">
-	<embed src="http://static.twitter.com/flash/widgets/profile/TwitterWidget.swf" quality="high" bgcolor="#ffffff" width="100%" height="350" name="TwitterWidget" align="middle" allowScriptAccess="sameDomain" allowFullScreen="false" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" FlashVars="userID=24371070&styleURL=http://static.twitter.com/flash/widgets/profile/velvetica.xml"/>
-</object>
+<script src="http://widgets.twimg.com/j/2/widget.js"></script>
+<script>
+new TWTR.Widget({
+  version: 2,
+  type: 'profile',
+  rpp: 8,
+  interval: 6000,
+  width: 'auto',
+  height: 300,
+  theme: {
+    shell: {
+      background: '#cdcdcd',
+      color: '#777777'
+    },
+    tweets: {
+      background: '#efefef',
+      color: '#444444',
+      links: '#0065b3'
+    }
+  },
+  features: {
+    scrollbar: true,
+    loop: false,
+    live: false,
+    hashtags: true,
+    timestamp: true,
+    avatars: false,
+    behavior: 'all'
+  }
+}).render().setUser('webos_goodies').start();
+</script>
 </div>
 <div class="sidebottom"></div>
 
