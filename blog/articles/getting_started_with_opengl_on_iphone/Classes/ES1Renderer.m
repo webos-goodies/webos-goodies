@@ -177,6 +177,11 @@ static void drawScene(GLfloat screenWidth, GLfloat screenHeight) {
 
     // 球体を描画
     glDrawElements(GL_TRIANGLES, 3 * 32 * 8, GL_UNSIGNED_SHORT, 0);
+
+    // bindを解除
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+    glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 @implementation ES1Renderer
