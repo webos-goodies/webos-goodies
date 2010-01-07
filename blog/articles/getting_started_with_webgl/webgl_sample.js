@@ -98,7 +98,7 @@ function initShaders() {
   var vshader = gl.createShader(gl.VERTEX_SHADER);
   gl.shaderSource(vshader, $('#vshader').text());
   gl.compileShader(vshader);
-  if(!gl.getShaderProgram(vshader, gl.COMPILE_STATUS))
+  if(!gl.getShaderParameter(vshader, gl.COMPILE_STATUS))
     alert(gl.getShaderInfoLog(vshader));
 
   // フラグメントシェーダーを作成
