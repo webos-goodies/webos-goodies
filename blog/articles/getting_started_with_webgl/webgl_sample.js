@@ -98,14 +98,14 @@ function initShaders() {
   var vshader = gl.createShader(gl.VERTEX_SHADER);
   gl.shaderSource(vshader, $('#vshader').text());
   gl.compileShader(vshader);
-  if(!gl.getShaderi(vshader, gl.COMPILE_STATUS))
+  if(!gl.getShaderParameter(vshader, gl.COMPILE_STATUS))
     alert(gl.getShaderInfoLog(vshader));
 
   // フラグメントシェーダーを作成
   var fshader = gl.createShader(gl.FRAGMENT_SHADER);
   gl.shaderSource(fshader, $('#fshader').text());
   gl.compileShader(fshader);
-  if(!gl.getShaderi(fshader, gl.COMPILE_STATUS))
+  if(!gl.getShaderParameter(fshader, gl.COMPILE_STATUS))
     alert(gl.getShaderInfoLog(fshader));
 
   // プログラムオブジェクトを作成
