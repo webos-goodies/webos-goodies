@@ -120,7 +120,7 @@ function initShaders() {
 
   // 頂点シェーダーとフラグメントシェーダーをリンクする
   gl.linkProgram(program);
-  if(!gl.getProgrami(program, gl.LINK_STATUS))
+  if(!gl.getProgramParameter(program, gl.LINK_STATUS))
     alert(gl.getProgramInfoLog(program));
 
   // シェーダーパラメータのインデックスを取得・保存
