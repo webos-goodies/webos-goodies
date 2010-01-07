@@ -10,7 +10,7 @@ var count       = 0;
 $(function() {
   // WebGL コンテキストの取得
   var canvas = $("#screen").get(0);
-  $.each(["webkit-3d", "moz-webgl"], function(i, name) {
+  $.each(["webgl", "experimental-webgl", "webkit-3d", "moz-webgl"], function(i, name) {
     try { gl = canvas.getContext(name); } catch(e) {}
     return !gl
   });
