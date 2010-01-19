@@ -1,0 +1,21 @@
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" type="text/css" href="closure/goog/demos/css/toolbar.css">
+    <link rel="stylesheet" type="text/css" href="closure/goog/demos/css/colormenubutton.css">
+    <script src="closure/goog/base.js"></script>
+    <script src="simple-draw.js"></script>
+  </head>
+  <body onload="initialize();">
+    <div style="float:left">
+      <div id="toolbar" class="goog-toolbar">
+        <div id="toolbar-mode-move" class="goog-toolbar-toggle-button">移動</div>
+        <div id="toolbar-mode-ellipse" class="goog-toolbar-toggle-button">◯</div>
+        <div id="toolbar-color-stroke" class="goog-toolbar-color-menu-button">線色</div>
+        <div id="toolbar-color-fill" class="goog-toolbar-color-menu-button">背景色</div>
+      </div>
+      <div id="canvas" style="border: solid 1px black;"></div>
+    </div>
+    <div id="dummy-drag-target" style="display:none;"></div>
+  </body>
+</html>
