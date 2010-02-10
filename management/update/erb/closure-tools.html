@@ -1,0 +1,8 @@
+<% @title = escapeHTML(@captions[@basename]) %>
+<h1><%= @title %></h1>
+
+<p>
+<a href="http://code.google.com/closure/">Closure Tools</a> は Google が開発した JavaScript 開発ツールキットで、 <a href="http://code.google.com/closure/library/">Closure Library</a> （JavaScript フレームワーク）、 <a href="http://code.google.com/closure/compiler/">Closure Compiler</a> （サイズ削減・最適化ツール）、 <a href="http://code.google.com/closure/templates/">Closure Template</a> （Java / JavaScript 共通のテンプレートライブラリ）の 3 つで構成されています。これらの最大の特徴は、今後要求が高まってくるであろう大規模 Web アプリケーションの開発をサポートし、その品質を向上させる機能の数々。 <a href="http://gmail.com/">Gmail</a> や <a href="http://docs.google.com/">Google Docs</a> などの開発で培った Google のノウハウが凝縮されています。それが Apache License 2.0 ライセンスによりオープンソース化され、自由に利用できるのですから、使わない手はありません。このカテゴリーでは、これら <strong>Closure Tools</strong> の活用方法をご紹介し、日本における普及の後押しをしていきます。
+</p>
+
+<ol><%= list_articles(@basename, nil, false) %></ol>

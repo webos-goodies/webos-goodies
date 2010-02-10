@@ -1,0 +1,8 @@
+<% @title = escapeHTML(@captions[@basename]) %>
+<h1><%= @title %></h1>
+
+<p>
+近年、 Web におけるモバイルの重要性が急速に拡大しています。そして、その中心となっているのが <a href="http://www.apple.com/">Apple</a> の <a href="http://www.apple.com/jp/iphone/">iPhone</a> です。 PC とほぼ同じポテンシャルを持つ <a href="http://webkit.org/">Webkit</a> ベースのモバイル Safari ブラウザを搭載し、本格的な Web アプリケーションが利用できます。同時にネイティブアプリケーションも多数開発されており、ほぼ常時ネットワークにアクセスできるという携帯電話の特性から、その多くが Web に関連する機能を持ちます。このカテゴリーではそうした iPhone アプリケーションの開発 Tips をご紹介し、モバイル Web の発展を支援していきます。
+</p>
+
+<ol><%= list_articles(@basename, nil, false) %></ol>

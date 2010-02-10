@@ -71,15 +71,16 @@ GSearch.setOnLoadCallback(OnLoad);
 
 <div class="lefts">
 <h1>WebOS Goodies</h1>
-<h2>Gentoo Linux で個人サーバーから名称変更しました。今後ともよろしくお願いします！</h2>
+<h2>WebOS の未来を模索する、ゲームプログラマあがりの Web 開発者のブログ。</h2>
 </div>
 </div>
 
 <div id="topmenu">
 <div class="rights"></div>
 <div class="lefts"><ul>
-<li><a class="current" href="http://webos-goodies.jp/" title="ホームページへ移動">Home</a></li>
-<li><a href="http://wiki.livedoor.jp/sourcewalker/d/" title="Wiki へ移動">Wiki</a></li>
+<li><a href="http://webos-goodies.jp/" title="ホームページ">Home</a></li>
+<li><a href="http://groups.google.com/group/webos-goodies/" title="ディスカッション・フォーラム">Forum</a></li>
+<li><a id="tpl_contact" href="https://spreadsheets.google.com/viewform?formkey=dFJHTDE4N1hjNEFKYy02Um9iYTgwLUE6MA" title="お問い合わせ">Contact</a></li>
 </ul></div>
 </div>
 

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 CaptionMap = {
   'announcement' => 'アナウンス',
   'apache' => 'Apache による Web サーバーの構築',
@@ -40,5 +41,7 @@ CaptionMap = {
   'web-apps-tips' => 'Web アプリケーション Tips',
   'web-apps' => '一歩進んだ Web アプリケーション活用術',
   'web-development' => 'Web プログラミング Tips',
-  'weekly-news' => '今週の話題'
+  'weekly-news' => '今週の話題',
+  'iphone' => 'iPhone 開発 Tips',
+  'closure-tools' => 'Closure Tools 活用入門'
 }
