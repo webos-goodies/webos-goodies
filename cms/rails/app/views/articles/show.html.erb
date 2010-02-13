@@ -1,5 +1,8 @@
 <div><%= link_to('編集', edit_site_article_url(@site.id, @article.id)) %></div>
 <div><%= link_to('プレビュー', :controller => :preview, :action => :article, :id => @article.id) %></div>
+<%- if @article.published -%>
+<div><a href="<%= h(@article.url) %>">記事</a></div>
+<%- end -%>
 
 <dl>
   <dt>Page name</dt>

@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 require 'wikiparser/wikiparser.rb'
 require 'nkf'
+require 'net/http'
+require 'uri'
 
 class LivedoorParser < Parser::Base
 
@@ -137,11 +139,24 @@ class LivedoorParser < Parser::Base
     end
 
     # ソースコード（HTML より先に解析しないと、ソース中に <html> タグがあったときにおかしくなる）
-    tag_syntax(/^<code(?:\s+(\w+))?\s*>(.*?)^<\/code>\s*$/mu) do |match, parser|
+    tag_syntax(/^<code([^>]*)>(.*?)^<\/code>\s*$/mu) do |match, parser|
+      text  = match[2]
+      attrs = { 'class' => 'prettyprint' }
+      match[1].gsub(/(?:^|\s)(\w+)=\"([^\"]*)\"/mu) do
+        name, value = $1, CGI.unescapeHTML($2)
+        case name
+        when 'lang'
+          attrs['class'] = "#{attrs['class']} lang-#{CGI.escapeHTML(value.strip)}"
+        when 'src'
+          text = parser.fetch_url(value);
+        when 'height'
+          attrs['style'] = (attrs['style']||'') + "height:#{value}px;overflow:auto;"
+        end
+        ''
+      end
       parser.set_prettify()
-      attrs   = { 'class' => ['prettyprint', match[1].blank? ? nil : "lang-#{match[1]}"].compact.join(' ') }
       options = { :attributes => attrs, :filter => false, :syntax => nil }
-      WikiParser::BlockTagSection.new(match[2], 'pre', options)
+      WikiParser::BlockTagSection.new(text, 'pre', options)
     end
 
     # HTML
@@ -158,6 +173,20 @@ class LivedoorParser < Parser::Base
 
     def set_prettify() @prettify = true end
     def prettify?() @prettify end
+
+    def fetch_url(url, limit = 3)
+      if limit <= 0
+        'http redirect too deep'
+      else
+        Net::HTTP.version_1_2
+        response = Net::HTTP.get_response(URI.parse(url))
+        case response
+        when Net::HTTPSuccess     then response.body
+        when Net::HTTPRedirection then fetch_url(url, limit - 1)
+        else                           response.message
+        end
+      end
+    end
 
     # ---- 下位ルーチン ----------------------------------------------
 
