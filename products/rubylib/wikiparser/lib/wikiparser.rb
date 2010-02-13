@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # 同じ Wiki 文法がネストすることはできない。
 # 解析中は $ が $d$ に置き換えられているので注意。
 # Wiki 文法は正しく入れ子にならなければならない。
@@ -46,7 +47,7 @@ module WikiParser
       text.gsub('$d$', '$')
     end
     def hesc(str)
-      str.gsub(/&/u, '&amp;').gsub(/</u, '&lt;').gsub(/>/u, '&gt;').gsub(/"/u, '&quot;').gsub(/'/u, '&#39')
+      str.gsub(/&/u, '&amp;').gsub(/</u, '&lt;').gsub(/>/u, '&gt;').gsub(/"/u, '&quot;').gsub(/'/u, '&#39;')
     end
   end
 
