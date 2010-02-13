@@ -15,7 +15,10 @@ xml.rss("version"    => "2.0",
       xml.item do
         xml.title        article.title
         xml.link         article.url
-        xml.description  article.formatted_body1
+        xml.description  <<EOS
+#{article.formatted_body1}
+<p><a href="#{CGI.escapeHTML(article.url)}">&gt;&gt; 続きを読む</a></p>
+EOS
         xml.pubDate      article.publish_date.to_formatted_s(:rfc822)
         xml.guid         article.url
         xml.dc :creator, @site.author

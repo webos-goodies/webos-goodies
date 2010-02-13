@@ -14,7 +14,10 @@ atom_feed(:language => 'ja-JP',
 			   :published => article.publish_date,
 			   :updated   => article.updated_at) do |entry|
 	  entry.title(article.title)
-	  entry.content(article.formatted_body1, :type => 'html')
+	  entry.content(<<EOS, :type => 'html')
+#{article.formatted_body1}
+<p><a href="#{CGI.escapeHTML(article.url)}">&gt;&gt; 続きを読む</a></p>
+EOS
 	  entry.author{|author| author.name(@site.author) }
 	end
   end
