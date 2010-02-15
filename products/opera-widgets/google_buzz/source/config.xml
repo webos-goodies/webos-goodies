@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<widget network="public" defaultmode="widget">
+
+  <widgetname>Google Buzz Opera Widget</widgetname>
+  <description>Display your Google Buzz timeline.</description>
+  <width>400</width>
+  <height>500</height>
+
+  <icon>icons/icon128.png</icon>
+  <icon>icons/icon64.png</icon>
+  <icon>icons/icon32.png</icon>
+  <icon>icons/icon16.png</icon>
+
+  <id>
+	<host>webos-goodies.jp</host>
+	<name>google_buzz</name>
+	<revised>2009-02-15</revised>
+  </id>
+
+  <author>
+	<name>Chihiro Ito</name>
+	<organization>WebOS Goodies</organization>
+	<email>contact@webos-goodies.jp</email>
+	<link>http://webos-goodies.jp</link>
+  </author>
+
+  <feature name="http://xmlns.opera.com/stdbtn">
+    <param name="standardbuttons" value="false" />
+  </feature>
+
+</widget>

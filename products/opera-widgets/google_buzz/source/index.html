@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Google Buzz</title>
+  <script type="text/javascript" src="scripts/chrome.js"></script>
+  <script type="text/javascript" src="scripts/jquery.min.js"></script>
+  <script type="text/javascript" src="scripts/application.js"></script>
+  <link href="basic.skin/skin.css" rel="stylesheet" type="text/css" media="screen" />
+  <style type="text/css">
+	#buzz-view {
+	  position: absolute;
+	  top:0px; left:0px; bottom:0px; right:0px;
+	  overflow: hidden;
+	}
+	#buzz {
+	  width: 100%; height: 100%;
+	  border: none;
+	  margin: 0px; padding:0px;
+	}
+	#config-view {
+	  display: none;
+	}
+	#config-view fieldset {
+	  margin: 10px;
+	}
+	#config-view legend {
+	  padding: 0px 8px;
+	}
+	#config-view label {
+	  display: block;
+	  margin: 4px 0px 4px 16px;
+	}
+	#config-view input[type="radio"] {
+	  padding-right: 1em;
+	}
+  </style>
+</head>
+
+<body>
+  <div id="buzz-view">
+	<iframe id="buzz" src="about:blank" border="0"></iframe>
+  </div>
+  <div id="config-view">
+	<form>
+
+	  <fieldset id="config-view-set">
+		<legend id="label-view"></legend>
+
+		<label>
+		  <input id="config-following" type="radio" name="view" value="following">
+		  <span id="label-following"></span>
+		</label>
+
+		<label>
+		  <input id="config-menu" type="radio" name="view" value="menu">
+		  <span id="label-menu"></span>
+		</label>
+
+	  </fieldset>
+
+	  <fieldset id="config-language-set">
+		<legend id="label-language"></legend>
+
+		<label>
+		  <input id="config-english" type="radio" name="language" value="english">
+		  <span id="label-english"></span>
+		</label>
+
+		<label>
+		  <input id="config-japanese" type="radio" name="language" value="japanese">
+		  <span id="label-japanese"></span>
+		</label>
+
+	  </fieldset>
+
+	</form>
+	</form>
+  </div>
+</body>
+
+</html>
