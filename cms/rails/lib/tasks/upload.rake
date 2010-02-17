@@ -1,8 +1,10 @@
+# -*- mode:ruby -*-
+
 require 'ftp_ex'
 
 namespace :upload do
 
-  task :all => [:indices, :articles]
+  task :all => [:indices, :articles, :scripts]
 
   task :setup => :environment do
     require 'action_controller/integration'
@@ -74,6 +76,19 @@ namespace :upload do
       cache = article.upload_googledocs(cache)
       unless cache[:article_list][:rows]
         cache[:article_list][:rows] = cache[:article_list][:list_class].find(:all)
+      end
+    end
+  end
+
+  task :scripts => :setup do
+    raise 'Please set ENV["SITE"].' if (ENV['SITE']||'').strip.blank?
+    site = Site.find(ENV['SITE'].strip.to_i)
+    Net::FTP.open(site.ftp_host, site.ftp_user, site.ftp_password) do |ftp|
+      ['common2.js'].each do |sname|
+        dname       = File.join(site.ftp_path, '/template', sname)
+        content     = IO.read(File.join(RAILS_ROOT, 'public/javascripts', sname))
+        ftp.passive = true
+        ftp.putbinarystring(content, dname)
       end
     end
   end

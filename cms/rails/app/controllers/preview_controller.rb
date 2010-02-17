@@ -1,6 +1,7 @@
 class PreviewController < ApplicationController
 
   def index
+    common_params(params)
     @site     = Site.find(params[:site_id], :include => :preference)
     @articles = @site.articles.find(:all,
                                     :order      => 'publish_date DESC',
@@ -15,6 +16,7 @@ class PreviewController < ApplicationController
   end
 
   def article
+    common_params(params)
     if request.method != :post && request.method != :put
       @article = Article.find(params[:id])
       @site    = @article.site
@@ -30,6 +32,12 @@ class PreviewController < ApplicationController
     end
   rescue ActiveRecord::RecordInvalid => e
     render :action => 'error', :layout => false
+  end
+
+  private
+
+  def common_params(params)
+    @dev = params[:dev]
   end
 
 end
