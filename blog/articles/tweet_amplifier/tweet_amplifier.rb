@@ -70,7 +70,7 @@ class TweetAmplifier
       entries.each do |entry|
         begin
           text = entry["text"]
-          unless @ignore && @ignore === text
+          unless (@ignore && @ignore === text) || @mute
             @buzzruby.post(entry["text"])
           end
           config['since_id'] = entry['id'] if entry['id']
