@@ -148,7 +148,7 @@ class LivedoorParser < Parser::Base
         when 'lang'
           attrs['class'] = "#{attrs['class']} lang-#{CGI.escapeHTML(value.strip)}"
         when 'src'
-          text = parser.fetch_url(value);
+          text = WikiParser::Utils.wiki_escape(parser.fetch_url(value));
         when 'height'
           attrs['style'] = (attrs['style']||'') + "height:#{value}px;overflow:auto;"
         end
