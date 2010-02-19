@@ -3,6 +3,9 @@
 
   <% form_tag(site_articles_url(@site.id), :method => :get) do -%>
 	<%= text_field_tag(:q, @q) %>
+	<%= check_box_tag(:re,     '1',        @re) %>Regexp
+	<%= check_box_tag(:parser, 'html',     @html) %>html
+	<%= check_box_tag(:parser, 'livedoor', @livedoor) %>livedoor
 	<%= submit_tag('検索') %>
   <% end -%>
 </div>

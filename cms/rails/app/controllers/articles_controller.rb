@@ -5,12 +5,35 @@ class ArticlesController < ApplicationController
   def index
     @site     = Site.find(params[:site_id])
     @q        = params[:q]
+    @re       = (params[:re] || '0').to_i > 0
+    parser    = [*params[:parser]]
+    @html     = parser.include?('html')
+    @livedoor = parser.include?('livedoor')
     query = { :order => "coalesce(publish_date, date('now')) DESC, id DESC" }
-    unless @q.blank?
-      query[:conditions] =
-        [%w"page_name title body1 body2".map{|c| "#{c} LIKE :q" }.join(' OR '), { :q => "%#{@q}%" }]
+    s     = []
+    p     = {}
+    if !@html || !@livedoor
+      s    << "parser IN (:p)"
+      p[:p] = [@html ? 'HtmlParser' : nil, @livedoor ? 'LivedoorParser' : nil].compact
     end
+    if !@q.blank? && !@re
+      s    << %w"page_name title body1 body2".map{|c| "#{c} LIKE :q" }.join(' OR ')
+      p[:q] = "%#{@q}%"
+    end
+    query[:conditions] = ["(#{s.join(') AND (')})", p] unless s.empty?
     @articles = @site.articles.find(:all, query)
+    if !@q.blank? && @re
+      begin
+        regexp = Regexp.new(@q, false, 'U')
+        @articles = @articles.select do |article|
+          (regexp === article.page_name ||
+           regexp === article.title ||
+           regexp === article.body1 ||
+           regexp === article.body2)
+        end
+      rescue
+      end
+    end
   end
 
   def show
