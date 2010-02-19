@@ -134,12 +134,14 @@ var DragResize = (function() {
   DragResize.$onMouseUp = function(event)
   {
     var info = DragResize.$dragInfo, scroll = $getScroll();
-	var self = info.$manager;
-    if(info && typeof self.$onClickCallback === 'function' &&
-       info.$clickX + info.$baseScX == event.clientX + scroll.x &&
-       info.$clickY + info.$baseScY == event.clientY + scroll.y) {
-      self.$onClickCallback.call(self.$onClickScope, event);
-    }
+	if(info) {
+	  var self = info.$manager;
+      if(self && typeof self.$onClickCallback === 'function' &&
+		 info.$clickX + info.$baseScX == event.clientX + scroll.x &&
+		 info.$clickY + info.$baseScY == event.clientY + scroll.y) {
+		self.$onClickCallback.call(self.$onClickScope, event);
+      }
+	}
     DragResize.$finish();
   };
 
