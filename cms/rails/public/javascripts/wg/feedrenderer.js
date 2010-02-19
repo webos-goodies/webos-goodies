@@ -1,4 +1,4 @@
-goog.provide('wg.FeedReader');
+goog.provide('wg.FeedRenderer');
 
 goog.require('goog.dom');
 goog.require('goog.string');

@@ -3,8 +3,8 @@ goog.require('goog.string');
 goog.require('goog.array');
 goog.require('goog.date.relative');
 goog.require('goog.i18n.DateTimeFormat');
-goog.require('wg.FeedReader');
-goog.require('wg.SpreadsheetReader');
+goog.require('wg.FeedRenderer');
+goog.require('wg.SpreadsheetRenderer');
 
 //----------------------------------------------------------
 // Opera fast navigation mode.

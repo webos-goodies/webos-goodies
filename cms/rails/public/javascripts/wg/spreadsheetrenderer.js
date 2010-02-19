@@ -1,4 +1,4 @@
-goog.provide('wg.SpreadsheetReader');
+goog.provide('wg.SpreadsheetRenderer');
 
 goog.require('goog.dom');
 goog.require('goog.string');
