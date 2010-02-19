@@ -12,7 +12,10 @@ wg.FeedRenderer = function(opt_params) {
   this.formatter_ = opt_params['formatter'] || {};
 }
 wg.FeedRenderer.defaultFormatter_ = function(value, entry) {
-  return goog.string.htmlEscape('' + value);
+  // '&' is not escaped to avoid double escaping.
+  value = value.replace('<', '&lt;').replace('>', '&gt;');
+  value = value.replace('"', '&quot;').replace("'", '&#39;');
+  return value;
 };
 wg.FeedRenderer.callback_ = function(context, response, status, details) {
   if(!response || status < 200 || 300 <= status)
