@@ -31,6 +31,11 @@
 	<tbody id="t4"></tbody>
   </table>
 
+  <table>
+	<caption>custom renderer</caption>
+	<tbody id="t5"></tbody>
+  </table>
+
   <p id="globals"></p>
 
   <script type="text/javascript">
@@ -50,6 +55,14 @@
 	renderer.setTemplate(template);
 	renderer.setFormatter(formatter);
 	renderer.render('http://webos-goodies.jp/atom.xml', 't4', 8);
+
+    renderer.setTemplate('<td>%title%</td><td>%link%</td><td>%contentSnippet%</td>');
+	renderer.render('http://webos-goodies.jp/atom.xml', function(html, entry) {
+	  for(var i = 0 ; i < html.length ; ++i) {
+        html[i] = '<tr><td>' + (i+1) + '</td>' + html[i] + '</tr>';
+	  }
+	  document.getElementById('t5').innerHTML = html.join('');
+	}, 8);
   </script>
 </body>
 
