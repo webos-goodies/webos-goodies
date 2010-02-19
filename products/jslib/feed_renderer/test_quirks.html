@@ -1,0 +1,55 @@
+<html>
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <script type="text/javascript" src="feed_renderer.js"></script>
+  <style type="text/css">
+	table { border-collapse: collapse; margin-bottom: 1em; }
+	td { border: solid 1px black; font-size:10px; }
+  </style>
+</head>
+
+<body>
+  <table>
+	<caption>default</caption>
+	<tbody id="t1"></tbody>
+  </table>
+
+  <table>
+	<caption>setTemplate</caption>
+	<tbody id="t2"></tbody>
+  </table>
+
+  <table>
+	<caption>formatter</caption>
+	<tbody id="t3"></tbody>
+  </table>
+
+  <table>
+	<caption>setFormatter and number of entries</caption>
+	<tbody id="t4"></tbody>
+  </table>
+
+  <p id="globals"></p>
+
+  <script type="text/javascript">
+	var template = '<tr><td>%title%</td><td>%link%</td><td>%contentSnippet%</td></tr>';
+	var renderer = new FeedRenderer({ template:template });
+	renderer.render('http://webos-goodies.jp/atom.xml', 't1');
+
+	renderer = new FeedRenderer();
+	renderer.setTemplate(template);
+	renderer.render('http://webos-goodies.jp/atom.xml', 't2');
+
+	var formatter = { contentSnippet: function(value) { return value.substr(0, 10); } };
+	renderer = new FeedRenderer({ template: template, formatter: formatter });
+	renderer.render('http://webos-goodies.jp/atom.xml', 't3');
+
+	renderer = new FeedRenderer();
+	renderer.setTemplate(template);
+	renderer.setFormatter(formatter);
+	renderer.render('http://webos-goodies.jp/atom.xml', 't4', 8);
+  </script>
+</body>
+
+</html>
