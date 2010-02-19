@@ -23,6 +23,7 @@ var template             = {};
 window['template']       = template;
 template['FeedRenderer'] = wg.FeedRenderer;
 template['feedCallback'] = function(){ wg.FeedRenderer.processResponse.apply(this, arguments) };
+wg.FeedRenderer.setDefaultCallbackName('template.feedCallback');
 
 
 //----------------------------------------------------------
@@ -196,7 +197,6 @@ template.addWindowEvent('ready', function() {
   var renderer = new wg.FeedRenderer({
 	'key':'ABQIAAAADFolcpMzeDEXDBR65zomPRSdobuQ8nl73Zh0G-Y7QnxRnfXdORRvX5O5---NvrXXjsKrVcjvSimLkw'
   });
-  renderer.setCallbackName('template.feedCallback');
 
   // recent articles
   renderer.setTemplate('<a class="sidebody" href="%link%">%title%</a>');

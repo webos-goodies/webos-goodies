@@ -10,7 +10,7 @@ wg.FeedRenderer = function(opt_params) {
   this.key_       = opt_params['key'];
   this.template_  = opt_params['template']     || '';
   this.formatter_ = opt_params['formatter']    || {};
-  this.callback_  = opt_params['callbackName'] || '';
+  this.callback_  = opt_params['callbackName'] || wg.FeedRenderer.defaultCallbackName_;
 }
 wg.FeedRenderer.defaultFormatter_ = function(value, entry) {
   // '&' is not escaped to avoid double escaping.
@@ -48,19 +48,30 @@ wg.FeedRenderer.processResponse = function(context, response, status, details) {
 	}
   }
 };
-wg.FeedRenderer.prototype.requests_    = [];
+
+wg.FeedRenderer.defaultCallbackName_ = '';
+wg.FeedRenderer.setDefaultCallbackName = function(callbackName) {
+  wg.FeedRenderer.defaultCallbackName_ = callbackName;
+}
+
+wg.FeedRenderer.prototype.requests_ = [];
+
 wg.FeedRenderer.prototype.makeMsg = function(msg) {
   return 'FeedRenderer : ' + msg;
 };
+
 wg.FeedRenderer.prototype.setCallbackName = function(callbackName) {
   this.callback_ = callbackName;
 };
+
 wg.FeedRenderer.prototype.setTemplate = function(template) {
   this.template_ = template;
 };
+
 wg.FeedRenderer.prototype.setFormatter = function(formatter) {
   this.formatter_ = formatter;
 };
+
 wg.FeedRenderer.prototype.render = function(source, element_or_function, opt_maxEntries) {
   if(!this.template_)
 	throw this.makeMsg('The template string must be set.');
