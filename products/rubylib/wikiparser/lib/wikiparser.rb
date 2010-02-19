@@ -40,6 +40,7 @@ module WikiParser
   end
 
   module Utils
+    module_function
     def wiki_escape(text)
       text.gsub('$', '$d$')
     end
