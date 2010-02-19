@@ -53,6 +53,8 @@ module WikiParser
   end
 
   class Section
+    include Utils
+
     attr_accessor :text
     attr_reader   :syntax
 
@@ -93,7 +95,7 @@ module WikiParser
           e = child.to_xml(sections, scanner)
           element.add(e) if e
         else
-          element.add_text(child)
+          element.add_text(hesc(child))
         end
       end
       element
@@ -176,7 +178,7 @@ module WikiParser
     end
 
     def parse(sources)
-      doc  = REXML::Document.new
+      doc  = REXML::Document.new(nil, :raw => :all)
       root = REXML::Element.new('root')
       [*sources].each do |src|
         @sections = [RootSection.new(wiki_escape(src.gsub(/(?:\r\n|\r|\n)/u, "\n")))]
