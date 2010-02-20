@@ -133,7 +133,7 @@ commentFormatter['Source']  = commentFormatter['Name'];
 commentFormatter['Excerpt'] = commentFormatter['Comment'];
 
 template['renderComments'] = function(pageId) {
-  renderer = new wg.SpreadsheetsRenderer({ key: 'pMIBrnJ4PHK_Tnb_IAz3cTQ' });
+  renderer = new wg.SpreadsheetRenderer({ key: 'pMIBrnJ4PHK_Tnb_IAz3cTQ' });
   renderer.setTemplate([
 	'<div class="comment_item">',
 	'<h2><n>.&nbsp;Posted by %Name% &nbsp;&nbsp;&nbsp;%Timestamp%</h2>',
@@ -159,7 +159,7 @@ template['renderComments'] = function(pageId) {
 //----------------------------------------------------------
 
 template['renderTrackbacks'] = function(pageId) {
-  renderer = new wg.SpreadsheetsRenderer({ key: 'pMIBrnJ4PHK_XSOfGkVhjTQ' });
+  renderer = new wg.SpreadsheetRenderer({ key: 'pMIBrnJ4PHK_XSOfGkVhjTQ' });
   renderer.setTemplate([
 	'<div class="trackback_item">',
 	'<h2><n>.&nbsp;%Source%&nbsp;&nbsp;[&nbsp;%Site%&nbsp;]&nbsp;&nbsp;&nbsp;%Timestamp%</h2>',

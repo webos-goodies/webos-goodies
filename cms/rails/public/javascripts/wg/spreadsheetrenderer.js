@@ -5,7 +5,7 @@ goog.require('goog.string');
 goog.require('goog.array');
 
 /** @constructor */
-wg.SpreadsheetsRenderer = function(source, opt_params) {
+wg.SpreadsheetRenderer = function(source, opt_params) {
   source     = source     || {};
   opt_params = opt_params || {};
   var url    = source;
@@ -25,28 +25,29 @@ wg.SpreadsheetsRenderer = function(source, opt_params) {
 	var params = {};
 	goog.mixin(params, source);
 	goog.mixin(params, opt_params);
+	opt_params = params;
   }
   this.query_     = new google.visualization.Query(url);
   this.template_  = opt_params['template']  || '';
   this.formatter_ = opt_params['formatter'] || {};
 }
-wg.SpreadsheetsRenderer.defaultFormatter_ = function(value, rawValue, values) {
+wg.SpreadsheetRenderer.defaultFormatter_ = function(value, rawValue, values) {
   return goog.string.htmlEscape('' + value);
 };
-wg.SpreadsheetsRenderer.prototype.makeMsg = function(msg) {
-  return 'SpreadsheetsRenderer : ' + msg;
+wg.SpreadsheetRenderer.prototype.makeMsg = function(msg) {
+  return 'SpreadsheetRenderer : ' + msg;
 };
-wg.SpreadsheetsRenderer.prototype.setTemplate = function(template) {
+wg.SpreadsheetRenderer.prototype.setTemplate = function(template) {
   this.template_ = template;
 };
-wg.SpreadsheetsRenderer.prototype.setFormatter = function(formatter) {
+wg.SpreadsheetRenderer.prototype.setFormatter = function(formatter) {
   this.formatter_ = formatter;
 };
-wg.SpreadsheetsRenderer.prototype.render = function(query, element_or_function) {
+wg.SpreadsheetRenderer.prototype.render = function(query, element_or_function) {
   this.query_.setQuery(query),
   this.query_.send(goog.bind(this.renderResponse_, this, element_or_function));
 };
-wg.SpreadsheetsRenderer.prototype.renderResponse_ = function(element_or_function, response) {
+wg.SpreadsheetRenderer.prototype.renderResponse_ = function(element_or_function, response) {
   if(!response)          throw this.makeMsg("Null response.");
   if(response.isError()) throw this.makeMsg(this.getMessage());
   var table      = response.getDataTable();
@@ -59,7 +60,7 @@ wg.SpreadsheetsRenderer.prototype.renderResponse_ = function(element_or_function
   for(column = 0 ; column < numColumns ; ++column) {
 	labels[column]    = table.getColumnLabel(column);
 	formatter[column] = (this.formatter_[labels[column]] || this.formatter_[column] ||
-						 wg.SpreadsheetsRenderer.defaultFormatter_);
+						 wg.SpreadsheetRenderer.defaultFormatter_);
   }
   for(row = 0 ; row < numRows ; ++row) {
 	values = {}; htmlValues = {};
