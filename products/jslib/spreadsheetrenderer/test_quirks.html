@@ -1,0 +1,208 @@
+<html>
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+  <script type="text/javascript">
+	google.load("visualization", "1");
+  </script>
+  <script type="text/javascript" src="spreadsheetrenderer.js"></script>
+  <style type="text/css">
+	table { border-collapse: collapse; margin-bottom: 1em; }
+	td { border: solid 1px black; font-size: 10px; }
+	.col { float:left; }
+  </style>
+</head>
+
+<body>
+  <div class="col">
+	<table>
+	  <caption>default</caption>
+	  <tbody id="t11"></tbody>
+	</table>
+
+	<table>
+	  <caption>setTemplate</caption>
+	  <tbody id="t12"></tbody>
+	</table>
+
+	<table>
+	  <caption>formatter</caption>
+	  <tbody id="t13"></tbody>
+	</table>
+
+	<table>
+	  <caption>setFormatter</caption>
+	  <tbody id="t14"></tbody>
+	</table>
+
+	<table>
+	  <caption>custom renderer</caption>
+	  <tbody id="t15"></tbody>
+	</table>
+  </div>
+
+  <div class="col">
+	<table>
+	  <caption>default</caption>
+	  <tbody id="t21"></tbody>
+	</table>
+
+	<table>
+	  <caption>setTemplate</caption>
+	  <tbody id="t22"></tbody>
+	</table>
+
+	<table>
+	  <caption>formatter</caption>
+	  <tbody id="t23"></tbody>
+	</table>
+
+	<table>
+	  <caption>setFormatter</caption>
+	  <tbody id="t24"></tbody>
+	</table>
+
+	<table>
+	  <caption>custom renderer</caption>
+	  <tbody id="t25"></tbody>
+	</table>
+  </div>
+
+  <div class="col">
+	<table>
+	  <caption>default</caption>
+	  <tbody id="t31"></tbody>
+	</table>
+
+	<table>
+	  <caption>setTemplate</caption>
+	  <tbody id="t32"></tbody>
+	</table>
+
+	<table>
+	  <caption>formatter</caption>
+	  <tbody id="t33"></tbody>
+	</table>
+
+	<table>
+	  <caption>setFormatter</caption>
+	  <tbody id="t34"></tbody>
+	</table>
+
+	<table>
+	  <caption>custom renderer</caption>
+	  <tbody id="t35"></tbody>
+	</table>
+  </div>
+
+  <p id="globals"></p>
+
+  <script type="text/javascript">
+  google.setOnLoadCallback(function() {
+    var template = '<tr><td>%県コード%</td><td>%1%</td><td>%2%</td></tr>';
+    var renderer = new SpreadsheetRenderer({
+      key: '0Ao0lgngMECUtdGpHVW8xNGs1UjJIWkU3NWg1TXRQWEE',
+      template: template
+    });
+    renderer.render('select * limit 5', 't11');
+
+    var renderer = new SpreadsheetRenderer({
+      key: '0Ao0lgngMECUtdGpHVW8xNGs1UjJIWkU3NWg1TXRQWEE', gid: 0
+    });
+    renderer.setTemplate(template);
+    renderer.render('select * limit 5', 't12');
+
+    var formatter = { '県コード': function(value, rawValue){ return 'No.'+value; } };
+    var renderer = new SpreadsheetRenderer({
+      key: '0Ao0lgngMECUtdGpHVW8xNGs1UjJIWkU3NWg1TXRQWEE', sheet: '県コード表',
+      template: template,
+      formatter: formatter
+    });
+    renderer.render('select * limit 5', 't13');
+
+    var renderer = new SpreadsheetRenderer({
+      key: '0Ao0lgngMECUtdGpHVW8xNGs1UjJIWkU3NWg1TXRQWEE',
+    });
+    renderer.setTemplate(template);
+    renderer.setFormatter(formatter);
+    renderer.render('select * limit 5', 't14');
+
+    var renderer = new SpreadsheetRenderer(
+      { key: '0Ao0lgngMECUtdGpHVW8xNGs1UjJIWkU3NWg1TXRQWEE' },
+      { template: template, formatter: formatter });
+    renderer.setTemplate(template);
+    renderer.setFormatter(formatter);
+    renderer.render('select * limit 5', function(html, table) {
+      document.getElementById('t15').innerHTML = html.join('');
+    });
+
+
+    var url = 'http://spreadsheets.google.com/tq?key=0Ao0lgngMECUtdGpHVW8xNGs1UjJIWkU3NWg1TXRQWEE&gid=0&pub=1';
+    var renderer = new SpreadsheetRenderer(url, { template: template });
+    renderer.render('select * limit 5', 't21');
+
+    var renderer = new SpreadsheetRenderer(url);
+    renderer.setTemplate(template);
+    renderer.render('select * limit 5', 't22');
+
+    var renderer = new SpreadsheetRenderer(url, { template: template, formatter: formatter });
+    renderer.render('select * limit 5', 't23');
+
+    var renderer = new SpreadsheetRenderer(url);
+    renderer.setTemplate(template);
+    renderer.setFormatter(formatter);
+    renderer.render('select * limit 5', 't24');
+
+    var renderer = new SpreadsheetRenderer(url);
+    renderer.setTemplate(template);
+    renderer.setFormatter(formatter);
+    renderer.render('select * limit 5', function(html, table) {
+      document.getElementById('t25').innerHTML = html.join('');
+    });
+
+
+    var renderer = new SpreadsheetRenderer({
+      key: '0Ao0lgngMECUtdHdkQzdFSkQyVE9mNmhDYU5TajBFTFE',
+      domain: 'webos-goodies.jp', pub: false,
+      template: template
+    });
+    renderer.render('select * limit 5', 't31');
+
+    var renderer = new SpreadsheetRenderer({
+      key: '0Ao0lgngMECUtdHdkQzdFSkQyVE9mNmhDYU5TajBFTFE',
+      domain: 'webos-goodies.jp', pub: false
+    });
+    renderer.setTemplate(template);
+    renderer.render('select * limit 5', 't32');
+
+    var renderer = new SpreadsheetRenderer({
+      key: '0Ao0lgngMECUtdHdkQzdFSkQyVE9mNmhDYU5TajBFTFE',
+      domain: 'webos-goodies.jp', pub: false,
+      template: template,
+      formatter: formatter
+    });
+    renderer.render('select * limit 5', 't33');
+
+    var renderer = new SpreadsheetRenderer({
+      key: '0Ao0lgngMECUtdHdkQzdFSkQyVE9mNmhDYU5TajBFTFE',
+      domain: 'webos-goodies.jp', pub: false
+    });
+    renderer.setTemplate(template);
+    renderer.setFormatter(formatter);
+    renderer.render('select * limit 5', 't34');
+
+    var renderer = new SpreadsheetRenderer(
+      { key: '0Ao0lgngMECUtdHdkQzdFSkQyVE9mNmhDYU5TajBFTFE',
+        domain: 'webos-goodies.jp', pub: false },
+      { template: template, formatter: formatter });
+    renderer.setTemplate(template);
+    renderer.setFormatter(formatter);
+    renderer.render('select * limit 5', function(html, table) {
+      document.getElementById('t35').innerHTML = html.join('');
+    });
+  })
+  </script>
+</body>
+
+</html>

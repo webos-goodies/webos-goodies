@@ -1,0 +1,29 @@
+# -*- mode:ruby -*-
+
+RAILS_ROOT      = File.expand_path('../../../cms/rails')
+CLOSURE_LIB_DIR = File.join(RAILS_ROOT, 'public/javascripts/closure')
+WG_LIB_DIR      = File.join(RAILS_ROOT, 'public/javascripts/wg')
+PYTHON          = 'python'
+CALCDEPS        = File.join(CLOSURE_LIB_DIR, 'bin/calcdeps.py')
+COMPILER        = File.expand_path('~/lib/closure-compiler/compiler.jar')
+JSFILES         = FileList['*-debug.js']
+EXTERNS         = File.join(RAILS_ROOT, 'public/javascripts/externs.js')
+
+task :default => :compile
+
+task :compile do
+  JSFILES.each do |sname|
+    dname = sname.sub(/-debug\.js$/, '.js')
+    cmd   = ["#{PYTHON} #{CALCDEPS} -o compiled -c #{COMPILER} -i #{sname}",
+             "-p #{CLOSURE_LIB_DIR}/goog -p #{WG_LIB_DIR}",
+             "-f \"--compilation_level=ADVANCED_OPTIMIZATIONS\"",
+             "-f \"--externs=#{EXTERNS}\"",
+             ENV['PRETTY_PRINT'] ? "-f \"--formatting=PRETTY_PRINT\"" : '',
+             "-f \"--define=goog.DEBUG=false\""].join(' ')
+    print cmd, "\n"
+    code  = ['(function(){', `#{cmd}`, '})();'].join('')
+    File.open(dname, 'w') do |file|
+      file.write(code)
+    end
+  end
+end

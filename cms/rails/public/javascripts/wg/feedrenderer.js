@@ -97,6 +97,6 @@ wg.FeedRenderer.prototype.render = function(source, element_or_function, options
   });
   goog.dom.appendChild(document.body, goog.dom.createDom('script', {
 	'type': 'text/javascript',
-	'src':  goog.string.buildString.apply(goog.string.buildString, url)
+	'src':  goog.string.buildString.apply(null, url)
   }));
 };

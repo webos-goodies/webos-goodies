@@ -10,18 +10,23 @@ wg.SpreadsheetRenderer = function(source, opt_params) {
   opt_params = opt_params || {};
   var url    = source;
   if(typeof url != 'string') {
-	var key    = source['key'];
-	var domain = source['domain'] || '';
-	var pub    = ('pub' in source) && !goog.isNull(source['pub']) ? source['pub'] : 1;
+	var key = source['key'];
+	var pub = source['pub'] === false ? false : true;
 	if(!key)
-	  throw this.makeMsg('The "key" parameter is required.');
-	if(domain && pub == 0)
-	  domain = '/a/' + goog.string.urlEncode(domain);
-	url = goog.string.buildString('http://spreadsheets.google.com',
-								  domain,
-								  '/tq?key=', goog.string.urlEncode(key),
-								  '&gid=',    goog.string.urlEncode(source['gid'] || 0),
-								  '&pub=',    goog.string.urlEncode(pub));
+	  throw wg.SpreadsheetRenderer.makeMsg('The "key" parameter is required.');
+	url = [(pub ? 'http' : 'https'), '://spreadsheets.google.com'];
+	if(source['domain'] && !pub)
+	  url.push('/a/', goog.string.urlEncode(source['domain']));
+	url.push('/tq?key=', goog.string.urlEncode(key));
+	if(source['sheet'])
+	  url.push('&sheet=', goog.string.urlEncode(source['sheet']));
+	else
+	  url.push('&gid=', goog.string.urlEncode(source['gid'] || 0));
+	if(goog.isNumber(source['headers']))
+	  url.push('&headers=', source['headers']);
+	if(pub)
+	  url.push('&pub=1');
+	url = goog.string.buildString.apply(null, url);
 	var params = {};
 	goog.mixin(params, source);
 	goog.mixin(params, opt_params);
@@ -34,7 +39,7 @@ wg.SpreadsheetRenderer = function(source, opt_params) {
 wg.SpreadsheetRenderer.defaultFormatter_ = function(value, rawValue, values) {
   return goog.string.htmlEscape('' + value);
 };
-wg.SpreadsheetRenderer.prototype.makeMsg = function(msg) {
+wg.SpreadsheetRenderer.makeMsg = function(msg) {
   return 'SpreadsheetRenderer : ' + msg;
 };
 wg.SpreadsheetRenderer.prototype.setTemplate = function(template) {
@@ -48,8 +53,8 @@ wg.SpreadsheetRenderer.prototype.render = function(query, element_or_function) {
   this.query_.send(goog.bind(this.renderResponse_, this, element_or_function));
 };
 wg.SpreadsheetRenderer.prototype.renderResponse_ = function(element_or_function, response) {
-  if(!response)          throw this.makeMsg("Null response.");
-  if(response.isError()) throw this.makeMsg(this.getMessage());
+  if(!response)          throw wg.SpreadsheetRenderer.makeMsg("Null response.");
+  if(response.isError()) throw wg.SpreadsheetRenderer.makeMsg(response.getMessage());
   var table      = response.getDataTable();
   var numColumns = table.getNumberOfColumns();
   var numRows    = table.getNumberOfRows();

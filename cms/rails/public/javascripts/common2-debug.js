@@ -96,7 +96,7 @@ template['generateRelatedLinks'] = function(json, root) {
 	['<h1><a href="', catURL, '">', json['c'], '</a></h1><ul>'],
 	html,
 	['</ul><div class="morecategory"><a href="', catURL, '">&gt;&gt; もっと読む</a></div>']);
-  html = goog.string.buildString.apply(goog.string.buildString, html)
+  html = goog.string.buildString.apply(null, html)
   return goog.dom.htmlToDocumentFragment(html);
 }
 
