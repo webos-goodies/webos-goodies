@@ -89,7 +89,7 @@ wg.FeedRenderer.prototype.render = function(source, element_or_function, options
   if(key)
 	url = goog.array.concat(url, ['&key=', goog.string.urlEncode(key)]);
   if(scoring)
-	url = goog.array.concat(url, ['&scoring=', goog.string.urlEncoded(scoring)]);
+	url = goog.array.concat(url, ['&scoring=', goog.string.urlEncode(scoring)]);
   this.requests_.push({
 	element:   element_or_function,
 	template:  this.template_,

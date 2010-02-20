@@ -36,6 +36,11 @@
 	<tbody id="t5"></tbody>
   </table>
 
+  <table>
+	<caption>scoring</caption>
+	<tbody id="t6"></tbody>
+  </table>
+
   <p id="globals"></p>
 
   <script type="text/javascript">
@@ -54,7 +59,7 @@
 	renderer = new FeedRenderer();
 	renderer.setTemplate(template);
 	renderer.setFormatter(formatter);
-	renderer.render('http://webos-goodies.jp/atom.xml', 't4', 8);
+	renderer.render('http://webos-goodies.jp/atom.xml', 't4', { num: 8 });
 
     renderer.setTemplate('<td>%title%</td><td>%link%</td><td>%contentSnippet%</td>');
 	renderer.render('http://webos-goodies.jp/atom.xml', function(html, entry) {
@@ -63,6 +68,10 @@
 	  }
 	  document.getElementById('t5').innerHTML = html.join('');
 	}, 8);
+
+	renderer = new FeedRenderer();
+	renderer.setTemplate(template);
+	renderer.render('http://webos-goodies.jp/atom.xml', 't6', { num: 20, scoring: 'h' });
   </script>
 </body>
 
