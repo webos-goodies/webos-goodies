@@ -9,6 +9,7 @@ class ArticlesController < ApplicationController
     parser    = [*params[:parser]]
     @html     = parser.include?('html')
     @livedoor = parser.include?('livedoor')
+    @html = @livedoor = true if !@html && !@livedoor
     query = { :order => "coalesce(publish_date, date('now')) DESC, id DESC" }
     s     = []
     p     = {}

@@ -200,7 +200,7 @@ template.addWindowEvent('ready', function() {
 
   // recent articles
   renderer.setTemplate('<a class="sidebody" href="%link%">%title%</a>');
-  renderer.render('http://webos-goodies.jp/atom.xml', 'tpl_recent_articles', 8);
+  renderer.render('http://webos-goodies.jp/atom.xml', 'tpl_recent_articles', { 'num': 8 });
 
   // buzz
   renderer.setTemplate(goog.string.buildString(
@@ -208,5 +208,5 @@ template.addWindowEvent('ready', function() {
 	'<span class="tpl-buzz-date">%publishedDate%</span></a>'));
   renderer.setFormatter(buzzFormatter);
   renderer.render('http://buzz.googleapis.com/feeds/113438044941105226764/public/posted',
-				  'tpl_buzz', 16);
+				  'tpl_buzz', { 'num': 16 });
 });

@@ -72,21 +72,24 @@ wg.FeedRenderer.prototype.setFormatter = function(formatter) {
   this.formatter_ = formatter;
 };
 
-wg.FeedRenderer.prototype.render = function(source, element_or_function, opt_maxEntries) {
+wg.FeedRenderer.prototype.render = function(source, element_or_function, options) {
   if(!this.template_)
 	throw this.makeMsg('The template string must be set.');
   if(!this.callback_)
 	throw this.makeMsg('The callback name must be set.');
+  options = options || {};
   var url = [
 	'http://ajax.googleapis.com/ajax/services/feed/load?v=1.0&output=json&callback=',
 	goog.string.urlEncode(this.callback_),
 	'&q=', goog.string.urlEncode(source),
 	'&context=', this.requests_.length];
-  var num = opt_maxEntries, key = this.key_;
+  var num = options['num'], scoring = options['scoring'], key = this.key_;
   if(num)
 	url = goog.array.concat(url, ['&num=', goog.string.urlEncode(num)]);
   if(key)
 	url = goog.array.concat(url, ['&key=', goog.string.urlEncode(key)]);
+  if(scoring)
+	url = goog.array.concat(url, ['&scoring=', goog.string.urlEncoded(scoring)]);
   this.requests_.push({
 	element:   element_or_function,
 	template:  this.template_,
