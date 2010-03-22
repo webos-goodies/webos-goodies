@@ -50,7 +50,7 @@ function initVertices() {
     gl.bufferData(gl.ARRAY_BUFFER, new WebGLFloatArray(data), gl.STATIC_DRAW);
     return vbuffer;
   });
-  gl.bindBuffer(gl.ARRAY_BUFFER, 0);
+  gl.bindBuffer(gl.ARRAY_BUFFER, null);
 }
 
 function initIndices() {
@@ -69,7 +69,7 @@ function initIndices() {
   ibuffer = gl.createBuffer();
   gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, ibuffer);
   gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new WebGLShortArray(indices), gl.STATIC_DRAW);
-  gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, 0);
+  gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, null);
 
   // インデックスの数を保存しておく
   numIndices = indices.length;
