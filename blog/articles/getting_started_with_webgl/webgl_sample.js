@@ -86,7 +86,7 @@ function initTexture() {
     gl.bindTexture(gl.TEXTURE_2D, texture);
     gl.texImage2D(gl.TEXTURE_2D, 0, image);
     gl.generateMipmap(gl.TEXTURE_2D);
-    gl.bindTexture(gl.TEXTURE_2D, 0);
+    gl.bindTexture(gl.TEXTURE_2D, null);
   }
 
   // 画像の読み込みを開始
