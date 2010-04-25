@@ -52,19 +52,18 @@ namespace :upload do
     site         = Site.find(ENV['SITE'].strip.to_i)
     ftp_path     = site.ftp_path
     article_path = site.article_path
-    articles = site.articles.find(:all, :conditions => { :published => true }).map do |article|
-      { :id => article.id, :page_name => article.page_name }
+    articles = site.articles.find(:all, :conditions => { :published => true })
     cmd = File.join(RAILS_ROOT, 'script/app/show_article')
-    end
     Net::FTP.open(site.ftp_host, site.ftp_user, site.ftp_password) do |ftp|
       ftp.passive = true
       articles.each do |article|
         article.publish
         article.save(false)
-        $stdout << "uploading article #{article[:id]}...\n"
-        html = `#{cmd} #{id}`
+        $stdout << "uploading article #{article.id}...\n"
+        html = `#{cmd} #{article.id}`
         path = File.join(ftp_path, article_path, article[:page_name] + '.html')
         ftp.putbinarystring(html, path)
+        sleep(5)
       end
     end
   end

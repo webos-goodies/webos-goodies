@@ -43,6 +43,10 @@ class Article < ActiveRecord::Base
 
   def prettify?() @prettify end
 
+  def has_short_url?()
+    !self.short_url.blank? && /^http:\/\/bit\.ly\// === self.short_url
+  end
+
   def publish
     self.published      = true
     self.publish_date ||= DateTime.now
@@ -52,12 +56,13 @@ class Article < ActiveRecord::Base
   def shorten_url
     user   = self.site.bitly_user
     apikey = self.site.bitly_apikey
-    if self.short_url.blank? && !user.blank? && !apikey.blank?
+    if !self.has_short_url? && !user.blank? && !apikey.blank?
       url = ERB::Util.u(self.url)
       Net::HTTP.start('api.bit.ly', 80) do |http|
         response = http.get("/v3/shorten?login=#{user}&apiKey=#{apikey}&uri=#{url}&format=txt")
         self.short_url = response.body
       end
+      raise "failed to shorten the url." unless self.has_short_url?
     end
   end
 
