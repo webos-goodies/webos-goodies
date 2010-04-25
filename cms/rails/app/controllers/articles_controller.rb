@@ -73,23 +73,14 @@ class ArticlesController < ApplicationController
   end
 
   def publish
-    @article = load_article(params[:site_id], params[:id]) || return
-    @site    = @article.site
-    first    = !@article.published
-    @article.published      = true
-    @article.publish_date ||= DateTime.now
-    @article.save(false)
+    id      = params[:id].strip.to_i
+    site_id = params[:site_id].strip.to_i
     Dir.chdir(RAILS_ROOT) do
-      external_command("rake upload:single_article ARTICLE=#{@article.id}")
-      external_command("rake upload:indices SITE=#{@site.id}")
+      external_command("rake upload:single_article ARTICLE=#{id}")
+      external_command("rake upload:indices SITE=#{site_id}")
     end
-    if first
-      @site.ping_servers.each_line do |server|
-        server = server.strip
-        send_ping(server, @article.full_title, @article.url) unless server.blank?
-      end
-    end
-    @article.upload_googledocs
+    @article = load_article(site_id, id) || return
+    @site    = @article.site
     redirect_to(site_article_path(@site.id, @article.id))
   end
 
@@ -107,16 +98,6 @@ class ArticlesController < ApplicationController
 
   def external_command(cmd)
     raise "External command failed : #{cmd}" unless system(cmd)
-  end
-
-  def send_ping(server, title, url)
-    logger.info('sending ping to ' + server)
-    client   = XMLRPC::Client.new2(server)
-    response = client.call("weblogUpdates.ping", title, url)
-    logger.info(response.inspect)
-    response
-  rescue
-    logger.error('sending ping to ' + server + ' failed.')
   end
 
 end

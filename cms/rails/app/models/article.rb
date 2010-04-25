@@ -1,6 +1,6 @@
 class Article < ActiveRecord::Base
   belongs_to     :site
-  attr_protected :id, :created_at, :updated_at, :site_id, :site, :published
+  attr_protected :id, :created_at, :updated_at, :site_id, :site, :published, :short_url
 
   AVAILABLE_PARSERS = Parser::Base.all_parsers.map{|k| k.name }
 
@@ -43,42 +43,22 @@ class Article < ActiveRecord::Base
 
   def prettify?() @prettify end
 
-  def upload_googledocs(cache = {})
-    return nil if self.site.google_account.blank? || self.site.google_password.blank?
-    article_list_cache = cache[:article_list] || {}
-    if self.site.article_list_key
-      opts = {
-        :user         => self.site.google_account,
-        :password     => self.site.google_password,
-        :document_id  => self.site.article_list_key,
-        :worksheet_id => article_list_cache[:worksheet_id],
-        :visibility   => 'private',
-        :projection   => 'full'
-      }
-      unless opts[:worksheet_id]
-        sheet = GData::Spreadsheets::Worksheet.generate_subclass(opts).find(:first)
-        opts[:worksheet_id] = sheet.id if sheet
+  def publish
+    self.published      = true
+    self.publish_date ||= DateTime.now
+    self.shorten_url
+  end
+
+  def shorten_url
+    user   = self.site.bitly_user
+    apikey = self.site.bitly_apikey
+    if self.short_url.blank? && !user.blank? && !apikey.blank?
+      url = ERB::Util.u(self.url)
+      Net::HTTP.start('api.bit.ly', 80) do |http|
+        response = http.get("/v3/shorten?login=#{user}&apiKey=#{apikey}&uri=#{url}&format=txt")
+        self.short_url = response.body
       end
-      if opts[:worksheet_id]
-        klass = article_list_cache[:list_class] || GData::Spreadsheets::List.generate_subclass(opts)
-        page  = ERB::Util.h(self.page_name)
-        rows  = (article_list_cache[:rows] ?
-                 article_list_cache[:rows].select{|r| r.gsx_pagename == page } :
-                 klass.find(:all, :params => { :sq => %(pagename="#{page}") }))
-        rows << klass.new if rows.empty?
-        (rows[1..-1]||[]).each{|r| r.destroy }
-        rows[0].gsx_pagename = self.page_name
-        rows[0].gsx_title    = self.title
-        rows[0].save
-      end
-      article_list_cache = {
-        :document_id  => opts[:document_id],
-        :worksheet_id => opts[:worksheet_id],
-        :list_class   => klass,
-        :rows         => article_list_cache[:rows]
-      }
     end
-    { :article_list => article_list_cache }
   end
 
   private

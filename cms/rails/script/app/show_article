@@ -1,0 +1,15 @@
+#!/usr/bin/env /Users/ito/projects/webos-goodies/cms/rails/script/runner
+# -*- mode:ruby -*-
+
+require 'action_controller/integration'
+require File.join(RAILS_ROOT, 'app/controllers/articles_controller')
+
+if ARGV.length < 1
+  print "usage: show_article <article id>\n"
+else
+  id      = ARGV[0].strip.to_i
+  session = ActionController::Integration::Session.new
+  status  = session.get("/preview/article/#{id}")
+  raise "request failed :\n#{session.response.body}" unless status == 200
+  print session.response.body
+end

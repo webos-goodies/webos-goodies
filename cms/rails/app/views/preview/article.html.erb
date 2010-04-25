@@ -28,6 +28,10 @@ function tplRegistCategory(json)
 <div class="article">
 
 <div class="article_head"><h1 class="title"><%= h(@article.title) %></h1></div>
+<div class="tpl_share_buttons">
+  <a class="tpl_retweet_button" target="blank_" href="http://twitter.com/home/?status=<%= h(u(@article.full_title)) %>%20<%= h(u(@article.short_url)) %>"><img src="<%=h(@site.full_url('/template/imgs/share/tweetthis.png'))%>"></a>
+  <iframe src="http://www.facebook.com/plugins/like.php?href=<%= h(u(@article.url)) %>&amp;layout=standard&amp;show_faces=false&amp;width=300&amp;action=like&amp;colorscheme=light" scrolling="no" frameborder="0" allowTransparency="true" style="border:none; overflow:hidden; width:300px; height:24px"></iframe>
+</div>
 <div class="article_body"><%= @article.formatted_body1 %></div>
 <a name="more"></a>
 <% unless @article.formatted_body2.empty? -%>
@@ -66,7 +70,7 @@ function tplRegistCategory(json)
 <h1>トラックバックURL</h1>
 <div class="trackback_form">
 <!-- <input type="text" value="$ArticleTrackBackUrl$" /> -->
-<div class="notice">※現在、トラックバックの受け付けは中止しております。ご了承ください。</div>
+<div class="notice">※システムの都合によりトラックバックの受け付けは中止しております。</div>
 </div>
 <a name="trackback"></a>
 <div id="tpl_trackbacks"></div>

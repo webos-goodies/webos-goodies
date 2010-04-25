@@ -12,6 +12,9 @@
   <dt>Page name</dt>
   <dd><%= h(@article.page_name) %></dd>
 
+  <dt>Short URL</dt>
+  <dd><%= h(@article.short_url) %></dd>
+
   <dt>Parser</dt>
   <dd><%= h(@article.parser.constantize::Label) %></dd>
 

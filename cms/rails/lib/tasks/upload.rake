@@ -33,16 +33,17 @@ namespace :upload do
   task :single_article => :setup do
     raise 'Please set ENV["ARTICLE"].' if (ENV['ARTICLE']||'').strip.blank?
     id      = ENV['ARTICLE'].strip.to_i
-    session = ActionController::Integration::Session.new
-    status  = session.get("/preview/article/#{id}")
-    raise "request failed :\n#{session.response.body}" unless status == 200
     article = Article.find_by_id(id)
+    site    = article.site
+    cmd     = File.join(RAILS_ROOT, 'script/app/show_article')
     raise "article #{id} was not found." unless article
-    site = article.site
+    article.publish
+    article.save(false)
+    html = `#{cmd} #{id}`
+    path = File.join(site.ftp_path, site.article_path, article[:page_name] + '.html')
     Net::FTP.open(site.ftp_host, site.ftp_user, site.ftp_password) do |ftp|
       ftp.passive = true
-      ftp.putbinarystring(session.response.body,
-                          File.join(site.ftp_path, site.article_path, article[:page_name] + '.html'))
+      ftp.putbinarystring(html, path)
     end
   end
 
@@ -53,16 +54,17 @@ namespace :upload do
     article_path = site.article_path
     articles = site.articles.find(:all, :conditions => { :published => true }).map do |article|
       { :id => article.id, :page_name => article.page_name }
+    cmd = File.join(RAILS_ROOT, 'script/app/show_article')
     end
-    session = ActionController::Integration::Session.new
     Net::FTP.open(site.ftp_host, site.ftp_user, site.ftp_password) do |ftp|
       ftp.passive = true
       articles.each do |article|
+        article.publish
+        article.save(false)
         $stdout << "uploading article #{article[:id]}...\n"
-        status = session.get("/preview/article/#{article[:id]}")
-        raise "request failed :\n#{session.response.body}" unless status == 200
-        ftp.putbinarystring(session.response.body,
-                            File.join(ftp_path, article_path, article[:page_name] + '.html'))
+        html = `#{cmd} #{id}`
+        path = File.join(ftp_path, article_path, article[:page_name] + '.html')
+        ftp.putbinarystring(html, path)
       end
     end
   end
