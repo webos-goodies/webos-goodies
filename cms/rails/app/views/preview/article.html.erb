@@ -29,7 +29,7 @@ function tplRegistCategory(json)
 
 <div class="article_head"><h1 class="title"><%= h(@article.title) %></h1></div>
 <div class="tpl_share_buttons">
-  <a class="tpl_retweet_button" target="blank_" href="http://twitter.com/home/?status=<%= h(u(@article.full_title)) %>%20<%= h(u(@article.short_url)) %>"><img src="<%=h(@site.full_url('/template/imgs/share/tweetthis.png'))%>"></a>
+  <a class="tpl_tweet_button" target="blank_" href="http://twitter.com/home/?status=<%= h(u(@article.full_title)) %>%20<%= h(u(@article.short_url)) %>"></a>
   <iframe src="http://www.facebook.com/plugins/like.php?href=<%= h(u(@article.url)) %>&amp;layout=standard&amp;show_faces=false&amp;width=300&amp;action=like&amp;colorscheme=light" scrolling="no" frameborder="0" allowTransparency="true" style="border:none; overflow:hidden; width:300px; height:24px"></iframe>
 </div>
 <div class="article_body"><%= @article.formatted_body1 %></div>

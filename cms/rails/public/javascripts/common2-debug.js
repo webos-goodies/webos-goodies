@@ -1,8 +1,8 @@
-goog.require('goog.dom');
 goog.require('goog.string');
 goog.require('goog.array');
 goog.require('goog.date.relative');
 goog.require('goog.i18n.DateTimeFormat');
+goog.require('goog.dom');
 goog.require('wg.FeedRenderer');
 goog.require('wg.SpreadsheetRenderer');
 
@@ -209,4 +209,18 @@ template.addWindowEvent('ready', function() {
   renderer.setFormatter(buzzFormatter);
   renderer.render('http://buzz.googleapis.com/feeds/113438044941105226764/public/posted',
 				  'tpl_buzz', { 'num': 16 });
+});
+
+
+//----------------------------------------------------------
+// show recent articles and buzz.
+//----------------------------------------------------------
+
+template.addWindowEvent('ready', function() {
+  var parent = goog.dom.$('tpl_recommendations');
+  if(parent) {
+	var width  = parent.clientWidth;
+	var height = parent.clientHeight;
+	parent.innerHTML = '<iframe src="http://www.facebook.com/plugins/recommendations.php?site=webos-goodies.jp&amp;width='+width+'&amp;height='+height+'&amp;header=true&amp;border_color=%2523cdcdcd" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:'+width+'px; height:'+height+'px;" allowTransparency="true"></iframe>';
+  }
 });
