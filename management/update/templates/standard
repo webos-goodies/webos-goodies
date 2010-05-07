@@ -34,13 +34,14 @@
 
 <div class="rights"></div>
 <div id="search">
-<form id="searchbox_011600946954025377643:3gub1bav68w" class="search" method="GET" action="http://google.com/cse">
+<form id="searchbox_011600946954025377643:3gub1bav68w" class="search" method="GET" action="http://google.com/cse" onsubmit="return false;">
 <p>
 <input class="text" name="q" type="text" id="keywords" />
 <input class="searchbutton" name="submit" type="submit" value="Search" />
 </p>
 <input type="hidden" name="cx" value="011600946954025377643:3gub1bav68w" />
 <input type="hidden" name="cof" value="FORID:0" />
+<input type="hidden" name="hl" value="ja" />
 <input type="hidden" name="ie" value="UTF-8" />
 </form>
 </div><!-- search -->
@@ -48,7 +49,7 @@
 <script src="http://www.google.com/coop/cse/brand?form=searchbox_011600946954025377643:3gub1bav68w"></script>
 
 <div id="results_011600946954025377643:3gub1bav68w" style="display:none">
-  <div class="cse-closeResults"> 
+  <div class="cse-closeResults">
     <a>&times; close</a>
   </div>
   <div class="cse-resultsContainer"></div>
@@ -84,7 +85,7 @@ GSearch.setOnLoadCallback(OnLoad);
 </ul></div>
 </div>
 
-<script type="text/javascript">template.oldSite();</script>
+<div id="tpl_old_site_notification"></div>
 
 <div id="subheader">
 <div class="text">
