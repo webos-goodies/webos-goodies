@@ -119,6 +119,8 @@ WebOS はインターネットの未来形。あらゆる Web サイトが繋が
 <div id="rightside">
 <div id="rightside-wrap">
 
+<div id="tpl_recommendations"></div>
+
 <div class="sidetitlebody">
   <div class="sidetitle">Categories</div>
 </div>
