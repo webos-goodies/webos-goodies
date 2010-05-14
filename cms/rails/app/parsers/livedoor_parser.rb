@@ -239,9 +239,7 @@ class LivedoorParser < Parser::Base
     parser = LivedoorWikiParser.new
     doc    = parser.parse(documents.map{|s| (s||'').to_s.strip + "\n"})
     self.set_meta('prettify', parser.prettify?)
-    WikiParser::HtmlFormatter.new.format(doc).map do |html|
-      %(<div class="dokuwiki">\n#{html}\n</div>)
-    end
+    WikiParser::HtmlFormatter.new.format(doc)
   end
 
 end

@@ -72,6 +72,12 @@ class Article < ActiveRecord::Base
     parser  = Parser::Base.find(self.parser).new
     @formatted_body1, @formatted_body2 = parser.parse(self.body1||'', self.body2||'')
     @prettify = parser.get_meta('prettify')
+
+    eyecatch =
+      self.image.blank? ? '' :
+      %(<div class="eyecatch_image"><img src="#{ERB::Util.h(self.image)}"></div>)
+    @formatted_body1 = %(<div class="dokuwiki">\n#{eyecatch}\n#{@formatted_body1}\n</div>)
+    @formatted_body2 = %(<div class="dokuwiki">\n#{@formatted_body2}\n</div>)
   end
 
 end
