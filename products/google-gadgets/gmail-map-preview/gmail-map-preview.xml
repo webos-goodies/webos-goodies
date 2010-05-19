@@ -33,6 +33,7 @@
   document.getElementById('imagelist').appendChild(parent);
 
   function imageLoaded() {
+    console.log(numLoaded);
     numLoaded += 1;
     if(numLoaded >= matches.length)
 	  gadgets.window.adjustHeight();
