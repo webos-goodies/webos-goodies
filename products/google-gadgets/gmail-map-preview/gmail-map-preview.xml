@@ -2,7 +2,7 @@
 <Module>
   <ModulePrefs title="Gmail Map Preview"
 			   description="Show previews of links to Google Maps."
-			   height="120"
+			   height="100"
 			   author="WebOS Goodies"
 			   author_email="support@webos-goodies.jp"
 			   author_location="Tokyo, Japan">
@@ -16,56 +16,28 @@
   <!-- type="html", view="card" に固定 -->
   <Content type="html" view="card">
     <![CDATA[
-<div id="map_canvas"></div>
-<!--
-<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
+
+<div id="imagelist"></div>
+
 <script type="text/javascript">
-  function showMap(results, status) {
-    var div = document.getElementById('map_canvas');
-    if(status != google.maps.GeocoderStatus.OK)
-      div.innerHTML = '住所から座標への変換に失敗しました。';
+  var matches   = google.contentmatch.getContentMatches();
+  var parent    = document.createDocumentFragment();
+  var numLoaded = 0;
 
-    // 地図を表示
-    var myOptions = {
-      zoom:      16,
-      center:    results[0].geometry.location,
-      mapTypeId: google.maps.MapTypeId.ROADMAP
-    };
-    var map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+  for(var i = 0 ; i < matches.length ; ++i) {
+    var img    = document.createElement('IMG');
+    img.onload = imageLoaded;
+    img.src    = matches[i].url;
+    parent.appendChild(img);
   }
+  document.getElementById('imagelist').appendChild(parent);
 
-  gadgets.util.registerOnLoadHandler(function() {
-    // 地図表示のサイズを算出
-    var width = gadgets.window.getViewportDimensions().width;
-    var div   = document.getElementById('map_canvas');
-    div.style.width  = width + 'px'
-    div.style.height = (width * 0.8 | 0) + 'px';
-    gadgets.window.adjustHeight();
-
-    // 住所から座標を取得
-    var geocoder = new google.maps.Geocoder();
-    geocoder.geocode({ 'address': '東京都大田区池上3-37-13' }, showMap);
-  });
+  function imageLoaded() {
+    numLoaded += 1;
+    if(numLoaded >= matches.length)
+	  gadgets.window.adjustHeight(100);
+  }
 </script>
--->
-      <script type="text/javascript">
-
-        matches = google.contentmatch.getContentMatches();
-        var matchList = document.createElement('UL');
-        var listItem;
-        var extractedText;
-
-        for (var match in matches) {
-          for (var key in matches[match]) {
-            listItem = document.createElement('LI');
-            extractedText = document.createTextNode(key + ": " + matches[match][key]);
-            listItem.appendChild(extractedText);
-            matchList.appendChild(listItem);
-          }
-        }
-        document.body.appendChild(matchList);
-        gadgets.window.adjustHeight(100);
-      </script>
     ]]>
   </Content>
 </Module>

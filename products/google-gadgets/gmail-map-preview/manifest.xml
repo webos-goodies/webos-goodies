@@ -8,25 +8,23 @@
   </Support>
 
   <!-- アプリケーション名と説明 -->
-  <Name>Gmail Map Preview</Name>
-  <Description>Show Google Maps preview.</Description>
+  <Name>Picture Preview</Name>
+  <Description>Preview picture links.</Description>
 
 <!-- Extractorとフィルターの情報 -->
-<Extension id="MapLinkExtractor" type="contextExtractor">
+<Extension id="PictureLinkExtractor" type="contextExtractor">
 
   <!-- 人間が読める名前 -->
-  <Name>Gmail Map Preview</Name>
+  <Name>Picture Link Extractor</Name>
 
   <!-- 使用するExtractor -->
   <Url>google.com:HttpLinkExtractor</Url>
 
   <!-- フィルター -->
-  <!--
-  <Param name="host" value="maps\.google\.(com|co\.jp)"/>
-  -->
+  <Param name="url" value=".*\.(jpg|jpeg|png|gif)$"/>
 
   <!-- 表示するガジェット（ref属性はExtensionタグのid） -->
-  <Triggers ref="MapPreviewGadget"/>
+  <Triggers ref="PicturePreviewGadget"/>
 
   <!-- 必要なスコープ（ref属性はScopeタグのid） -->
   <Scope ref="emailSubject"/>
@@ -37,10 +35,10 @@
 </Extension>
 
 <!-- ガジェットの情報 -->
-<Extension id="MapPreviewGadget" type="gadget">
+<Extension id="PicturePreviewGadget" type="gadget">
 
   <!-- ガジェットの名前 -->
-  <Name>Gmail Map Preview contextual gadget</Name>
+  <Name>Gmail Picture Preview contextual gadget</Name>
 
   <!-- ガジェットXMLのURL -->
   <Url>http://webos-goodies.googlecode.com/svn/trunk/products/google-gadgets/gmail-map-preview/gmail-map-preview.xml</Url>
@@ -52,12 +50,12 @@
 <!-- スコープ（このアプリケーションが必要な権限） -->
 <Scope id="emailSubject">
   <Url>tag:google.com,2010:auth/contextual/extractor/SUBJECT</Url>
-  <Reason>This application searches the Subject: line of each email for the link to Google Maps</Reason>
+  <Reason>This application searches the Subject: line of each email for the link to pictures</Reason>
 </Scope>
 
 <Scope id="emailBody">
   <Url>tag:google.com,2010:auth/contextual/extractor/BODY</Url>
-  <Reason>This application searches the message body of each email for the link to Google Maps</Reason>
+  <Reason>This application searches the message body of each email for the link to pictures</Reason>
 </Scope>
 
 </ApplicationManifest>
