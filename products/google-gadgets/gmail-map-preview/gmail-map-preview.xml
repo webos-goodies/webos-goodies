@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Module>
-  <ModulePrefs title="Gmail Map Preview"
-			   description="Show previews of links to Google Maps."
+  <ModulePrefs title="Picture Preview"
+			   description="Picture previews."
 			   height="100"
 			   author="WebOS Goodies"
 			   author_email="support@webos-goodies.jp"
@@ -35,7 +35,7 @@
   function imageLoaded() {
     numLoaded += 1;
     if(numLoaded >= matches.length)
-	  gadgets.window.adjustHeight(100);
+	  gadgets.window.adjustHeight();
   }
 </script>
     ]]>
