@@ -4,7 +4,7 @@
   <!-- マーケットプレイスやコントロールパネルに表示されるサポート情報 -->
   <Support>
     <!-- カスタマーサポートのURL -->
-    <Link rel="support" href="http://example.com/google/support.php" />
+    <Link rel="support" href="http://groups.google.com/group/webos-goodies/" />
   </Support>
 
   <!-- アプリケーション名と説明 -->
@@ -21,7 +21,9 @@
   <Url>google.com:HttpLinkExtractor</Url>
 
   <!-- フィルター -->
+  <!--
   <Param name="host" value="maps\.google\.(com|co\.jp)"/>
+  -->
 
   <!-- 表示するガジェット（ref属性はExtensionタグのid） -->
   <Triggers ref="MapPreviewGadget"/>
@@ -35,10 +37,10 @@
 </Extension>
 
 <!-- ガジェットの情報 -->
-<Extension id="HelloWorldGadget" type="gadget">
+<Extension id="MapPreviewGadget" type="gadget">
 
   <!-- ガジェットの名前 -->
-  <Name>Gmail Map Preview</Name>
+  <Name>Gmail Map Preview contextual gadget</Name>
 
   <!-- ガジェットXMLのURL -->
   <Url>http://webos-goodies.googlecode.com/svn/trunk/products/google-gadgets/gmail-map-preview/gmail-map-preview.xml</Url>
