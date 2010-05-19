@@ -29,22 +29,18 @@
     var parent    = document.createDocumentFragment();
     var numLoaded = 0;
 
-    gadgets.util.registerOnLoadHandler(function() {
-      for(var i = 0 ; i < matches.length ; ++i) {
-        var img    = document.createElement('IMG');
-        img.onload = imageLoaded;
-        img.src    = matches[i].url;
-        parent.appendChild(img);
-      }
-      document.getElementById('imagelist').appendChild(parent);
-    });
+    for(var i = 0 ; i < matches.length ; ++i) {
+      var img    = document.createElement('IMG');
+      img.onload = imageLoaded;
+      img.src    = matches[i].url;
+      parent.appendChild(img);
+    }
+    document.getElementById('imagelist').appendChild(parent);
 
     function imageLoaded() {
       numLoaded += 1;
-      if(numLoaded >= matches.length) {
-        console.log('adjusted');
-  	  gadgets.window.adjustHeight();
-      }
+      if(numLoaded >= matches.length)
+        gadgets.window.adjustHeight();
     }
   })();
 </script>
