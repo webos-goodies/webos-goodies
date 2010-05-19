@@ -17,34 +17,36 @@
   <Content type="html" view="card">
     <![CDATA[
 
-<style type="text/stylesheet">
+<style type="text/css">
   #imagelist img { padding: 4px; }
 </style>
 
 <div id="imagelist"></div>
 
 <script type="text/javascript">
-  var matches   = google.contentmatch.getContentMatches();
-  var parent    = document.createDocumentFragment();
-  var numLoaded = 0;
+  (function () {
+    var matches   = google.contentmatch.getContentMatches();
+    var parent    = document.createDocumentFragment();
+    var numLoaded = 0;
 
-  gadgets.util.registerOnLoadHandler(function() {
-    for(var i = 0 ; i < matches.length ; ++i) {
-      var img    = document.createElement('IMG');
-      img.onload = imageLoaded;
-      img.src    = matches[i].url;
-      parent.appendChild(img);
-    }
-    document.getElementById('imagelist').appendChild(parent);
-  });
+    gadgets.util.registerOnLoadHandler(function() {
+      for(var i = 0 ; i < matches.length ; ++i) {
+        var img    = document.createElement('IMG');
+        img.onload = imageLoaded;
+        img.src    = matches[i].url;
+        parent.appendChild(img);
+      }
+      document.getElementById('imagelist').appendChild(parent);
+    });
 
-  function imageLoaded() {
-    numLoaded += 1;
-    if(numLoaded >= matches.length) {
-      console.log('adjusted');
-	  gadgets.window.adjustHeight();
+    function imageLoaded() {
+      numLoaded += 1;
+      if(numLoaded >= matches.length) {
+        console.log('adjusted');
+  	  gadgets.window.adjustHeight();
+      }
     }
-  }
+  })();
 </script>
     ]]>
   </Content>
