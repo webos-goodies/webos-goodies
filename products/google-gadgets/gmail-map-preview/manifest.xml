@@ -21,15 +21,12 @@
   <Url>google.com:HttpLinkExtractor</Url>
 
   <!-- フィルター -->
-  <!--
-  <Param name="host" value="maps\.google\.(com|co\.jp)"/>
-  -->
+  <Param name="body" value="東京都[^a-zA-Z0-9]+\s*\d+(-\d+)*"/>
 
   <!-- 表示するガジェット（ref属性はExtensionタグのid） -->
   <Triggers ref="MapPreviewGadget"/>
 
   <!-- 必要なスコープ（ref属性はScopeタグのid） -->
-  <Scope ref="emailSubject"/>
   <Scope ref="emailBody"/>
 
   <!-- 対象のアプリケーション？ -->
@@ -50,14 +47,9 @@
 </Extension>
 
 <!-- スコープ（このアプリケーションが必要な権限） -->
-<Scope id="emailSubject">
-  <Url>tag:google.com,2010:auth/contextual/extractor/SUBJECT</Url>
-  <Reason>This application searches the Subject: line of each email for the link to Google Maps</Reason>
-</Scope>
-
 <Scope id="emailBody">
   <Url>tag:google.com,2010:auth/contextual/extractor/BODY</Url>
-  <Reason>This application searches the message body of each email for the link to Google Maps</Reason>
+  <Reason>This application searches the message body of each email for the address</Reason>
 </Scope>
 
 </ApplicationManifest>

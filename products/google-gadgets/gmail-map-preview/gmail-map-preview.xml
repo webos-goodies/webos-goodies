@@ -27,7 +27,7 @@
 
     // 地図を表示
     var myOptions = {
-      zoom:      8,
+      zoom:      16,
       center:    results[0].geometry.location,
       mapTypeId: google.maps.MapTypeId.ROADMAP
     };
