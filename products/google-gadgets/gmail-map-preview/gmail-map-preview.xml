@@ -24,13 +24,15 @@
   var parent    = document.createDocumentFragment();
   var numLoaded = 0;
 
-  for(var i = 0 ; i < matches.length ; ++i) {
-    var img    = document.createElement('IMG');
-    img.onload = imageLoaded;
-    img.src    = matches[i].url;
-    parent.appendChild(img);
-  }
-  document.getElementById('imagelist').appendChild(parent);
+  gadgets.util.registerOnLoadHandler(function() {
+    for(var i = 0 ; i < matches.length ; ++i) {
+      var img    = document.createElement('IMG');
+      img.onload = imageLoaded;
+      img.src    = matches[i].url;
+      parent.appendChild(img);
+    }
+    document.getElementById('imagelist').appendChild(parent);
+  });
 
   function imageLoaded() {
     console.log(numLoaded);
