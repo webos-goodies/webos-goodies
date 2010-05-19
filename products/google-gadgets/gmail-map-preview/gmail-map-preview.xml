@@ -17,6 +17,10 @@
   <Content type="html" view="card">
     <![CDATA[
 
+<style type="text/stylesheet">
+  #imagelist img { padding: 4px; }
+</style>
+
 <div id="imagelist"></div>
 
 <script type="text/javascript">
@@ -37,8 +41,8 @@
   function imageLoaded() {
     numLoaded += 1;
     if(numLoaded >= matches.length) {
-	  gadgets.window.adjustHeight();
       console.log('adjusted');
+	  gadgets.window.adjustHeight();
     }
   }
 </script>
