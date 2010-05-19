@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Module>
-  <ModulePrefs title="Gmail Map Preview"
-			   description="Show previews of links to Google Maps."
-			   height="20"
-			   author="WebOS Goodies"
-			   author_email="support@webos-goodies.jp"
-			   author_location="Tokyo, Japan">
+  <ModulePrefs title="Picture Preview"
+               description="Picture previews."
+               height="100"
+               author="WebOS Goodies"
+               author_email="support@webos-goodies.jp"
+               author_location="Tokyo, Japan">
     <Require feature="dynamic-height"/>
-	<!-- 使用するExtractorのリスト -->
+    <!-- 使用するExtractorのリスト -->
     <Require feature="google.contentmatch">
       <Param name="extractors">google.com:HttpLinkExtractor</Param>
     </Require>
@@ -16,26 +16,34 @@
   <!-- type="html", view="card" に固定 -->
   <Content type="html" view="card">
     <![CDATA[
-      <script type="text/javascript">
 
-        <!-- Start by fetching the array of content matches. -->
-        matches = google.contentmatch.getContentMatches();
-        var matchList = document.createElement('UL');
-        var listItem;
-        var extractedText;
+<style type="text/css">
+  #imagelist img { padding: 4px; }
+</style>
 
-        <!-- Iterate through the array and display output for each match. -->
-        for (var match in matches) {
-          for (var key in matches[match]) {
-            listItem = document.createElement('LI');
-            extractedText = document.createTextNode(key + ": " + matches[match][key]);
-            listItem.appendChild(extractedText);
-            matchList.appendChild(listItem);
-          }
-        }
-        document.body.appendChild(matchList);
-        gadgets.window.adjustHeight(100);
-      </script>
+<div id="imagelist"></div>
+
+<script type="text/javascript">
+  (function () {
+    var matches   = google.contentmatch.getContentMatches();
+    var parent    = document.createDocumentFragment();
+    var numLoaded = 0;
+
+    for(var i = 0 ; i < matches.length ; ++i) {
+      var img    = document.createElement('IMG');
+      img.onload = imageLoaded;
+      img.src    = matches[i].url;
+      parent.appendChild(img);
+    }
+    document.getElementById('imagelist').appendChild(parent);
+
+    function imageLoaded() {
+      numLoaded += 1;
+      if(numLoaded >= matches.length)
+        gadgets.window.adjustHeight();
+    }
+  })();
+</script>
     ]]>
   </Content>
 </Module>
