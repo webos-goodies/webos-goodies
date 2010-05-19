@@ -9,7 +9,7 @@
     <Require feature="dynamic-height"/>
 	<!-- 使用するExtractorのリスト -->
     <Require feature="google.contentmatch">
-      <Param name="extractors">google.com:HttpLinkExtractor</Param>
+      <Param name="extractors">google.com:EmailBodyExtractor</Param>
     </Require>
   </ModulePrefs>
 

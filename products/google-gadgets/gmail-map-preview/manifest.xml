@@ -12,16 +12,18 @@
   <Description>Show Google Maps preview.</Description>
 
 <!-- Extractorとフィルターの情報 -->
-<Extension id="MapLinkExtractor" type="contextExtractor">
+<Extension id="AddressExtractor" type="contextExtractor">
 
   <!-- 人間が読める名前 -->
   <Name>Gmail Map Preview</Name>
 
   <!-- 使用するExtractor -->
-  <Url>google.com:HttpLinkExtractor</Url>
+  <Url>google.com:EmailBodyExtractor</Url>
 
   <!-- フィルター -->
+  <!--
   <Param name="body" value="東京都[^a-zA-Z0-9]+\s*\d+(-\d+)*"/>
+  -->
 
   <!-- 表示するガジェット（ref属性はExtensionタグのid） -->
   <Triggers ref="MapPreviewGadget"/>
