@@ -1,0 +1,16 @@
+@import "closure-library/closure/goog/css/common.css";
+@import "closure-library/closure/goog/css/colormenubutton.css";
+@import "closure-library/closure/goog/css/palette.css";
+@import "closure-library/closure/goog/css/colorpalette.css";
+@import "closure-library/closure/goog/css/editortoolbar.css";
+@import "closure-library/closure/goog/css/button.css";
+@import "closure-library/closure/goog/css/menus.css";
+@import "closure-library/closure/goog/css/toolbar.css";
+
+#frame {
+  border: solid 1px black;
+}
+
+#editor {
+  display:block; width:100%; height:400px;
+}

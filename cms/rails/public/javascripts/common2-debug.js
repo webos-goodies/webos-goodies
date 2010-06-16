@@ -213,7 +213,7 @@ template.addWindowEvent('ready', function() {
 
 
 //----------------------------------------------------------
-// show recent articles and buzz.
+// show recommendations from Facebook.
 //----------------------------------------------------------
 
 template.addWindowEvent('ready', function() {
