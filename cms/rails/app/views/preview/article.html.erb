@@ -56,13 +56,13 @@ function tplRegistCategory(json)
 | <a href="#trackback">TrackBack(<span id="tpl_num_trackbacks"></span>)</a>
 |
 
-<%- # livedoor clip -%>
+<%- "livedoor clip" -%>
 <a href="http://clip.livedoor.com/redirect?link=<%= h(u(@article.url)) %>&title=<%= h(u(@article.full_title)) %>&ie=utf8" class="ldclip-redirect" title="livedoor clip! でブックマーク"><img src="<%= h(@site.full_url('/template/imgs/bookmark/livedoorclip.gif')) %>" width="16" height="16" alt="[livedoor clip!]" style="border: none;vertical-align: middle;" /></a>
 
-<%- # はてなブックマーク -%>
+<%- "はてなブックマーク" -%>
 <a href="http://b.hatena.ne.jp/entry/<%= h(@article.url) %>" title="はてなブックマークでブックマーク"><img src="<%= h(@site.full_url('/template/imgs/bookmark/hatena.gif')) %>" width="16" height="12" style="border: none; vertical-align:middle;" alt="[はてなブックマーク]" /></a>
 
-<%- # Delicious -%>
+<%- "Delicious" -%>
 <a href="http://delicious.com/save" onclick="window.open('http://delicious.com/save?v=5&noui&jump=close&url='+encodeURIComponent('<%= @article.url %>')+'&title='+encodeURIComponent('<%= @article.full_title %>'), 'delicious','toolbar=no,width=550,height=550'); return false;" title="delicious でブックマーク"><img src="<%= h(@site.full_url('/template/imgs/bookmark/delicious.gif')) %>" width="10" height="10" style="border: none; vertical-align:middle;" alt="[del.icio.us]" /></a>
 
 </div>
@@ -97,7 +97,7 @@ function tplRegistCategory(json)
 </div>
 </div>
 
-<%- # Google Code Prettify -%>
+<%- "Google Code Prettify" -%>
 
 <% if @article.prettify? -%>
   <style type="text/css">@import url("http://webos-goodies.jp/template/scripts/prettify.css");</style>
