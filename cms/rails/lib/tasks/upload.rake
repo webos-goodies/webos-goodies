@@ -14,18 +14,19 @@ namespace :upload do
   task :indices => :setup do
     raise 'Please set ENV["SITE"].' if (ENV['SITE']||'').strip.blank?
     site = Site.find(ENV['SITE'].strip.to_i)
+    cmd  = File.join(RAILS_ROOT, 'script/app/show_page')
     raise "site #{id} was not found." unless site
-    session = ActionController::Integration::Session.new
+    pages = [{ :src => '/preview',      :dest => 'index.html' },
+             { :src => '/preview.rss',  :dest => site.rss_path },
+             { :src => '/preview.atom', :dest => site.atom_path }]
+    pages.each do |page|
+      page[:body] = `#{cmd} #{page[:src]}?site_id=#{site.id}`
+    end
     Net::FTP.open(site.ftp_host, site.ftp_user, site.ftp_password) do |ftp|
-      site_id     = site.id
       ftp_path    = site.ftp_path
       ftp.passive = true
-      [['/preview',      'index.html'],
-       ['/preview.rss',  site.rss_path],
-       ['/preview.atom', site.atom_path]].each do |get_path, upload_path|
-        status = session.get(get_path + "?site_id=#{site_id}")
-        raise "request failed for the top page:\n#{session.response.body}" unless status == 200
-        ftp.putbinarystring(session.response.body, File.join(ftp_path, upload_path))
+      pages.each do |page|
+        ftp.putbinarystring(page[:body], File.join(ftp_path, page[:dest]))
       end
     end
   end
