@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Module>
+  <ModulePrefs title="atomreader sample" scrolling="true" />
+  <Content type="html">
+  <![CDATA[
+
+<form id="search-form" action="#">
+  Google Booksの検索結果を表示します。
+  <input type="text" size="60" id="text">
+  <input type="submit" value="検索">
+</form>
+
+<script type="text/javascript">
+  <%= compile_closure_app('booksearchgadget.App', nil, '../scripts', '../lib') %>
+</script>
+
+  ]]>
+  </Content>
+</Module>

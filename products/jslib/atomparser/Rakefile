@@ -1,0 +1,203 @@
+# -*- mode:ruby -*-
+
+require 'rake/clean'
+require 'erb'
+
+PYTHON          = 'python'
+JAVA            = 'java'
+CLOSURECOMPILER = File.expand_path('./compiler.jar')
+YUICOMPRESSOR   = File.expand_path('./yuicompressor-2.4.2.jar')
+
+CLOSURE_LIB_DIR = File.expand_path('closure-library')
+DEPSWRITER      = File.join(CLOSURE_LIB_DIR, 'closure/bin/build/depswriter.py')
+CLOSUREBUILDER  = File.join(CLOSURE_LIB_DIR, 'closure/bin/build/closurebuilder.py')
+
+BUILD_DIR       = File.expand_path('build')
+SRC_FILES       = FileList['xml/*.xml']
+EXTERNS         = FileList['externs/*.js']
+
+CLEAN.include(SRC_FILES.map{|n| File.join(BUILD_DIR, File.basename(n)) })
+
+class HtmlOptimizer
+
+  def initialize(config = {})
+    @java            = config[:java]            || 'java'
+    @python          = config[:python]          || 'python'
+    @yuicompressor   = config[:yuicompressor]   || 'yuicompressor.jar'
+    @closurecompiler = config[:closurecompiler] || 'compiler.jar'
+    @closurelibrary  = config[:closurelibrary]  || 'closure-library'
+    @closurebuilder  = (config[:closurebuilder] ||
+                        File.join(@closurelibrary, 'closure/bin/build/closurebuilder.py'))
+    @closureopts     = config[:closureopts]     || {}
+    @optimize        = config[:optimize]
+    @pre_tag_regex   = nil
+
+    pre_tag = config[:pre_tag] ? [*config[:pre_tag]] : ['pre', 'script', 'title']
+    unless pre_tag.empty?
+      pre_tag = pre_tag.map{|s| Regexp.quote(s) }.join('|')
+      @pre_tag_regex = /<(#{pre_tag})[\s>].*?<\/\1\s*>/mui
+    end
+  end
+
+  def render_str(str)
+    str = str.gsub(/<!--\[del\].*?\[\/del\]-->/mu, '')
+    str = str.gsub(/<!--\[uncomment\](.*?)-->/mu){ $1 }
+    erb = ERB.new(str)
+    optimize_html(erb.result(get_binding()))
+  end
+
+  def render_file(path)
+    str = IO.read(path)
+    Dir.chdir(File.dirname(path)) do
+      render_str(str)
+    end
+  end
+
+  def include_file(path)
+    IO.read(path)
+  end
+
+  def include_css(path)
+    dir = File.expand_path(File.dirname(path))
+    css = IO.read(path)
+    css = css.gsub(/\/\*.*?\*\//mu, '')
+    css = css.gsub(/^@import(?:\s+url\()?\s*[\"\']?([^\"\'\)]+)[\"\']?\s*\)?([^;]*);/u) do
+      text, url, media = $0, $1.strip, $2.strip
+      if /^(?:https?:\/)\//u === url
+        text
+      else
+        sub_css = include_css(File.join(dir, url))
+        unless media.empty?
+          sub_css = "@media #{media} {\n#{sub_css}\n}\n"
+        end
+        sub_css
+      end
+    end
+  end
+
+  def compress_css(*paths)
+    code = paths.map{|path| include_css(path) }.join("\n")
+    code = exec([@java, '-jar', @yuicompressor, '--type', 'css'], code) if @optimize
+    code
+  end
+
+  def escape_js(str)
+    str.gsub(/<\/(script)/ui, '<\\/\1')
+  end
+
+  def include_js(path)
+    escape_js(IO.read(path))
+  end
+
+  def compress_js(*paths)
+    code = paths.map{|path| IO.read(path) }.join("\n")
+    code = exec([@java, '-jar', @yuicompressor, '--type', 'js'], code) if @optimize
+    escape_js(code)
+  end
+
+  def build_closure_opts(opts)
+    opts.map do |key, values|
+      [*values].map{|v| "#{key}=#{v}" }
+    end
+  end
+
+  def compile_js(compiler_opts={}, *paths)
+    if @optimize
+      opts = build_closure_opts(@closureopts.merge(compiler_opts))
+      code = exec([@java, '-jar', @closurecompiler, opts,
+                   paths.map{|path| ['--js', path] }])
+    else
+      code = paths.map{|path| IO.read(path) }.join("\n")
+    end
+    escape_js(code)
+  end
+
+  def compile_closure_app(namespace, compiler_opts=nil, *paths)
+    cmd  = [@python, @closurebuilder, '-n', namespace, "--root=#{@closurelibrary}",
+            paths.map{|path| "--root=#{path}" }]
+    code = ''
+    if @optimize
+      opts = build_closure_opts(@closureopts.merge(compiler_opts || {}))
+      code = exec([cmd, '-o', 'compiled', '-c', @closurecompiler,
+                   opts.map{|s| ['-f', s] }])
+    else
+      opts = build_closure_opts(@closureopts.merge(compiler_opts))
+      code = exec([cmd, '-o', 'script'])
+    end
+    escape_js(code)
+  end
+
+  def optimize_html(html)
+    html = html.dup
+    if @optimize
+      html.gsub!(/<\!--.*?-->/mu, '')
+      html.gsub!(/[~^]/u) {|c| c == '~' ? '^T~' : '^E~' }
+      preserved = []
+      if @pre_tag_regex
+        html.gsub!(@pre_tag_regex) do |pre|
+          preserved << pre
+          "^#{preserved.size-1}~"
+        end
+      end
+      html.gsub!(/<[A-Za-z](?:[^>]*)>/u) do |tag|
+        tag.gsub(/([\"\']).+?\1/mui) do |attr|
+          preserved << attr
+          "^#{preserved.size-1}~"
+        end
+      end
+      html.gsub!(/\s+/u, ' ')
+      html.gsub!(/\^(\d+)~/u) { preserved[$1.to_i] }
+      html.gsub!(/\^([TE])~/u) { $1 == 'T' ? '~' : '^' }
+    end
+    html
+  end
+
+  def get_binding()
+    binding
+  end
+
+  def exec(cmd, stdin = '')
+    stdout = ''
+    IO.popen([*cmd].flatten.map{|s| '"'+s+'"'}.join(' '), 'r+') do |pipe|
+      pipe.write(stdin)
+      pipe.close_write
+      stdout = pipe.read
+    end
+    stdout
+  end
+
+end
+
+task :default  => [:xml]
+
+task :xml do |t, args|
+  srcs = SRC_FILES
+  if args['target']
+    srcs = args['target'].split(',').map{|n| File.join('xml', n.strip + '.xml') }
+  end
+  opts = {
+    :python          => PYTHON,
+    :java            => JAVA,
+    :yuicompressor   => YUICOMPRESSOR,
+    :closurecompiler => CLOSURECOMPILER,
+    :closurelibrary  => CLOSURE_LIB_DIR,
+    :closurebuilder  => CLOSUREBUILDER,
+    :optimize        => /^[yY]/ === (args['optimize'] || 'y'),
+    :closureopts     => {
+      '--define'            => 'goog.DEBUG=false',
+      '--output_wrapper'    => '(function(){%output%})();',
+      '--externs'           => EXTERNS.map{|n| File.join('..', n) },
+      '--compilation_level' => 'ADVANCED_OPTIMIZATIONS'
+    }
+  }
+  optimizer = HtmlOptimizer.new(opts)
+  srcs.each do |path|
+    xml = optimizer.render_file(path)
+    xml = xml.unpack('U*').map do |c|
+      c >= 0x80 ? "&\##{c};".unpack('C*') : c
+    end.flatten.pack('U*')
+    File.open(File.join(BUILD_DIR, File.basename(path)), 'w') do |file|
+      file << xml
+    end
+  end
+end
