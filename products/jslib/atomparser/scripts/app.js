@@ -1,6 +1,7 @@
 goog.provide('booksearchgadget.App');
 goog.require('goog.dom');
 goog.require('goog.events');
+goog.require('atomparser.Feed');
 
 booksearchgadget.App = function() {};
 
