@@ -3,9 +3,14 @@ goog.require('goog.dom');
 goog.require('goog.events');
 goog.require('atomparser.Feed');
 
-booksearchgadget.App = function() {};
+booksearchgadget.App = function() {
+  goog.events.listen(goog.dom.getElement('search-form'),
+					 goog.events.EventType.SUBMIT,
+					 booksearchgadget.App.onSubmit);
+};
+goog.addSingletonGetter(booksearchgadget.App);
 
-function onSubmit(e) {
+booksearchgadget.App.onSubmit = function(e) {
   e.preventDefault();
   var text = goog.dom.getElement('text').value;
   var url  = 'http://books.google.com/books/feeds/volumes?q=' + _esc(text);
@@ -28,6 +33,4 @@ function onSubmit(e) {
   });
 }
 
-goog.events.listen(goog.dom.getElement('search-form'),
-                   goog.events.EventType.SUBMIT,
-                   onSubmit);
+booksearchgadget.App.getInstance();
