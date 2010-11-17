@@ -221,6 +221,6 @@ template.addWindowEvent('ready', function() {
   if(parent) {
 	var width  = parent.clientWidth;
 	var height = parent.clientHeight;
-	parent.innerHTML = '<iframe src="http://www.facebook.com/plugins/recommendations.php?site=webos-goodies.jp&amp;width='+width+'&amp;height='+height+'&amp;header=true&amp;border_color=%2523cdcdcd" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:'+width+'px; height:'+height+'px;" allowTransparency="true"></iframe>';
+	parent.innerHTML = '<iframe src="http://www.facebook.com/plugins/recommendations.php?site=webos-goodies.jp&amp;width='+width+'&amp;height='+height+'&amp;header=false&amp;border_color=white" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:'+width+'px; height:'+height+'px;" allowTransparency="true"></iframe>';
   }
 });
