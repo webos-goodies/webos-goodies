@@ -117,10 +117,14 @@ WebOS はインターネットの未来形。あらゆる Web サイトが繋が
 
 <%- "購読リンク" -%>
 <div id="subscribe">Subscribe&nbsp;
-<a href="<%= h(@site.full_url(:atom_path)) %>" title="Atom feed"><img alt="[Atom feed]" width="14" height="14" src="<%= h(@site.full_url('/template/imgs/feed/feed.png')) %>"/></a>&nbsp;
-<a href="http://fusion.google.com/add?feedurl=<%= h(u(@site.full_url(:atom_path))) %>" title="Google Gadget/Google Readerで購読"><img alt="[Google]" width="68" height="17" src="<%= h(@site.full_url('/template/imgs/feed/google.gif')) %>" />&nbsp;
-<a href="http://reader.livedoor.com/subscribe/<%= h(@site.url) %>" title="livedoor Readerで購読"><img width="91" height="17" src="<%= h(@site.full_url('/template/imgs/feed/livedoorreader.gif')) %>" alt="[livedoor Reader]" /></a>&nbsp;
-<a href="http://widgets.opera.com/widgetize/Feed%20Reader/Advanced/?serve&skin=skin2&widgetname=WebOS%20Goodies&url=http%3A%2F%2Fwebos-goodies.jp%2Fatom.xml&rel=myopera&ref=" title="Opera Widgetで購読"><img src="http://webos-goodies.jp/template/imgs/feed/operawidget.png" alt="[Opera Widgetize]" width="80" height="15"></a>
+<a href="<%= h(@site.full_url(:atom_path)) %>"
+   title="Atom feed" class="tpl_sprite tpl_feed"></a>&nbsp;
+<a href="http://fusion.google.com/add?feedurl=<%= h(u(@site.full_url(:atom_path))) %>"
+   title="Google Gadget/Google Readerで購読" class="tpl_sprite tpl_googlereader"></a>&nbsp;
+<a href="http://reader.livedoor.com/subscribe/<%= h(@site.url) %>"
+   title="livedoor Readerで購読" class="tpl_sprite tpl_ldreader"></a>&nbsp;
+<a href="http://widgets.opera.com/widgetize/Feed%20Reader/Advanced/?serve&skin=skin2&widgetname=WebOS%20Goodies&url=http%3A%2F%2Fwebos-goodies.jp%2Fatom.xml&rel=myopera&ref="
+   title="Opera Widgetで購読" class="tpl_sprite tpl_operawidget"></a>
 </div>
 
 
