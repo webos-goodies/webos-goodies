@@ -12,25 +12,13 @@
 </script>
 <% end -%>
 
-<% content_for :bottom do -%>
-<script type="text/javascript">
-function tplRegistCategory(json)
-{
-  var f = template.generateRelatedLinks(json, '<%= @site.url %>');
-  document.getElementById('tpl_related').appendChild(f);
-}
-</script>
-<% @article.meta.strip.split(',').each do |tag| -%>
-<script type="text/javascript" charset="UTF-8" src="<%= h(@site.full_url('/categories/jsonp/', u(tag.strip) + '.js')) %>"></script>
-<% end -%>
-<% end -%>
-
 <div class="article">
 
 <div class="article_head"><h1 class="title"><%= h(@article.title) %></h1></div>
 <div class="tpl_share_buttons">
-  <a class="tpl_tweet_button" target="blank_" href="http://twitter.com/home/?status=<%= h(u(@article.full_title)) %>%20<%= h(u(@article.short_url)) %>"></a>
-  <iframe src="http://www.facebook.com/plugins/like.php?href=<%= h(u(@article.url)) %>&amp;layout=standard&amp;show_faces=false&amp;width=300&amp;action=like&amp;colorscheme=light" scrolling="no" frameborder="0" allowTransparency="true" style="border:none; overflow:hidden; width:300px; height:24px"></iframe>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="<%= h(@article.url) %>" data-text="<%= h(@article.full_title) %>" data-count="horizontal" data-lang="ja">Tweet</a>
+  <a href="javascript:void(0);" onclick="window.open('http://mixi.jp/share.pl?u=<%= h(u(@article.url)) %>&k=47c2f3d702ad729634af4accde45810f7649ad44','share',['width=632','height=456','location=yes','resizable=yes','toolbar=no','menubar=no','scrollbars=no','status=no'].join(','));"><img src="http://img.mixi.jp/img/basic/mixicheck_entry/bt_check_1.png" style="vertical-align:top; padding-right:16px;"></a>
+  <iframe src="http://www.facebook.com/plugins/like.php?href=<%= h(u(@article.url)) %>&amp;layout=button_count&amp;show_faces=false&amp;width=110&amp;action=like&amp;colorscheme=light" scrolling="no" frameborder="0" allowTransparency="true" style="border:none; overflow:hidden; width:110px; height:20px"></iframe>
 </div>
 
 <div class="article_body"><%= @article.formatted_body1 %></div>
@@ -100,10 +88,27 @@ function tplRegistCategory(json)
 </div>
 </div>
 
-<%- "Google Code Prettify" -%>
+<% content_for :bottom do -%>
 
+<script type="text/javascript">
+function tplRegistCategory(json)
+{
+  var f = template.generateRelatedLinks(json, '<%= @site.url %>');
+  document.getElementById('tpl_related').appendChild(f);
+}
+</script>
+<% @article.meta.strip.split(',').each do |tag| -%>
+<script type="text/javascript" charset="UTF-8" src="<%= h(@site.full_url('/categories/jsonp/', u(tag.strip) + '.js')) %>"></script>
+<% end -%>
+
+<%- "Tweet button" -%>
+<script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+
+<%- "Google Code Prettify" -%>
 <% if @article.prettify? -%>
   <style type="text/css">@import url("http://webos-goodies.jp/template/scripts/prettify.css");</style>
   <script type="text/javascript" src="http://webos-goodies.jp/template/scripts/prettify.js"></script>
   <script type="text/javascript">template.addWindowEvent('load', function() { prettyPrint(); });</script>
+<% end -%>
+
 <% end -%>
