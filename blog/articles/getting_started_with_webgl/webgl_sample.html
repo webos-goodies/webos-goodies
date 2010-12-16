@@ -11,6 +11,10 @@
     <canvas id="screen" style="width:500px; height:500px;" width="500px" height="500px"></canvas>
 
     <script id="vshader" type="x-shader/x-vertex">
+	  #ifdef GL_ES
+	  precision highp float;
+	  #endif
+
       uniform mat4 mvpMatrix;
       uniform mat4 normalMatrix;
       uniform vec4 lightVec;
@@ -32,6 +36,10 @@
     </script>
 
     <script id="fshader" type="x-shader/x-fragment">
+	  #ifdef GL_ES
+	  precision highp float;
+	  #endif
+
       uniform sampler2D texture;
 
       varying vec4 color;

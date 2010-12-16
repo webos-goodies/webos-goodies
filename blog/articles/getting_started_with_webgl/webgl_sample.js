@@ -47,7 +47,7 @@ function initVertices() {
   vbuffers = $.map([positions, positions, uvs], function(data, i) {
     var vbuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, vbuffer);
-    gl.bufferData(gl.ARRAY_BUFFER, new WebGLFloatArray(data), gl.STATIC_DRAW);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(data), gl.STATIC_DRAW);
     return vbuffer;
   });
   gl.bindBuffer(gl.ARRAY_BUFFER, null);
@@ -68,7 +68,7 @@ function initIndices() {
   // IBOを作成し、データを転送
   ibuffer = gl.createBuffer();
   gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, ibuffer);
-  gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new WebGLShortArray(indices), gl.STATIC_DRAW);
+  gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Int16Array(indices), gl.STATIC_DRAW);
   gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, null);
 
   // インデックスの数を保存しておく
@@ -84,7 +84,7 @@ function initTexture() {
   image.onload = function() {
     gl.enable(gl.TEXTURE_2D);
     gl.bindTexture(gl.TEXTURE_2D, texture);
-    gl.texImage2D(gl.TEXTURE_2D, 0, image);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
     gl.generateMipmap(gl.TEXTURE_2D);
     gl.bindTexture(gl.TEXTURE_2D, null);
   }
@@ -160,7 +160,7 @@ function redrawScene() {
     if(value instanceof CanvasMatrix4)
       gl.uniformMatrix4fv(uniformVars[i], false, value.getAsWebGLFloatArray());
     else
-      gl.uniform4fv(uniformVars[i], new WebGLFloatArray(value));
+      gl.uniform4fv(uniformVars[i], new Float32Array(value));
   });
 
   // VBOを頂点属性に割り当てる
