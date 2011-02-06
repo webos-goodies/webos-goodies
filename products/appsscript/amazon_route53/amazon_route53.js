@@ -486,7 +486,8 @@ var exports = (function(){
     this.records_ = {};
   }
 
-  HostedZone.zones_ = [];
+  HostedZone.zones_         = [];
+  HostedZone.commentRegexp_ = /^\s*#/;
 
   HostedZone.toJson = function() {
     var zones = [];
@@ -585,17 +586,18 @@ var exports = (function(){
     // Update existing values
     var range = this.getRecordRange();
     if(range) {
-      var rows = range.getValues();
+      var rows = range.getValues(), cellRecord, record;
       for(var i = 0 ; i < rows.length ; ++i) {
-        var record = this.records_[
-          ResourceRecord.getKey(this.name_, rows[i][0], rows[i][1])];
-        if(record) {
-          if(!record.valueCompare(ResourceRecord.fromCells(this.name_, rows[i])))
-            rows[i][2] = record.toCells()[2];
-          rows[i][3] = record.ttl;
-          record.marker = true;
-        } else {
-          deletedRows.push(i + 2);
+        if(!HostedZone.commentRegexp_.test(rows[i][0])) {
+          cellRecord = ResourceRecord.fromCells(this.name_, rows[i]);
+          if(cellRecord && (record = this.records_[cellRecord.getKey()])) {
+            if(!record.valueCompare(cellRecord))
+              rows[i][2] = record.toCells()[2];
+            rows[i][3] = record.ttl;
+            record.marker = true;
+          } else {
+            deletedRows.push(i + 2);
+          }
         }
       }
       range.setValues(rows);
@@ -621,24 +623,34 @@ var exports = (function(){
     var range = this.getRecordRange();
     if(!range)
       return null;
-    var rows = range.getValues(), oldRecords = {}, body = [];
+    var rows = range.getValues(), oldRecords = {}, body = [],
+        newRecord, record, error = false;
     this.clearRecordMarker_();
     for(var i = 0 ; i < rows.length ; ++i) {
-      var newRecord = ResourceRecord.fromCells(this.name_, rows[i]);
-      var record    = this.records_[newRecord.getKey()];
-      if(record) {
-        if(record.compare(newRecord)) {
-          record.marker = 'pass';
+      if(HostedZone.commentRegexp_.test(rows[i][0])) {
+        rows[i] = ['#cccccc', '#cccccc', '#cccccc', '#cccccc'];
+      } else if(newRecord = ResourceRecord.fromCells(this.name_, rows[i])) {
+        if(record = this.records_[newRecord.getKey()]) {
+          if(record.compare(newRecord)) {
+            record.marker = 'pass';
+          } else {
+            newRecord.marker                  = 'update';
+            this.records_[newRecord.getKey()] = newRecord;
+            oldRecords[newRecord.getKey()]    = record;
+          }
         } else {
-          newRecord.marker                  = 'update';
+          newRecord.marker = 'create';
           this.records_[newRecord.getKey()] = newRecord;
-          oldRecords[newRecord.getKey()]    = record;
         }
+        rows[i] = ['#ffffff', '#ffffff', '#ffffff', '#ffffff'];
       } else {
-        newRecord.marker = 'create';
-        this.records_[newRecord.getKey()] = newRecord;
+        rows[i] = ['#ffcccc', '#ffcccc', '#ffcccc', '#ffcccc'];
+        error   = true;
       }
     }
+    range.setBackgroundColors(rows);
+    if(error)
+      throw 'Error: empty cell(s).';
     for(var i in this.records_) {
       var record = this.records_[i];
       if(record.marker == 'create') {
@@ -731,12 +743,14 @@ var exports = (function(){
   };
 
   ResourceRecord.fromCells = function(zone, cells) {
-    var name  = ResourceRecord.normalizeHost(zone, cells[0]);
-    var type  = strStrip(cells[1]).toUpperCase();
-    var ttl   = (strStrip(cells[3] - 0)) || (60 * 60 * 24);
-    var lines = (cells[2]||'').split(/\r\n?|\n/);
+    var name = ResourceRecord.normalizeHost(zone, cells[0]);
+    var type = strStrip(cells[1]).toUpperCase();
+    var ttl  = (strStrip(cells[3] - 0)) || (60 * 60 * 24);
+    if(!(name && type && ttl))
+      return null;
+    var lines      = (cells[2]||'').split(/\r\n?|\n/);
     var hostFields = ResourceRecord.HOST_FIELDS[type]||[];
-    var values = [], line;
+    var values     = [], line;
     for(var i = 0 ; i < lines.length ; ++i) {
       if(line = strStrip(lines[i])) {
         var fields = line.split(/(\s+)/);
@@ -747,14 +761,15 @@ var exports = (function(){
         values.push(fields.join(''));
       }
     }
-    return new ResourceRecord(zone, name, type, values.sort(), ttl);
+    return (values.length <= 0 ? null :
+            new ResourceRecord(zone, name, type, values.sort(), ttl));
   };
 
   ResourceRecord.normalizeHost = function(zone, name) {
     name = strStrip(name).toLowerCase();
     if(name == '@')
       return zone;
-    else if(!/\.$/.test(name))
+    else if(name.length > 0 && !/\.$/.test(name))
       return name + '.' + zone;
     else
       return name;
@@ -767,10 +782,6 @@ var exports = (function(){
     else if(name.lastIndexOf('.' + zone) == index)
       return name.substr(0, index);
     return name;
-  };
-
-  ResourceRecord.getKey = function(zone, name, type) {
-    return strStrip(type).toUpperCase() + ':' + ResourceRecord.normalizeHost(zone, name);
   };
 
   ResourceRecord.prototype.getKey = function() {
@@ -830,6 +841,10 @@ var exports = (function(){
       return true;
     }
     return false;
+  };
+
+  ResourceRecord.prototype.toString = function() {
+    return '[ResourceRecord ' + this.type + ':' + this.name + ']';
   };
 
   //----------------------------------------------------------
