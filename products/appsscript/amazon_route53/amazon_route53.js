@@ -13,11 +13,11 @@ function onOpen() {
 
 var exports = (function(){
   //----------------------------------------------------------
-  // Route35 Menu
+  // Route53 Menu
 
   function buildMenu() {
     SpreadsheetApp.getActiveSpreadsheet().addMenu(
-      'Route35', [
+      'Route53', [
         { name: 'Sync this zone...',   functionName: 'menuSyncCurrent' },
         { name: 'Sync all zones...',   functionName: 'menuSyncAll' },
         null,
