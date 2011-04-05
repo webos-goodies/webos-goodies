@@ -30,8 +30,9 @@
 	<Require feature="flash" />
 	<Require feature="views" />
 	<Require feature="skins" />
-<% if platform == 'friendconnect' %>
+<% if platform == 'friendconnect' || platform == 'igoogle' || platform == 'google-calendar' %>
 	<Require feature="opensocial-0.9" />
+	<Require feature="opensocial-i18n" />
 	<Require feature="osapi" />
 <% else %>
 	<Require feature="opensocial-0.8" />
