@@ -120,8 +120,8 @@ bool PVRLoader::LoadFromMemory(const void* pData)
             surface.size = widthBlocks * heightBlocks * ((blockSize  * bpp) / 8);
             surface.bits = &pBytes[offset];
 
-            w       = (w >> 1) || 1;
-            h       = (h >> 1) || 1;
+            (w >>= 1) || (w = 1);
+            (h >>= 1) || (h = 1);
             offset += surface.size;
         }
 
