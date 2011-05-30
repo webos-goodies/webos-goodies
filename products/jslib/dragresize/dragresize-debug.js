@@ -9,6 +9,10 @@
     return typeof value == 'number';
   }
 
+  function isFunction(value) {
+    return typeof value == 'function';
+  }
+
   function bind(method, scope) {
     return function() { return method.apply(scope, arguments) };
   }
@@ -69,14 +73,16 @@
     options   = options || {};
     container = getElement(container);
 
-    this.container       = container;
-    this.minWidth        = options['minWidth'];
-    this.minHeight       = options['minHeight'];
-    this.scroll          = options['scroll'];
-    this.onClickCallback = options['onclick'];
-    this.onClickScope    = options['scope'];
-    this.ignoreTags      = {};
-    this.events          = [];
+    this.container        = container;
+    this.minWidth         = options['minWidth'];
+    this.minHeight        = options['minHeight'];
+    this.scroll           = options['scroll'];
+    this.onClickCallback  = options['onclick'];
+    this.onDragCallback   = options['ondrag'];
+    this.onFinishCallback = options['onfinish'];
+    this.onCallbackScope  = options['scope'];
+    this.ignoreTags       = {};
+    this.events           = [];
 
     var dragHandle   = getElement(options['dragHandle']),
         resizeHandle = getElement(options['resizeHandle']);
@@ -118,35 +124,50 @@
         info.currentX = ev.clientX;
         info.currentY = ev.clientY;
         DragResize.ie && stopEvent(ev);
+        var self = info.manager;
+        if(self && isFunction(self.onDragCallback)) {
+          self.onDragCallback.call(
+            self.onCallbackScope, self.container, info.currentX, info.currentY);
+        }
       }
     }
   };
 
   DragResize.onMouseUp = function(ev) {
     var info = DragResize.dragInfo, scroll = getScroll();
-    if(info) {
-      var self = info.manager;
-      if(self && typeof self.onClickCallback === 'function' &&
-         info.clickX + info.baseScX == ev.clientX + scroll.x &&
-         info.clickY + info.baseScY == ev.clientY + scroll.y) {
-        self.onClickCallback.call(self.onClickScope, ev);
+    try {
+      if(info) {
+        var self = info.manager;
+        if(self && isFunction(self.onClickCallback) &&
+           info.clickX + info.baseScX == ev.clientX + scroll.x &&
+           info.clickY + info.baseScY == ev.clientY + scroll.y) {
+          self.onClickCallback.call(self.onCallbackScope, ev);
+        }
       }
+    } finally {
+      DragResize.finish();
     }
-    DragResize.finish();
   };
 
   DragResize.finish = function() {
     var info = DragResize.dragInfo;
-    info && info.intervalId && clearInterval(info.intervalId);
     DragResize.dragInfo = null;
+    if(info) {
+      info.intervalId && clearInterval(info.intervalId);
+      var self = info.manager;
+      if(self && isFunction(self.onFinishCallback)) {
+        self.onFinishCallback.call(
+          self.onCallbackScope, self.container, info.currentX, info.currentY);
+      }
+    }
   };
 
   DragResize.prototype.drag_onMouseDown = function(ev) {
     if(this.checkIgnoreTags(ev))
       return;
     stopEvent(ev);
-    var info    = DragResize.dragInfo = this.beginDrag(ev, this.drag_onInterval),
-      container = this.container;
+    var info      = DragResize.dragInfo = this.beginDrag(ev, this.drag_onInterval),
+        container = this.container;
     info.baseX = container.offsetLeft;
     info.baseY = container.offsetTop;
     info.minX  = 0;
@@ -266,7 +287,7 @@
     }
   };
 
-  DragResize.prototype.detach = function() {
+  DragResize.prototype['detach'] = function() {
     if(DragResize.dragInfo && DragResize.dragInfo.manager == this)
       DragResize.finish();
     while(this.events.length > 0)

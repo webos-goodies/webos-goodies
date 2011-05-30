@@ -48,6 +48,12 @@
     alert(this);
   }
 
+  function log(container, x, y) {
+    if(window.console) {
+      console.log('id: ' + container.id + ', x: ' + x + ', y: ' + y);
+    }
+  }
+
   var objs = [];
   DragResize.minWidth  = 10;
   DragResize.minHeight = 10;
@@ -58,7 +64,7 @@
   objs.push(new DragResize('draghdl', { dragHandle: 'draghdl-drag', scroll: true }));
   objs.push(new DragResize('resizehdl', { resizeHandle: 'resizehdl-resize', scroll: true }));
   objs.push(new DragResize('dragignore', { ignoreTags:'A', scroll: true, onclick: click, scope: 'ok' }));
-  objs.push(new DragResize('resizeignore', { resizeHandle: 'resizeignore', ignoreTags:['A', 'TEXTAREA'], scroll: true, onclick: click, scope: 'ok' }));
+  objs.push(new DragResize('resizeignore', { resizeHandle: 'resizeignore', ignoreTags:['A', 'TEXTAREA'], scroll: true, onclick: click, ondrag: log, onfinish: log, scope: 'ok' }));
 
   function selectionMode(mode)
   {
