@@ -80,7 +80,7 @@
     this.onClickCallback  = options['onclick'];
     this.onDragCallback   = options['ondrag'];
     this.onFinishCallback = options['onfinish'];
-    this.onCallbackScope  = options['scope'];
+    this.callbackScope    = options['scope'];
     this.ignoreTags       = {};
     this.events           = [];
 
@@ -127,7 +127,7 @@
         var self = info.manager;
         if(self && isFunction(self.onDragCallback)) {
           self.onDragCallback.call(
-            self.onCallbackScope, self.container, info.currentX, info.currentY);
+            self.callbackScope, self.container, info.currentX, info.currentY);
         }
       }
     }
@@ -141,7 +141,7 @@
         if(self && isFunction(self.onClickCallback) &&
            info.clickX + info.baseScX == ev.clientX + scroll.x &&
            info.clickY + info.baseScY == ev.clientY + scroll.y) {
-          self.onClickCallback.call(self.onCallbackScope, ev);
+          self.onClickCallback.call(self.callbackScope, ev);
         }
       }
     } finally {
@@ -157,7 +157,7 @@
       var self = info.manager;
       if(self && isFunction(self.onFinishCallback)) {
         self.onFinishCallback.call(
-          self.onCallbackScope, self.container, info.currentX, info.currentY);
+          self.callbackScope, self.container, info.currentX, info.currentY);
       }
     }
   };
@@ -292,7 +292,9 @@
       DragResize.finish();
     while(this.events.length > 0)
       removeEvent(this.events.pop());
-    this.container = this.dragHandle = this.resizeHandle = null;
+    this.container = this.dragHandle = this.resizeHandle =
+      this.onClickCallback = this.onDragCallback = this.onFinishCallback =
+      this.callbackScope = this.ignoreTags = this.events = null;
   }
 
   addEvent(doc, 'mouseup',   DragResize.onMouseUp,   DragResize);
