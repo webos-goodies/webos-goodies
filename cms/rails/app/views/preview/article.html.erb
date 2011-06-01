@@ -1,7 +1,8 @@
 <% content_for :title, @article.full_title -%>
 
 <% content_for :head do -%>
-<link rel="stylesheet" href="<%= h(@site.full_url('/template/articles.css')) %>" type="text/css" />
+<link rel="stylesheet" href="<%= h(@site.full_url('/template/articles.css')) %>" type="text/css">
+<link rel="canonical" href="<%= h(@article.url) %>">
 <script type="text/javascript" src="http://www.google.com/jsapi"></script>
 <script type="text/javascript">
   google.load("visualization", "1");
@@ -17,6 +18,7 @@
 <div class="article_head"><h1 class="title"><%= h(@article.title) %></h1></div>
 <div class="tpl_share_buttons">
   <a href="http://twitter.com/share" class="twitter-share-button" data-url="<%= h(@article.url) %>" data-text="<%= h(@article.full_title) %>" data-count="horizontal" data-lang="ja">Tweet</a>
+  <div style="display:inline;" class="g-plusone" size="medium" count="true" data-size="medium" data-count="true"></div>
   <a href="javascript:void(0);" onclick="window.open('http://mixi.jp/share.pl?u=<%= h(u(@article.url)) %>&k=47c2f3d702ad729634af4accde45810f7649ad44','share',['width=632','height=456','location=yes','resizable=yes','toolbar=no','menubar=no','scrollbars=no','status=no'].join(','));"><img src="http://img.mixi.jp/img/basic/mixicheck_entry/bt_check_1.png" style="vertical-align:top; padding-right:16px;"></a>
   <iframe src="http://www.facebook.com/plugins/like.php?href=<%= h(u(@article.url)) %>&amp;layout=button_count&amp;show_faces=false&amp;width=110&amp;action=like&amp;colorscheme=light" scrolling="no" frameborder="0" allowTransparency="true" style="border:none; overflow:hidden; width:110px; height:20px"></iframe>
 </div>
@@ -100,6 +102,11 @@ function tplRegistCategory(json)
 <% @article.meta.strip.split(',').each do |tag| -%>
 <script type="text/javascript" charset="UTF-8" src="<%= h(@site.full_url('/categories/jsonp/', u(tag.strip) + '.js')) %>"></script>
 <% end -%>
+
+<%- "+1 button" -%>
+<script type="text/javascript" src="http://apis.google.com/js/plusone.js">
+  {lang: 'ja'}
+</script>
 
 <%- "Tweet button" -%>
 <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
