@@ -1,0 +1,12 @@
+@import url(../closure-library/closure/goog/css/common.css);
+@import url(../closure-library/closure/goog/css/toolbar.css);
+
+#html-code {
+    width:  90%;
+    height: 100px;
+}
+
+#btn-update-toolbar-wrap {
+    text-align:    center;
+    margin-bottom: 1em;
+}

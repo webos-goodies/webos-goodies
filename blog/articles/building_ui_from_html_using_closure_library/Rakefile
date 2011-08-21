@@ -1,0 +1,118 @@
+# -*- coding: utf-8; mode: ruby -*-
+
+require 'rake/clean'
+require 'pathname'
+require File.join(File.dirname(__FILE__), 'rakeutils.rb')
+
+PYTHON          = 'python'
+JAVA            = 'java'
+CLOSURECOMPILER = File.expand_path('bin/compiler.jar')
+YUICOMPRESSOR   = File.expand_path('bin/yuicompressor.jar')
+CLOSURE_LIB_DIR = File.expand_path('closure-library')
+CLOSUREBUILDER  = File.join(CLOSURE_LIB_DIR, 'closure/bin/build/closurebuilder.py')
+DEPSWRITER      = File.join(CLOSURE_LIB_DIR, 'closure/bin/build/depswriter.py')
+COMMON_LIB_DIRS = []
+EXTERNS         = FileList[]
+
+PROJECT_DIR     = '.'
+STATICFILES_DIR = File.expand_path(PROJECT_DIR)
+DEPS_FILE       = 'deps.js'
+LIB_DIR         = 'lib'
+APPLICATIONS    = ['.']
+
+OPTIMIZE_OPTIONS = {
+  :optimize        => true,
+  :python          => PYTHON,
+  :java            => JAVA,
+  :yuicompressor   => YUICOMPRESSOR,
+  :closurecompiler => CLOSURECOMPILER,
+  :closurelibrary  => CLOSURE_LIB_DIR,
+  :closurebuilder  => CLOSUREBUILDER,
+  :closureopts     => {
+    '--define'            => 'goog.DEBUG=false',
+    '--output_wrapper'    => '(function(){%output%})();',
+    '--externs'           => EXTERNS,
+    # rake default["0"] で単にくっつけるだけ
+    # rake default["1"] でWHITESPACE_ONLY
+    # rake default["2"] でADVANCED_OPTIMIZATIONS
+    # になるようにしましたw
+    #'--compilation_level' => 'ADVANCED_OPTIMIZATIONS'
+    #'--compilation_level' => 'WHITESPACE_ONLY'
+  }
+}
+
+$javascript_targets = []
+$stylesheet_targets = []
+$deps_targets       = []
+
+APPLICATIONS.each do |app_dir|
+  jsfiles = FileList[File.join(PROJECT_DIR, app_dir, 'js/*.js')]
+  libdir  = File.join(PROJECT_DIR, app_dir, 'js', LIB_DIR)
+  jsfiles.each do |source|
+    target = File.join(STATICFILES_DIR, app_dir, File.basename(source).gsub('#', '_'))
+    depdir = source.sub(/(?:#.*)?\.js$/u, '')
+    depend = [source, FileList["#{depdir}/**/*.js"], FileList["#{libdir}/**/*.js"],
+              COMMON_LIB_DIRS.map{|d| FileList["#{d}/**/*.js"] }].flatten
+
+    file target => depend do |t, args|
+      opts = OPTIMIZE_OPTIONS.dup
+      opts[:closureopts] = opts[:closureopts].dup
+      case args['optimize'].to_i
+      when 0 then opts[:optimize] = false
+      when 1 then opts[:closureopts]['--compilation_level'] = 'WHITESPACE_ONLY'
+      else        opts[:closureopts]['--compilation_level'] = 'ADVANCED_OPTIMIZATIONS'
+      end
+      optimizer = RakeUtils::JavaScriptOptimizer.new(opts)
+      mkdir_p(File.dirname(t.name), :verbose => false)
+      ns, pf = File.basename(t.name, '.js'), ''
+      if /^([^#]+)#(.*)$/ === File.basename(t.prerequisites[0], '.js')
+        ns, pf = $1, $2.capitalize
+      end
+      path   = File.dirname(t.prerequisites[0])
+      jscode = optimizer.compile_closure_app("#{ns}.#{pf}App", nil, path, *COMMON_LIB_DIRS)
+      jscode = 'CLOSURE_NO_DEPS=true;' + jscode if args['optimize'].to_i == 0
+      File.open(t.name, 'w'){|file| file << jscode }
+    end
+    $javascript_targets << target
+  end
+
+  cssfiles = FileList[File.join(PROJECT_DIR, app_dir, 'css/*.css')]
+  cssfiles.exclude('**/_*.css')
+  libfiles = FileList[File.join(PROJECT_DIR, app_dir, 'css/_*.css')]
+  cssfiles.each do |source|
+    target = File.join(STATICFILES_DIR, app_dir, File.basename(source))
+    file target => [source, libfiles].flatten do |t, args|
+      puts "#{t.prerequisites[0]}..."
+      opts      = OPTIMIZE_OPTIONS.merge(:optimize => args['optimize'].to_i != 0)
+      optimizer = RakeUtils::CssOptimizer.new(opts)
+      css       = optimizer.expand(t.prerequisites[0])
+      mkdir_p(File.dirname(t.name), :verbose => false)
+      File.open(t.name, 'w') {|file| file << css }
+    end
+    $stylesheet_targets << target
+  end
+
+  $deps_targets << File.join(PROJECT_DIR, app_dir, DEPS_FILE)
+end
+
+task :default, 'optimize'
+task :default => [:scripts, :styles]
+
+task :script, 'optimize'
+task :scripts => $javascript_targets
+
+task :styles, 'optimize'
+task :styles  => $stylesheet_targets
+
+task :deps do
+  basepath = Pathname.new(File.join(CLOSURE_LIB_DIR, 'closure/goog'))
+  APPLICATIONS.each do |app_dir|
+    target  = File.join(PROJECT_DIR, app_dir, DEPS_FILE)
+    depsdir = Pathname.new(File.join(PROJECT_DIR, app_dir, 'js')).cleanpath.to_s
+    prefix  = Pathname.new(File.expand_path(depsdir)).relative_path_from(basepath).to_s
+    mkdir_p(File.dirname(target), :verbose => false)
+    sh(PYTHON, DEPSWRITER, "--output_file=#{target}", "--root_with_prefix=#{depsdir} #{prefix}")
+  end
+end
+
+CLOBBER.include($javascript_targets, $stylesheet_targets, $deps_targets)
