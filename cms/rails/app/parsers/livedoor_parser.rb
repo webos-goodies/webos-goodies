@@ -164,6 +164,12 @@ class LivedoorParser < Parser::Base
       WikiParser::BlockTagSection.new(match[1], 'rawhtml', :filter => false, :syntax => [])
     end
 
+    # 引用
+    tag_syntax(/^<quote>(.*?)^<\/quote>\s*$/mu) do |match, parser|
+      text  = match[1]
+      WikiParser::BlockTagSection.new(text, 'blockquote')
+    end
+
     # ---- メソッド --------------------------------------------------
 
     def initialize()

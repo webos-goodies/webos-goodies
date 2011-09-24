@@ -2,34 +2,35 @@
 
 namespace :closure do
 
-  CLOSURE_LIB_DIR = File.expand_path(File.join(RAILS_ROOT, 'public/javascripts/closure'))
-  WG_LIB_DIR      = '../../wg'
-  PYTHON          = 'python'
-  CALCDEPS        = File.join(CLOSURE_LIB_DIR, 'bin/calcdeps.py')
+  BASE_DIR        = File.expand_path(File.join(RAILS_ROOT, 'public/javascripts'))
+  CLOSURE_LIB_DIR = File.join(BASE_DIR, 'closure-library')
+  DEPSWRITER      = File.join(CLOSURE_LIB_DIR, 'closure/bin/build/depswriter.py')
+  CLOSUREBUILDER  = File.join(CLOSURE_LIB_DIR, 'closure/bin/build/closurebuilder.py')
   COMPILER        = File.expand_path('~/lib/closure-compiler/compiler.jar')
-  JSFILES         = FileList[File.join(RAILS_ROOT, 'public/javascripts/*-debug.js')]
+  SCRIPT_DIRS     = ['wg', 'blog']
+  DEPS_FILE       = File.join(BASE_DIR, 'deps.js')
+  SCRIPT_FILE     = File.join(BASE_DIR, 'common2.js')
   EXTERNS         = File.join(RAILS_ROOT, 'public/javascripts/externs.js')
 
   task :deps do
-    Dir.chdir(File.join(CLOSURE_LIB_DIR, 'goog')) do
-      sh "#{PYTHON} #{CALCDEPS} -p #{WG_LIB_DIR} -o deps > #{WG_LIB_DIR}/deps.js"
+    Dir.chdir(BASE_DIR) do
+      root_opts = SCRIPT_DIRS.map{|d| "--root_with_prefix=\"#{d} ../../../#{d}\"" }.join(' ')
+      print "python #{DEPSWRITER} #{root_opts} --output_file=#{DEPS_FILE}\n"
+      sh "python #{DEPSWRITER} #{root_opts} --output_file=#{DEPS_FILE}"
     end
   end
 
   task :compile do
-    Dir.chdir(File.join(CLOSURE_LIB_DIR, 'goog')) do
-      JSFILES.each do |sname|
-        dname = sname.sub(/-debug\.js$/, '.js')
-        cmd   = ["#{PYTHON} #{CALCDEPS} -o compiled -c #{COMPILER} -i #{sname}",
-                 "-p #{CLOSURE_LIB_DIR}/goog -p #{WG_LIB_DIR}",
-                 "-f \"--compilation_level=ADVANCED_OPTIMIZATIONS\"",
-                 "-f \"--externs=#{EXTERNS}\"",
-                 ENV['PRETTY_PRINT'] ? "-f \"--formatting=PRETTY_PRINT\"" : '',
-                 "-f \"--define=goog.DEBUG=false\""].join(' ')
-        code  = ['(function(){', `#{cmd}`, '})();'].join('')
-        File.open(dname, 'w') do |file|
-          file.write(code)
-        end
+    Dir.chdir(BASE_DIR) do
+      root_opts = (SCRIPT_DIRS+['closure-library']).map{|d| "--root=#{d}" }.join(' ')
+      cmd = ["python #{CLOSUREBUILDER} -o compiled -c #{COMPILER} -n blog.App",
+             root_opts,
+             "-f \"--compilation_level=ADVANCED_OPTIMIZATIONS\"",
+             "-f \"--externs=#{EXTERNS}\"",
+             "-f \"--define=goog.DEBUG=false\""].join(' ')
+      code  = ['(function(){', `#{cmd}`, '})();'].join('')
+      File.open(SCRIPT_FILE, 'w') do |file|
+        file.write(code)
       end
     end
   end
