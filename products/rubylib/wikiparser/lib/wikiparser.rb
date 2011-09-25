@@ -128,10 +128,11 @@ module WikiParser
     end
   end
 
-  class RootSection < Section
-    def initialize(text, options={})
-      @element = REXML::Element.new('wiki')
-      super(text, {:syntax => [:tag, :block, :inline] }.update(options))
+  class RootTagSection < Section
+    def initialize(text, tag, options={:syntax => [:tag, :block, :inline]})
+      @element = REXML::Element.new(tag)
+      @element.add_attributes(options[:attributes]) if options[:attributes]
+      super(text, options)
     end
 
     def to_xml(sections, scanner)
@@ -161,6 +162,12 @@ module WikiParser
       e = REXML::Element.new('p')
       generate_element(e, children, sections, scanner)
       @element.add(e)
+    end
+  end
+
+  class RootSection < RootTagSection
+    def initialize(text, options={})
+      super(text, 'wiki')
     end
   end
 
