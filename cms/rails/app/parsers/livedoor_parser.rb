@@ -56,15 +56,15 @@ class LivedoorParser < Parser::Base
     end
 
     # フォーマット済みテキスト
-    block_syntax(/(?:^\^.*#{EOL})+/u) do |match, parser|
-      text = match[0].gsub(/^\^/u, '')
+    block_syntax(/(?:^[ ^].*#{EOL})+/u) do |match, parser|
+      text = match[0].gsub(/^[ ^]/u, '')
       WikiParser::BlockTagSection.new(text, 'pre', :filter => false, :syntax => nil)
     end
 
-    # 引用（歴史的理由により、 pre 扱い ＾＾；）
-    block_syntax(/(?:^[ >].*#{EOL})+/u) do |match, parser|
-      text = match[0].gsub(/^[ >]/u, '')
-      WikiParser::BlockTagSection.new(text, 'pre')
+    # 引用
+    block_syntax(/(?:^\>.*#{EOL})+/u) do |match, parser|
+      text = match[0].gsub(/^\>/u, '')
+      WikiParser::BlockTagSection.new(text, 'blockquote')
     end
 
     # テーブル
@@ -167,7 +167,9 @@ class LivedoorParser < Parser::Base
     # 引用
     tag_syntax(/^<quote>(.*?)^<\/quote>\s*$/mu) do |match, parser|
       text  = match[1]
-      WikiParser::BlockTagSection.new(text, 'blockquote')
+      attrs = { 'class' => 'tpl_nest' }
+      WikiParser::RootTagSection.new(text, 'blockquote',
+                                     :attributes => attrs, :syntax => [:tag, :block, :inline])
     end
 
     # ---- メソッド --------------------------------------------------

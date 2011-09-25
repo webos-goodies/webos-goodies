@@ -162,17 +162,6 @@ WebOS はインターネットの未来形。あらゆる Web サイトが繋が
 <div class="side" id="tpl_buzz"></div>
 <div class="sidebottom"></div>
 
-<table style="background-color: #fff; padding: 5px; margin: 12px 0px;" cellspacing=0>
-  <tr><td>
-    <img src="http://groups.google.com/groups/img/3/groups_bar_ja.gif"
-         height=26 width=132 alt="Google グループ Beta">
-  </td></tr>
-  <tr><td style="padding-left: 5px;font-size: 125%">
-    <b>WebOS Goodies</b>
-  </td></tr>
-  <tr><td style="padding-left: 5px"> <a href="http://groups.google.com/group/webos-goodies">このグループにアクセス</a> </td></tr>
-</table>
-
 </div>
 </div>
 
@@ -180,7 +169,7 @@ WebOS はインターネットの未来形。あらゆる Web サイトが繋が
 
 <div id="footer">
 
-<div class="rside">&copy; Copyright 2005-2009, <a href="http://webos-goodies.jp/">Chihiro Ito</a> - <a href="http://webos-goodies.jp/atom.xml">RSS Feed</a><br />
+<div class="rside">&copy; Copyright 2005-2011, <a href="http://webos-goodies.jp/">Chihiro Ito</a> - <a href="http://webos-goodies.jp/atom.xml">RSS Feed</a><br />
 Design: <a href="http://www.free-css-templates.com/" title="Design by David Herreman">David Herreman</a>
 </div><!-- rside -->
 

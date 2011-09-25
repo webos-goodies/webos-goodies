@@ -3,6 +3,8 @@
 <% content_for :head do -%>
 <link rel="stylesheet" href="<%= h(@site.full_url('/template/articles.css')) %>" type="text/css">
 <link rel="canonical" href="<%= h(@article.url) %>">
+
+<%- "Google Visualization API" -%>
 <script type="text/javascript" src="http://www.google.com/jsapi"></script>
 <script type="text/javascript">
   google.load("visualization", "1");
@@ -11,19 +13,29 @@
     template.renderTrackbacks('<%= @article.page_name %>');
   });
 </script>
+
+<%- "+1 button" -%>
+<script type="text/javascript">
+  (function() {
+    window.___gcfg = { lang: 'ja' };
+    var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+    po.src = 'https://apis.google.com/js/plusone.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+  })();
+</script>
 <% end -%>
 
-<div class="article">
+<div class="article" itemscope itemtype="http://schema.org/Article">
 
-<div class="article_head"><h1 class="title"><%= h(@article.title) %></h1></div>
+<div class="article_head"><h1 class="title" itemprop="name"><%= h(@article.title) %></h1></div>
 <div class="tpl_share_buttons">
   <a href="http://twitter.com/share" class="twitter-share-button" data-url="<%= h(@article.url) %>" data-text="<%= h(@article.full_title) %>" data-count="horizontal" data-lang="ja">Tweet</a>
-  <div style="display:inline;" class="g-plusone" size="medium" count="true" data-size="medium" data-count="true"></div>
+  <div style="display:inline;" data-href="<%= h(@article.url) %>" class="g-plusone" data-size="medium" data-annotation="bubble"></div>
   <a href="javascript:void(0);" onclick="window.open('http://mixi.jp/share.pl?u=<%= h(u(@article.url)) %>&k=47c2f3d702ad729634af4accde45810f7649ad44','share',['width=632','height=456','location=yes','resizable=yes','toolbar=no','menubar=no','scrollbars=no','status=no'].join(','));"><img src="http://img.mixi.jp/img/basic/mixicheck_entry/bt_check_1.png" style="vertical-align:top; padding-right:16px;"></a>
   <iframe src="http://www.facebook.com/plugins/like.php?href=<%= h(u(@article.url)) %>&amp;layout=button_count&amp;show_faces=false&amp;width=110&amp;action=like&amp;colorscheme=light" scrolling="no" frameborder="0" allowTransparency="true" style="border:none; overflow:hidden; width:110px; height:20px"></iframe>
 </div>
 
-<div class="article_body"><%= @article.formatted_body1 %></div>
+<div class="article_body" itemprop="description"><%= @article.formatted_body1 %></div>
 <div style="clear:both; height:0px;"></div>
 <% unless @article.formatted_body2.empty? -%>
 <div class="article_body"><%= @article.formatted_body2 %></div>
@@ -63,7 +75,6 @@
 <div class="trackback">
 <h1>トラックバックURL</h1>
 <div class="trackback_form">
-<!-- <input type="text" value="$ArticleTrackBackUrl$" /> -->
 <div class="notice">※システムの都合によりトラックバックの受け付けは中止しております。</div>
 </div>
 <a name="trackback"></a>
@@ -102,11 +113,6 @@ function tplRegistCategory(json)
 <% @article.meta.strip.split(',').each do |tag| -%>
 <script type="text/javascript" charset="UTF-8" src="<%= h(@site.full_url('/categories/jsonp/', u(tag.strip) + '.js')) %>"></script>
 <% end -%>
-
-<%- "+1 button" -%>
-<script type="text/javascript" src="https://apis.google.com/js/plusone.js">
-  {lang: 'ja'}
-</script>
 
 <%- "Tweet button" -%>
 <script type="text/javascript" src="//platform.twitter.com/widgets.js"></script>
