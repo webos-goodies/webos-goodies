@@ -103,13 +103,19 @@ module WikiParser
 
   end
 
-  class TagSection < Section
+  class BaseTagSection < Section
     def initialize(text, tag, options={})
       @element = REXML::Element.new(tag)
       @element.add_attributes(options[:attributes]) if options[:attributes]
       super(text, options)
     end
 
+    def add_attributes(hash)
+      @element.add_attributes(hash)
+    end
+  end
+
+  class TagSection < BaseTagSection
     def to_xml(sections, scanner)
       children = generate_children(@text, sections, scanner)
       generate_element(@element, children, sections, scanner)
@@ -128,11 +134,9 @@ module WikiParser
     end
   end
 
-  class RootTagSection < Section
-    def initialize(text, tag, options={:syntax => [:tag, :block, :inline]})
-      @element = REXML::Element.new(tag)
-      @element.add_attributes(options[:attributes]) if options[:attributes]
-      super(text, options)
+  class RootTagSection < BaseTagSection
+    def initialize(text, tag, options={})
+      super(text, tag, {:syntax => [:tag, :block, :inline]}.update(options))
     end
 
     def to_xml(sections, scanner)

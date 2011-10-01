@@ -70,8 +70,13 @@ class LivedoorParser < Parser::Base
     # テーブル
     block_syntax(/(?:^\|.*#{EOL})+/u) do |match, parser|
       children = []
-      match[0].each_line{|line| children << parser.table_row(line) }
-      { :section => WikiParser::BlockTagSection.new('', 'table'), :children => children.flatten }
+      match[0].each_line do |line|
+        children << {
+          :section => WikiParser::BlockTagSection.new('', 'tr'),
+          :children => parser.table_row(line)
+        }
+      end
+      { :section => WikiParser::BlockTagSection.new('', 'table'), :children => children }
     end
 
     # 斜体
@@ -166,10 +171,42 @@ class LivedoorParser < Parser::Base
 
     # 引用
     tag_syntax(/^<quote>(.*?)^<\/quote>\s*$/mu) do |match, parser|
-      text  = match[1]
-      attrs = { 'class' => 'tpl_nest' }
-      WikiParser::RootTagSection.new(text, 'blockquote',
-                                     :attributes => attrs, :syntax => [:tag, :block, :inline])
+      text = match[1]
+      opts = { :attributes => { 'class' => 'tpl_nest' } }
+      WikiParser::RootTagSection.new(text, 'blockquote', opts)
+    end
+
+    # 複雑な表
+    tag_syntax(/^<table([^>]*)>(.*?)^<\/table>\s*$/mu) do |match, parser|
+      opts = { :attributes => {} }
+      match[1].gsub(/(?:^|\s)(\w+)=\"([^\"]*)\"/mu) do
+        name, value = $1, CGI.unescapeHTML($2)
+        case name
+        when 'class'
+          opts[:attributes]['class'] = "#{CGI.escapeHTML(value.strip)}"
+        end
+        ''
+      end
+
+      rows = []
+      match[2].split(/^={4,}\s*$/u).each do |text|
+        unless (text.strip! || text).empty?
+          if text[0,1] == '|'
+            text.each_line{|line| rows << parser.table_row(line) }
+          else
+            rows << parser.complex_table_row(text)
+          end
+        end
+      end
+      rows.compact!
+      num_columns = rows.inject(0) {|v, row| row.length > v ? row.length : v }
+      rows = rows.map do |row|
+        if !row.empty? && (colspan = num_columns - row.length) > 0
+          row.last.add_attributes('colspan' => (colspan + 1).to_s)
+        end
+        { :section => WikiParser::BlockTagSection.new('', 'tr'), :children => row }
+      end
+      { :section => WikiParser::BlockTagSection.new('', 'table', opts), :children => rows }
     end
 
     # ---- メソッド --------------------------------------------------
@@ -219,10 +256,29 @@ class LivedoorParser < Parser::Base
     def table_row(line)
       tag  = (/\|\~/u === line ? 'th' : 'td')
       (columns = line.strip.split(/\|\~?/u)).shift
-      children = columns.map do |text|
+      columns.map do |text|
         WikiParser::BlockTagSection.new(text.strip, tag)
       end
-      { :section => WikiParser::BlockTagSection.new('', 'tr'), :children => children }
+    end
+
+    def complex_table_row(text)
+      children = []
+      tag      = 'td'
+      while /\A(.*?)^([-+]{4,})\s*$/mu === text
+        cell_text = $1.strip
+        separator = $2
+        text      = $'
+        children << complex_table_cell(cell_text, tag)
+        tag = separator[0, 1] == '+' ? 'th' : 'td'
+      end
+      children << complex_table_cell(text, tag)
+      children.compact!
+      children.empty? ? nil : children
+    end
+
+    def complex_table_cell(text, tag)
+      opts = { :attributes => { 'class' => 'tpl_nest' } }
+      text.empty? ? nil : WikiParser::RootTagSection.new(text.strip + "\n", tag, opts)
     end
 
     def link(url, content)
