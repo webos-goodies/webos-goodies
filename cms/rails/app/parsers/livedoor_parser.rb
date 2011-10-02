@@ -177,37 +177,37 @@ class LivedoorParser < Parser::Base
     end
 
     # 複雑な表
-    tag_syntax(/^<table([^>]*)>(.*?)^<\/table>\s*$/mu) do |match, parser|
-      opts = { :attributes => {} }
-      match[1].gsub(/(?:^|\s)(\w+)=\"([^\"]*)\"/mu) do
-        name, value = $1, CGI.unescapeHTML($2)
-        case name
-        when 'class'
-          opts[:attributes]['class'] = "#{CGI.escapeHTML(value.strip)}"
-        end
-        ''
-      end
+#     tag_syntax(/^<table([^>]*)>(.*?)^<\/table>\s*$/mu) do |match, parser|
+#       opts = { :attributes => {} }
+#       match[1].gsub(/(?:^|\s)(\w+)=\"([^\"]*)\"/mu) do
+#         name, value = $1, CGI.unescapeHTML($2)
+#         case name
+#         when 'class'
+#           opts[:attributes]['class'] = "#{CGI.escapeHTML(value.strip)}"
+#         end
+#         ''
+#       end
 
-      rows = []
-      match[2].split(/^={4,}\s*$/u).each do |text|
-        unless (text.strip! || text).empty?
-          if text[0,1] == '|'
-            text.each_line{|line| rows << parser.table_row(line) }
-          else
-            rows << parser.complex_table_row(text)
-          end
-        end
-      end
-      rows.compact!
-      num_columns = rows.inject(0) {|v, row| row.length > v ? row.length : v }
-      rows = rows.map do |row|
-        if !row.empty? && (colspan = num_columns - row.length) > 0
-          row.last.add_attributes('colspan' => (colspan + 1).to_s)
-        end
-        { :section => WikiParser::BlockTagSection.new('', 'tr'), :children => row }
-      end
-      { :section => WikiParser::BlockTagSection.new('', 'table', opts), :children => rows }
-    end
+#       rows = []
+#       match[2].split(/^={4,}\s*$/u).each do |text|
+#         unless (text.strip! || text).empty?
+#           if text[0,1] == '|'
+#             text.each_line{|line| rows << parser.table_row(line) }
+#           else
+#             rows << parser.complex_table_row(text)
+#           end
+#         end
+#       end
+#       rows.compact!
+#       num_columns = rows.inject(0) {|v, row| row.length > v ? row.length : v }
+#       rows = rows.map do |row|
+#         if !row.empty? && (colspan = num_columns - row.length) > 0
+#           row.last.add_attributes('colspan' => (colspan + 1).to_s)
+#         end
+#         { :section => WikiParser::BlockTagSection.new('', 'tr'), :children => row }
+#       end
+#       { :section => WikiParser::BlockTagSection.new('', 'table', opts), :children => rows }
+#     end
 
     # ---- メソッド --------------------------------------------------
 
