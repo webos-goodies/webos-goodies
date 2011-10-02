@@ -9,12 +9,12 @@ gapi.hangout.addApiReadyListener(function() {
 
 // 参加者情報の表示
 function updateParticipants(participants) {
-  var parentEl = $('#participants').empty(participants);
+  var parentEl = $('#participants').empty();
   $.each(participants, function() {
-    var name = this.id;
+    var name = this.hangoutId;
     if(this.displayName)
       name = this.displayName + ' (' + this.id + ')';
-    return $('<li/>').text(name).appendTo(parentEl);
+    $('<li/>').text(name).appendTo(parentEl);
   });
 }
 gapi.hangout.addApiReadyListener(function() {
@@ -27,7 +27,7 @@ function updateAppParticipants(participants) {
   var parentEl = $('#app-participants').empty();
   $.each(participants, function() {
     if(this.hasAppInstalled) {
-      $('<li/>').text(this.displayName || this.id).appendTo(parentEl);
+      $('<li/>').text(this.displayName || this.hangoutId).appendTo(parentEl);
     }
   });
 }
@@ -50,25 +50,33 @@ gapi.hangout.addApiReadyListener(function() {
 // アクティブスピーカーの制御
 
 // 現在のアクティブスピーカーを表示
-gapi.hangout.addActiveSpeakerListener(function(hangoutId) {
-  var p = gapi.hangout.getPerticipantById(hangoutId);
+function showActiveSpeaker(hangoutId) {
+  var p = gapi.hangout.getParticipantById(hangoutId);
   if(p) {
-    $('#current-speaker').text(p.displayName || p.id);
+    $('#current-speaker').text(p.displayName || p.hangoutId);
   }
+}
+gapi.hangout.addApiReadyListener(function() {
+  showActiveSpeaker(gapi.hangout.getActiveSpeaker());
+  gapi.hangout.addActiveSpeakerListener(showActiveSpeaker);
 });
 
 // アクティブスピーカーを選択するためのラジオボタンを表示
-gapi.hangout.addParticipantsListener(function() {
+function updateActiveSpeakerSelector(participants) {
   var parentEl = $('#active-speaker').empty();
   $('<input type="radio" name="activespeaker" value="">自動<br />').appendTo(parentEl);
-  $.each(gapi.hangout.getParticipants(), function() {
+  $.each(participants, function() {
     parentEl.append(
       $('<input type="radio" name="activespeaker" />').attr({
         value:this.hangoutId
       }),
-      $('<span />').text(this.displayName || this.id),
+      $('<span />').text(this.displayName || this.hangoutId),
       $('<br />'));
   });
+}
+gapi.hangout.addApiReadyListener(function() {
+  updateActiveSpeakerSelector(gapi.hangout.getParticipants());
+  gapi.hangout.addParticipantsListener(updateActiveSpeakerSelector);
 });
 
 // ラジオボタンがクリックされた際にアクティブスピーカーを切り替える
@@ -120,7 +128,7 @@ function updateVolumeParticipants(participants) {
   var parentEl = $('#volume').empty();
   $.each(participants, function() {
     var span = $('<span />');
-    var name = (this.displayName || this.id) + ' : ';
+    var name = (this.displayName || this.hangoutId) + ' : ';
     $('<li/>').text(name).append(span).appendTo(parentEl);
     volumeElementMap[this.hangoutId] = span;
   });
@@ -142,19 +150,19 @@ function updateCount(adds, removes, state, metadata) {
   }
 };
 function updateCountParticipants(participants) {
-  var parentEl = $('#count').empty();
+  var parentEl = $('#count');
   $.each(participants, function() {
-    if(!countElementMap[this.hangoutId]) {
+    if(this.hasAppInstalled && !countElementMap[this.hangoutId]) {
       var span = $('<span />').text('0');
-      var name = (this.displayName || this.id) + ' : ';
+      var name = (this.displayName || this.hangoutId) + ' : ';
       $('<li/>').text(name).append(span).appendTo(parentEl);
       countElementMap[this.hangoutId] = span;
     }
   });
 };
 gapi.hangout.addApiReadyListener(function() {
-  updateCountParticipants(gapi.hangout.getParticipants());
-  gapi.hangout.addParticipantAddedListener(updateCountParticipants);
+  updateCountParticipants(gapi.hangout.getAppParticipants());
+  gapi.hangout.addAppParticipantsListener(updateCountParticipants);
   gapi.hangout.data.addStateChangeListener(updateCount);
   $('#countup').click(function() {
     var id     = gapi.hangout.getParticipantId();
