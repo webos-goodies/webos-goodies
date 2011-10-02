@@ -48,20 +48,13 @@ gapi.hangout.addApiReadyListener(function() {
 });
 
 // アクティブスピーカーの制御
-
-// 現在のアクティブスピーカーを表示
 function showActiveSpeaker(hangoutId) {
   var p = gapi.hangout.getParticipantById(hangoutId);
   if(p) {
     $('#current-speaker').text(p.displayName || p.hangoutId);
   }
 }
-gapi.hangout.addApiReadyListener(function() {
-  showActiveSpeaker(gapi.hangout.getActiveSpeaker());
-  gapi.hangout.addActiveSpeakerListener(showActiveSpeaker);
-});
 
-// アクティブスピーカーを選択するためのラジオボタンを表示
 function updateActiveSpeakerSelector(participants) {
   var parentEl = $('#active-speaker').empty();
   $('<input type="radio" name="activespeaker" value="">自動<br />').appendTo(parentEl);
@@ -74,21 +67,24 @@ function updateActiveSpeakerSelector(participants) {
       $('<br />'));
   });
 }
+
+function changeActiveSpeaker() {
+  var hangoutId = this.val();
+  if(hangoutId) {
+    gapi.hangout.setActiveSpeaker(hangoutId);
+  } else {
+    gapi.hangout.clearActiveSpeaker();
+  }
+}
+
 gapi.hangout.addApiReadyListener(function() {
+  showActiveSpeaker(gapi.hangout.getActiveSpeaker());
+  gapi.hangout.addActiveSpeakerListener(showActiveSpeaker);
+
   updateActiveSpeakerSelector(gapi.hangout.getParticipants());
   gapi.hangout.addParticipantsListener(updateActiveSpeakerSelector);
-});
 
-// ラジオボタンがクリックされた際にアクティブスピーカーを切り替える
-gapi.hangout.addApiReadyListener(function() {
-  $('#active-speaker').change(function(e) {
-    var hangoutId = $(e.target).val();
-    if(hangoutId) {
-      gapi.hangout.setActiveSpeaker(hangoutId);
-    } else {
-      gapi.hangout.clearActiveSpeaker();
-    }
-  });
+  $('#active-speaker').change(changeActiveSpeaker);
 });
 
 // AV機器の状態取得
@@ -123,6 +119,7 @@ function updateVolume(volumeInfo) {
       span.text(volumeInfo[id]);
   }
 }
+
 function updateVolumeParticipants(participants) {
   volumeElementMap = {};
   var parentEl = $('#volume').empty();
@@ -133,6 +130,7 @@ function updateVolumeParticipants(participants) {
     volumeElementMap[this.hangoutId] = span;
   });
 }
+
 gapi.hangout.addApiReadyListener(function() {
   updateVolumeParticipants(gapi.hangout.getParticipants());
   updateVolume(gapi.hangout.av.getVolumes());
@@ -149,6 +147,7 @@ function updateCount(adds, removes, state, metadata) {
     }
   }
 };
+
 function updateCountParticipants(participants) {
   var parentEl = $('#count');
   $.each(participants, function() {
@@ -160,6 +159,7 @@ function updateCountParticipants(participants) {
     }
   });
 };
+
 gapi.hangout.addApiReadyListener(function() {
   updateCountParticipants(gapi.hangout.getAppParticipants());
   gapi.hangout.addAppParticipantsListener(updateCountParticipants);
