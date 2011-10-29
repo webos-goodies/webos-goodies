@@ -77,6 +77,38 @@ namespace :upload do
     end
   end
 
+  task :categories => :setup do
+    raise 'Please set ENV["SITE"].' if (ENV['SITE']||'').strip.blank?
+    site          = Site.find(ENV['SITE'].strip.to_i)
+    ftp_path      = site.ftp_path
+    category_path = 'categories'
+    categories    = site.categories.find(:all)
+    cmd           = File.join(RAILS_ROOT, 'script/app/show_category')
+    index         = 0
+    while index < categories.size
+      begin
+        Net::FTP.open(site.ftp_host, site.ftp_user, site.ftp_password) do |ftp|
+          ftp.passive = true
+          while index < categories.size
+            category = categories[index]
+            $stdout << "uploading category #{category.name}...\n"
+            name = category[:name]
+            json = category.to_json
+            html = `#{cmd} #{category.id}`
+            path = File.join(ftp_path, category_path, name + '.html')
+            ftp.putbinarystring(html, path)
+            sleep(1)
+            path = File.join(ftp_path, category_path, 'jsonp', name + '.js')
+            ftp.putbinarystring("tplRegistCategory(#{json});", path)
+            sleep(1)
+            index = index + 1
+          end
+        end
+      rescue
+      end
+    end
+  end
+
   task :article_list => :setup do
     raise 'Please set ENV["SITE"].' if (ENV['SITE']||'').strip.blank?
     site  = Site.find(ENV['SITE'].strip.to_i)

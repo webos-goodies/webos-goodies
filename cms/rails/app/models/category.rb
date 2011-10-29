@@ -53,4 +53,12 @@ class Category < ActiveRecord::Base
     end
   end
 
+  def to_json
+    require 'webapi/json'
+    articles = self.articles(nil, true).map do |article|
+      { 't' => article.simple_title, 'u' => article.url }
+    end
+    json = { 'c' => self.title, 't' => self.name, 'p' => articles }
+    WebAPI::JsonBuilder.new.build(json)
+  end
 end
