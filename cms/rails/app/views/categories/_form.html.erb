@@ -1,0 +1,21 @@
+<%= form[:f].error_messages %>
+
+<p>
+  <%= form[:f].label :name %><br />
+  <%= form[:f].text_field :name %>
+</p>
+<p>
+  <%= form[:f].label :title %><br />
+  <%= form[:f].text_field :title %>
+</p>
+<p>
+  <%= form[:f].label :description %><br />
+  <%= form[:f].text_area :description, :style => 'width:90%;' %>
+</p>
+<p>
+  <%= form[:f].label :tags %><br />
+  <%= form[:f].text_field :tags, :style => 'width:90%;' %>
+</p>
+<p>
+  <%= form[:f].submit '送信' %>
+</p>

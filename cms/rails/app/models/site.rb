@@ -1,8 +1,9 @@
 class Site < ActiveRecord::Base
   has_one  :preference, :dependent => :delete, :class_name => 'SitePreference'
   has_many :articles,   :dependent => :delete_all
+  has_many :categories, :dependent => :delete_all
 
-  attr_protected :id, :created_at, :updated_at, :preference, :articles
+  attr_protected :id, :created_at, :updated_at, :preference, :articles, :categories
 
   validates_presence_of :title
   validates_format_of   :url, :with => /\Ahttps?:\/\//u

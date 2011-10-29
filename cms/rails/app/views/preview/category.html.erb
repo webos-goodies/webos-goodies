@@ -1,0 +1,43 @@
+<% content_for :title, @category.full_title -%>
+
+<% content_for :head do -%>
+<link rel="stylesheet" href="<%= h(@site.full_url('/template/categories.css')) %>" type="text/css">
+<link rel="canonical" href="<%= h(@category.url) %>">
+<% end -%>
+
+<div class="article">
+
+<div class="tpl_categories_body">
+  <% if @category.tags.blank? -%>
+    <h1><%= h(@category.title) %></h1>
+  <% end -%>
+
+  <%= @category.formatted_description %>
+
+  <% @category.sub_categories.each do |sub| -%>
+    <h1><a href="<%= h(sub.url) %>"><%= h(sub.title) %></a></h1>
+    <%= sub.formatted_description %>
+    <fieldset id="tpl_relatedframe">
+      <legend>最新記事</legend>
+      <div id="tpl_related">
+        <ul>
+          <% sub.articles(3, true).each do |article| -%>
+            <li><a href="<%= h(article.url) %>"><%= h(article.simple_title) %></a></li>
+          <% end -%>
+        </ul>
+        <div class="morecategory"><a href="web-apps-review.html">&gt;&gt; もっと読む</a></div>
+      </div>
+    </fieldset>
+  <% end -%>
+
+
+  <% if @category.tags.blank? -%>
+    <ol>
+    <% @category.articles.each do |article| -%>
+      <li><a href="<%= h(article.url) %>"><%= h(article.simple_title) %></a></li>
+    <% end -%>
+    </ol>
+  <% end -%>
+</div>
+
+</div>

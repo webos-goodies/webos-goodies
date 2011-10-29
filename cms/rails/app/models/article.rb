@@ -17,6 +17,7 @@ class Article < ActiveRecord::Base
 
   def url()             self.site.full_url(self.site.article_path, self.page_name + '.html') end
   def full_title()      self.site.format_title(self.title) end
+  def simple_title()    self.title[/\:\s*([^:]+)$/u, 1] || self.title end
 
   def page_name=(value) self[:page_name] = value.strip end
   def title=(value)     self[:title]     = value.strip end

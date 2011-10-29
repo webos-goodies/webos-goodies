@@ -1,4 +1,6 @@
 ActionController::Routing::Routes.draw do |map|
+  map.resources :categories
+
   # The priority is based upon order of creation: first created -> highest priority.
 
   # Sample of regular route:
@@ -43,6 +45,7 @@ ActionController::Routing::Routes.draw do |map|
 
   map.resources :sites do |site|
     site.resources :articles, :member => { :publish => :put }
+    site.resources :categories
   end
 
   map.connect ':controller/:action/:id'

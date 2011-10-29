@@ -1,0 +1,17 @@
+<h1>Editing category</h1>
+
+<% form_for(@category, :url => site_category_url(@site.id, @category.id)) do |f| %>
+  <%= render :partial => 'form', :object => { :f => f } %>
+<% end %>
+
+<hr>
+<p>
+  <%= link_to('プレビュー', :controller => :preview, :action => :category, :id => @category.id) %>
+  （<%= link_to('Debug版', :controller => :preview, :action => :category, :id => @category.id, :dev => 'debug') %>,
+	<%= link_to('Release版', :controller => :preview, :action => :category, :id => @category.id, :dev => 'release') %>）
+</p>
+<ul>
+  <% @category.sub_categories.each do |sub| %>
+    <li><%= link_to sub.title, site_category_path(@site.id, sub.id) %></li>
+  <% end %>
+</ul>

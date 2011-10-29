@@ -34,6 +34,15 @@ class PreviewController < ApplicationController
     render :action => 'error', :layout => false
   end
 
+  def category
+    common_params(params)
+    @category = Category.find(params[:id])
+    @site     = @category.site
+    raise ActiveRecord::RecordInvalid.new(article) unless @category.valid?
+  rescue ActiveRecord::RecordInvalid => e
+    render :action => 'error', :layout => false
+  end
+
   private
 
   def common_params(params)
