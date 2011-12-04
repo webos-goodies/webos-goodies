@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Module>
+  <ModulePrefs title="Plus Short">
+    <Require feature="rpc"/>
+    <Require feature="views"/>
+  </ModulePrefs>
+  <Content type="html">
+    <![CDATA[
+
+<!DOCTYPE html>
+
+<style>
+  body { position:absolute; left:0px; top:0px; width:100%; height:100%; }
+  #wrap { width:100%; height:100%; overflow:auto }
+  #hangout-url {
+    height:      36px;
+    line-height: 1;
+    font-size:   32px;
+  }
+  #screendiv {
+    position:  fixed;
+    left:      0px;
+    right:     0px;
+    top:       40px;
+    bottom:    0px;
+    text-align:center;
+  }
+</style>
+
+<div id="wrap">
+
+  <div id="hangout-url"></div>
+  <div id="screendiv"><canvas id="screen" width="384" height="256"></canvas></div>
+
+</div>
+
+<script src="//hangoutsapi.talkgadget.google.com/hangouts/api/hangout.js?v=0.1"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
+<script src="//dl.dropbox.com/u/327/plusshot.js"></script>
+
+    ]]>
+  </Content>
+</Module>

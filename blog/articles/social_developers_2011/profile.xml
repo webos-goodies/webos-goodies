@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Module>
+  <ModulePrefs title="Your App Name">
+    <Require feature="rpc"/>
+    <Require feature="views"/>
+  </ModulePrefs>
+  <Content type="html">
+    <![CDATA[
+
+<!DOCTYPE html>
+
+<style>
+  body { position:absolute; left:0px; top:0px; width:100%; height:100%; }
+  #wrap { width:100%; height:100%; overflow:auto }
+  #wrap table {
+    width:           100%;
+    table-layout:    fixed;
+    border-collapse: collapse;
+  }
+  #wrap td {
+    padding:   4px;
+    border:    solid 1px black;
+    overflow:  hidden;
+    font-size: 12px;
+    vertical-align: top;
+  }
+  #wrap .label {
+    font-weight: bold;
+    margin-top:  1em;
+  }
+  #hangout-url {
+    font-size: 32px;
+    margin:    10px 0;
+  }
+</style>
+
+<div id="wrap">
+
+  <div id="hangout-url"></div>
+  <table>
+    <body><tr id="profiles"></tr></head>
+  </table>
+
+</div>
+
+<script src="//hangoutsapi.talkgadget.google.com/hangouts/api/hangout.js?v=0.1"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
+<script src="//dl.dropbox.com/u/327/profile.js"></script>
+
+    ]]>
+  </Content>
+</Module>
