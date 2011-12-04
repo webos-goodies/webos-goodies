@@ -1,5 +1,5 @@
 var g_gplusApiKey  = 'AIzaSyA66MPZoCni63p1HVlOmfptNKlaQZAyOVQ';
-var g_imageUrl     = '////dl.dropbox.com/u/327/images/';
+var g_imageUrl     = '//webos-goodies.googlecode.com/svn/trunk/blog/articles/social_developers_2011/images/';
 var g_canvas       = null;
 var g_ctx          = null;
 var g_screenWidth  = 384;
