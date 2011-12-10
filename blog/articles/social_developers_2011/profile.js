@@ -1,4 +1,4 @@
-var g_gplusApiKey  = 'AIzaSyCvECmyv9YVlYtDMSZl_X3BuffRi01Y9KA';
+var g_gplusApiKey  = 'AIzaSyDlSUZoRH5kERDrBDLDNLCyis4drcam8eQ';
 var g_participants = {};
 
 // gadgets.io.makeRequestのjQuery.Deferrdバージョン
