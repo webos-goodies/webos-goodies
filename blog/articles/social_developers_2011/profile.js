@@ -45,11 +45,11 @@ function updateParticipants(participants) {
   // 参加者の情報を得る
   var newParticipants = {};
   var maxIndex        = -1;
-  $.each(participants, function() {
+  $.each(participants, function(i) {
     var id   = this.id;
     var data = g_participants[id] || {};
     data.id            = id;
-    data.displayIndex  = this.displayIndex,
+    data.displayIndex  = typeof(this.displayIndex) == 'number' ? this.displayIndex : i,
     data.hasAppEnabled = this.hasAppEnabled,
     data.displayName   = 'Unknown'
     if(this.person) {
