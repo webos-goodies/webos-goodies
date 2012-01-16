@@ -6,6 +6,7 @@ import dateutil.tz
 import jinja2
 import baseview
 import twolegged
+import re
 
 from google.appengine.api import mail
 
@@ -18,51 +19,86 @@ SHEET_ID        = ('0Ao0lgngMECUtcE1JQnJuSjRQSEtfVG5iX0lBejNjVFE', 'od6')
 HEADERS         = { 'GData-Version': '3.0', 'Content-Type':'application/atom+xml' }
 USER_EMAIL      = 'support@webos-goodies.jp'
 
-ARTICLE_URL    = 'http://webos-goodies.jp/archives/%s.html#comments'
+ARTICLE_URL     = 'http://webos-goodies.jp/archives/%s.html#comments'
+
+ANCHOR_RE       = re.compile(r'</a>')
+BBTAG_RE        = re.compile(r'\[/url\]')
 
 
 class CommentsView(baseview.BaseView):
   def get(self, page_id):
-    self.render_html(PAGE_TEMPLATE)
+    self.render_html(TOP_TEMPLATE)
 
   def post(self, page_id):
     dt = datetime.datetime.now(dateutil.tz.tzoffset('JST', +9*60*60))
-    payload = self.template_env.from_string(POST_SPREADSHEETS_TEMPLATE).render(
-      timestamp = dt.strftime('%m/%d/%Y %H:%M:%S'),
-      page      = page_id,
-      title     = self.request.get('title'),
-      name      = self.request.get('name'),
-      url       = self.request.get('url'),
-      comment   = self.request.get('comment'))
+    p  = {
+      'timestamp': dt.strftime('%m/%d/%Y %H:%M:%S'),
+      'page':      page_id,
+      'title':     self.request.get('title'),
+      'name':      self.request.get('name'),
+      'url':       self.request.get('url'),
+      'comment':   self.request.get('comment') }
 
-    client   = twolegged.Client(CONSUMER_KEY, CONSUMER_SECRET, deadline=30)
-    response = client.fetch(twolegged.Request(
-        method='POST', url=LISTFEED_URL % SHEET_ID, payload=payload,
-        headers=HEADERS, user=USER_EMAIL))
+    err = self.validate_form(p)
+    if err is None:
+      payload  = self.template_env.from_string(POST_SPREADSHEETS_TEMPLATE).render(p)
+      client   = twolegged.Client(CONSUMER_KEY, CONSUMER_SECRET, deadline=30)
+      response = client.fetch(twolegged.Request(
+          method='POST', url=LISTFEED_URL % SHEET_ID, payload=payload,
+          headers=HEADERS, user=USER_EMAIL))
+      mail.send_mail(sender="support@webos-goodies.jp",
+                     to="support@webos-goodies.jp",
+                     subject="You got a comment!",
+                     body=NOTIFICATION)
+      return self.redirect(ARTICLE_URL % page_id)
 
-    mail.send_mail(sender="support@webos-goodies.jp",
-                   to="support@webos-goodies.jp",
-                   subject="You got a comment!",
-                   body=NOTIFICATION)
-
-    return self.redirect(ARTICLE_URL % page_id)
+    else:
+      p['err'] = err
+      self.render_html(TOP_TEMPLATE, p)
 
 
-PAGE_TEMPLATE = u"""
+  def validate_form(self, p):
+    if not p['name']:
+      return u'お名前を入力してください。'
+    if not p['comment']:
+      return u'コメントを入力してください。'
+    if ANCHOR_RE.search(p['comment']) and BBTAG_RE.search(p['comment']):
+      return u'スパム対策によりコメントは拒否されました。'
+    return None
+
+
+TOP_TEMPLATE = u"""
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>コメント投稿フォーム</title>
+<style>
+.notice {background-color:#fae8a0;margin:16px 0 16px 90px; padding:8px;}
+.label {clear:both;float:left;text-align:right;width:80px;}
+.field {margin: 16px 0 16px 90px;}
+.btn   {clear:botn;text-align:center;}
+.form input{width:40em;font-size:14px;}
+.form textarea{width:40em;height:20em;font-size:14px;}
+.btn  input{font-size:14px; padding:8px 24px;}
+</style>
 </head>
 <body>
-<form action="#" method="POST">
-<input type="hidden" name="title" value="テスト">
-お名前: <input type="text" name="name">
-URL: <input type="text" name="url">
-<textarea style="width:80em;height:30em;" name="comment"></textarea>
-<input type="submit">
-</form>
+<div style="float:left;">
+  <form action="#" method="POST">
+    <input type="hidden" name="title" value="{{title}}">
+    <div class="form">
+      <div class="notice">{{err}}</div>
+      <div class="label">お名前</div>
+      <div class="field"><input type="text" name="name" value="{{name}}"></div>
+      <div class="label">URL</div>
+      <div class="field"><input type="text" name="url" value="{{url}}"></div>
+      <div class="label"></div>
+      <div class="field"><textarea name="comment">{{comment}}</textarea></div>
+    </div>
+    <div class="btn"><input type="submit"></div>
+  </form>
+</div>
 </body>
 </html>
 """
