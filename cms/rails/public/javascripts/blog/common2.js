@@ -184,6 +184,12 @@ blog.App.prototype.renderComments = function(pageId) {
     'Name':      blog.App.nameFormatter_,
     'Comment':   blog.App.bodyFormatter_
   });
+  if(location.hash == '#comments') {
+    goog.dom.insertChildAt(
+      goog.dom.getElement('comment_form'),
+      goog.dom.createDom(
+        'div', 'notice', '※ コメントの反映には時間がかかることがあります。'), 0);
+  }
   var renderFunc = goog.bind(
     this.renderComments_, this,
     '<h1>この記事へのコメント</h1><div class="comment_body">%s</div>',
@@ -209,7 +215,12 @@ blog.App.prototype.renderTrackbacks = function(pageId) {
   });
   var renderFunc = goog.bind(
     this.renderComments_, this,
-    '<h1>この記事へのトラックバック</h1><div class="trackback_body">%s</div>',
+    ['<div class="trackback"><h1>トラックバックURL</h1>',
+     '<div class="trackback_form">',
+     '<div class="notice">※トラックバックの受け付けは中止しております。</div>',
+     '</div>',
+     '<h1>この記事へのトラックバック</h1><div class="trackback_body">%s</div>',
+     '</div>'].join(''),
     'tpl_trackbacks', 'tpl_num_trackbacks');
   renderer.render("select * WHERE B = '" + pageId + "' ORDER BY A", renderFunc);
 };
@@ -227,7 +238,7 @@ blog.App.relativeDateFormatter_ = function(value, entry) {
 };
 
 /**
- * Recent ArticlesとBuzzのフィードを表示する
+ * Recent ArticlesとTwitterのフィードを表示する
  * @param {goog.events.Event} e イベントオブジェクト
  * @private
  */
@@ -240,12 +251,12 @@ blog.App.prototype.renderFeeds_ = function(e) {
   renderer.setTemplate('<a class="sidebody" href="%link%">%title%</a>');
   renderer.render('http://webos-goodies.jp/atom.xml', 'tpl_recent_articles', { 'num': 8 });
 
-  // buzz
+  // Twitter
   renderer.setTemplate(goog.string.buildString(
 	'<a class="sidebody" href="%link%" target="_blank">%contentSnippet%<br>',
 	'<span class="tpl-buzz-date">%publishedDate%</span></a>'));
   renderer.setFormatter({'publishedDate': blog.App.relativeDateFormatter_});
-  renderer.render('http://buzz.googleapis.com/feeds/113438044941105226764/public/posted',
+  renderer.render('https://twitter.com/statuses/user_timeline/24371070.rss',
 				  'tpl_buzz', { 'num': 16 });
 };
 

@@ -1,0 +1,34 @@
+application: blog-backend
+version: 1
+runtime: python27
+api_version: 1
+threadsafe: true
+
+
+handlers:
+- url: .*
+  script: views.app
+
+
+libraries:
+- name: jinja2
+  version: 2.6
+
+- name: markupsafe
+  version: 0.15
+
+- name: setuptools
+  version: 0.6c11
+
+
+skip_files:
+- ^(.*/)?app\.yaml
+- ^(.*/)?app\.yml
+- ^(.*/)?index\.yaml
+- ^(.*/)?index\.yml
+- ^(.*/)?#.*#
+- ^(.*/)?.*~
+- ^(.*/)?.*\.py[co]
+- ^(.*/)?.*/RCS/.*
+- ^(.*/)?\..*
+- ^/?lib-official.*
