@@ -1,10 +1,17 @@
 # -*- coding: utf-8 -*-
 
+import os
 import setup
 setup.initialize()
+import logging
 import webapp2
 
 from comments import CommentsView
+
+def is_dev_server():
+  server_software = os.environ.get('SERVER_SOFTWARE')
+  logging.debug(server_software)
+  return server_software.startswith('Development')
 
 class MainHandler(webapp2.RequestHandler):
   def get(self):
@@ -13,4 +20,4 @@ class MainHandler(webapp2.RequestHandler):
 
 app = webapp2.WSGIApplication(
     [ ('/comments/([^/]+)', CommentsView) ],
-    debug=False)
+    debug=is_dev_server())

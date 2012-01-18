@@ -1,18 +1,19 @@
 # -*- coding: utf-8 -*-
 
 import logging
+import re
 import datetime
 import dateutil.tz
 import jinja2
+import settings
 import baseview
 import twolegged
-import re
 
 from google.appengine.api import mail
 
 
-CONSUMER_KEY    = 'webos-goodies.jp'
-CONSUMER_SECRET = 'RR3Na6IT1KTO8JrsvjqbSXFd'
+CONSUMER_KEY    = settings.CONSUMER_KEY
+CONSUMER_SECRET = settings.CONSUMER_SECRET
 
 LISTFEED_URL    = 'https://spreadsheets.google.com/feeds/list/%s/%s/private/full?alt=json'
 SHEET_ID        = ('0Ao0lgngMECUtcE1JQnJuSjRQSEtfVG5iX0lBejNjVFE', 'od6')
@@ -20,8 +21,6 @@ HEADERS         = { 'GData-Version': '3.0', 'Content-Type':'application/atom+xml
 USER_EMAIL      = 'support@webos-goodies.jp'
 
 ARTICLE_URL     = 'http://webos-goodies.jp/archives/%s.html#comments'
-
-ANCHOR_RE       = re.compile(r'</a>')
 BBTAG_RE        = re.compile(r'\[/url\]')
 
 
@@ -62,7 +61,7 @@ class CommentsView(baseview.BaseView):
       return u'お名前を入力してください。'
     if not p['comment']:
       return u'コメントを入力してください。'
-    if ANCHOR_RE.search(p['comment']) and BBTAG_RE.search(p['comment']):
+    if BBTAG_RE.search(p['comment']):
       return u'スパム対策によりコメントは拒否されました。'
     return None
 
@@ -88,7 +87,7 @@ TOP_TEMPLATE = u"""
   <form action="#" method="POST">
     <input type="hidden" name="title" value="{{title}}">
     <div class="form">
-      <div class="notice">{{err}}</div>
+      {% if err %}<div class="notice">{{err}}</div>{% endif %}
       <div class="label">お名前</div>
       <div class="field"><input type="text" name="name" value="{{name}}"></div>
       <div class="label">URL</div>
