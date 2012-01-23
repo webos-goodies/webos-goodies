@@ -21,7 +21,7 @@ HEADERS         = { 'GData-Version': '3.0', 'Content-Type':'application/atom+xml
 USER_EMAIL      = 'support@webos-goodies.jp'
 
 ARTICLE_URL     = 'http://webos-goodies.jp/archives/%s.html#comments'
-BBTAG_RE        = re.compile(r'\[/url\]')
+SPAM_RE         = re.compile(r'(?:\[/url\])|ã')
 
 
 class CommentsView(baseview.BaseView):
@@ -61,7 +61,7 @@ class CommentsView(baseview.BaseView):
       return u'お名前を入力してください。'
     if not p['comment']:
       return u'コメントを入力してください。'
-    if BBTAG_RE.search(p['comment']):
+    if SPAM_RE.search(p['comment']):
       return u'スパム対策によりコメントは拒否されました。'
     return None
 
