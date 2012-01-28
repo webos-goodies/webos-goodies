@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ApplicationManifest xmlns="http://schemas.google.com/ApplicationManifest/2009">
+
+  <!-- アプリケーション名と説明 -->
+  <Name>Blog Backend</Name>
+  <Description>Backend service for webos-goodies.jp.</Description>
+
+  <!-- OpenIDの設定 -->
+  <Extension id="realm" type="openIdRealm">
+    <!-- 必ず自分の管理下のドメインを指定してください -->
+    <Url>http://webos-goodies.jp</Url>
+
+    <!-- ScopeタグのIDを列挙する -->
+    <Scope ref="spreadsheets" />
+  </Extension>
+
+  <!-- アクセスしたいAPIのスコープ定義 -->
+  <Scope id="spreadsheets">
+    <Url>https://spreadsheets.google.com/feeds/</Url>
+    <Reason>適当な理由</Reason>
+  </Scope>
+
+</ApplicationManifest>

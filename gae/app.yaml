@@ -32,3 +32,4 @@ skip_files:
 - ^(.*/)?.*/RCS/.*
 - ^(.*/)?\..*
 - ^/?lib-official.*
+- ^/?support-files.*

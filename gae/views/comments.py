@@ -45,10 +45,19 @@ class CommentsView(baseview.BaseView):
       response = client.fetch(twolegged.Request(
           method='POST', url=LISTFEED_URL % SHEET_ID, payload=payload,
           headers=HEADERS, user=USER_EMAIL))
-      mail.send_mail(sender="support@webos-goodies.jp",
-                     to="support@webos-goodies.jp",
-                     subject="You got a comment!",
-                     body=NOTIFICATION)
+      if 200 <= response.status_code < 300:
+        mail.send_mail(sender="support@webos-goodies.jp",
+                       to="support@webos-goodies.jp",
+                       subject="You got a comment!",
+                       body=NOTIFICATION)
+      else:
+        body = ERR_NOTIFICATION % (
+          p['timestamp'], p['page'], p['title'], p['name'], p['url'], p['comment'],
+          str(HEADERS), payload, response.status_code, str(response.headers), response.content)
+        mail.send_mail(sender="support@webos-goodies.jp",
+                       to="support@webos-goodies.jp",
+                       subject="Error at posting comment",
+                       body=body)
       return self.redirect(ARTICLE_URL % page_id)
 
     else:
@@ -116,4 +125,33 @@ NOTIFICATION = """
 A comment has been posted on webos-goodies.jp.
 
 https://docs.google.com/a/webos-goodies.jp/spreadsheet/ccc?key=0Ao0lgngMECUtcE1JQnJuSjRQSEtfVG5iX0lBejNjVFE
+"""
+
+ERR_NOTIFICATION = """
+Got an error at posting a comment.
+
+---- Comment ----
+Timestamp: %s
+Page:      %s
+Title:     %s
+Name:      %s
+Url:       %s
+Comment:
+%s
+
+---- Request ----
+Headers:
+%s
+
+Body:
+%s
+
+---- Response ----
+Status: %d
+
+Headers:
+%s
+
+Body:
+%s
 """
