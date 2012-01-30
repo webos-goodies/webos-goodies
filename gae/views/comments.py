@@ -21,7 +21,7 @@ HEADERS         = { 'GData-Version': '3.0', 'Content-Type':'application/atom+xml
 USER_EMAIL      = 'support@webos-goodies.jp'
 
 ARTICLE_URL     = 'http://webos-goodies.jp/archives/%s.html#comments'
-SPAM_RE         = re.compile(r'(?:\[/url\])|ã|pharmacy')
+SPAM_RE         = re.compile(r'(?:\[/url\])|ã|pharmacy|\.hppejft')
 
 
 class CommentsView(baseview.BaseView):
