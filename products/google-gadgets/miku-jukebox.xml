@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Module>
+  <ModulePrefs title="初音ミク JUKE BOX" height="200">
+    <Require feature="dynamic-height" />
+  </ModulePrefs>
+  <Content type="html" view="default,home,canvas,preview"><![CDATA[
+
+    <style type="text/css">
+      html,body { margin:0; padding:0;
+    </style>
+    <script src="http://www.google.com/jsapi" type="text/javascript"></script>
+    <script type="text/javascript">
+      google.load("swfobject", "2.1");
+    </script>
+    <script type="text/javascript">
+      /*
+       * Change out the video that is playing
+       */
+
+      // playlist
+      var playerReady = false;
+      var feeds       = [];
+      var videoIds    = [];
+      var playIndex   = 0;
+
+      // Loads the selected video into the player.
+      function loadVideo(videoID) {
+        if(ytplayer) {
+          ytplayer.loadVideoById(videoID, 0);
+        }
+      }
+
+      // This function is called when an error is thrown by the player
+      function onPlayerError(errorCode) {
+        alert("An error occured of type:" + errorCode);
+      }
+
+      // This function is called when the playback status is changed
+      function onPlayerStateChange(state) {
+        if(state - 0 == 0) {
+          playIndex = (playIndex + 1) % videoIds.length;
+          loadVideo(videoIds[playIndex]);
+        }
+      }
+
+      // This function is automatically called by the player once it loads
+      function onYouTubePlayerReady(playerId) {
+        ytplayer = document.getElementById("ytPlayer");
+        ytplayer.addEventListener("onError", "onPlayerError");
+        ytplayer.addEventListener("onStateChange", "onPlayerStateChange");
+      }
+
+      // The "main method" of this sample. Called when someone clicks "Run".
+      function loadPlayer(videoID) {
+        // Lets Flash from another domain call JavaScript
+        var params = { allowScriptAccess: "always" };
+        // The element id of the Flash embed
+        var atts = { id: "ytPlayer" };
+        // Compute the size of the player
+        var playerDiv = document.getElementById('videoDiv');
+        var width  = playerDiv.clientWidth;
+        var height = (width * 0.5625 | 0) + 25;
+        // All of the magic handled by SWFObject (http://code.google.com/p/swfobject/)
+        swfobject.embedSWF("http://www.youtube.com/v/" + videoID +
+                           "?version=3&enablejsapi=1&playerapiid=player1",
+                           "videoDiv", ''+width, ''+height, "9", null, null, params, atts);
+        gadgets.window.adjustHeight();
+      }
+      function _run() {
+        playerReady = true;
+        if(videoIds.length > 0) {
+          loadPlayer(videoIds[0]);
+        }
+      }
+      google.setOnLoadCallback(_run);
+
+      function onSearchResult(result) {
+        feeds.push(result.data.items);
+        if(feeds.length >= 2) {
+          buildPlayList();
+        }
+      }
+
+      function buildPlayList() {
+        var items  = Array.prototype.concat.apply([], feeds);
+        var exists = {}
+        for(var i = 0 ; i < items.length ; i++) {
+          var videoId = items[i].id;
+          if(!exists[videoId]) {
+            var pos = Math.random() * videoIds.length | 0;
+            videoIds.splice(pos, 0, videoId);
+            exists[videoId] = true
+          }
+        }
+        if(playerReady) {
+          loadPlayer(videoIds[0]);
+        }
+      }
+    </script>
+    <script src="https://gdata.youtube.com/feeds/api/videos?q=hatsune+miku&alt=jsonc&callback=onSearchResult&max-results=50&v=2"></script>
+    <script src="https://gdata.youtube.com/feeds/api/videos?q=%E5%88%9D%E9%9F%B3%E3%83%9F%E3%82%AF&alt=jsonc&callback=onSearchResult&max-results=50&v=2"></script>
+
+    <div id="videoDiv">Loading...</div>
+
+  ]]></Content>
+</Module>
