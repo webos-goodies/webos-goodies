@@ -40,7 +40,8 @@ goog.tweak.endBooleanGroup();
 goog.tweak.registerButton(
   'Button',
   'ボタンでJavaScriptの実行も可能',
-  function() { alert('ボタンでJavaScriptの実行も可能'); });
+  function() { alert('ボタンでJavaScriptの実行も可能'); },
+  'コードの実行');
 
 /** @constructor */
 tweakuisample.App = function() {
