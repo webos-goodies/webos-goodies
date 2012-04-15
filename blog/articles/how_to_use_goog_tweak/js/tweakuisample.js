@@ -39,13 +39,13 @@ goog.tweak.endBooleanGroup();
 
 goog.tweak.registerButton(
   'Button',
-  '任意の操作を行うボタンも追加できます',
-  function() { alert('clicked!'); });
+  'ボタンでJavaScriptの実行も可能',
+  function() { alert('ボタンでJavaScriptの実行も可能'); });
 
 /** @constructor */
 tweakuisample.App = function() {
-  goog.dom.setTextContent(goog.dom.getElement('url'), location.href);
-  var tweakEl = goog.tweak.TweakUi.create();
+  goog.dom.setTextContent(goog.dom.getElement('url'), location.search || '');
+  var tweakEl = goog.tweak.TweakUi.createCollapsible();
   if(tweakEl) {
     goog.dom.getElement('my-tweak-ui').appendChild(tweakEl);
   } else {
