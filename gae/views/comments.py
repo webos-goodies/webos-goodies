@@ -48,7 +48,7 @@ class CommentsView(baseview.BaseView):
       if 200 <= response.status_code < 300:
         mail.send_mail(sender="support@webos-goodies.jp",
                        to="support@webos-goodies.jp",
-                       subject="You got a comment!",
+                       subject="You've got a comment!",
                        body=NOTIFICATION)
       else:
         body = ERR_NOTIFICATION % (
