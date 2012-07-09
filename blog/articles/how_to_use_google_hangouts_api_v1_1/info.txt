@@ -1,0 +1,16 @@
+Sample Hangout application.
+
+Terms of Service
+================
+
+Use at your own risk.
+
+Privacy Policy
+==============
+
+This application will never collect any of your personal information.
+
+Support Contact Information
+===========================
+
+No support is provided.
