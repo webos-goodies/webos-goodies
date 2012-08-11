@@ -81,6 +81,7 @@
 <div id="comment_form">
 <form action="https://blog-backend.appspot.com/comments/<%= h(@article.page_name) %>" method="POST" name="comment_form">
 <input type="hidden" name="title" value="<%= h(@article.title) %>" />
+<input type="hidden" name="code" value="寿限無寿限無五劫の擦り切れ" />
 <div class="with_label"><label for="author">名前</label><input id="author" name="name" /></div>
 <div class="with_label"><label for="url">URL</label><input id="url" name="url" /></div>
 <div class="no_label">

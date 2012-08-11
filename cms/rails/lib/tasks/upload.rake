@@ -2,6 +2,8 @@
 
 require 'ftp_ex'
 
+FTP_PASSIVE = false
+
 namespace :upload do
 
   task :all => [:indices, :articles, :scripts]
@@ -24,7 +26,7 @@ namespace :upload do
     end
     Net::FTP.open(site.ftp_host, site.ftp_user, site.ftp_password) do |ftp|
       ftp_path    = site.ftp_path
-      ftp.passive = true
+      ftp.passive = FTP_PASSIVE
       pages.each do |page|
         ftp.putbinarystring(page[:body], File.join(ftp_path, page[:dest]))
       end
@@ -43,7 +45,7 @@ namespace :upload do
     html = `#{cmd} #{id}`
     path = File.join(site.ftp_path, site.article_path, article[:page_name] + '.html')
     Net::FTP.open(site.ftp_host, site.ftp_user, site.ftp_password) do |ftp|
-      ftp.passive = true
+      ftp.passive = FTP_PASSIVE
       ftp.putbinarystring(html, path)
     end
   end
@@ -59,7 +61,7 @@ namespace :upload do
     while index < articles.size
       begin
         Net::FTP.open(site.ftp_host, site.ftp_user, site.ftp_password) do |ftp|
-          ftp.passive = true
+          ftp.passive = FTP_PASSIVE
           while index < articles.size
             article = articles[index]
             article.publish
@@ -88,7 +90,7 @@ namespace :upload do
     while index < categories.size
       begin
         Net::FTP.open(site.ftp_host, site.ftp_user, site.ftp_password) do |ftp|
-          ftp.passive = true
+          ftp.passive = FTP_PASSIVE
           while index < categories.size
             category = categories[index]
             $stdout << "uploading category #{category.name}...\n"
@@ -129,7 +131,7 @@ namespace :upload do
       ['common2.js'].each do |sname|
         dname       = File.join(site.ftp_path, '/template', sname)
         content     = IO.read(File.join(RAILS_ROOT, 'public/javascripts', sname))
-        ftp.passive = true
+        ftp.passive = FTP_PASSIVE
         ftp.putbinarystring(content, dname)
       end
     end

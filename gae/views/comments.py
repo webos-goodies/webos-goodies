@@ -31,12 +31,13 @@ class CommentsView(baseview.BaseView):
   def post(self, page_id):
     dt = datetime.datetime.now(dateutil.tz.tzoffset('JST', +9*60*60))
     p  = {
-      'timestamp': dt.strftime('%m/%d/%Y %H:%M:%S'),
-      'page':      page_id,
-      'title':     self.request.get('title'),
-      'name':      self.request.get('name'),
-      'url':       self.request.get('url'),
-      'comment':   self.request.get('comment') }
+      'timestamp': self.force_unicode(dt.strftime('%m/%d/%Y %H:%M:%S')),
+      'page':      self.force_unicode(page_id),
+      'title':     self.force_unicode(self.request.get('title')),
+      'name':      self.force_unicode(self.request.get('name')),
+      'url':       self.force_unicode(self.request.get('url')),
+      'comment':   self.force_unicode(self.request.get('comment')),
+      'code':      self.force_unicode(self.request.get('code')) }
 
     err = self.validate_form(p)
     if err is None:
@@ -66,13 +67,22 @@ class CommentsView(baseview.BaseView):
 
 
   def validate_form(self, p):
+    logging.info(p);
     if not p['name']:
       return u'お名前を入力してください。'
     if not p['comment']:
       return u'コメントを入力してください。'
+    if p['code'] != u'寿限無寿限無五劫の擦り切れ':
+      return u'スパム対策によりコメントは拒否されました。'
     if SPAM_RE.search(p['comment']):
       return u'スパム対策によりコメントは拒否されました。'
     return None
+
+
+  def force_unicode(self, s):
+    if not isinstance(s, unicode):
+      s = unicode(s, 'UTF-8')
+    return s
 
 
 TOP_TEMPLATE = u"""
