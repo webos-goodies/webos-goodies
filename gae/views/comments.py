@@ -21,7 +21,10 @@ HEADERS         = { 'GData-Version': '3.0', 'Content-Type':'application/atom+xml
 USER_EMAIL      = 'support@webos-goodies.jp'
 
 ARTICLE_URL     = 'http://webos-goodies.jp/archives/%s.html#comments'
-SPAM_RE         = re.compile(r'(?:\[/url\])|ã|pharmacy|\.hppejft')
+LINK_RE         = re.compile(r'^https?://')
+SPAM_NAME_RE    = re.compile(r'(?:^|\s)replicas?\s', re.I)
+SPAM_RE         = re.compile(r'\[/url\]', re.I)
+SPAM_LINK_RE    = re.compile(r'(?:^|\s)https?://', re.I)
 
 
 class CommentsView(baseview.BaseView):
@@ -35,7 +38,7 @@ class CommentsView(baseview.BaseView):
       'page':      self.force_unicode(page_id),
       'title':     self.force_unicode(self.request.get('title')),
       'name':      self.force_unicode(self.request.get('name')),
-      'url':       self.force_unicode(self.request.get('url')),
+      'url':       self.force_unicode(self.request.get('url'), True),
       'comment':   self.force_unicode(self.request.get('comment')),
       'code':      self.force_unicode(self.request.get('code')) }
 
@@ -72,16 +75,24 @@ class CommentsView(baseview.BaseView):
       return u'お名前を入力してください。'
     if not p['comment']:
       return u'コメントを入力してください。'
+    if p['url'] and not LINK_RE.match(p['url']):
+      return u'URLのフォーマットが間違っています。'
     if p['code'] != u'寿限無寿限無五劫の擦り切れ':
       return u'スパム対策によりコメントは拒否されました。'
+    if SPAM_NAME_RE.search(p['name']):
+      return u'スパム対策によりコメントは拒否されました。'
     if SPAM_RE.search(p['comment']):
+      return u'スパム対策によりコメントは拒否されました。'
+    if len(SPAM_LINK_RE.findall(p['comment'])) >= 4:
       return u'スパム対策によりコメントは拒否されました。'
     return None
 
 
-  def force_unicode(self, s):
+  def force_unicode(self, s, strip=False):
     if not isinstance(s, unicode):
       s = unicode(s, 'UTF-8')
+    if s and strip:
+      s = s.strip()
     return s
 
 
@@ -105,6 +116,7 @@ TOP_TEMPLATE = u"""
 <div style="float:left;">
   <form action="#" method="POST">
     <input type="hidden" name="title" value="{{title}}">
+    <input type="hidden" name="code" value="寿限無寿限無五劫の擦り切れ" />
     <div class="form">
       {% if err %}<div class="notice">{{err}}</div>{% endif %}
       <div class="label">お名前</div>

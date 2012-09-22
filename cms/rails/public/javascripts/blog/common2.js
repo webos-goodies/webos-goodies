@@ -254,10 +254,10 @@ blog.App.prototype.renderFeeds_ = function(e) {
   // Twitter
   renderer.setTemplate(goog.string.buildString(
 	'<a class="sidebody" href="%link%" target="_blank">%contentSnippet%<br>',
-	'<span class="tpl-buzz-date">%publishedDate%</span></a>'));
+	'<span class="tpl-activity-date">%publishedDate%</span></a>'));
   renderer.setFormatter({'publishedDate': blog.App.relativeDateFormatter_});
   renderer.render('https://twitter.com/statuses/user_timeline/24371070.rss',
-				  'tpl_buzz', { 'num': 16 });
+				  'tpl_activity', { 'num': 16 });
 };
 
 /**

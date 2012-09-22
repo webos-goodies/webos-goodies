@@ -71,7 +71,6 @@ namespace :upload do
             path = File.join(ftp_path, article_path, article[:page_name] + '.html')
             ftp.putbinarystring(html, path)
             index = index + 1
-            sleep(1)
           end
         end
       rescue
