@@ -5,6 +5,7 @@ goog.require('goog.date.relative');
 goog.require('goog.i18n.DateTimeFormat');
 goog.require('goog.uri.utils');
 goog.require('goog.dom');
+goog.require('goog.dom.ViewportSizeMonitor');
 goog.require('goog.events.EventType');
 goog.require('goog.events.EventTarget');
 goog.require('goog.events.EventHandler');
@@ -25,6 +26,13 @@ blog.App = function() {
    */
   this.eh_ = new goog.events.EventHandler(this);
 
+  /**
+   * Observe window resizing.
+   * @type {goog.dom.ViewportSizeMonitor}
+   * @private
+   */
+  this.vsm_ = new goog.dom.ViewportSizeMonitor();
+
   // Opera fast navigation mode.
   if(typeof(history['navigationMode']) != 'undifined') {
     history['navigationMode'] = 'fast';
@@ -35,6 +43,8 @@ blog.App = function() {
   this.eh_.listen(this,   blog.App.EventType.READY,   this.notifyNewAddress_);
   this.eh_.listen(this,   blog.App.EventType.READY,   this.renderFeeds_);
   this.eh_.listen(this,   blog.App.EventType.READY,   this.showRecommendationWidget_);
+  this.eh_.listen(this,   blog.App.EventType.READY,   this.resizeTwitterWidget_);
+  this.eh_.listen(this.vsm_, goog.events.EventType.RESIZE, this.resizeTwitterWidget_);
 };
 goog.inherits(blog.App, goog.events.EventTarget);
 
@@ -252,12 +262,14 @@ blog.App.prototype.renderFeeds_ = function(e) {
   renderer.render('http://webos-goodies.jp/atom.xml', 'tpl_recent_articles', { 'num': 8 });
 
   // Twitter
+  /*
   renderer.setTemplate(goog.string.buildString(
 	'<a class="sidebody" href="%link%" target="_blank">%contentSnippet%<br>',
 	'<span class="tpl-activity-date">%publishedDate%</span></a>'));
   renderer.setFormatter({'publishedDate': blog.App.relativeDateFormatter_});
   renderer.render('https://twitter.com/statuses/user_timeline/24371070.rss',
 				  'tpl_activity', { 'num': 16 });
+  */
 };
 
 /**
@@ -274,6 +286,18 @@ blog.App.prototype.showRecommendationWidget_ = function(e) {
   }
 };
 
+/**
+ * Twitterウィジェットをサイドバーの幅にリサイズする
+ * @param {goog.events.Event} e イベントオブジェクト
+ * @private
+ */
+blog.App.prototype.resizeTwitterWidget_ = function() {
+  var parentEl = goog.dom.getElement('rightside-wrap');
+  var tweetEl  = parentEl && goog.dom.getElementByClass('twitter-timeline', parentEl);
+  if(tweetEl) {
+    tweetEl.setAttribute('width', parentEl.clientWidth - 8);
+  }
+};
 
 var app = new blog.App();
 

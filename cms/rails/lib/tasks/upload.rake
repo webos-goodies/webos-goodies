@@ -1,8 +1,7 @@
 # -*- mode:ruby -*-
 
-require 'ftp_ex'
-
-FTP_PASSIVE = false
+require 'aws-sdk'
+require 'uri'
 
 namespace :upload do
 
@@ -18,18 +17,18 @@ namespace :upload do
     site = Site.find(ENV['SITE'].strip.to_i)
     cmd  = File.join(RAILS_ROOT, 'script/app/show_page')
     raise "site #{id} was not found." unless site
-    pages = [{ :src => '/preview',      :dest => 'index.html' },
-             { :src => '/preview.rss',  :dest => site.rss_path },
-             { :src => '/preview.atom', :dest => site.atom_path }]
+    pages = [{ :src => '/preview',      :dest => 'index.html',   :type => 'text/html' },
+             { :src => '/preview.rss',  :dest => site.rss_path,  :type => 'application/atom+xml' },
+             { :src => '/preview.atom', :dest => site.atom_path, :type => 'application/rss+xml' }]
     pages.each do |page|
       page[:body] = `#{cmd} #{page[:src]}?site_id=#{site.id}`
     end
-    Net::FTP.open(site.ftp_host, site.ftp_user, site.ftp_password) do |ftp|
-      ftp_path    = site.ftp_path
-      ftp.passive = FTP_PASSIVE
-      pages.each do |page|
-        ftp.putbinarystring(page[:body], File.join(ftp_path, page[:dest]))
-      end
+
+    client = AWS::S3.new(:access_key_id => site.aws_id, :secret_access_key => site.aws_secret)
+    bucket = client.buckets[URI.parse(site.url).host]
+    pages.each do |page|
+      opts = { :reduced_redundancy => true, :content_type => page[:type] }
+      bucket.objects[page[:dest].sub(/\A\/+/, '')].write(page[:body], opts)
     end
   end
 
@@ -42,71 +41,51 @@ namespace :upload do
     raise "article #{id} was not found." unless article
     article.publish
     article.save(false)
-    html = `#{cmd} #{id}`
-    path = File.join(site.ftp_path, site.article_path, article[:page_name] + '.html')
-    Net::FTP.open(site.ftp_host, site.ftp_user, site.ftp_password) do |ftp|
-      ftp.passive = FTP_PASSIVE
-      ftp.putbinarystring(html, path)
-    end
+
+    html   = `#{cmd} #{id}`
+    path   = File.join(site.article_path, article[:page_name] + '.html')
+    client = AWS::S3.new(:access_key_id => site.aws_id, :secret_access_key => site.aws_secret)
+    bucket = client.buckets[URI.parse(site.url).host]
+    opts   = { :reduced_redundancy => true, :content_type => 'text/html' }
+    bucket.objects[path.sub(/\A\/+/, '')].write(html, opts)
   end
 
   task :articles => :setup do
     raise 'Please set ENV["SITE"].' if (ENV['SITE']||'').strip.blank?
-    site         = Site.find(ENV['SITE'].strip.to_i)
-    ftp_path     = site.ftp_path
-    article_path = site.article_path
-    articles     = site.articles.find(:all, :conditions => { :published => true })
-    cmd          = File.join(RAILS_ROOT, 'script/app/show_article')
-    index        = 0
-    while index < articles.size
-      begin
-        Net::FTP.open(site.ftp_host, site.ftp_user, site.ftp_password) do |ftp|
-          ftp.passive = FTP_PASSIVE
-          while index < articles.size
-            article = articles[index]
-            article.publish
-            article.save(false)
-            $stdout << "uploading article #{article.id}...\n"
-            html = `#{cmd} #{article.id}`
-            path = File.join(ftp_path, article_path, article[:page_name] + '.html')
-            ftp.putbinarystring(html, path)
-            index = index + 1
-          end
-        end
-      rescue
-      end
+    site   = Site.find(ENV['SITE'].strip.to_i)
+    cmd    = File.join(RAILS_ROOT, 'script/app/show_article')
+    client = AWS::S3.new(:access_key_id => site.aws_id, :secret_access_key => site.aws_secret)
+    bucket = client.buckets[URI.parse(site.url).host]
+    opts   = { :reduced_redundancy => true, :content_type => 'text/html' }
+    site.articles.find(:all, :conditions => { :published => true }).each do |article|
+      article.publish
+      article.save(false)
+      $stdout << "uploading article #{article.id}...\n"
+      html = `#{cmd} #{article.id}`
+      path = File.join(site.article_path, article[:page_name] + '.html')
+      bucket.objects[path.sub(/\A\/+/, '')].write(html, opts)
     end
   end
 
   task :categories => :setup do
     raise 'Please set ENV["SITE"].' if (ENV['SITE']||'').strip.blank?
-    site          = Site.find(ENV['SITE'].strip.to_i)
-    ftp_path      = site.ftp_path
-    category_path = 'categories'
-    categories    = site.categories.find(:all)
-    cmd           = File.join(RAILS_ROOT, 'script/app/show_category')
-    index         = 0
-    while index < categories.size
-      begin
-        Net::FTP.open(site.ftp_host, site.ftp_user, site.ftp_password) do |ftp|
-          ftp.passive = FTP_PASSIVE
-          while index < categories.size
-            category = categories[index]
-            $stdout << "uploading category #{category.name}...\n"
-            name = category[:name]
-            json = category.to_json
-            html = `#{cmd} #{category.id}`
-            path = File.join(ftp_path, category_path, name + '.html')
-            ftp.putbinarystring(html, path)
-            sleep(1)
-            path = File.join(ftp_path, category_path, 'jsonp', name + '.js')
-            ftp.putbinarystring("tplRegistCategory(#{json});", path)
-            sleep(1)
-            index = index + 1
-          end
-        end
-      rescue
-      end
+    site   = Site.find(ENV['SITE'].strip.to_i)
+    cmd    = File.join(RAILS_ROOT, 'script/app/show_category')
+    client = AWS::S3.new(:access_key_id => site.aws_id, :secret_access_key => site.aws_secret)
+    bucket = client.buckets[URI.parse(site.url).host]
+    htopts = { :reduced_redundancy => true, :content_type => 'text/html' }
+    jsopts = { :reduced_redundancy => true, :content_type => 'text/javascript' }
+    site.categories.find(:all).each do |category|
+      $stdout << "uploading category #{category.name}...\n"
+      name = category[:name]
+
+      html = `#{cmd} #{category.id}`
+      path = File.join('categories', name + '.html')
+      bucket.objects[path.sub(/\A\/+/, '')].write(html, htopts)
+
+      json = category.to_json
+      path = File.join('categories/jsonp', name + '.js')
+      bucket.objects[path.sub(/\A\/+/, '')].write("tplRegistCategory(#{json});", jsopts)
     end
   end
 
@@ -125,14 +104,15 @@ namespace :upload do
 
   task :scripts => :setup do
     raise 'Please set ENV["SITE"].' if (ENV['SITE']||'').strip.blank?
-    site = Site.find(ENV['SITE'].strip.to_i)
-    Net::FTP.open(site.ftp_host, site.ftp_user, site.ftp_password) do |ftp|
-      ['common2.js'].each do |sname|
-        dname       = File.join(site.ftp_path, '/template', sname)
-        content     = IO.read(File.join(RAILS_ROOT, 'public/javascripts', sname))
-        ftp.passive = FTP_PASSIVE
-        ftp.putbinarystring(content, dname)
-      end
+    site   = Site.find(ENV['SITE'].strip.to_i)
+    client = AWS::S3.new(:access_key_id => site.aws_id, :secret_access_key => site.aws_secret)
+    bucket = client.buckets[URI.parse(site.url).host]
+    opts   = { :reduced_redundancy => true, :content_type => 'text/javascript' }
+
+    ['common2.js'].each do |sname|
+      path    = File.join('template', sname)
+      content = IO.read(File.join(RAILS_ROOT, 'public/javascripts', sname))
+      bucket.objects[path.sub(/\A\/+/, '')].write(content, opts)
     end
   end
 
