@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>goog.cryptサンプル</title>
+  <style>
+    body { font-size:16px; }
+    table { margin-bottom:2em; }
+    th { width:100px; text-align:left; }
+    input[type=text] { width:250px; }
+    input[type=submit] { width:80px; font-size:18px; }
+  </style>
+</head>
+<body>
+  <form id="encrypt-form">
+    <table>
+      <tr><th>平文</th>     <td><input type="text" name="plaintext"></td></tr>
+      <tr><th>パスワード</th><td><input type="text" name="password"></td></tr>
+      <tr><td colspan="2" style="text-align:center"><input type="submit" value="暗号化"></td></tr>
+    </table>
+  </form>
+
+  <form id="decrypt-form">
+    <table>
+      <tr><th>暗号文</th>   <td><input type="text" name="encryptedtext"></td></tr>
+      <tr><th>パスワード</th><td><input type="text" name="password"></td></tr>
+      <tr><th>SALT</th>    <td><input type="text" name="salt"></td></tr>
+      <tr><th>IV</th>      <td><input type="text" name="iv"></td></tr>
+      <tr><td colspan="2" style="text-align:center"><input type="submit" value="復号"></td></tr>
+    </table>
+  </form>
+
+  <table>
+    <tr><th>復号結果</th><td id="decryptedtext"></td></tr>
+  </table>
+
+  <script src="../../../closure-library/closure/goog/base.js"></script>
+  <script src="deps.js"></script>
+  <script>goog.require('crypt.App');</script>
+</body>
+</html>
