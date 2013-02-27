@@ -22,9 +22,13 @@ USER_EMAIL      = 'support@webos-goodies.jp'
 
 ARTICLE_URL     = 'http://webos-goodies.jp/archives/%s.html#comments'
 LINK_RE         = re.compile(r'^https?://')
-SPAM_NAME_RE    = re.compile(r'(?:^|\s)replicas?\s', re.I)
-SPAM_RE         = re.compile(r'\[/url\]', re.I)
-SPAM_LINK_RE    = re.compile(r'(?:^|\s)https?://', re.I)
+SPAM_NAMES      = ('replicas', 'mafformmart', u'シャネル', u'プラダ', u'ネックレス',
+                   u'バッグ', u'時計', u'コピー', u'ヴィトン', u'ロレックス', u'オメガ',
+                   u'ヴィンテージ', u'草間彌生', 'ugg', 'sale',
+                   'jeanstory', 'baidu', 'gold', '____', 'DebraBanks', 'Pharm'
+                   'louis', 'vuitton', 'handbag', 'luggage', 'purse')
+SPAM_WORDS      = ('[/url]', u'紹介します', u'ナイキ')
+SPAM_LINK_RE    = re.compile(r'(?:^|\s|")https?://', re.I)
 
 
 class CommentsView(baseview.BaseView):
@@ -71,17 +75,24 @@ class CommentsView(baseview.BaseView):
 
   def validate_form(self, p):
     logging.info(p);
-    if not p['name']:
+    name    = (p['name']    or '').lower()
+    comment = (p['comment'] or '').lower()
+    url     = (p['url']     or '').lower()
+
+    if not name:
       return u'お名前を入力してください。'
-    if not p['comment']:
+    if not comment:
       return u'コメントを入力してください。'
-    if p['url'] and not LINK_RE.match(p['url']):
+    if url and not LINK_RE.match(p['url']):
       return u'URLのフォーマットが間違っています。'
     if p['code'] != u'寿限無寿限無五劫の擦り切れ':
       return u'スパム対策によりコメントは拒否されました。'
-    if SPAM_NAME_RE.search(p['name']):
+    logging.debug([s in name for s in SPAM_NAMES])
+    if any([s in name for s in SPAM_NAMES]):
       return u'スパム対策によりコメントは拒否されました。'
-    if SPAM_RE.search(p['comment']):
+    if len(comment) > 4096:
+      return u'コメントが長すぎます。'
+    if any([s in comment for s in SPAM_WORDS]):
       return u'スパム対策によりコメントは拒否されました。'
     if len(SPAM_LINK_RE.findall(p['comment'])) >= 4:
       return u'スパム対策によりコメントは拒否されました。'
