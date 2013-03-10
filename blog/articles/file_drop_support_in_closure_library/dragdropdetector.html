@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta charset="UTF-8">
   <title>DragDropDetectorのテスト</title>
   <link rel="stylesheet" href="closure-library/closure/goog/css/dragdropdetector.css">
-  <script type="text/javascript" src="script.js"></script>
-  <style type="text/css">
+  <style>
     html, body {
       width:100%; height: 100%; margin: 0; padding: 0;
     }
@@ -17,14 +16,24 @@
   <div>ここに他のページの画像やリンクをドラッグ＆ドロップしてください。</div>
   <div id="urls"></div>
 
-<script type="text/javascript">
-  var detector = new goog.ui.DragDropDetector('dragdropdetector_target.html');
-  var events   = [goog.ui.DragDropDetector.EventType.IMAGE_DROPPED,
-                  goog.ui.DragDropDetector.EventType.LINK_DROPPED];
-  goog.events.listen(detector, events, function(e) {
-    goog.dom.getElement('urls').innerHTML = goog.string.htmlEscape(e.getUrl());
-  });
-</script>
+  <!-- Closure Libraryのbase.jsの読み込み -->
+  <script src="closure-library/closure/goog/base.js"></script>
+
+  <script type="text/javascript">
+   goog.require('goog.array');
+   goog.require('goog.string');
+   goog.require('goog.dom');
+   goog.require('goog.events');
+   goog.require('goog.ui.DragDropDetector');
+  </script>
+  <script type="text/javascript">
+    var detector = new goog.ui.DragDropDetector('dragdropdetector_target.html');
+    var events   = [goog.ui.DragDropDetector.EventType.IMAGE_DROPPED,
+                    goog.ui.DragDropDetector.EventType.LINK_DROPPED];
+    goog.events.listen(detector, events, function(e) {
+      goog.dom.getElement('urls').innerHTML = goog.string.htmlEscape(e.getUrl());
+    });
+  </script>
 
 </body>
 </html>

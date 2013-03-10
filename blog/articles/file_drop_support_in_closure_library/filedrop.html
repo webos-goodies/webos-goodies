@@ -1,9 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta charset="UTF-8">
   <title>ファイルのドラッグ＆ドロップのテスト</title>
-  <script type="text/javascript" src="script.js"></script>
 </head>
 
 <body style="margin:0; padding:0;">
@@ -14,19 +13,29 @@
   </div>
   <div id="filenames"></div>
 
-<script type="text/javascript">
-  var handler = new goog.events.FileDropHandler(
-    goog.dom.getElement('droptarget'), true);
-  goog.events.listen(
-    handler, goog.events.FileDropHandler.EventType.DROP,
-    function(e) {
-      var files = e.getBrowserEvent().dataTransfer.files;
-      var names = goog.array.map(files, function(file) {
-        return goog.string.htmlEscape(file.fileName);
+  <!-- Closure Libraryのbase.jsの読み込み -->
+  <script src="closure-library/closure/goog/base.js"></script>
+
+  <script>
+    goog.require('goog.array');
+    goog.require('goog.string');
+    goog.require('goog.dom');
+    goog.require('goog.events');
+    goog.require('goog.events.FileDropHandler');
+  </script>
+  <script>
+    var handler = new goog.events.FileDropHandler(
+      goog.dom.getElement('droptarget'), true);
+    goog.events.listen(
+      handler, goog.events.FileDropHandler.EventType.DROP,
+      function(e) {
+        var files = e.getBrowserEvent().dataTransfer.files;
+        var names = goog.array.map(files, function(file) {
+          return goog.string.htmlEscape(file.name);
+        });
+        goog.dom.getElement('filenames').innerHTML = names.join('<br>');
       });
-      goog.dom.getElement('filenames').innerHTML = names.join('<br>');
-    });
-</script>
+  </script>
 
 </body>
 </html>
