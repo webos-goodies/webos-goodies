@@ -2,6 +2,7 @@
 require 'wikiparser/wikiparser.rb'
 require 'nkf'
 require 'net/http'
+require 'net/https'
 require 'uri'
 
 class LivedoorParser < Parser::Base
@@ -224,10 +225,21 @@ class LivedoorParser < Parser::Base
         'http redirect too deep'
       else
         Net::HTTP.version_1_2
-        response = Net::HTTP.get_response(URI.parse(url))
+        uri = URI.parse(url)
+        http = Net::HTTP.new(uri.host, uri.port)
+        if uri.scheme == 'https'
+          http.use_ssl = true
+          http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+        end
+
+        response = nil
+        http.start do |h|
+          response = h.get(uri.path + (uri.query ? '?' + uri.query : ''))
+        end
+
         case response
         when Net::HTTPSuccess     then response.body
-        when Net::HTTPRedirection then fetch_url(url, limit - 1)
+        when Net::HTTPRedirection then fetch_url(response['location'], limit - 1)
         else                           response.message
         end
       end
