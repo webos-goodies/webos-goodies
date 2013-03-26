@@ -25,8 +25,8 @@ LINK_RE         = re.compile(r'^https?://')
 SPAM_NAMES      = ('replicas', 'mafformmart', u'シャネル', u'プラダ', u'ネックレス', 'hermes',
                    u'バッグ', u'時計', u'コピー', u'ヴィトン', u'ロレックス', u'オメガ', 'emma',
                    u'ヴィンテージ', u'草間彌生', u'コーチ', u'財布', 'ugg', 'sale', 'xrumertest',
-                   'jeanstory', 'baidu', 'gold', '____', 'debrabanks', 'pharm', 'prada'
-                   'louis', 'vuitton', 'handbag', 'luggage', 'purse', 'miu miu', 'MCM')
+                   'jeanstory', 'baidu', 'gold', '____', 'debrabanks', 'pharm', 'prada', 'mulberry',
+                   'louis', 'vuitton', 'handbag', 'luggage', 'purse', 'miu miu', 'MCM', 'bags')
 SPAM_WORDS      = ('[/url]', u'紹介します', u'ナイキ')
 SPAM_LINK_RE    = re.compile(r'(?:^|\s|")https?://', re.I)
 
@@ -87,6 +87,8 @@ class CommentsView(baseview.BaseView):
     if p['code'] != u'寿限無寿限無五劫の擦り切れ':
       return u'スパム対策によりコメントは拒否されました。'
     if any([s in name for s in SPAM_NAMES]):
+      return u'スパム対策によりコメントは拒否されました。'
+    if any([0xb000 <= ord(c) <= 0xcfff for c in name]): # Rejects Hangeul letters.
       return u'スパム対策によりコメントは拒否されました。'
     if len(comment) > 4096:
       return u'コメントが長すぎます。'
