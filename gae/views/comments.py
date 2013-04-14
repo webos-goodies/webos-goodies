@@ -26,8 +26,9 @@ SPAM_NAMES      = ('replicas', 'mafformmart', u'シャネル', u'プラダ', u'�
                    u'バッグ', u'時計', u'コピー', u'ヴィトン', u'ロレックス', u'オメガ', 'emma',
                    u'ヴィンテージ', u'草間彌生', u'コーチ', u'財布', 'ugg', 'sale', 'xrumertest',
                    'jeanstory', 'baidu', 'gold', '____', 'debrabanks', 'pharm', 'prada', 'mulberry',
-                   'louis', 'vuitton', 'handbag', 'luggage', 'purse', 'miu miu', 'MCM', 'bags')
-SPAM_WORDS      = ('[/url]', u'紹介します', u'ナイキ')
+                   'louis', 'vuitton', 'handbag', 'luggage', 'purse', 'miu miu', 'MCM', 'bags',
+                   'loans')
+SPAM_WORDS      = ('[/url]', u'紹介します', u'ナイキ', 'loans')
 SPAM_URLS       = ('http://www.paydayloansbargains.co.uk',)
 SPAM_LINK_RE    = re.compile(r'(?:^|\s|")https?://', re.I)
 
