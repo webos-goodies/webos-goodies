@@ -28,6 +28,7 @@ SPAM_NAMES      = ('replicas', 'mafformmart', u'シャネル', u'プラダ', u'�
                    'jeanstory', 'baidu', 'gold', '____', 'debrabanks', 'pharm', 'prada', 'mulberry',
                    'louis', 'vuitton', 'handbag', 'luggage', 'purse', 'miu miu', 'MCM', 'bags')
 SPAM_WORDS      = ('[/url]', u'紹介します', u'ナイキ')
+SPAM_URLS       = ('http://www.paydayloansbargains.co.uk',)
 SPAM_LINK_RE    = re.compile(r'(?:^|\s|")https?://', re.I)
 
 
@@ -85,6 +86,8 @@ class CommentsView(baseview.BaseView):
     if url and not LINK_RE.match(p['url']):
       return u'URLのフォーマットが間違っています。'
     if p['code'] != u'寿限無寿限無五劫の擦り切れ':
+      return u'スパム対策によりコメントは拒否されました。'
+    if url.strip() in SPAM_URLS:
       return u'スパム対策によりコメントは拒否されました。'
     if any([s in name for s in SPAM_NAMES]):
       return u'スパム対策によりコメントは拒否されました。'
