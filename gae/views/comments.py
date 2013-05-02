@@ -28,10 +28,12 @@ SPAM_NAMES      = ('replicas', 'mafformmart', u'シャネル', u'プラダ', u'�
                    'jeanstory', 'baidu', 'gold', '____', 'debrabanks', 'pharm', 'prada', 'mulberry',
                    'louis', 'vuitton', 'handbag', 'luggage', 'purse', 'miu miu', 'MCM', 'bags',
                    'loans', 'coupon', 'nike', 'clothing', 'dresses', 'wedding', 'exotic',
-                   'burberry')
-SPAM_WORDS      = ('[/url]', u'紹介します', u'ナイキ', 'loans', 'coupon')
+                   'burberry', 'girlfriend', u'バイエルン', 'credit')
+SPAM_WORDS      = ('[/url]', u'紹介します', u'ナイキ', 'loans', 'coupon', 'extravagant',
+                   'enviable')
 SPAM_URLS       = ('http://www.paydayloansbargains.co.uk',
                    'http://shoebuycoupon2013.com')
+SPAM_URL_WORDS  = ('asian',)
 SPAM_LINK_RE    = re.compile(r'(?:^|\s|"|=)https?://', re.I)
 
 
@@ -93,6 +95,8 @@ class CommentsView(baseview.BaseView):
     if url.strip() in SPAM_URLS:
       return u'スパム対策によりコメントは拒否されました。'
     if any([s in name for s in SPAM_NAMES]):
+      return u'スパム対策によりコメントは拒否されました。'
+    if any([s in url for s in SPAM_URL_WORDS]):
       return u'スパム対策によりコメントは拒否されました。'
     if any([0xb000 <= ord(c) <= 0xcfff for c in name]): # Rejects Hangeul letters.
       return u'スパム対策によりコメントは拒否されました。'
