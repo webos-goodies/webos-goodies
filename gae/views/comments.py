@@ -28,7 +28,8 @@ SPAM_NAMES      = ('replicas', 'mafformmart', u'シャネル', u'プラダ', u'�
                    'jeanstory', 'baidu', 'gold', '____', 'debrabanks', 'pharm', 'prada', 'mulberry',
                    'louis', 'vuitton', 'handbag', 'luggage', 'purse', 'miu miu', 'MCM', 'bags',
                    'loans', 'coupon', 'nike', 'clothing', 'dresses', 'wedding', 'exotic',
-                   'burberry', 'girlfriend', u'バイエルン', 'credit')
+                   'burberry', 'girlfriend', u'バイエルン', 'credit', 'sabo' 'talked', u'ACミラン',
+                   u'ユニフォーム')
 SPAM_WORDS      = ('[/url]', u'紹介します', u'ナイキ', 'loans', 'coupon', 'extravagant',
                    'enviable')
 SPAM_URLS       = ('http://www.paydayloansbargains.co.uk',
