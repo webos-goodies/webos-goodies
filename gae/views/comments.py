@@ -29,13 +29,15 @@ SPAM_NAMES      = ('replicas', 'mafformmart', u'シャネル', u'プラダ', u'�
                    'louis', 'vuitton', 'handbag', 'luggage', 'purse', 'miu miu', 'MCM', 'bags',
                    'loans', 'coupon', 'nike', 'clothing', 'dresses', 'wedding', 'exotic',
                    'burberry', 'girlfriend', u'バイエルン', 'credit', 'sabo' 'talked', u'ACミラン',
-                   u'ユニフォーム')
+                   u'ユニフォーム', 'sex', u'アディダス', u'シューズ', 'shoes', 'miumiu', 'discount',
+                   'secret', 'expensive', 'market', 'fashion', 'replica', 'watch', 'planta',
+                   'promo')
 SPAM_WORDS      = ('[/url]', u'紹介します', u'ナイキ', 'loans', 'coupon', 'extravagant',
                    'enviable')
 SPAM_URLS       = ('http://www.paydayloansbargains.co.uk',
                    'http://shoebuycoupon2013.com')
 SPAM_URL_WORDS  = ('asian',)
-SPAM_LINK_RE    = re.compile(r'(?:^|\s|"|=)https?://', re.I)
+SPAM_LINK_RE    = re.compile(r'[^a-zA-Z0-9]https?://', re.I)
 
 
 class CommentsView(baseview.BaseView):
