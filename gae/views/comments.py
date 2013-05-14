@@ -33,7 +33,8 @@ SPAM_NAMES      = ('replicas', 'mafformmart', u'シャネル', u'プラダ', u'�
                    'secret', 'expensive', 'market', 'fashion', 'replica', 'watch', 'planta',
                    'promo')
 SPAM_WORDS      = ('[/url]', u'紹介します', u'ナイキ', 'loans', 'coupon', 'extravagant',
-                   'enviable')
+                   'enviable', u'アディダス', u'シャネル', u'プラダ', u'ネックレス', u'ヴィトン',
+                   u'ロレックス', u'オメガ', u'コーチ')
 SPAM_URLS       = ('http://www.paydayloansbargains.co.uk',
                    'http://shoebuycoupon2013.com')
 SPAM_URL_WORDS  = ('asian',)
