@@ -31,13 +31,13 @@ SPAM_NAMES      = ('replicas', 'mafformmart', u'シャネル', u'プラダ', u'�
                    'burberry', 'girlfriend', u'バイエルン', 'credit', 'sabo' 'talked', u'ACミラン',
                    u'ユニフォーム', 'sex', u'アディダス', u'シューズ', 'shoes', 'miumiu', 'discount',
                    'secret', 'expensive', 'market', 'fashion', 'replica', 'watch', 'planta',
-                   'promo')
+                   'promo', 'cheap', 'belt', 'gucci', 'addidas', 'annabell')
 SPAM_WORDS      = ('[/url]', u'紹介します', u'ナイキ', 'loans', 'coupon', 'extravagant',
                    'enviable', u'アディダス', u'シャネル', u'プラダ', u'ネックレス', u'ヴィトン',
                    u'ロレックス', u'オメガ', u'コーチ')
 SPAM_URLS       = ('http://www.paydayloansbargains.co.uk',
                    'http://shoebuycoupon2013.com')
-SPAM_URL_WORDS  = ('asian',)
+SPAM_URL_WORDS  = ('asian', 'discount')
 SPAM_LINK_RE    = re.compile(r'[^a-zA-Z0-9]https?://', re.I)
 
 
