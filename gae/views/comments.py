@@ -31,7 +31,8 @@ SPAM_NAMES      = ('replicas', 'mafformmart', u'シャネル', u'プラダ', u'�
                    'burberry', 'girlfriend', u'バイエルン', 'credit', 'sabo' 'talked', u'ACミラン',
                    u'ユニフォーム', 'sex', u'アディダス', u'シューズ', 'shoes', 'miumiu', 'discount',
                    'secret', 'expensive', 'market', 'fashion', 'replica', 'watch', 'planta',
-                   'promo', 'cheap', 'belt', 'gucci', 'addidas', 'annabell')
+                   'promo', 'cheap', 'belt', 'gucci', 'addidas', 'annabell', 'adidas',
+                   'outlet', 'swimwear', 'bikini')
 SPAM_WORDS      = ('[/url]', u'紹介します', u'ナイキ', 'loans', 'coupon', 'extravagant',
                    'enviable', u'アディダス', u'シャネル', u'プラダ', u'ネックレス', u'ヴィトン',
                    u'ロレックス', u'オメガ', u'コーチ')
@@ -109,6 +110,8 @@ class CommentsView(baseview.BaseView):
     if any([s in comment for s in SPAM_WORDS]):
       return u'スパム対策によりコメントは拒否されました。'
     if len(SPAM_LINK_RE.findall(p['comment'])) >= 4:
+      return u'スパム対策によりコメントは拒否されました。'
+    if url in comment:
       return u'スパム対策によりコメントは拒否されました。'
     return None
 
