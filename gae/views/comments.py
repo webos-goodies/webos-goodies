@@ -32,14 +32,22 @@ SPAM_NAMES      = ('replicas', 'mafformmart', u'シャネル', u'プラダ', u'�
                    u'ユニフォーム', 'sex', u'アディダス', u'シューズ', 'shoes', 'miumiu', 'discount',
                    'secret', 'expensive', 'market', 'fashion', 'replica', 'watch', 'planta',
                    'promo', 'cheap', 'belt', 'gucci', 'addidas', 'annabell', 'adidas',
-                   'outlet', 'swimwear', 'bikini')
+                   'outlet', 'swimwear', 'bikini', u'アウトレット', u'ジバンシ', u'メンズ',
+                   'louboutin', 'pumps', 'brillen', u'モンブラン', u'画像', 'diamond',
+                   'shoulder bag', 'dvds', u'フェラガモ', u'靴', 'dorothy', 'lampinen',
+                   'zixiutang', 'diet', u'ルブタン', 'zi xiu tang', 'pollen', u'バーバリ',
+                   u'ビキニ', 'dient', '2 day', 'slimming', 'meizitang', u'ブルガリ',
+                   u'スニーカ', u'通販', u'ティファニ', 'shoe', u'エルメス', u'ブレスレット',
+                   u'指輪', u'ミュウミュウ', 'pills', 'shenna', 'ralph', 'lauren')
 SPAM_WORDS      = ('[/url]', u'紹介します', u'ナイキ', 'loans', 'coupon', 'extravagant',
                    'enviable', u'アディダス', u'シャネル', u'プラダ', u'ネックレス', u'ヴィトン',
                    u'ロレックス', u'オメガ', u'コーチ')
 SPAM_URLS       = ('http://www.paydayloansbargains.co.uk',
-                   'http://shoebuycoupon2013.com')
-SPAM_URL_WORDS  = ('asian', 'discount')
-SPAM_LINK_RE    = re.compile(r'[^a-zA-Z0-9]https?://', re.I)
+                   'http://shoebuycoupon2013.com',
+                   'http://www.canadagooseestore.com/')
+SPAM_URL_WORDS  = ('asian', 'discount', 'twodaydiet4u.com', 'indiadealsonline.com',
+                   'mitsubishielectric.co.uk', 'hspa.com' 'jimdo.com', 'www.bookyards.com')
+SPAM_LINK_RE    = re.compile(r'https?://', re.I)
 
 
 class CommentsView(baseview.BaseView):
