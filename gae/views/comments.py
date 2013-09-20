@@ -38,15 +38,36 @@ SPAM_NAMES      = ('replicas', 'mafformmart', u'シャネル', u'プラダ', u'�
                    'zixiutang', 'diet', u'ルブタン', 'zi xiu tang', 'pollen', u'バーバリ',
                    u'ビキニ', 'dient', '2 day', 'slimming', 'meizitang', u'ブルガリ',
                    u'スニーカ', u'通販', u'ティファニ', 'shoe', u'エルメス', u'ブレスレット',
-                   u'指輪', u'ミュウミュウ', 'pills', 'shenna', 'ralph', 'lauren', u'ドレス')
+                   u'指輪', u'ミュウミュウ', 'pills', 'shenna', 'ralph', 'lauren', u'ドレス',
+                   u'ショッピング', u'ブランド', u'ジャージ', 'lunettes', 'carrera', 'oakley',
+                   'soldes', 'reviews', 'slim', u'ラルフローレン', u'ジャケット', u'トムフォード',
+                   u'楽天', u'ブラジャー', u'ヴィクトリアシークレット', u'サンダルヴィ', u'レイバン',
+                   u'ナイキ', 'canon', u'サングラス', u'クロックス', 'beams', 'moncler',
+                   'crocss', 'powerleveling', u'ラッシュガード', u'ハーレー', u'ゴローズ',
+                   'pil', u'ブーツ', u'レディス', u'レディース', u'長袖', u'ビトン', u'販売',
+                   'capsule', u'カルティエ', u'折りたたみ', u'パーカー', u'折り畳み',
+                   u'自動開閉傘', u'下着', u'グッチ', u'手帳', u'ショルダーバッグ', 'infections',
+                   'casio', u'泳装', u'激安', u'ミネトンカ', 'mizuno', u'カシオ', u'シチズン',
+                   u'オシアナス', u'朱肉', 'minnetonka', u'カルバンクライン', u'ロキシー',
+                   u'セイコー', u'クォーツ', 'chanel', u'ミズノゴルフ', u'パネライ' u'ルミノールマリーナ',
+                   u'プレイボーイ', u'ゴルフ', u'サマンサタバサ', u'バック', 'hoodia', '7 day',
+                   'gordoni', u'新作', 'chloe', 'air max', u'アイフォン', 'sdao', 'cut down',
+                   'bear', 'parajumpers', u'モカシン', 'http://', 'p57')
 SPAM_WORDS      = ('[/url]', u'紹介します', u'ナイキ', 'loans', 'coupon', 'extravagant',
                    'enviable', u'アディダス', u'シャネル', u'プラダ', u'ネックレス', u'ヴィトン',
-                   u'ロレックス', u'オメガ', u'コーチ')
+                   u'ロレックス', u'オメガ', u'コーチ', u'ブレスレット', 'crocs', u'ビクトリア',
+                   u'下着', u'エルメス', u'バーキン', u'ルブタン', 'christian', u'クロックス',
+                   u'グラビア', u'水着', u'アウトレット', u'カシオ', 'puma', u'水着', u'掛け時計',
+                   'gucci', u'グッチ', u'ラルフローレン', 'minnetonka', u'レディース', 'lanvin',
+                   u'パネライ', 'icamtech', u'セイコー', 'playboy', u'表参道', u'海外ファッション',
+                   'hahaha')
 SPAM_URLS       = ('http://www.paydayloansbargains.co.uk',
                    'http://shoebuycoupon2013.com',
-                   'http://www.canadagooseestore.com/')
-SPAM_URL_WORDS  = ('asian', 'discount', 'twodaydiet4u.com', 'indiadealsonline.com',
-                   'mitsubishielectric.co.uk', 'hspa.com' 'jimdo.com', 'www.bookyards.com')
+                   'http://www.canadagooseestore.com/',
+                   'http://goo.gl/')
+SPAM_URL_WORDS  = ('asian', 'discount', 'twodaydiet4u.com', 'indiadealsonline.com', '/nike',
+                   'mitsubishielectric.co.uk', 'hspa.com' 'jimdo.com', 'www.bookyards.com',
+                   'freesound.org', 'hm6v.com', 'hspa.com')
 SPAM_LINK_RE    = re.compile(r'https?://', re.I)
 
 
@@ -117,9 +138,9 @@ class CommentsView(baseview.BaseView):
       return u'コメントが長すぎます。'
     if any([s in comment for s in SPAM_WORDS]):
       return u'スパム対策によりコメントは拒否されました。'
-    if len(SPAM_LINK_RE.findall(p['comment'])) >= 4:
+    if len(SPAM_LINK_RE.findall(p['comment'])) >= 3:
       return u'スパム対策によりコメントは拒否されました。'
-    if url in comment:
+    if url and url in comment:
       return u'スパム対策によりコメントは拒否されました。'
     return None
 
