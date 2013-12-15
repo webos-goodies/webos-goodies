@@ -21,7 +21,7 @@ HEADERS         = { 'GData-Version': '3.0', 'Content-Type':'application/atom+xml
 USER_EMAIL      = 'support@webos-goodies.jp'
 
 ARTICLE_URL     = 'http://webos-goodies.jp/archives/%s.html#comments'
-LINK_RE         = re.compile(r'^https?://')
+LINK_RE         = re.compile(r'^https?://[\x01-\x7f]+$')
 SPAM_NAMES      = ('replicas', 'mafformmart', u'シャネル', u'プラダ', u'ネックレス', 'hermes',
                    u'バッグ', u'時計', u'コピー', u'ヴィトン', u'ロレックス', u'オメガ', 'emma',
                    u'ヴィンテージ', u'草間彌生', u'コーチ', u'財布', 'ugg', 'sale', 'xrumertest',
@@ -50,9 +50,15 @@ SPAM_NAMES      = ('replicas', 'mafformmart', u'シャネル', u'プラダ', u'�
                    'casio', u'泳装', u'激安', u'ミネトンカ', 'mizuno', u'カシオ', u'シチズン',
                    u'オシアナス', u'朱肉', 'minnetonka', u'カルバンクライン', u'ロキシー',
                    u'セイコー', u'クォーツ', 'chanel', u'ミズノゴルフ', u'パネライ' u'ルミノールマリーナ',
-                   u'プレイボーイ', u'ゴルフ', u'サマンサタバサ', u'バック', 'hoodia', '7 day',
+                   u'プレイボーイ', u'ゴルフ', u'サマンサ', u'バック', 'hoodia', '7 day',
                    'gordoni', u'新作', 'chloe', 'air max', u'アイフォン', 'sdao', 'cut down',
-                   'bear', 'parajumpers', u'モカシン', 'http://', 'p57')
+                   'bear', 'parajumpers', u'モカシン', 'http://', 'p57', u'パーペチュアル',
+                   u'アルマーニ', '.com', u'コンバース', u'オールスター', 'http://', u'リーボック',
+                   'daidaihua', u'アイホン', 'benefits', u'キーケース', u'デジタルカメラ',
+                   u'モンクレール', u'ジミーチュウ', u'トミーヒルフィガー', 'newera', u'ニューエラ',
+                   u'チャンルー', u'ニクソン', u'ストーンブレス', 'weightloss', 'canada goose',
+                   'calvin klein', 'wallet')
+SPAM_NAME_RE    = re.compile(ur'(?:^|\s)(?:seo|weight|価格)(?:\s|$)', re.I | re.M | re.U)
 SPAM_WORDS      = ('[/url]', u'紹介します', u'ナイキ', 'loans', 'coupon', 'extravagant',
                    'enviable', u'アディダス', u'シャネル', u'プラダ', u'ネックレス', u'ヴィトン',
                    u'ロレックス', u'オメガ', u'コーチ', u'ブレスレット', 'crocs', u'ビクトリア',
@@ -60,15 +66,19 @@ SPAM_WORDS      = ('[/url]', u'紹介します', u'ナイキ', 'loans', 'coupon'
                    u'グラビア', u'水着', u'アウトレット', u'カシオ', 'puma', u'水着', u'掛け時計',
                    'gucci', u'グッチ', u'ラルフローレン', 'minnetonka', u'レディース', 'lanvin',
                    u'パネライ', 'icamtech', u'セイコー', 'playboy', u'表参道', u'海外ファッション',
-                   'hahaha')
+                   'hahaha', u'カルバンクライン', u'ブランド時計', u'デジタル一眼', u'フレッドペリー',
+                   u'トートバッグ', u'ニューバランス', u'スニーカー', 'newbalance', u'ショルダーバッグ',
+                   u'アイホン', u'高級腕時計')
+SPAM_WORD_RE    = re.compile(ur'(?:^|\s)(?:メンズ|通販|バッグ|帽子|価格)(?:\s|$)|^[-\._a-z0-9]+$',
+                             re.I | re.M | re.U)
 SPAM_URLS       = ('http://www.paydayloansbargains.co.uk',
                    'http://shoebuycoupon2013.com',
                    'http://www.canadagooseestore.com/',
-                   'http://goo.gl/')
+                   'http://goo.gl/', 'lidadaidaihua', 'fledlights')
 SPAM_URL_WORDS  = ('asian', 'discount', 'twodaydiet4u.com', 'indiadealsonline.com', '/nike',
                    'mitsubishielectric.co.uk', 'hspa.com' 'jimdo.com', 'www.bookyards.com',
-                   'freesound.org', 'hm6v.com', 'hspa.com')
-SPAM_LINK_RE    = re.compile(r'https?://', re.I)
+                   'freesound.org', 'hm6v.com', 'hspa.com', u'セイコー')
+SPAM_LINK_RE    = re.compile(r'https?://|\[\/\w+\]', re.I)
 
 
 class CommentsView(baseview.BaseView):
@@ -130,6 +140,8 @@ class CommentsView(baseview.BaseView):
       return u'スパム対策によりコメントは拒否されました。'
     if any([s in name for s in SPAM_NAMES]):
       return u'スパム対策によりコメントは拒否されました。'
+    if SPAM_NAME_RE.search(name):
+      return u'スパム対策によりコメントは拒否されました。'
     if any([s in url for s in SPAM_URL_WORDS]):
       return u'スパム対策によりコメントは拒否されました。'
     if any([0xb000 <= ord(c) <= 0xcfff for c in name]): # Rejects Hangeul letters.
@@ -137,6 +149,8 @@ class CommentsView(baseview.BaseView):
     if len(comment) > 4096:
       return u'コメントが長すぎます。'
     if any([s in comment for s in SPAM_WORDS]):
+      return u'スパム対策によりコメントは拒否されました。'
+    if SPAM_WORD_RE.search(comment):
       return u'スパム対策によりコメントは拒否されました。'
     if len(SPAM_LINK_RE.findall(p['comment'])) >= 3:
       return u'スパム対策によりコメントは拒否されました。'
