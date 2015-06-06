@@ -12,8 +12,7 @@ import twolegged
 from google.appengine.api import mail
 
 
-CONSUMER_KEY    = settings.CONSUMER_KEY
-CONSUMER_SECRET = settings.CONSUMER_SECRET
+CLIENT_ID       = settings.CLIENT_ID
 
 LISTFEED_URL    = 'https://spreadsheets.google.com/feeds/list/%s/%s/private/full?alt=json'
 SHEET_ID        = ('0Ao0lgngMECUtcE1JQnJuSjRQSEtfVG5iX0lBejNjVFE', 'od6')
@@ -22,14 +21,15 @@ USER_EMAIL      = 'support@webos-goodies.jp'
 
 ARTICLE_URL     = 'http://webos-goodies.jp/archives/%s.html#comments'
 LINK_RE         = re.compile(r'^https?://[\x01-\x7f]+$')
+SEPARATOR_RE    = re.compile(r'''[\s!-/:-?@\[-`{-~]+''')
 SPAM_NAMES      = ('replicas', 'mafformmart', u'シャネル', u'プラダ', u'ネックレス', 'hermes',
                    u'バッグ', u'時計', u'コピー', u'ヴィトン', u'ロレックス', u'オメガ', 'emma',
                    u'ヴィンテージ', u'草間彌生', u'コーチ', u'財布', 'ugg', 'sale', 'xrumertest',
                    'jeanstory', 'baidu', 'gold', '____', 'debrabanks', 'pharm', 'prada', 'mulberry',
                    'louis', 'vuitton', 'handbag', 'luggage', 'purse', 'miu miu', 'MCM', 'bags',
                    'loans', 'coupon', 'nike', 'clothing', 'dresses', 'wedding', 'exotic',
-                   'burberry', 'girlfriend', u'バイエルン', 'credit', 'sabo' 'talked', u'ACミラン',
-                   u'ユニフォーム', 'sex', u'アディダス', u'シューズ', 'shoes', 'miumiu', 'discount',
+                   'burberry', 'girlfriend', u'バイエルン', 'credit', 'sabo', 'talked', u'ACミラン',
+                   u'ユニフォーム', u'アディダス', u'シューズ', 'shoes', 'miumiu', 'discount',
                    'secret', 'expensive', 'market', 'fashion', 'replica', 'watch', 'planta',
                    'promo', 'cheap', 'belt', 'gucci', 'addidas', 'annabell', 'adidas',
                    'outlet', 'swimwear', 'bikini', u'アウトレット', u'ジバンシ', u'メンズ',
@@ -40,8 +40,8 @@ SPAM_NAMES      = ('replicas', 'mafformmart', u'シャネル', u'プラダ', u'�
                    u'スニーカ', u'通販', u'ティファニ', 'shoe', u'エルメス', u'ブレスレット',
                    u'指輪', u'ミュウミュウ', 'pills', 'shenna', 'ralph', 'lauren', u'ドレス',
                    u'ショッピング', u'ブランド', u'ジャージ', 'lunettes', 'carrera', 'oakley',
-                   'soldes', 'reviews', 'slim', u'ラルフローレン', u'ジャケット', u'トムフォード',
-                   u'楽天', u'ブラジャー', u'ヴィクトリアシークレット', u'サンダルヴィ', u'レイバン',
+                   'soldes', 'reviews', u'ラルフローレン', u'ジャケット', u'トムフォード',
+                   u'楽天', u'ブラジャー', u'ヴィクトリアシークレット', u'サンダル', u'レイバン',
                    u'ナイキ', 'canon', u'サングラス', u'クロックス', 'beams', 'moncler',
                    'crocss', 'powerleveling', u'ラッシュガード', u'ハーレー', u'ゴローズ',
                    'pil', u'ブーツ', u'レディス', u'レディース', u'長袖', u'ビトン', u'販売',
@@ -49,7 +49,7 @@ SPAM_NAMES      = ('replicas', 'mafformmart', u'シャネル', u'プラダ', u'�
                    u'自動開閉傘', u'下着', u'グッチ', u'手帳', u'ショルダーバッグ', 'infections',
                    'casio', u'泳装', u'激安', u'ミネトンカ', 'mizuno', u'カシオ', u'シチズン',
                    u'オシアナス', u'朱肉', 'minnetonka', u'カルバンクライン', u'ロキシー',
-                   u'セイコー', u'クォーツ', 'chanel', u'ミズノゴルフ', u'パネライ' u'ルミノールマリーナ',
+                   u'セイコー', u'クォーツ', 'chanel', u'ミズノゴルフ', u'パネライ', u'ルミノールマリーナ',
                    u'プレイボーイ', u'ゴルフ', u'サマンサ', u'バック', 'hoodia', '7 day',
                    'gordoni', u'新作', 'chloe', 'air max', u'アイフォン', 'sdao', 'cut down',
                    'bear', 'parajumpers', u'モカシン', 'http://', 'p57', u'パーペチュアル',
@@ -57,8 +57,46 @@ SPAM_NAMES      = ('replicas', 'mafformmart', u'シャネル', u'プラダ', u'�
                    'daidaihua', u'アイホン', 'benefits', u'キーケース', u'デジタルカメラ',
                    u'モンクレール', u'ジミーチュウ', u'トミーヒルフィガー', 'newera', u'ニューエラ',
                    u'チャンルー', u'ニクソン', u'ストーンブレス', 'weightloss', 'canada goose',
-                   'calvin klein', 'wallet')
-SPAM_NAME_RE    = re.compile(ur'(?:^|\s)(?:seo|weight|価格)(?:\s|$)', re.I | re.M | re.U)
+                   'calvin klein', 'wallet', 'michael kors', '&#', 'jordan', 'bottega', 'veneta',
+                   u'トリーバーチ', u'ラゲージ', u'キャロウェイ', u'クロムハーツ', 'skuteczne',
+                   'odchudzanie', 'vapor', 'veloce', u'セリーヌ', u'万年筆', u'サンローラン',
+                   u'芸能人', u'ダッフル', u'ネイビー', 'tennis', 'golf', 'clearance', 'birkin',
+                   'jersey', 'costume', 'homme', 'jacket', 'survetement', 'honestly', 'airmax',
+                   'femme', 'montant', 'sterling', 'birthstone', 'charm', 'ray ban', 'bracciale',
+                   'tiffany', 'prezzo', 'occhiali', 'wayfarer', 'cosmetics', 'pencil', 'gamma 11s',
+                   'pants', 'tshirt', 'cycling', 'trousers', 'abercrombie', 'rainproof', 'hogan',
+                   'lancome', 'giuseppe', 'longchamp', 'scarpe', 'kurikulum', u'店舗', u'コービー',
+                   u'マリークワント', u'ニューバランス', u'¥', 'superior', 'venus', u'ズームコービー',
+                   'interview', u'ジョーダン', 'lancel', u'オークリー', u'フロッグスキン', u'限定',
+                   u'鯨肉', u'にんにく', u'リモワ', u'インテグラル', u'トパーズ', u'安値', u'ルフトハンザ',
+                   u'スーツケース', u'レンタル', u'送料無料', u'最高級', u'百貨店', u'松坂屋',
+                   u'メデューサ', u'中古', 'emanuel', 'jaime', 'kylie', 'abigail', u'バスケットボール',
+                   u'サッカー', u'エアペニー', u'ヴェイパー', 'murah', 'stylo', u'レプリカ',
+                   u'ジェレミースコット', u'エアマックス', u'パトリック', u'浴衣', u'スワロフスキ',
+                   u'ヘッドホン', 'hilfiger', u'リュックサック', u'レベッカテイラ', u'クイックサーフ',
+                   u'スリッポン', u'スエード', 'www.', u'正規品', 'nikon', u'デジタル一眼', 'visconti',
+                   u'ビスコンティ', u'リーバイス', u'景品', u'ダイニング', u'掃除機', u'バッテリ',
+                   u'自転車', u'洗濯機', u'ダイニング', 'olivea', 'stephenamex', 'meitzitang'
+                   'manuelon', u'ポールスミス', u'パスケース', 'vernonpt', u'ビルケンシュトック',
+                   u'ビルキー', u'釣り竿', u'空気清浄機', u'ワンピース', u'釣り', u'ダミアーニ',
+                   'subwoofer', 'woolrich', u'取扱店', u'鮎竿', u'購入', 'mercurial', 'barbour',
+                   'coach')
+TYPICAL_WORDS   = ('', 'this', 'that', 'these', 'those', 'they', 'it', 'its', 'is', 'was',
+                   'are', 'were', 'be', 'i', 'my', 'me', 'mine', 'you', 'your', 'yours',
+                   'he', 'him', 'his', 'she', 'her', 'hers', 'we', 'our', 'us', 'ours',
+                   'see', 'dig', 'updated', 'blog', 'post', 'hudson', 'the', 'a', 'full',
+                   'report', 'eat', 'stop', 'lucy', 'glenn', 'glendora', 'layla', 'facebook',
+                   'lv', u'ケイト', u'けいと')
+SPAM_NAME_RE    = re.compile(ur'(?:^|[-_\s])(?:'
+                             ur'seo|weight|価格|pas|john\w\d+|smith\w\d+|shop|mbt|bag|sex|slim'
+                             ur'|pants?|suits?|fu|sko|norge|makeup|bobbi\s*brown|akkie|fuck'
+                             ur'|pdf|ケース|ポーチ|セール|人気|エリート|最新|shock|cdk|バッシュ'
+                             ur'|wild\s*star|ella|new\s*balance|dre|スラッシャー|バカラ|era|vans|水着'
+                             ur'|トキナー|イヤホン|ダイワ|seiko|actus|uk|paris|judi|hamilton|rimowa'
+                             ur'|vintage|london|samantha|salsa|sheaffer|celine|marc\s*jacobs'
+                             ur'|koffer|fifa|tn'
+                             ur')(?:[-_\s]|$)',
+                             re.I | re.M | re.U)
 SPAM_WORDS      = ('[/url]', u'紹介します', u'ナイキ', 'loans', 'coupon', 'extravagant',
                    'enviable', u'アディダス', u'シャネル', u'プラダ', u'ネックレス', u'ヴィトン',
                    u'ロレックス', u'オメガ', u'コーチ', u'ブレスレット', 'crocs', u'ビクトリア',
@@ -68,16 +106,22 @@ SPAM_WORDS      = ('[/url]', u'紹介します', u'ナイキ', 'loans', 'coupon'
                    u'パネライ', 'icamtech', u'セイコー', 'playboy', u'表参道', u'海外ファッション',
                    'hahaha', u'カルバンクライン', u'ブランド時計', u'デジタル一眼', u'フレッドペリー',
                    u'トートバッグ', u'ニューバランス', u'スニーカー', 'newbalance', u'ショルダーバッグ',
-                   u'アイホン', u'高級腕時計')
-SPAM_WORD_RE    = re.compile(ur'(?:^|\s)(?:メンズ|通販|バッグ|帽子|価格)(?:\s|$)|^[-\._a-z0-9]+$',
+                   u'アイホン', u'高級腕時計', 'shoe', 'clearance', 'cheap', 'hermes', u'在庫あり',
+                   u'送料無料', u'けいとすぺーど', u'ケイトスペイド', u'海外ブランド', u'ミュウミュウ')
+SPAM_WORD_RE    = re.compile('|'.join((ur'(?:^|\s)(?:'
+                                       ur'メンズ|通販|バッグ|帽子|価格|mbt|mens?|stores?|sales?'
+                                       ur')(?:\s|$)',
+                                       ur'https?://www\.[a-z]{4,8}\d{4}\.com',
+                                       ur'&#\d{4,8};', ur'^[-\._a-z0-9]+$')),
                              re.I | re.M | re.U)
-SPAM_URLS       = ('http://www.paydayloansbargains.co.uk',
-                   'http://shoebuycoupon2013.com',
-                   'http://www.canadagooseestore.com/',
-                   'http://goo.gl/', 'lidadaidaihua', 'fledlights')
+SPAM_URLS       = ('http://www.paydayloansbargains.co.uk', 'http://shoebuycoupon2013.com',
+                   'http://www.canadagooseestore.com/', 'http://goo.gl/', 'http://is.gd/',
+                   'http://tinyurl.com/', 'http://www.dokka-fasteners.com',
+                   'http://www.cristalcreditgroup.com')
 SPAM_URL_WORDS  = ('asian', 'discount', 'twodaydiet4u.com', 'indiadealsonline.com', '/nike',
-                   'mitsubishielectric.co.uk', 'hspa.com' 'jimdo.com', 'www.bookyards.com',
-                   'freesound.org', 'hm6v.com', 'hspa.com', u'セイコー')
+                   'mitsubishielectric.co.uk', 'hspa.com', 'jimdo.com', 'www.bookyards.com',
+                   'freesound.org', 'hm6v.com', 'hspa.com', u'セイコー', '-nike-', 'lidadaidaihua',
+                   'fledlights', 'taobao')
 SPAM_LINK_RE    = re.compile(r'https?://|\[\/\w+\]', re.I)
 
 
@@ -124,9 +168,10 @@ class CommentsView(baseview.BaseView):
 
 
   def validate_form(self, p):
-    name    = (p['name']    or '').lower()
-    comment = (p['comment'] or '').lower()
-    url     = (p['url']     or '').lower()
+    name       = (p['name']    or '').lower()
+    name_words = SEPARATOR_RE.split(name)
+    comment    = (p['comment'] or '').lower()
+    url        = (p['url']     or '').lower().strip()
 
     if not name:
       return u'お名前を入力してください。'
@@ -136,9 +181,11 @@ class CommentsView(baseview.BaseView):
       return u'URLのフォーマットが間違っています。'
     if p['code'] != u'寿限無寿限無五劫の擦り切れ':
       return u'スパム対策によりコメントは拒否されました。'
-    if url.strip() in SPAM_URLS:
+    if any([url.startswith(s) for s in SPAM_URLS]):
       return u'スパム対策によりコメントは拒否されました。'
     if any([s in name for s in SPAM_NAMES]):
+      return u'スパム対策によりコメントは拒否されました。'
+    if all((s in TYPICAL_WORDS for s in name_words)):
       return u'スパム対策によりコメントは拒否されました。'
     if SPAM_NAME_RE.search(name):
       return u'スパム対策によりコメントは拒否されました。'
@@ -155,6 +202,8 @@ class CommentsView(baseview.BaseView):
     if len(SPAM_LINK_RE.findall(p['comment'])) >= 3:
       return u'スパム対策によりコメントは拒否されました。'
     if url and url in comment:
+      return u'スパム対策によりコメントは拒否されました。'
+    if url and url.startswith(name):
       return u'スパム対策によりコメントは拒否されました。'
     return None
 

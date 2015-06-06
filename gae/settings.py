@@ -1,4 +1,1 @@
-import settings_private
-
-CONSUMER_KEY    = settings_private.CONSUMER_KEY
-CONSUMER_SECRET = settings_private.CONSUMER_SECRET
+SERVICE_ACCOUNT = '391775591970-uujj4922fgkv00endclbt61smqp2gsk4@developer.gserviceaccount.com'

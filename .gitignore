@@ -1,0 +1,12 @@
+**/*.pyc
+**/account.rb
+closure-library
+cms/rails/db/*.sqlite3
+cms/rails/lib/delicious_account.rb
+cms/rails/log
+cms/rails/public/javascripts/closure-library
+cms/rails/public/javascripts/deps.js
+gae/google_oauth.p12
+gae/google_oauth.pem
+gae/settings_private.py
+management

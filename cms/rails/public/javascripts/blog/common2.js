@@ -280,8 +280,8 @@ blog.App.prototype.renderFeeds_ = function(e) {
 blog.App.prototype.showRecommendationWidget_ = function(e) {
   var parent = goog.dom.$('tpl_recommendations');
   if(parent) {
-	var width  = parent.clientWidth;
-	var height = parent.clientHeight;
+	var width  = Math.round(parent.clientWidth);
+	var height = Math.round(parent.clientHeight);
 	parent.innerHTML = '<iframe src="http://www.facebook.com/plugins/recommendations.php?site=webos-goodies.jp&amp;width='+width+'&amp;height='+height+'&amp;header=false&amp;border_color=white" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:'+width+'px; height:'+height+'px;" allowTransparency="true"></iframe>';
   }
 };
