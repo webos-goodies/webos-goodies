@@ -5,14 +5,14 @@ import re
 import datetime
 import dateutil.tz
 import jinja2
-import settings
+import settings_private
 import baseview
-import twolegged
+import json
+import urllib
 
 from google.appengine.api import mail
+from google.appengine.api import urlfetch
 
-
-CLIENT_ID       = settings.CLIENT_ID
 
 LISTFEED_URL    = 'https://spreadsheets.google.com/feeds/list/%s/%s/private/full?alt=json'
 SHEET_ID        = ('0Ao0lgngMECUtcE1JQnJuSjRQSEtfVG5iX0lBejNjVFE', 'od6')
@@ -125,6 +125,15 @@ SPAM_URL_WORDS  = ('asian', 'discount', 'twodaydiet4u.com', 'indiadealsonline.co
 SPAM_LINK_RE    = re.compile(r'https?://|\[\/\w+\]', re.I)
 
 
+def to_unicode(s):
+  if s is None or isinstance(s, unicode):
+    return s
+  elif isinstance(s, bytes):
+    return unicode(s, 'utf-8')
+  else:
+    return unicode(s)
+
+
 class CommentsView(baseview.BaseView):
   def get(self, page_id):
     self.render_html(TOP_TEMPLATE)
@@ -142,30 +151,54 @@ class CommentsView(baseview.BaseView):
 
     err = self.validate_form(p)
     if err is None:
-      payload  = self.template_env.from_string(POST_SPREADSHEETS_TEMPLATE).render(p)
-      client   = twolegged.Client(CONSUMER_KEY, CONSUMER_SECRET, deadline=30)
-      response = client.fetch(twolegged.Request(
-          method='POST', url=LISTFEED_URL % SHEET_ID, payload=payload.encode('utf-8'),
-          headers=HEADERS, user=USER_EMAIL))
-      if 200 <= response.status_code < 300:
-        mail.send_mail(sender="support@webos-goodies.jp",
-                       to="support@webos-goodies.jp",
-                       subject="You've got a comment!",
-                       body=NOTIFICATION)
-      else:
-        body = ERR_NOTIFICATION % (
-          p['timestamp'], p['page'], p['title'], p['name'], p['url'], p['comment'],
-          str(HEADERS), payload, response.status_code, str(response.headers), response.content)
-        mail.send_mail(sender="support@webos-goodies.jp",
-                       to="support@webos-goodies.jp",
-                       subject="Error at posting comment",
-                       body=body)
+      token = self.retrieve_access_token(p)
+      if token is not None:
+        self.add_to_sheet(p, token)
       return self.redirect(ARTICLE_URL % page_id)
-
     else:
       p['err'] = err
       self.render_html(TOP_TEMPLATE, p)
 
+  def add_to_sheet(self, p, token):
+    url     = LISTFEED_URL % SHEET_ID
+    payload = self.template_env.from_string(POST_SPREADSHEETS_TEMPLATE).render(p).encode('utf-8')
+    headers = dict(HEADERS)
+    headers['Authorization'] = 'Bearer %s' % token
+    rsp = urlfetch.fetch(method='POST', url=url, payload=payload, headers=headers)
+    if 200 <= rsp.status_code < 300:
+      mail.send_mail(sender="support@webos-goodies.jp",
+                     to="support@webos-goodies.jp",
+                     subject="You've got a comment!",
+                     body=NOTIFICATION)
+    else:
+      self.send_error(p, LISTFEED_URL % SHEET_ID, 'POST', headers, payload, rsp)
+
+  def retrieve_access_token(self, p):
+    url = 'https://www.googleapis.com/oauth2/v3/token'
+    payload = {
+      'client_id':     settings_private.CLIENT_ID,
+      'client_secret': settings_private.CLIENT_SECRET,
+      'refresh_token': settings_private.REFRESH_TOKEN,
+      'grant_type':    'refresh_token'
+    }
+    payload = urllib.urlencode(payload)
+    headers = { 'Content-Type':'application/x-www-form-urlencoded' }
+    rsp = urlfetch.fetch(url=url, method='POST', payload=payload, headers=headers)
+    if 200 <= rsp.status_code < 300:
+      return json.loads(rsp.content)['access_token']
+    else:
+      self.send_error(p, url, 'POST', headers, payload, rsp)
+      return None
+
+  def send_error(self, p, url, method, headers, payload, rsp):
+    body = ERR_NOTIFICATION % (
+      p['timestamp'], p['page'], p['title'], p['name'], p['url'], p['comment'],
+      url, method, str(headers), to_unicode(payload),
+      rsp.status_code, str(rsp.headers), to_unicode(rsp.content))
+    mail.send_mail(sender="support@webos-goodies.jp",
+                   to="support@webos-goodies.jp",
+                   subject="Error at posting comment",
+                   body=body)
 
   def validate_form(self, p):
     name       = (p['name']    or '').lower()
@@ -282,6 +315,8 @@ Comment:
 %s
 
 ---- Request ----
+Url: %s
+Method: %s
 Headers:
 %s
 
