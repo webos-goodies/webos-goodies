@@ -117,11 +117,13 @@ SPAM_WORD_RE    = re.compile('|'.join((ur'(?:^|\s)(?:'
 SPAM_URLS       = ('http://www.paydayloansbargains.co.uk', 'http://shoebuycoupon2013.com',
                    'http://www.canadagooseestore.com/', 'http://goo.gl/', 'http://is.gd/',
                    'http://tinyurl.com/', 'http://www.dokka-fasteners.com',
-                   'http://www.cristalcreditgroup.com')
+                   'http://www.cristalcreditgroup.com', 'http://birkenstock',
+                   'http://www.hbbuxiugangwang.com')
+SPAM_URL_RE     = re.compile(ur'\?list\d*=\d+')
 SPAM_URL_WORDS  = ('asian', 'discount', 'twodaydiet4u.com', 'indiadealsonline.com', '/nike',
                    'mitsubishielectric.co.uk', 'hspa.com', 'jimdo.com', 'www.bookyards.com',
                    'freesound.org', 'hm6v.com', 'hspa.com', u'セイコー', '-nike-', 'lidadaidaihua',
-                   'fledlights', 'taobao')
+                   'fledlights', 'taobao', '.ru/')
 SPAM_LINK_RE    = re.compile(r'https?://|\[\/\w+\]', re.I)
 
 
@@ -215,6 +217,8 @@ class CommentsView(baseview.BaseView):
     if p['code'] != u'寿限無寿限無五劫の擦り切れ':
       return u'スパム対策によりコメントは拒否されました。'
     if any([url.startswith(s) for s in SPAM_URLS]):
+      return u'スパム対策によりコメントは拒否されました。'
+    if SPAM_URL_RE.search(url):
       return u'スパム対策によりコメントは拒否されました。'
     if any([s in name for s in SPAM_NAMES]):
       return u'スパム対策によりコメントは拒否されました。'
