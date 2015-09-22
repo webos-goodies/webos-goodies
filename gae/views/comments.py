@@ -80,7 +80,7 @@ SPAM_NAMES      = ('replicas', 'mafformmart', u'シャネル', u'プラダ', u'�
                    'manuelon', u'ポールスミス', u'パスケース', 'vernonpt', u'ビルケンシュトック',
                    u'ビルキー', u'釣り竿', u'空気清浄機', u'ワンピース', u'釣り', u'ダミアーニ',
                    'subwoofer', 'woolrich', u'取扱店', u'鮎竿', u'購入', 'mercurial', 'barbour',
-                   'coach', 'fitflop', 'birkenstocks', 'jacqueline', 'converse')
+                   'coach', 'fitflop', 'birkenstocks', 'jacqueline', 'converse', 'kolocsolidaire')
 TYPICAL_WORDS   = ('', 'this', 'that', 'these', 'those', 'they', 'it', 'its', 'is', 'was',
                    'are', 'were', 'be', 'i', 'my', 'me', 'mine', 'you', 'your', 'yours',
                    'he', 'him', 'his', 'she', 'her', 'hers', 'we', 'our', 'us', 'ours',
@@ -118,7 +118,7 @@ SPAM_URLS       = ('http://www.paydayloansbargains.co.uk', 'http://shoebuycoupon
                    'http://www.canadagooseestore.com/', 'http://goo.gl/', 'http://is.gd/',
                    'http://tinyurl.com/', 'http://www.dokka-fasteners.com',
                    'http://www.cristalcreditgroup.com', 'http://birkenstock',
-                   'http://www.hbbuxiugangwang.com')
+                   'http://www.hbbuxiugangwang.com', 'http://www.fukuda.ch')
 SPAM_URL_RE     = re.compile(ur'\?list\d*=\d+')
 SPAM_URL_WORDS  = ('asian', 'discount', 'twodaydiet4u.com', 'indiadealsonline.com', '/nike',
                    'mitsubishielectric.co.uk', 'hspa.com', 'jimdo.com', 'www.bookyards.com',
@@ -241,6 +241,8 @@ class CommentsView(baseview.BaseView):
     if url and url in comment:
       return u'スパム対策によりコメントは拒否されました。'
     if url and url.startswith(name):
+      return u'スパム対策によりコメントは拒否されました。'
+    if name and url and url.lower().startswith('http://www.%s.' % name.lower()):
       return u'スパム対策によりコメントは拒否されました。'
     return None
 
