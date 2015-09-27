@@ -80,7 +80,8 @@ SPAM_NAMES      = ('replicas', 'mafformmart', u'シャネル', u'プラダ', u'�
                    'manuelon', u'ポールスミス', u'パスケース', 'vernonpt', u'ビルケンシュトック',
                    u'ビルキー', u'釣り竿', u'空気清浄機', u'ワンピース', u'釣り', u'ダミアーニ',
                    'subwoofer', 'woolrich', u'取扱店', u'鮎竿', u'購入', 'mercurial', 'barbour',
-                   'coach', 'fitflop', 'birkenstocks', 'jacqueline', 'converse', 'kolocsolidaire')
+                   'coach', 'fitflop', 'birkenstocks', 'jacqueline', 'converse', 'kolocsolidaire',
+                   'baratas')
 TYPICAL_WORDS   = ('', 'this', 'that', 'these', 'those', 'they', 'it', 'its', 'is', 'was',
                    'are', 'were', 'be', 'i', 'my', 'me', 'mine', 'you', 'your', 'yours',
                    'he', 'him', 'his', 'she', 'her', 'hers', 'we', 'our', 'us', 'ours',
