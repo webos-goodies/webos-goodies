@@ -81,7 +81,7 @@ SPAM_NAMES      = ('replicas', 'mafformmart', u'シャネル', u'プラダ', u'�
                    u'ビルキー', u'釣り竿', u'空気清浄機', u'ワンピース', u'釣り', u'ダミアーニ',
                    'subwoofer', 'woolrich', u'取扱店', u'鮎竿', u'購入', 'mercurial', 'barbour',
                    'coach', 'fitflop', 'birkenstocks', 'jacqueline', 'converse', 'kolocsolidaire',
-                   'baratas')
+                   'baratas', 'lindsey')
 TYPICAL_WORDS   = ('', 'this', 'that', 'these', 'those', 'they', 'it', 'its', 'is', 'was',
                    'are', 'were', 'be', 'i', 'my', 'me', 'mine', 'you', 'your', 'yours',
                    'he', 'him', 'his', 'she', 'her', 'hers', 'we', 'our', 'us', 'ours',
@@ -95,7 +95,7 @@ SPAM_NAME_RE    = re.compile(ur'(?:^|[-_\s])(?:'
                              ur'|wild\s*star|ella|new\s*balance|dre|スラッシャー|バカラ|era|vans|水着'
                              ur'|トキナー|イヤホン|ダイワ|seiko|actus|uk|paris|judi|hamilton|rimowa'
                              ur'|vintage|london|samantha|salsa|sheaffer|celine|marc\s*jacobs'
-                             ur'|koffer|fifa|tn|true\s+religion|15|yiwu'
+                             ur'|koffer|fifa|tn|true\s+religion|15|yiwu|porn|free|casino'
                              ur')(?:[-_\s]|$)',
                              re.I | re.M | re.U)
 SPAM_WORDS      = ('[/url]', u'紹介します', u'ナイキ', 'loans', 'coupon', 'extravagant',
@@ -119,7 +119,8 @@ SPAM_URLS       = ('http://www.paydayloansbargains.co.uk', 'http://shoebuycoupon
                    'http://www.canadagooseestore.com/', 'http://goo.gl/', 'http://is.gd/',
                    'http://tinyurl.com/', 'http://www.dokka-fasteners.com',
                    'http://www.cristalcreditgroup.com', 'http://birkenstock',
-                   'http://www.hbbuxiugangwang.com', 'http://www.fukuda.ch')
+                   'http://www.hbbuxiugangwang.com', 'http://www.fukuda.ch',
+                   'https://www.youtube.com/')
 SPAM_URL_RE     = re.compile(ur'\?list\d*=\d+')
 SPAM_URL_WORDS  = ('asian', 'discount', 'twodaydiet4u.com', 'indiadealsonline.com', '/nike',
                    'mitsubishielectric.co.uk', 'hspa.com', 'jimdo.com', 'www.bookyards.com',
